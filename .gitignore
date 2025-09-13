@@ -1,1 +1,9 @@
 out/
+*.o
+*.pyc
+.platform
+.sconsign.dblite
+config.json
+link.lds
+rtconfig.h
+sys_config.h
