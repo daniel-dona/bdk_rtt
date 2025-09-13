@@ -42,7 +42,7 @@
 #define RT_USING_DEVICE_OPS
 #define RT_USING_CONSOLE
 #define RT_CONSOLEBUF_SIZE 128
-#define RT_CONSOLE_DEVICE_NAME "uart2"
+#define RT_CONSOLE_DEVICE_NAME "uart1"
 
 /* RT-Thread Components */
 
@@ -298,24 +298,24 @@
 #define PLAYER_DEVICE "sound"
 #define PLAYER_DEFAULT_VOLUME 65
 
-/* PLAYER ÄÚ²¿Ö§³Ö CODEC */
-#define PLAYER_ENABLE_CODEC_PCM             /* PCM±àÂë */
-#define PLAYER_ENABLE_CODEC_WAV             /* WAV±àÂë */
-// #define PLAYER_ENABLE_FORMAT_TS          /* MPEG-TSÈÝÆ÷ */
+/* PLAYER ï¿½Ú²ï¿½Ö§ï¿½ï¿½ CODEC */
+#define PLAYER_ENABLE_CODEC_PCM             /* PCMï¿½ï¿½ï¿½ï¿½ */
+#define PLAYER_ENABLE_CODEC_WAV             /* WAVï¿½ï¿½ï¿½ï¿½ */
+// #define PLAYER_ENABLE_FORMAT_TS          /* MPEG-TSï¿½ï¿½ï¿½ï¿½ */
 
-/* PLAYER ÍøÂçÁ÷ */
-#define PLAYER_ENABLE_NET_STREAM            /* ÍøÂçÁ÷ÒôÆµ²¥·ÅÖ§³Ö */
-#define PLAYER_ENABLE_HTTP_STREAM           /* HTTPÁ÷ÒôÆµ²¥·ÅÖ§³Ö */
-#define PLAYER_ENABLE_HTTPS_STREAM          /* HTTPSÁ÷ÒôÆµ²¥·ÅÖ§³Ö */
-#define PLAYER_ENABLE_TTS_STREAM            /* TTSÁ÷ÒôÆµ²¥·ÅÖ§³Ö */
-// #define PLAYER_ENABLE_HLS_STREAM         /* HLSÁ÷ÒôÆµ²¥·ÅÖ§³Ö */
-// #define PLAYER_ENABLE_HLS_ACCELERATE     /* HLS TLS¼ÓËÙ */
-// #define PLAYER_ENABLE_PLS_STREAM         /* PLSÁ÷ÒôÆµ²¥·ÅÖ§³Ö */
+/* PLAYER ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
+#define PLAYER_ENABLE_NET_STREAM            /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æµï¿½ï¿½ï¿½ï¿½Ö§ï¿½ï¿½ */
+#define PLAYER_ENABLE_HTTP_STREAM           /* HTTPï¿½ï¿½ï¿½ï¿½Æµï¿½ï¿½ï¿½ï¿½Ö§ï¿½ï¿½ */
+#define PLAYER_ENABLE_HTTPS_STREAM          /* HTTPSï¿½ï¿½ï¿½ï¿½Æµï¿½ï¿½ï¿½ï¿½Ö§ï¿½ï¿½ */
+#define PLAYER_ENABLE_TTS_STREAM            /* TTSï¿½ï¿½ï¿½ï¿½Æµï¿½ï¿½ï¿½ï¿½Ö§ï¿½ï¿½ */
+// #define PLAYER_ENABLE_HLS_STREAM         /* HLSï¿½ï¿½ï¿½ï¿½Æµï¿½ï¿½ï¿½ï¿½Ö§ï¿½ï¿½ */
+// #define PLAYER_ENABLE_HLS_ACCELERATE     /* HLS TLSï¿½ï¿½ï¿½ï¿½ */
+// #define PLAYER_ENABLE_PLS_STREAM         /* PLSï¿½ï¿½ï¿½ï¿½Æµï¿½ï¿½ï¿½ï¿½Ö§ï¿½ï¿½ */
 
-#define PLAYER_USING_NETSTREAM_BUFSZ 96     /* ÍøÂç»º´æ */
+#define PLAYER_USING_NETSTREAM_BUFSZ 96     /* ï¿½ï¿½ï¿½ç»ºï¿½ï¿½ */
 
-/* PLAYER ÈÕÖ¾ */
-#define PLAYER_USING_DEBUG 0                /* 0:·¢²¼°æ±¾, 1:µ÷ÊÔ°æ±¾ */
+/* PLAYER ï¿½ï¿½Ö¾ */
+#define PLAYER_USING_DEBUG 0                /* 0:ï¿½ï¿½ï¿½ï¿½ï¿½æ±¾, 1:ï¿½ï¿½ï¿½Ô°æ±¾ */
 
 /* PLAYER Example */
 #define PLAYER_USING_EXAMPLE00
