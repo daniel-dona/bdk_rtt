@@ -17,7 +17,7 @@ if os.getenv('RTT_CC'):
 
 if  CROSS_TOOL == 'gcc':
     PLATFORM    = 'gcc'
-    EXEC_PATH   = r'/home/gcc-arm-none-eabi-5_4-2016q3/bin'
+    EXEC_PATH   = r'/tools/gcc/bin'
 else:
     print 'Please make sure your toolchains is GNU GCC!'
     exit(0)
