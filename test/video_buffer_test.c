@@ -16,9 +16,10 @@ void vbuf(int argc, char** argv)
     {
         video_buffer_open();
     }
-    else if(strcmp(argv[1], "read") == 0)
+    else if(strcmp(argv[1], "read") == 0)
+
     {
-        uint8_t *mybuf, i;
+        uint8_t *mybuf;
         uint32_t my_len;
         
         my_len = atoi(argv[2]);

@@ -59,7 +59,7 @@ static void i2c_device_deinit()
 
 static unsigned long I2C_write_eeprom(unsigned char op_addr, unsigned char *pData, unsigned char len)
 {
-    unsigned char i;
+    //unsigned char i;
     unsigned int status;
     I2C_OP_ST i2c_op;
 
@@ -70,7 +70,7 @@ static unsigned long I2C_write_eeprom(unsigned char op_addr, unsigned char *pDat
 
     do
     {
-        status = ddev_write(i2c_hdl, pData, len, (unsigned long)&i2c_op);
+        status = ddev_write(i2c_hdl, (char *) pData, len, (unsigned long)&i2c_op);
     } while (status != 0);
 
     I2C_EEPROM_PRT("----- I2C1_write_eeprom over  -----\r\n");
@@ -90,7 +90,7 @@ static unsigned long I2C_write_eeprom(unsigned char op_addr, unsigned char *pDat
 static unsigned long I2C_read_eeprom(unsigned char op_addr, unsigned char *pData, unsigned char len)
 {
     unsigned char i;
-    DD_HANDLE i2c_hdl;
+    DD_HANDLE i2c_hdl = 0;
     unsigned int status;
     I2C_OP_ST i2c_op;
 
@@ -100,7 +100,7 @@ static unsigned long I2C_read_eeprom(unsigned char op_addr, unsigned char *pData
     i2c_op.salve_id = I2C_SALVE_ID;
     do
     {
-        status = ddev_read(i2c_hdl, pData, len, (unsigned long)&i2c_op);
+        status = ddev_read(i2c_hdl, (char *) pData, len, (unsigned long)&i2c_op);
     } while (status != 0);
 
     for (i=0; i<8; i++)
@@ -122,7 +122,7 @@ static unsigned long I2C_read_eeprom(unsigned char op_addr, unsigned char *pData
 static unsigned long i2c_test_eeprom(void)
 {
     int i, j;
-    DD_HANDLE i2c_hdl;
+    //DD_HANDLE i2c_hdl;
     unsigned char pReadData[8];
     unsigned char pWriteData[8];
     

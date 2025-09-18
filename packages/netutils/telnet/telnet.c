@@ -25,11 +25,12 @@
 #include <rtthread.h>
 #include <rtdevice.h>
 
-#ifdef RT_USING_DFS_NET
+#ifdef PKG_NETUTILS_TELNET
+#if defined(RT_USING_DFS_NET) || defined(SAL_USING_POSIX)
 #include <sys/socket.h>
 #else
 #include <lwip/sockets.h>
-#endif /* RT_USING_DFS_NET */
+#endif /* SAL_USING_POSIX */
 
 #if defined(RT_USING_POSIX)
 #include <dfs_posix.h>
@@ -227,13 +228,14 @@ static void client_close(struct telnet_session* telnet)
 #if defined(RT_USING_POSIX)
     ioctl(libc_stdio_get_console(), F_SETFL, (void *) dev_old_flag);
     libc_stdio_set_console(RT_CONSOLE_DEVICE_NAME, O_RDWR);
-    rt_sem_release(telnet->read_notice);
 #else
     finsh_set_device(RT_CONSOLE_DEVICE_NAME);
 #endif /* RT_USING_POSIX */
 
+    rt_sem_release(telnet->read_notice);
+
     /* close connection */
-    close(telnet->client_fd);
+    closesocket(telnet->client_fd);
 
     /* restore shell option */
     finsh_set_echo(telnet->echo_mode);
@@ -266,6 +268,15 @@ static rt_size_t telnet_read(rt_device_t dev, rt_off_t pos, void* buffer, rt_siz
     /* read from rx ring buffer */
     rt_mutex_take(telnet->rx_ringbuffer_lock, RT_WAITING_FOREVER);
     result = rt_ringbuffer_get(&(telnet->rx_ringbuffer), buffer, size);
+    if (result == 0)
+    {
+        /**
+         * MUST return unless **1** byte for support sync read data.
+         * It will return empty string when read no data
+         */
+        *(char *) buffer = '\0';
+        result = 1;
+    }
     rt_mutex_release(telnet->rx_ringbuffer_lock);
 
     return result;
@@ -301,6 +312,16 @@ static rt_err_t telnet_control(rt_device_t dev, int cmd, void *args)
     return RT_EOK;
 }
 
+#ifdef RT_USING_DEVICE_OPS
+    static struct rt_device_ops _ops = {
+        telnet_init,
+        telnet_open,
+        telnet_close,
+        telnet_read,
+        telnet_write,
+        telnet_control
+    };
+#endif
 /* telnet server thread entry */
 static void telnet_thread(void* parameter)
 {
@@ -335,12 +356,16 @@ static void telnet_thread(void* parameter)
 
     /* register telnet device */
     telnet->device.type     = RT_Device_Class_Char;
+#ifdef RT_USING_DEVICE_OPS
+    telnet->device.ops = &_ops;
+#else    
     telnet->device.init     = telnet_init;
     telnet->device.open     = telnet_open;
     telnet->device.close    = telnet_close;
     telnet->device.read     = telnet_read;
     telnet->device.write    = telnet_write;
     telnet->device.control  = telnet_control;
+#endif
 
     /* no private */
     telnet->device.user_data = RT_NULL;
@@ -390,7 +415,9 @@ static void telnet_thread(void* parameter)
         /* disable echo mode */
         finsh_set_echo(0);
         /* output RT-Thread version and shell prompt */
+#ifdef FINSH_USING_MSH
         msh_exec("version", strlen("version"));
+#endif
         rt_kprintf(FINSH_PROMPT);
 
         while (1)
@@ -477,3 +504,4 @@ FINSH_FUNCTION_EXPORT(telnet_server, startup telnet server);
 MSH_CMD_EXPORT(telnet_server, startup telnet server)
 #endif /* FINSH_USING_MSH */
 #endif /* RT_USING_FINSH */
+#endif /* PKG_NETUTILS_TELNET */

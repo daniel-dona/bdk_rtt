@@ -6,7 +6,7 @@
 #include <time.h>
 #include <drv_iic.h>
 #include "test_config.h"
-#if (BEKEN_USING_IIC && RT_USING_I2C)
+#if (defined BEKEN_USING_IIC && defined RT_USING_I2C)
 #define eeprom_addr   0x50;  /* 1010A2A1A0 -R/W */
 
 #ifdef I2C_RTT_TEST

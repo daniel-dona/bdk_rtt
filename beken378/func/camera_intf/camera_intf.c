@@ -19,33 +19,29 @@
 #include "bk_timer_pub.h"
 #include "gpio_pub.h"
 
-#define CAMERA_INTF_DEBUG
 #include "uart_pub.h"
-#ifdef CAMERA_INTF_DEBUG
-#define CAMERA_INTF_PRT             os_printf
-#define CAMERA_INTF_WPRT            warning_prf
-#define CAMERA_INTF_FATAL           fatal_prf
-#else
-#define CAMERA_INTF_PRT             null_prf
-#define CAMERA_INTF_WPRT            null_prf
-#define CAMERA_INTF_FATAL           null_prf
-#endif
-#define CAMERA_RESET_GPIO_INDEX		GPIO16
-#define CAMERA_RESET_HIGH_VAL       1
-#define CAMERA_RESET_LOW_VAL        0
+
+#include "sensors/bf2013.h"
+#include "sensors/gc0308c.h"
+#include "sensors/gc0311.h"
+#include "sensors/gc0328c.h"
+#include "sensors/hi704.h"
+#include "sensors/hm1055.h"
+#include "sensors/ov7670.h"
+#include "sensors/pas6329.h"
+#include "sensors/pas6375.h"
+
 extern void delay100us(INT32 num);
 
-#define EJPEG_DMA_CHNAL             GDMA_CHANNEL_5
-#define EJPEG_DELAY_HTIMER_CHNAL    5
-#define EJPEG_DELAY_HTIMER_VAL      (2)  // 2ms
-#define USE_JTAG_FOR_DEBUG          0
-#define I2C_WIRTE_TIMEOUT_COUNT     20
 DJPEG_DESC_ST ejpeg_cfg;
+TVIDEO_DESC_ST tvideo_st;
+
 DD_HANDLE i2c_hdl = DD_HANDLE_UNVALID, ejpeg_hdl = DD_HANDLE_UNVALID;
 I2C_OP_ST i2c_operater;
 
-void camera_intf_delay_timer_hdl(UINT8 param)
-{
+// General interface functions
+
+void camera_intf_delay_timer_hdl(UINT8 param){
     #if CFG_GENERAL_DMA
     GDMA_CFG_ST en_cfg;
     UINT16 already_len = ejpeg_cfg.rx_read_len;
@@ -100,8 +96,7 @@ void camera_intf_delay_timer_hdl(UINT8 param)
     //REG_WRITE((0x00802800+(16*4)), 0x00);
 }
 
-static void camera_intf_start_delay_timer(void)
-{
+static void camera_intf_start_delay_timer(void){
     timer_param_t param;
 
     if (ejpeg_hdl == DD_HANDLE_UNVALID)
@@ -120,8 +115,7 @@ static void camera_intf_start_delay_timer(void)
     //REG_WRITE((0x00802800+(16*4)), 0x00);
 }
 
-static void camera_intf_ejpeg_rx_handler(UINT32 dma)
-{
+static void camera_intf_ejpeg_rx_handler(UINT32 dma){
     UINT16 already_len = ejpeg_cfg.rx_read_len;
     UINT16 copy_len = ejpeg_cfg.node_len;
     GLOBAL_INT_DECLARATION();
@@ -152,13 +146,11 @@ static void camera_intf_ejpeg_rx_handler(UINT32 dma)
     //REG_WRITE((0x00802800+(17*4)), 0x00);
 }
 
-static void camera_intf_ejpeg_end_handler(void)
-{
+static void camera_intf_ejpeg_end_handler(void){
     camera_intf_start_delay_timer();
 }
 
-static void camera_intf_init_ejpeg_pixel(UINT32 ppi_type)
-{
+static void camera_intf_init_ejpeg_pixel(UINT32 ppi_type){
     switch (ppi_type)
     {
     case QVGA_320_240:
@@ -182,15 +174,14 @@ static void camera_intf_init_ejpeg_pixel(UINT32 ppi_type)
         break;
 
     default:
-        CAMERA_INTF_WPRT("cm PPI unknown, use QVGA\r\n");
+        os_printf("cm PPI unknown, use QVGA\r\n");
         ejpeg_cfg.x_pixel = X_PIXEL_640;
         ejpeg_cfg.y_pixel = Y_PIXEL_480;
         break;
     }
 }
 
-static void camera_intf_config_ejpeg(void *data)
-{
+static void camera_intf_config_ejpeg(void *data){
     os_memset(&ejpeg_cfg, 0, sizeof(DJPEG_DESC_ST));
     os_memcpy(&ejpeg_cfg, data, sizeof(TVIDEO_DESC_ST));
 
@@ -204,7 +195,7 @@ static void camera_intf_config_ejpeg(void *data)
     ejpeg_cfg.dma_channel = GDMA_CHANNEL_4;
     #endif
 }
-#if (USE_CAMERA != HM_1055_DEV)
+
 void camera_intf_sccb_write(UINT8 addr, UINT8 data)
 {
     unsigned int status;
@@ -234,6 +225,9 @@ void camera_intf_sccb_read(UINT8 addr, UINT8 *data)
     }
     while (status != 0);
 }
+
+/* None of the sensors I can test use 16 bit I2C addresses
+
 #else
 void camera_intf_sccb_write(UINT16 addr, UINT8 data)
 {
@@ -266,211 +260,7 @@ void camera_intf_sccb_read(UINT16 addr, UINT8 *data)
 }
 #endif
 
-#if (USE_CAMERA == GC0328C_DEV)
-static void camera_inf_cfg_gc0328c_ppi(UINT32 ppi_type)
-{
-    UINT32 i, size;
-    UINT8 addr, data;
-
-    switch (ppi_type)
-    {
-    case QVGA_320_240:
-        size = sizeof(gc0328c_QVGA_320_240_talbe) / 2;
-        for (i = 0; i < size; i++)
-        {
-            addr = gc0328c_QVGA_320_240_talbe[i][0];
-            data = gc0328c_QVGA_320_240_talbe[i][1];
-            camera_intf_sccb_write(addr, data);
-        }
-        break;
-
-    case VGA_640_480:
-        size = sizeof(gc0328c_VGA_640_480_talbe) / 2;
-        for (i = 0; i < size; i++)
-        {
-            addr = gc0328c_VGA_640_480_talbe[i][0];
-            data = gc0328c_VGA_640_480_talbe[i][1];
-            camera_intf_sccb_write(addr, data);
-        }
-        break;
-
-    default:
-        CAMERA_INTF_WPRT("set PPI unknown\r\n");
-        break;
-    }
-}
-
-static void camera_inf_cfg_gc0328c_fps(UINT32 fps_type)
-{
-    UINT32 i, size;
-    UINT8 addr, data;
-
-    switch (fps_type)
-    {
-    case TYPE_5FPS:
-        size = sizeof(gc0328c_5pfs_talbe) / 2;
-        for (i = 0; i < size; i++)
-        {
-            addr = gc0328c_5pfs_talbe[i][0];
-            data = gc0328c_5pfs_talbe[i][1];
-            camera_intf_sccb_write(addr, data);
-        }
-        break;
-
-    case TYPE_10FPS:
-        size = sizeof(gc0328c_10pfs_talbe) / 2;
-        for (i = 0; i < size; i++)
-        {
-            addr = gc0328c_10pfs_talbe[i][0];
-            data = gc0328c_10pfs_talbe[i][1];
-            camera_intf_sccb_write(addr, data);
-        }
-        break;
-
-    case TYPE_20FPS:
-        size = sizeof(gc0328c_20pfs_talbe) / 2;
-        for (i = 0; i < size; i++)
-        {
-            addr = gc0328c_20pfs_talbe[i][0];
-            data = gc0328c_20pfs_talbe[i][1];
-            camera_intf_sccb_write(addr, data);
-        }
-        break;
-
-    default:
-        CAMERA_INTF_WPRT("set FPS unknown\r\n");
-        break;
-    }
-}
-#endif
-
-static void camera_intf_config_senser(void)
-{
-    UINT32 i, size;
-    UINT8 addr, data;
-
-    #if (USE_CAMERA == PAS6329_DEV)
-
-    i2c_operater.salve_id = PAS6329_DEV_ID;
-
-    size = sizeof(pas6329_page0) / 2;
-    PAS6329_SET_PAGE0;
-
-    for (i = 0; i < size; i++)
-    {
-        addr = pas6329_page0[i][0];
-        data = pas6329_page0[i][1];
-        camera_intf_sccb_write(addr, data);
-    }
-
-    size = sizeof(pas6329_page1) / 2;
-    PAS6329_SET_PAGE1;
-    for (i = 0; i < size; i++)
-    {
-        addr = pas6329_page1[i][0];
-        data = pas6329_page1[i][1];
-        camera_intf_sccb_write(addr, data);
-    }
-
-    size = sizeof(pas6329_page2) / 2;
-    PAS6329_SET_PAGE2;
-    for (i = 0; i < size; i++)
-    {
-        addr = pas6329_page2[i][0];
-        data = pas6329_page2[i][1];
-        camera_intf_sccb_write(addr, data);
-    }
-
-    PAS6329_SET_PAGE0;
-    CAMERA_INTF_WPRT("PAS6329 init finish\r\n");
-
-    #elif (USE_CAMERA == OV_7670_DEV)
-
-    i2c_operater.salve_id = OV_7670_DEV_ID;
-
-    size = sizeof(ov_7670_init_talbe) / 2;
-
-    for (i = 0; i < size; i++)
-    {
-        addr = ov_7670_init_talbe[i][0];
-        data = ov_7670_init_talbe[i][1];
-        camera_intf_sccb_write(addr, data);
-    }
-    CAMERA_INTF_WPRT("OV_7670 init finish\r\n");
-
-    #elif (USE_CAMERA == PAS6375_DEV)
-
-    i2c_operater.salve_id = PAS6375_DEV_ID;
-
-    size = sizeof(pas6375_init_talbe) / 2;
-
-    for (i = 0; i < size; i++)
-    {
-        addr = pas6375_init_talbe[i][0];
-        data = pas6375_init_talbe[i][1];
-        camera_intf_sccb_write(addr, data);
-    }
-    CAMERA_INTF_WPRT("PAS6375 init finish\r\n");
-
-    #elif (USE_CAMERA == GC0328C_DEV)
-    i2c_operater.salve_id = GC0328C_DEV_ID;
-
-    size = sizeof(gc0328c_init_talbe) / 2;
-
-    for (i = 0; i < size; i++)
-    {
-        addr = gc0328c_init_talbe[i][0];
-        data = gc0328c_init_talbe[i][1];
-        camera_intf_sccb_write(addr, data);
-    }
-
-    camera_inf_cfg_gc0328c_ppi(CMPARAM_GET_PPI(ejpeg_cfg.sener_cfg));
-    camera_inf_cfg_gc0328c_fps(CMPARAM_GET_FPS(ejpeg_cfg.sener_cfg));
-
-    CAMERA_INTF_WPRT("GC0328C init finish\r\n");
-    #elif (USE_CAMERA == BF_2013_DEV)
-    i2c_operater.salve_id = BF_2013_DEV_ID;
-
-    size = sizeof(bf_2013_init_talbe) / 2;
-
-    for (i = 0; i < size; i++)
-    {
-        addr = bf_2013_init_talbe[i][0];
-        data = bf_2013_init_talbe[i][1];
-        camera_intf_sccb_write(addr, data);
-    }
-    CAMERA_INTF_WPRT("BF_2013 init finish\r\n");
-
-    #elif (USE_CAMERA == GC0308C_DEV)
-    i2c_operater.salve_id = GC0308C_DEV_ID;
-
-    size = sizeof(gc0308c_init_talbe) / 2;
-
-    for (i = 0; i < size; i++)
-    {
-        addr = gc0308c_init_talbe[i][0];
-        data = gc0308c_init_talbe[i][1];
-        camera_intf_sccb_write(addr, data);
-    }
-    CAMERA_INTF_WPRT("GC0308C init finish\r\n");
-    #elif (USE_CAMERA == HM_1055_DEV)
-    i2c_operater.salve_id = HM_1055_DEV_ID;
-
-    size = sizeof(hm_1055_init_talbe) / 4;
-
-    for (i = 0; i < size; i++)
-    {
-        UINT16 addr1;
-        addr1 = hm_1055_init_talbe[i][0];
-        data = hm_1055_init_talbe[i][1];
-        addr = addr;
-        camera_intf_sccb_write(addr1, data);
-    }
-    CAMERA_INTF_WPRT("HM_1055 init finish\r\n");
-    #endif
-
-}
-
+*/
 
 void init_camera_resetpin(void)
 {
@@ -489,73 +279,55 @@ void camera_reset(void)
     //CAMERA_INTF_WPRT("Camera Reset\r\n");
 }
 
-void camera_flip(UINT8 n)
-{
-    UINT8 addr, data, dt0, dt1;
-
-    if (i2c_operater.salve_id == GC0328C_DEV_ID)
-    {
-        addr = 0x17;
-        dt0 = 0x14;
-        dt1 = 0x17;
-    }
-    else
-    {
-        addr = 0x17;
-        dt0 = 0x14;
-        dt1 = 0x17;
-    }
-
-    if (n)
-    {
-        data = dt1;     //flip 180
-    }
-    else
-    {
-        data = dt0;     //normal
-    }
-
-    camera_intf_sccb_write(addr, data);
-}
 
 /*---------------------------------------------------------------------------*/
-void camera_intfer_init(void *data)
-{
+
+void camera_intfer_init(void *ejpeg_config, camera_sensor_t *sensor){
+
     UINT32 status;
 
-    camera_intf_config_ejpeg(data);
+    camera_intf_config_ejpeg(ejpeg_config);
 
     ejpeg_hdl = ddev_open(EJPEG_DEV_NAME, &status, (UINT32)&ejpeg_cfg);
+    
     //camera_reset();
-    #if USE_JTAG_FOR_DEBUG
-    //set i2c2 mode master/slave
+
     UINT32 i2c2_trans_mode = (0 & (~I2C2_MSG_WORK_MODE_MS_BIT)// master
                               & (~I2C2_MSG_WORK_MODE_AL_BIT))// 7bit address
                              | (I2C2_MSG_WORK_MODE_IA_BIT); // with inner address
     i2c_hdl = ddev_open(I2C2_DEV_NAME, &status, i2c2_trans_mode);
     bk_printf("open I2C2\r\n");
 
-    {
+    
+    /*{
         extern void uart_hw_uninit(UINT8 uport);
         // disable uart temporarily
         uart_hw_uninit(1);
-    }
+    }*/
+    
 
-    #else
+    /*
+
+    In case I2C1 is used, to be tested!!
+
     UINT32 oflag = 0;
     i2c_hdl = ddev_open(I2C1_DEV_NAME, &status, oflag);
     bk_printf("open I2C1\r\n");
-    #endif
+    #endif*/
 
-    camera_intf_config_senser();
+    //camera_intf_config_senser();
 
-    CAMERA_INTF_FATAL("camera_intfer_init,%p-%p\r\n", ejpeg_hdl, i2c_hdl);
+    sensor->i2c_cfg = &i2c_operater;
+    sensor->ejpeg_cfg = &ejpeg_cfg;
+
+    sensor->init(i2c_hdl, ejpeg_hdl, sensor);
+
+    os_printf("camera_intfer_init,%p-%p\r\n", ejpeg_hdl, i2c_hdl);
 }
 
-void camera_intfer_deinit(void)
-{
+void camera_intfer_deinit(camera_sensor_t *sensor){
     GLOBAL_INT_DECLARATION();
-    CAMERA_INTF_FATAL("camera_intfer_deinit,%p-%p\r\n", ejpeg_hdl, i2c_hdl);
+    os_printf("camera_intfer_deinit,%p-%p\r\n", ejpeg_hdl, i2c_hdl);
 
     ddev_close(ejpeg_hdl);
     ddev_close(i2c_hdl);
@@ -567,7 +339,57 @@ void camera_intfer_deinit(void)
     os_memset(&ejpeg_cfg, 0, sizeof(DJPEG_DESC_ST));
 }
 
-UINT32 camera_intfer_set_video_param(UINT32 ppi_type, UINT32 pfs_type)
+camera_sensor_t* camera_detect(){
+
+    UINT32 status;
+
+    camera_intf_config_ejpeg(&tvideo_st);
+
+    ejpeg_hdl = ddev_open(EJPEG_DEV_NAME, &status, (UINT32)&ejpeg_cfg);
+    
+    //camera_reset();
+
+    UINT32 i2c2_trans_mode = (0 & (~I2C2_MSG_WORK_MODE_MS_BIT)// master
+                              & (~I2C2_MSG_WORK_MODE_AL_BIT))// 7bit address
+                             | (I2C2_MSG_WORK_MODE_IA_BIT); // with inner address
+    i2c_hdl = ddev_open(I2C2_DEV_NAME, &status, i2c2_trans_mode);
+    bk_printf("open I2C2\r\n");
+
+    camera_sensor_t* sensor = malloc(sizeof(camera_sensor_t));
+
+
+    if(gc0328c_sensor_detect()){
+
+        sensor->name = rt_strdup("GalaxyCore 328C");
+        sensor->init = gc0328c_sensor_init;
+
+    }else if (gc0311_sensor_detect()){
+
+        sensor->name = rt_strdup("GalaxyCore 311");
+        sensor->init = gc0311_sensor_init;
+
+    }else if (hi704_sensor_detect()){
+
+        sensor->name = rt_strdup("Hynix 704");
+        sensor->init = hi704_sensor_init;
+
+    }
+    
+
+    GLOBAL_INT_DECLARATION();
+    os_printf("camera_intfer_deinit,%p-%p\r\n", ejpeg_hdl, i2c_hdl);
+
+    ddev_close(ejpeg_hdl);
+    ddev_close(i2c_hdl);
+
+    GLOBAL_INT_DISABLE();
+    ejpeg_hdl = i2c_hdl = DD_HANDLE_UNVALID;
+    GLOBAL_INT_RESTORE();
+
+    return sensor;
+}
+
+/*UINT32 camera_intfer_set_video_param(UINT32 ppi_type, UINT32 pfs_type)
 {
     #if (USE_CAMERA == GC0328C_DEV)
     if (ejpeg_hdl == DD_HANDLE_UNVALID)
@@ -596,7 +418,7 @@ UINT32 camera_intfer_set_video_param(UINT32 ppi_type, UINT32 pfs_type)
     #endif
     return 0;
 
-}
+}*/
 /*---------------------------------------------------------------------------*/
 
 #endif // CFG_USE_CAMERA_INTF

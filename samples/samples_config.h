@@ -33,6 +33,8 @@
 /* web net sample */
 //#define WEBNET_SAMPLE
 
+#define SAMPLE_USING_OTA_HTTP
+
 #ifdef XIAOYA_OS
 #define VOICE_CONFIG_TEST
 #define WANTONG_TEST

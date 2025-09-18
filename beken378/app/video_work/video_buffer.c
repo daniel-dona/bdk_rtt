@@ -176,8 +176,7 @@ static int video_buffer_recv_video_data(UINT8 *data, UINT32 len)
     }
 }
 
-int video_buffer_open(void)
-{
+int video_buffer_open(void){
     if (g_vbuf == NULL)
     {
         int ret;
@@ -187,13 +186,13 @@ int video_buffer_open(void)
         g_vbuf = (VBUF_PTR)os_malloc(sizeof(VBUF_ST));
         if (g_vbuf == NULL)
         {
-            os_printf("vbuf init no mem\r\n");
+            os_printf("Unable to reserve video buffer memory.\r\n");
             return 0;
         }
 
         if (rtos_init_semaphore(&g_vbuf->aready_semaphore, 1) != kNoErr)
         {
-            os_printf("vbuf init semaph failed\r\n");
+            os_printf("Semaphore 'aready' failed.\r\n");
             os_free(g_vbuf);
             g_vbuf = NULL;
             return 0;
@@ -223,14 +222,14 @@ int video_buffer_open(void)
         ret = video_transfer_init(&setup);
         if (ret != 0)
         {
-            os_printf("video_transfer_init failed\r\n");
+            os_printf("Video transfer initialization failed\r\n");
             rtos_deinit_semaphore(&g_vbuf->aready_semaphore);
             os_free(g_vbuf);
             g_vbuf = NULL;
             return ret;
         }
 
-        os_printf("vbuf opened\r\n");
+        os_printf("Video buffer opened.\r\n");
     }
 
     return 0;
@@ -241,12 +240,12 @@ int video_buffer_close(void)
     if (g_vbuf)
     {
         int ret;
-        os_printf("voide close\r\n");
+        os_printf("Closing video buffer.\r\n");
 
         ret = video_transfer_deinit();
         if (ret != 0)
         {
-            os_printf("video_buffer_close failed\r\n");
+            os_printf("Video buffer close failed.\r\n");
             return ret;
         }
 
@@ -318,7 +317,7 @@ UINT32 video_buffer_read_frame(UINT8 *buf, UINT32 buf_len)
     return frame_len;
 }
 
-#define VIDEO_BUFFER_CMD        1
+#define VIDEO_BUFFER_CMD        0
 
 #if VIDEO_BUFFER_CMD
 #include "string.h"
