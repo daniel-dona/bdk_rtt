@@ -14,11 +14,15 @@ uint8_t gc0311_sensor_detect(void){
     uint8_t data;
     uint8_t addr = 0xF0;
 
-    camera_intf_sccb_read((UINT8) addr, (UINT8 *) &data);
+    camera_intf_sccb_read2(GC0311_DEV_ID, addr, &data, 1);
 
-    os_printf("Result: %d, Expected: %d", data, GC0311_DEV_CHIPID);
+    uint8_t found = (data == GC0311_DEV_CHIPID);
 
-    return (data == GC0311_DEV_CHIPID);
+    if(found){
+        os_printf("Found sensor GC0311!");
+    }
+
+    return found;
 }
 
 void gc0311_sensor_init(DD_HANDLE i2c_hdl, DD_HANDLE ejpeg_hdl, camera_sensor_t * sensor){

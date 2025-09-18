@@ -13,11 +13,15 @@ uint8_t hi704_sensor_detect(void){
     uint8_t data;
     uint8_t addr = 0x04;
 
-    camera_intf_sccb_read((UINT8) addr, (UINT8 *) &data);
+    camera_intf_sccb_read2(HI704_DEV_ID, addr, &data, 1);
 
-    os_printf("Result: %d, Expected: %d", data, HI704_DEV_CHIPID);
+    uint8_t found = (data == HI704_DEV_CHIPID);
 
-    return (data == HI704_DEV_CHIPID);
+    if(found){
+        os_printf("Found sensor HI704!");
+    }
+
+    return found;
 }
 
 void hi704_sensor_init(DD_HANDLE i2c_hdl, DD_HANDLE ejpeg_hdl, camera_sensor_t * sensor){

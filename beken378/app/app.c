@@ -944,9 +944,13 @@ void app_start(void){
 
     //print_file();
 
-    char * wifi = "wifi";
+    /*char * wifi = "wifi";
 
     msh_exec(wifi, strlen(wifi));
+
+    char * webs = "web_jpeg_stream start";
+
+    msh_exec(webs, strlen(webs));*/
                                                                                                                                         
     //user_main_entry();
 

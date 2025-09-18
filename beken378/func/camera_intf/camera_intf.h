@@ -16,5 +16,7 @@
 
 void camera_intf_sccb_write(UINT8 addr, UINT8 data);
 void camera_intf_sccb_read(UINT8 addr, UINT8 *data);
+uint8_t camera_intf_sccb_write2(uint8_t device_addr, uint8_t register_addr, uint8_t *data, uint8_t len);
+uint8_t camera_intf_sccb_read2(uint8_t device_addr, uint8_t register_addr, uint8_t *data, uint8_t len);
 
 #endif  

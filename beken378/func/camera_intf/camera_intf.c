@@ -226,6 +226,39 @@ void camera_intf_sccb_read(UINT8 addr, UINT8 *data)
     while (status != 0);
 }
 
+uint8_t camera_intf_sccb_write2(uint8_t device_addr, uint8_t register_addr, uint8_t *data, uint8_t len){
+
+    uint8_t status;
+    i2c_operater.salve_id = device_addr;
+    i2c_operater.op_addr = register_addr;
+    i2c_operater.addr_width = ADDR_WIDTH_8;
+
+    status = ddev_write(i2c_hdl, (char *)data, (UINT32)len, (UINT32)&i2c_operater);
+
+    if(status != 0){
+        os_printf("Unable to read I2C.");
+    }
+
+    return status;
+
+}
+
+uint8_t camera_intf_sccb_read2(uint8_t device_addr, uint8_t register_addr, uint8_t *data, uint8_t len){
+    uint8_t status;
+    i2c_operater.salve_id = device_addr;
+    i2c_operater.op_addr = register_addr;
+    i2c_operater.addr_width = ADDR_WIDTH_8;
+
+    status = ddev_read(i2c_hdl, (char *)data, (UINT32)len, (UINT32)&i2c_operater);
+
+    if(status != 0){
+        os_printf("Unable to read I2C.");
+    }
+
+    return status;
+
+}
+
 /* None of the sensors I can test use 16 bit I2C addresses
 
 #else
