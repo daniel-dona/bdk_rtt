@@ -14,7 +14,7 @@
 #include "rtos_pub.h"
 #include "test_config.h"
 #include "gpio_pub.h"
-#define DEEP_SLEEP_TEST
+//#define DEEP_SLEEP_TEST
 #ifdef DEEP_SLEEP_TEST
 
 

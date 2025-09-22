@@ -70,6 +70,34 @@ def generate_beken_packager_json(beken_str, bootloader_str, firmware_str, out_js
             f.write(bk7251_out_json)
 	else:
             f.write(out_json)
+            
+def generate_ota_package(firmware_str, ota_str):
+    
+    # Will only work on x86-64
+    
+    os.system("ls tools/rt_ota_packaging_tool/ -la")
+    
+    RBL_CMD = './rt_ota_packaging_tool_cli-x64'
+
+    RBL_CMD += ' -f "' + firmware_str + '"'
+
+    import datetime
+    version = datetime.datetime.now().strftime('%Y%m%d_%H%M%S') # 20191219_124927
+    RBL_CMD += ' -v ' + version
+
+    RBL_CMD += ' -p app'
+    RBL_CMD += ' -o "' + ota_str + '"'
+    RBL_CMD += ' -c gzip'
+
+    RBL_CMD += ' -s aes -i ' + '0123456789ABCDEF' + ' -k ' + '0123456789ABCDEF0123456789ABCDEF'
+
+    RBL_CMD = 'tools/rt_ota_packaging_tool/' + RBL_CMD + "\n"
+    
+    os.system(RBL_CMD)
+    
+    print("Saving OTA file as ", ota_str)
+
+
 
 def gather_out_files(bootloader_str):
     if sys.platform == 'win32':
@@ -88,6 +116,7 @@ def gather_out_files(bootloader_str):
     os.system(cmd_mv + "rtthread.map" + out_folder)
     os.system(cmd_mv + "all_2M.1220.bin" + out_folder)
     os.system(cmd_mv + "rtthread_uart_2M.1220.bin" + out_folder)
+    os.system(cmd_mv + "rtthread_ota.rbl" + out_folder)
     os.system(cmd_cp + bootloader_str + out_folder)
     print 'rtthread.bin and other generated files were moved to folder %s' % out_folder
 
@@ -97,6 +126,7 @@ if __name__=='__main__':
 
     bootloader_str = ""
     firmware_str = "rtthread.bin"
+    ota_str = "rtthread_ota.rbl"
     out_json_str = "config.json"
     if beken_str == "bk7231u":
         bootloader_str = "tools/beken_packager/bootloader_bk7231u_uart2_v1.0.8.bin"
@@ -111,6 +141,7 @@ if __name__=='__main__':
 
     # copy or generate json file
     generate_beken_packager_json(beken_str, bootloader_str, firmware_str, out_json_str)
+    generate_ota_package(firmware_str, ota_str)
 
     # run beken packager and gather out files
     if sys.platform == 'win32':

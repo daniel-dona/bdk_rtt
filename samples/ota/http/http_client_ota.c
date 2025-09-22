@@ -31,7 +31,7 @@
 #define HTTP_OTA_BUFF_LEN 4096
 #define HTTP_OTA_DL_DELAY (10 * RT_TICK_PER_SECOND)
 
-#define HTTP_OTA_URL "http://192.168.10.135:80/rtthread.rbl"
+#define HTTP_OTA_URL "http://192.168.10.100:8888/rtthread_ota.rbl"
 
 static void print_progress(size_t cur_size, size_t total_size)
 {

@@ -735,6 +735,7 @@ static void init_app_thread( void *arg ){
     rtos_delete_thread( NULL );
 }
 
+/*
 void scan_camera_sensors(int argc, char **argv){
 
     os_printf("argc %d", argc);
@@ -853,7 +854,7 @@ void gpio_test_loop(int argc, char **argv){
 
     }
 }
-
+*/
 
 void fancy_msg(void){
     os_printf("\r\n");
@@ -913,44 +914,57 @@ void user_main_entry(void){
 
 
 static struct dfs_fd fd;
-void print_file(void){
+void run_init_script(void){
 
-    char buffer[81];
+    char cmd[32];
+    memset(cmd, 0, sizeof(cmd));
+    
+    char buf;
+    uint8_t i = 0;
+
     int length;
 
-    if (dfs_file_open(&fd, "/sd/wifi.cfg", O_RDONLY) < 0){
-        rt_kprintf("Open failed\n");
+    os_printf("Running init script: /sd/init.msh\r\n");
+
+    if (dfs_file_open(&fd, "/sd/init.msh", O_RDONLY) < 0){
+        os_printf("Init file open failed\r\n");
     }
 
-    do
-    {
-        memset(buffer, 0, sizeof(buffer));
-        length = dfs_file_read(&fd, buffer, sizeof(buffer)-1 );
-        if (length > 0)
-        {
-            rt_kprintf("%s", buffer);
+    do {
+        
+        length = dfs_file_read(&fd, &buf, 1 );
+        if (length > 0){
+            if(buf != '\n' && buf != '\r'){
+                //rt_kprintf("%c", buf);
+                cmd[i] = buf;
+                i++;
+
+            }else{
+                os_printf("\r\n ## Running command: %s\r\n", cmd);
+                msh_exec(cmd, i);
+                memset(cmd, 0, sizeof(cmd));
+                i = 0;
+            }
+            
         }
     }while (length > 0);
 
     dfs_file_close(&fd);
+
+    os_printf("Init script done.\r\n");
+
 }
 
 
 void app_start(void){
 
     app_pre_start();
-
     fancy_msg();
 
-    //print_file();
-
-    /*char * wifi = "wifi";
-
-    msh_exec(wifi, strlen(wifi));
-
-    char * webs = "web_jpeg_stream start";
-
-    msh_exec(webs, strlen(webs));*/
+    delay100us(5*10000);
+    run_init_script();
+    
+    
                                                                                                                                         
     //user_main_entry();
 
@@ -969,14 +983,14 @@ int bmsg_is_empty(void)
     }
 }
 
-void arg_test(int argc, char **argv){
+/*void arg_test(int argc, char **argv){
     os_printf("argc %d\n", argc);
-}
+}*/
 
-MSH_CMD_EXPORT(arg_test, arg test);
+//MSH_CMD_EXPORT(arg_test, arg test);
 //MSH_CMD_EXPORT(scan_camera_sensors , scan camera sensors);
-MSH_CMD_EXPORT(gpio_write , Set GPIO <pin> <value>);
-MSH_CMD_EXPORT(gpio_read , Set GPIO <pin> <value>);
+//MSH_CMD_EXPORT(gpio_write , Set GPIO <pin> <value>);
+//MSH_CMD_EXPORT(gpio_read , Set GPIO <pin> <value>);
 //MSH_CMD_EXPORT(gpio_test_loop, Loop over GPIOS)
 //MSH_CMD_EXPORT(sdcard_intf_test, sdcard_intf_test);
 // eof

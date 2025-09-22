@@ -112,7 +112,7 @@ int wifi_read_cfg(const char *filename)
             {
                 lseek(fd, 0, SEEK_SET);
                 read(fd, json_str, length);
-                rt_kprintf("JSON: %s", json_str);
+                //rt_kprintf("JSON: %s", json_str);
 
                 json = cJSON_Parse(json_str);
                 rt_free(json_str);
@@ -354,8 +354,6 @@ int wifi(int argc, char **argv)
 {
 	struct rt_wlan_info info = {0};
 	struct rt_wlan_device *wlan;
-
-    rt_kprintf("wifi argc %d", argc);
 
 	if (argc == 1) {
 		wifi_default();
