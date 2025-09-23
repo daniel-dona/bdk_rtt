@@ -15,6 +15,8 @@ uint8_t hi704_sensor_detect(void){
 
     camera_intf_sccb_read2(HI704_DEV_ID, addr, &data, 1);
 
+    os_printf("%x", data);
+
     uint8_t found = (data == HI704_DEV_CHIPID);
 
     if(found){

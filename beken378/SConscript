@@ -87,7 +87,7 @@ else:
 	src += ["driver/pwm/pwm_bk7231n.c"]
 	src += ["driver/gpio/gpio.c"]
 
-src += ["demo/ieee802_11_demo.c"]
+#src += ["demo/ieee802_11_demo.c"]
 src += ["func/func.c"]
 src += ["func/bk_aware/bk_aware.c"]
 src += ["func/audio/audio_intf.c"]

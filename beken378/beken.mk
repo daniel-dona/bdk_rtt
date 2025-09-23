@@ -174,11 +174,11 @@ $(NAME)_INCLUDES += func/$(WPA_VERSION)/src \
 					func/$(WPA_VERSION)/hostapd \
 					func/$(WPA_VERSION)/wpa_supplicant
 
-$(NAME)_SOURCES +=                      alios/lwip-2.0.2/port/ethernetif.c \
-					alios/lwip-2.0.2/port/net.c \
-					alios/lwip-2.0.2/apps/ping/ping.c \
-					alios/lwip-2.0.2/apps/iperf/iperf.c \
-					alios/os/mem_arch.c \
-					alios/os/str_arch.c \
-					alios/flash_hal.c \
-					alios/entry/arch_main.c
+#$(NAME)_SOURCES +=                      alios/lwip-2.0.2/port/ethernetif.c \
+#					alios/lwip-2.0.2/port/net.c \
+#					alios/lwip-2.0.2/apps/ping/ping.c \
+#					alios/lwip-2.0.2/apps/iperf/iperf.c \
+#					alios/os/mem_arch.c \
+#					alios/os/str_arch.c \
+#					alios/flash_hal.c \
+#					alios/entry/arch_main.c

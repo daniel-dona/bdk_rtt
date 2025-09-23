@@ -385,8 +385,10 @@ camera_sensor_t* camera_detect(){
     UINT32 i2c2_trans_mode = (0 & (~I2C2_MSG_WORK_MODE_MS_BIT)// master
                               & (~I2C2_MSG_WORK_MODE_AL_BIT))// 7bit address
                              | (I2C2_MSG_WORK_MODE_IA_BIT); // with inner address
+
     i2c_hdl = ddev_open(I2C2_DEV_NAME, &status, i2c2_trans_mode);
-    bk_printf("open I2C2\r\n");
+    
+    os_printf("Searching for camera sensors, using I2C2 bus...\r\n");
 
     camera_sensor_t* sensor = malloc(sizeof(camera_sensor_t));
 
@@ -406,11 +408,16 @@ camera_sensor_t* camera_detect(){
         sensor->name = rt_strdup("Hynix 704");
         sensor->init = hi704_sensor_init;
 
+    }else{
+        /*sensor->name = rt_strdup("None");
+        sensor->init = hi704_sensor_init;*/
+        os_printf("No compatible sensor found!\r\n");
+        return NULLPTR;
     }
     
 
     GLOBAL_INT_DECLARATION();
-    os_printf("camera_intfer_deinit,%p-%p\r\n", ejpeg_hdl, i2c_hdl);
+    //os_printf("camera_intfer_deinit,%p-%p\r\n", ejpeg_hdl, i2c_hdl);
 
     ddev_close(ejpeg_hdl);
     ddev_close(i2c_hdl);
