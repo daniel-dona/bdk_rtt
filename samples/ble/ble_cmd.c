@@ -28,37 +28,91 @@
 #define INDICATE_CHARACTERISTIC_128         {0x02,0xFF,0,0,0x34,0x56,0,0,0,0,0x28,0x37,0,0,0,0}
 #define NOTIFY_CHARACTERISTIC_128           {0x03,0xFF,0,0,0x34,0x56,0,0,0,0,0x28,0x37,0,0,0,0}
 
+// Improv
+#define IMPROV_STATUS_CHARACTERISTIC_128 { 0x01, 0x80, 0x26, 0x78, 0x74, 0x27, 0x63, 0x46, 0x72, 0x22, 0x28, 0x62, 0x68, 0x77, 0x46, 0x00}
+#define IMPROV_ERROR_CHARACTERISTIC_128 { 0x02, 0x80, 0x26, 0x78, 0x74, 0x27, 0x63, 0x46, 0x72, 0x22, 0x28, 0x62, 0x68, 0x77, 0x46, 0x00}
+#define IMPROV_RPCCMD_CHARACTERISTIC_128 { 0x03, 0x80, 0x26, 0x78, 0x74, 0x27, 0x63, 0x46, 0x72, 0x22, 0x28, 0x62, 0x68, 0x77, 0x46, 0x00}
+#define IMPROV_RPCRES_CHARACTERISTIC_128 { 0x04, 0x80, 0x26, 0x78, 0x74, 0x27, 0x63, 0x46, 0x72, 0x22, 0x28, 0x62, 0x68, 0x77, 0x46, 0x00}
+#define IMPROV_CAPS_CHARACTERISTIC_128 { 0x05, 0x80, 0x26, 0x78, 0x74, 0x27, 0x63, 0x46, 0x72, 0x22, 0x28, 0x62, 0x68, 0x77, 0x46, 0x00}
 
-static const uint8_t test_svc_uuid[16] = {0xFF,0xFF,0,0,0x34,0x56,0,0,0,0,0x28,0x37,0,0,0,0};
+// Adv
+static const uint8_t test_svc_uuid[16] = { //Little endian AND inverted
+    0x00, 0x80, 0x26, 0x78, 0x74, 0x27,  // 277478268000
+    0x63, 0x46,                          // 4663
+    0x72, 0x22,                          // 2272 
+    0x28, 0x62,                          // 6228 
+    0x68, 0x77, 0x46, 0x00               // 00467768
+};
 
 enum
 {
-	TEST_IDX_SVC,	 
-	TEST_IDX_FF01_VAL_CHAR,
-	TEST_IDX_FF01_VAL_VALUE,
-	TEST_IDX_FF02_VAL_CHAR,
-	TEST_IDX_FF02_VAL_VALUE,
-	TEST_IDX_FF02_VAL_IND_CFG,
-	TEST_IDX_NB,
+	IMPROV_IDX_SVC,	 
+
+	IMPROV_STATUS_IDX_CHAR,
+	IMPROV_STATUS_IDX_VALUE,
+	IMPROV_STATUS_IDX_DESC,
+
+	IMPROV_ERROR_IDX_CHAR,
+	IMPROV_ERROR_IDX_VALUE,
+	IMPROV_ERROR_IDX_DESC,
+
+	IMPROV_RPCCMD_IDX_CHAR,
+	IMPROV_RPCCMD_IDX_VALUE,
+	IMPROV_RPCCMD_IDX_DESC,
+
+	IMPROV_RPCRES_IDX_CHAR,
+	IMPROV_RPCRES_IDX_VALUE,
+	IMPROV_RPCRES_IDX_DESC,
+
+	IMPROV_CAPS_IDX_CHAR,
+	IMPROV_CAPS_IDX_VALUE,
+	IMPROV_CAPS_IDX_DESC,
+
+	IMPROV_IDX_NB,
 };
 
-bk_attm_desc_t test_att_db[6] =
+uint8_t capabilities_value = 0x01;
+
+bk_attm_desc_t test_att_db[] =
 {
 	//  Service Declaration
-	[TEST_IDX_SVC]              = {BK_ATT_DECL_PRIMARY_SERVICE_128, BK_PERM_SET(RD, ENABLE), 0, 0},
+	[IMPROV_IDX_SVC]              = {BK_ATT_DECL_PRIMARY_SERVICE_128, BK_PERM_SET(RD, ENABLE), 0, 0},
 	
 	//  Level Characteristic Declaration
-	[TEST_IDX_FF01_VAL_CHAR]    = {BK_ATT_DECL_CHARACTERISTIC_128,  BK_PERM_SET(RD, ENABLE), 0, 0},
+	//[TEST_IDX_FF01_VAL_CHAR]    = {BK_ATT_DECL_CHARACTERISTIC_128,  BK_PERM_SET(RD, ENABLE), 0, 0},
 	//  Level Characteristic Value
-	[TEST_IDX_FF01_VAL_VALUE]   = {WRITE_REQ_CHARACTERISTIC_128,    BK_PERM_SET(WRITE_REQ, ENABLE), BK_PERM_SET(RI, ENABLE) , 128},
+	//[TEST_IDX_FF01_VAL_VALUE]   = {WRITE_REQ_CHARACTERISTIC_128,    BK_PERM_SET(WRITE_REQ, ENABLE), BK_PERM_SET(RI, ENABLE) , 128},
 	
-	[TEST_IDX_FF02_VAL_CHAR]    = {BK_ATT_DECL_CHARACTERISTIC_128,  BK_PERM_SET(RD, ENABLE), 0, 0},
+	//[TEST_IDX_FF02_VAL_CHAR]    = {BK_ATT_DECL_CHARACTERISTIC_128,  BK_PERM_SET(RD, ENABLE), 0, 0},
 	//  Level Characteristic Value
-	[TEST_IDX_FF02_VAL_VALUE]   = {INDICATE_CHARACTERISTIC_128,     BK_PERM_SET(IND, ENABLE) , BK_PERM_SET(RI, ENABLE) , 128},
+	//[TEST_IDX_FF02_VAL_VALUE]   = {INDICATE_CHARACTERISTIC_128,     BK_PERM_SET(IND, ENABLE) , BK_PERM_SET(RI, ENABLE) , 128},
 
 	//  Level Characteristic - Client Characteristic Configuration Descriptor
 
-	[TEST_IDX_FF02_VAL_IND_CFG] = {BK_ATT_DESC_CLIENT_CHAR_CFG_128, BK_PERM_SET(RD, ENABLE)|BK_PERM_SET(WRITE_REQ, ENABLE), 0, 0},
+	//[TEST_IDX_FF02_VAL_IND_CFG] = {BK_ATT_DESC_CLIENT_CHAR_CFG_128, BK_PERM_SET(RD, ENABLE)|BK_PERM_SET(WRITE_REQ, ENABLE), 0, 0},
+
+	// Improv implementation
+	[IMPROV_STATUS_IDX_CHAR]        = {BK_ATT_DECL_CHARACTERISTIC_128, BK_PERM_SET(RD, ENABLE), 0, 0},
+	[IMPROV_STATUS_IDX_VALUE]       = {IMPROV_STATUS_CHARACTERISTIC_128, BK_PERM_SET(RD, ENABLE)|BK_PERM_SET(NTF, ENABLE) , BK_PERM_SET(UUID_LEN, UUID_128), 0},
+	[IMPROV_STATUS_IDX_DESC]        = {BK_ATT_DESC_CLIENT_CHAR_CFG_128, BK_PERM_SET(RD, ENABLE)|BK_PERM_SET(WRITE_REQ, ENABLE) , 0, 0},
+
+
+	[IMPROV_ERROR_IDX_CHAR]        = {BK_ATT_DECL_CHARACTERISTIC_128, BK_PERM_SET(RD, ENABLE), 0, 0},
+	[IMPROV_ERROR_IDX_VALUE]       = {IMPROV_ERROR_CHARACTERISTIC_128, BK_PERM_SET(RD, ENABLE)|BK_PERM_SET(NTF, ENABLE)  , BK_PERM_SET(UUID_LEN, UUID_128), sizeof(capabilities_value)},
+	[IMPROV_ERROR_IDX_DESC]        = {BK_ATT_DESC_CLIENT_CHAR_CFG_128, BK_PERM_SET(RD, ENABLE)|BK_PERM_SET(WRITE_REQ, ENABLE) , 0, 0},
+
+	[IMPROV_RPCCMD_IDX_CHAR]        = {BK_ATT_DECL_CHARACTERISTIC_128, BK_PERM_SET(RD, ENABLE), 0, 0},
+	[IMPROV_RPCCMD_IDX_VALUE]       = {IMPROV_RPCCMD_CHARACTERISTIC_128, BK_PERM_SET(WRITE_REQ, ENABLE) , BK_PERM_SET(UUID_LEN, UUID_128), sizeof(capabilities_value)},
+	[IMPROV_RPCCMD_IDX_DESC]        = {BK_ATT_DESC_CLIENT_CHAR_CFG_128, BK_PERM_SET(RD, ENABLE)|BK_PERM_SET(WRITE_REQ, ENABLE) , 0, 0},
+
+	[IMPROV_RPCRES_IDX_CHAR]        = {BK_ATT_DECL_CHARACTERISTIC_128, BK_PERM_SET(RD, ENABLE), 0, 0},
+	[IMPROV_RPCRES_IDX_VALUE]       = {IMPROV_RPCRES_CHARACTERISTIC_128, BK_PERM_SET(RD, ENABLE)|BK_PERM_SET(NTF, ENABLE)  , BK_PERM_SET(UUID_LEN, UUID_128), sizeof(capabilities_value)},
+	[IMPROV_RPCRES_IDX_DESC]        = {BK_ATT_DESC_CLIENT_CHAR_CFG_128, BK_PERM_SET(RD, ENABLE)|BK_PERM_SET(WRITE_REQ, ENABLE), 0, 0},
+
+	[IMPROV_CAPS_IDX_CHAR]        = {BK_ATT_DECL_CHARACTERISTIC_128, BK_PERM_SET(RD, ENABLE), 0, 0},
+	[IMPROV_CAPS_IDX_VALUE]       = {IMPROV_CAPS_CHARACTERISTIC_128, BK_PERM_SET(RD, ENABLE) , BK_PERM_SET(UUID_LEN, UUID_128), sizeof(capabilities_value)},
+	[IMPROV_CAPS_IDX_DESC]        = {BK_ATT_DESC_CLIENT_CHAR_CFG_128, BK_PERM_SET(RD, ENABLE)|BK_PERM_SET(WRITE_REQ, ENABLE) , 0, 0},
+
 };
 
 ble_err_t bk_ble_init(void)
@@ -67,11 +121,32 @@ ble_err_t bk_ble_init(void)
     struct bk_ble_db_cfg ble_db_cfg;
 
     ble_db_cfg.att_db = test_att_db;
-    ble_db_cfg.att_db_nb = TEST_IDX_NB;
+    ble_db_cfg.att_db_nb = IMPROV_IDX_NB;
     ble_db_cfg.prf_task_id = 0;
     ble_db_cfg.start_hdl = 0;
-    ble_db_cfg.svc_perm = 0;
-    memcpy(&(ble_db_cfg.uuid[0]), &test_svc_uuid[0], 16);
+    ble_db_cfg.svc_perm = BK_PERM_SET(SVC_UUID_LEN, UUID_128); // 128 bit UUID
+
+    memcpy(&(ble_db_cfg.uuid[0]), &test_svc_uuid[0], sizeof(uint8_t)*16);
+
+	/*bk_printf("SERVICE: %02x,%02x,%02x,%02x,%02x,%02x,%02x,%02x,%02x,%02x,%02x,%02x,%02x,%02x,%02x,%02x", 
+		ble_db_cfg.uuid[0], 
+		ble_db_cfg.uuid[1], 
+		ble_db_cfg.uuid[2], 
+		ble_db_cfg.uuid[3], 
+		ble_db_cfg.uuid[4], 
+		ble_db_cfg.uuid[5], 
+		ble_db_cfg.uuid[6], 
+		ble_db_cfg.uuid[7],
+		ble_db_cfg.uuid[8], 
+		ble_db_cfg.uuid[9], 
+		ble_db_cfg.uuid[10], 
+		ble_db_cfg.uuid[11], 
+		ble_db_cfg.uuid[12],  
+		ble_db_cfg.uuid[13], 
+		ble_db_cfg.uuid[14], 
+		ble_db_cfg.uuid[15]);*/
+
+	//memcpy(&(ble_db_cfg.uuid[0]), CAPS_CHARACTERISTIC_128, 16);
 
     status = bk_ble_create_db(&ble_db_cfg);
 
@@ -131,13 +206,17 @@ void appm_adv_data_decode(uint8_t len, const uint8_t *data)
     return ;
 }
 
-void ble_write_callback(write_req_t *write_req)
-{
+void ble_write_callback(write_req_t *write_req){
+
     bk_printf("write_cb[prf_id:%d, att_idx:%d, len:%d]\r\n", write_req->prf_id, write_req->att_idx, write_req->len);
+
+    for(int i = 0; i < write_req->len; i++){
+        bk_printf("Data [%d]: 0x%02x ", i, write_req->value[i]);
+    }
+    bk_printf("\r\n");
 }
 
-uint8_t ble_read_callback(read_req_t *read_req)
-{
+uint8_t ble_read_callback(read_req_t *read_req){
     bk_printf("read_cb[prf_id:%d, att_idx:%d]\r\n", read_req->prf_id, read_req->att_idx);
     read_req->value[0] = 0x10;
     read_req->value[1] = 0x20;
@@ -237,11 +316,11 @@ typedef adv_info_t ble_adv_param_t;
 static void ble_advertise(void)
 {
     UINT8 mac[6];
-    char ble_name[20];
+    char ble_name[22];
     UINT8 adv_idx, adv_name_len;
 
     wifi_get_mac_address((char *)mac, CONFIG_ROLE_STA);
-    adv_name_len = snprintf(ble_name, sizeof(ble_name), "bk72xx-%02x%02x", mac[4], mac[5]);
+    adv_name_len = snprintf(ble_name, sizeof(ble_name), "OpenCam-%02x%02x", mac[2], mac[1], mac[0]);
 
     memset(&adv_info, 0x00, sizeof(adv_info));
 
@@ -250,22 +329,73 @@ static void ble_advertise(void)
     adv_info.interval_max = 160;
 
     adv_idx = 0;
-    adv_info.advData[adv_idx] = 0x02; adv_idx++;
-    adv_info.advData[adv_idx] = 0x01; adv_idx++;
-    adv_info.advData[adv_idx] = 0x06; adv_idx++;
 
-    adv_info.advData[adv_idx] = adv_name_len + 1; adv_idx +=1;
-    adv_info.advData[adv_idx] = 0x09; adv_idx +=1; //name
-    memcpy(&adv_info.advData[adv_idx], ble_name, adv_name_len); adv_idx +=adv_name_len;
+    // Flags
+    adv_info.advData[adv_idx++] = 0x02;  // Length
+    adv_info.advData[adv_idx++] = 0x01;  // AD Type: Flags
+    adv_info.advData[adv_idx++] = 0x06;  // Flags value
+
+
+
+	/*// Complete List of 16-bit Service UUIDs (if you want to add services)
+    adv_info.advData[adv_idx++] = 0x03;  // Length (1 + 2 = 3 bytes)
+    adv_info.advData[adv_idx++] = 0x03;  // AD Type: Complete List of 16-bit UUIDs
+    adv_info.advData[adv_idx++] = 0x77;  // Device Information Service - Low byte (0x180A)
+    adv_info.advData[adv_idx++] = 0x46;  // Device Information Service - High byte*/
+
+	/*static const UINT8 custom_uuid[] = {
+		0x9E, 0xCA, 0xDC, 0x24, 0x0E, 0xE5, 0xA9, 0xE0,
+		0x93, 0xF3, 0xA3, 0xB5, 0x01, 0x00, 0x40, 0x6E
+	};*/
+
+	// Add to advertising data
+	adv_info.advData[adv_idx++] = 0x11;  // Length (1 + 16 = 17 bytes)
+	adv_info.advData[adv_idx++] = 0x07;  // AD Type: Complete List of 128-bit UUIDs
+	memcpy(&adv_info.advData[adv_idx], test_svc_uuid, 16);
+	adv_idx += 16;
+
+
+    adv_info.advData[adv_idx++] = 0x03;
+    adv_info.advData[adv_idx++] = 0x08; //name
+	adv_info.advData[adv_idx++] = 'O'; //name
+	adv_info.advData[adv_idx++] = 'C'; //name
+
+    /*memcpy(&adv_info.advData[adv_idx], ble_name, adv_name_len); adv_idx +=adv_name_len;*/
 
     adv_info.advDataLen = adv_idx;
 
+	bk_printf("ADV_LEN: %d\n", adv_info.advDataLen);
+
+	
+	// Response data
+
     adv_idx = 0;
 
-    adv_info.respData[adv_idx] = adv_name_len + 1; adv_idx +=1;
-    adv_info.respData[adv_idx] = 0x08; adv_idx +=1; //name
+    // Service Data for Battery Service (example: battery level 85%)
+    adv_info.respData[adv_idx++] = 0x09;  // Length (1 + 2 + 6 = 9 bytes)
+    adv_info.respData[adv_idx++] = 0x16;  // AD Type: Service Data - 16-bit UUID
+    adv_info.respData[adv_idx++] = 0x77;  // Battery Service UUID Low byte
+    adv_info.respData[adv_idx++] = 0x46;  // Battery Service UUID High byte
+    adv_info.respData[adv_idx++] = 0x02;  // State
+	adv_info.respData[adv_idx++] = 0x00;  // Caps
+	adv_info.respData[adv_idx++] = 0x00;  // Res
+	adv_info.respData[adv_idx++] = 0x00;  // Res
+	adv_info.respData[adv_idx++] = 0x00;  // Res
+	adv_info.respData[adv_idx++] = 0x00;  // Res
+
+	// Appearance - Camera Device
+    adv_info.respData[adv_idx++] = 0x03;  // Length (1 + 2 = 3 bytes)
+    adv_info.respData[adv_idx++] = 0x19;  // AD Type: Appearance
+    adv_info.respData[adv_idx++] = 0x40;  // Camera appearance - Low byte (0x0240)
+    adv_info.respData[adv_idx++] = 0x02;  // Camera appearance - High byte
+
+	adv_info.respData[adv_idx++] = adv_name_len + 1;
+    adv_info.respData[adv_idx++] = 0x08; //name
+
     memcpy(&adv_info.respData[adv_idx], ble_name, adv_name_len); adv_idx +=adv_name_len;
     adv_info.respDataLen = adv_idx;
+
+	bk_printf("RSP_LEN: %d\n", adv_info.respDataLen);
 
     if (ERR_SUCCESS != appm_start_advertising())
     {
@@ -286,7 +416,7 @@ static void ble(int argc, char **argv)
         ble_set_write_cb(ble_write_callback);
         ble_set_read_cb(ble_read_callback);
         ble_set_event_cb(ble_event_callback);
-        ble_activate(NULL);
+        ble_activate("opencam");
     }
 	else if(os_strcmp(argv[1], "start_adv") == 0)
     { 

@@ -3,7 +3,6 @@
 #define ADC_TEST
 
 /*deep sleep test*/
-#define DEEP_SLEEP_TEST
 
 /*sd card play*/
 #define CHECK_SD_PLAY_TEST
@@ -81,6 +80,8 @@
 #define VIDEO_BUF_TEST
 #define WEB_CAMERA_TEST
 #define MICPHONE_TEST
+#define DEEP_SLEEP_TEST
+
 
 //#define I2C_RTT_TEST
 

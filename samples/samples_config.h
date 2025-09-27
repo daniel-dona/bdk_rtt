@@ -34,6 +34,7 @@
 //#define WEBNET_SAMPLE
 
 #define SAMPLE_USING_OTA_HTTP
+#define BLE_CONFIG_SAMPLE
 
 #ifdef XIAOYA_OS
 #define VOICE_CONFIG_TEST

@@ -15,12 +15,32 @@
 #include "error.h"
 #include "video_transfer.h"
 #include "test_config.h"
+#include "fake_clock_pub.h"
+
 
 #ifdef WEB_CAMERA_TEST
 #define MJPEG_BOUNDARY "boundarydonotcross"
 #define MAX_BUF_SIZE    40*1024
 static int  g_mjpeg_stop = 0;
+static int  g_mjpeg_stream = 1;
 static char g_send_buf[1024];
+
+beken_semaphore_t buf_ready[2];
+beken_semaphore_t buf_free[2];
+
+
+typedef struct {
+    void *buf;
+    int *size;
+} thread_vbuf_t;
+
+typedef struct {
+    void *buf0;
+    void *buf1;
+    int size0;
+    int size1;
+} thread_2vbuf_t;
+
 
 int send_first_response(int client)
 {
@@ -83,23 +103,78 @@ int mjpeg_send_stream(int client, void *data, int size)
     return -1;
 }
 
-void mjpeg_server_thread(void *arg)
-{
+void mjpeg_server_thread_capture(void *arg){
+
+    uint8_t active_idx = 0;
+
+    thread_2vbuf_t *params = (thread_2vbuf_t *) arg;
+    rt_tick_t t0 = 0, t1 = 0;
+
+    uint8_t stat_count = 0;
+
+    while (!g_mjpeg_stop){
+        while(!g_mjpeg_stream){
+
+            
+
+            switch (active_idx){
+                case 0:
+                    //bk_printf("Waiting to wrote on %d\r\n", active_idx);
+                    if (rtos_get_semaphore(&buf_free[active_idx], BEKEN_WAIT_FOREVER) == kNoErr){
+                        t0 = rt_tick_get();
+                        params->size0 = video_buffer_read_frame(params->buf0, MAX_BUF_SIZE);
+                        t1 = rt_tick_get();
+                        //bk_printf("Wrote on %d\r\n", active_idx);
+                        rtos_set_semaphore(&buf_ready[active_idx]);
+                        active_idx = 1;
+                        break;
+                    }
+
+                case 1:
+                    //bk_printf("Waiting to wrote on %d\r\n", active_idx);
+                    if (rtos_get_semaphore(&buf_free[active_idx], BEKEN_WAIT_FOREVER) == kNoErr){
+                        t0 = rt_tick_get();
+                        params->size1 = video_buffer_read_frame(params->buf1, MAX_BUF_SIZE);
+                        t1 = rt_tick_get();
+                        //bk_printf("Wrote on %d\r\n", active_idx);
+                        rtos_set_semaphore(&buf_ready[active_idx]);
+                        active_idx = 0;
+                        break;
+                    }
+            }
+
+            
+
+            /*if((int) (100-(t1-t0)) > 5){
+                //bk_printf(">>> %d %d\r\n", (int) 100-(t1-t0), (100-(t1-t0)) > 5);
+                rtos_delay_milliseconds((int) 100-(t1-t0));
+            }*/
+
+            stat_count += 1;
+
+            if (stat_count == 100){
+                bk_printf("Sensor delay: %d\r\n", t1-t0);
+                stat_count = 0;
+            }
+        }
+
+        rtos_delay_milliseconds(100);
+    }
+
+}
+
+void mjpeg_server_thread(void *arg){
+
+    uint8_t active_idx = 0;
+
     int on;
     int srv_sock = -1;
-    int fream_length=0;
+    //int fream_length=0;
     struct sockaddr_in addr;
     socklen_t sock_len = sizeof(struct sockaddr_in);
 
-    //int bufsz = 50 * 1024;
-    uint8_t *buf = (uint8_t *) malloc (MAX_BUF_SIZE);
-
-    if (!buf)
-    {
-        rt_kprintf("no buffer yet!\n");
-        return ;
-    }
-
+    thread_2vbuf_t *params = (thread_2vbuf_t *) arg;
+    
 
     srv_sock = socket(AF_INET, SOCK_STREAM, 0);
     if (srv_sock < 0)
@@ -148,32 +223,78 @@ void mjpeg_server_thread(void *arg)
 			continue;
 		}
 
-		while (1)
-		{
-			fream_length = 0;
-			/* capture a jpeg frame */
-            fream_length = video_buffer_read_frame(buf, MAX_BUF_SIZE);
-            //rt_kprintf("len:%d\r\n",fream_length);
-			if (fream_length !=0)
-			{
+        rt_tick_t t0 = 0, t1 = 0;
+        int res = 0;
+        uint8_t stat_count = 0;
+
+		while (1){
+
+            g_mjpeg_stream = 0;
+			
+    		//if (params->size0 != 0 || params->size1 != 0){
 				/* send out this frame */
-				if (mjpeg_send_stream(client, (void*)buf, fream_length) < 0)
-				{
+
+                
+
+                switch (active_idx){
+                    case 0:
+                        //bk_printf("Waiting to read from %d\r\n", active_idx);
+                        if (rtos_get_semaphore(&buf_ready[active_idx], BEKEN_WAIT_FOREVER) == kNoErr){
+                            t0 = rt_tick_get();
+                            res = mjpeg_send_stream(client, (void*)params->buf0, params->size0);
+                            t1 = rt_tick_get();
+                            //bk_printf("Read from %d\r\n", active_idx);
+                            
+                            rtos_set_semaphore(&buf_free[active_idx]);
+                            active_idx = 1;
+                            
+                            break;
+                        }
+
+                    case 1:
+                        //bk_printf("Waiting to read from %d\r\n", active_idx);
+                        if (rtos_get_semaphore(&buf_ready[active_idx], BEKEN_WAIT_FOREVER) == kNoErr){
+                            t0 = rt_tick_get();
+                            res = mjpeg_send_stream(client, (void*)params->buf1, params->size1);
+                            t1 = rt_tick_get();
+                            //bk_printf("Read from %d\r\n", active_idx);
+                            
+                            rtos_set_semaphore(&buf_free[active_idx]);
+                            active_idx = 0;
+                            
+                            break;
+                        }
+
+                }
+
+
+                
+
+                if (stat_count == 100){
+                    bk_printf("Send frame latency %d ms\r\n", t1-t0);
+                    stat_count = 0;
+                }
+
+                stat_count += 1;
+                
+
+				if (res < 0){
 					rt_kprintf("client disconnected!\n");
+                    g_mjpeg_stream = 1;
 					break;
 				}
-			}
+			//}else{
+
+               // rtos_delay_milliseconds(10);
+            //}
 		}
 	}
 
 exit:
-	if (srv_sock >= 0) 
+	if (srv_sock >= 0){
         close(srv_sock);
-	if (buf)
-    {
-        free(buf);
-        buf=NULL;
     }
+	
 }
 
 int web_jpeg_stream(int argc, char** argv)
@@ -190,11 +311,49 @@ int web_jpeg_stream(int argc, char** argv)
 
     if (strcmp(argv[1], "start") == 0)
     {
-        rt_kprintf("start web camerar\r\n");
-        rt_thread_t tid;
-        tid = rt_thread_create("jpeg_stream", mjpeg_server_thread, NULL, 2048,20, 10);
-        if (tid) 
-            rt_thread_startup(tid);
+        rt_kprintf("start web camera\r\n");
+
+        
+        thread_2vbuf_t *params = malloc(sizeof(thread_2vbuf_t));
+
+        params->buf0 = malloc(MAX_BUF_SIZE);
+        params->buf1 = malloc(MAX_BUF_SIZE);
+        params->size0 = 0;
+        params->size1 = 0;
+
+        rtos_init_semaphore(&buf_ready[0], 1);
+        rtos_init_semaphore(&buf_ready[1], 1);
+        rtos_init_semaphore(&buf_free[0], 1);
+        rtos_init_semaphore(&buf_free[1], 1);
+
+        rtos_set_semaphore(&buf_free[0]);
+        rtos_set_semaphore(&buf_free[1]);
+
+        /*OSStatus ret = rtos_set_semaphore(&buf_free[0]);
+
+        bk_printf("Ret: %d %d %d\r\n", ret, kNoErr, kGeneralErr);
+
+        bk_printf("Sema: %d\r\n", rtos_get_sema_count(&buf_ready[0]));
+        bk_printf("Sema: %d\r\n", rtos_get_sema_count(&buf_ready[1]));
+        bk_printf("Sema: %d\r\n", rtos_get_sema_count(&buf_free[0]));
+        bk_printf("Sema: %d\r\n", rtos_get_sema_count(&buf_free[1]));*/
+
+        if(params != NULLPTR && params->buf0 != NULLPTR && params->buf1 != NULLPTR){
+
+            rt_thread_t tid;
+
+            tid = rt_thread_create("jpeg_stream", mjpeg_server_thread, params, 2048,20, 10);
+            if (tid){
+                rt_thread_startup(tid);
+            }
+
+            tid = rt_thread_create("jpeg_stream_capture", mjpeg_server_thread_capture, params, 2048,20, 10);
+            if (tid){
+                rt_thread_startup(tid);
+            }
+        }else{
+            bk_printf("Malloc failed!\r\n");
+        }
     }
     else
     {
@@ -202,56 +361,6 @@ int web_jpeg_stream(int argc, char** argv)
     }
 
     return 0;
-}
-
-static void fream_set_video_param(int argc, char* argv[])
-{
-
-    if(1==atoi(argv[1]))
-    {
-        video_transfer_set_video_param(QVGA_320_240,TYPE_10FPS);
-    }
-    else if(2==atoi(argv[1]))
-    {
-        video_transfer_set_video_param(VGA_640_480,TYPE_10FPS);
-    }
-}
-
-char* base64_encode(const uint8_t* data, size_t input_length) {
-    // Base64 character set
-    static const char encoding_table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-    
-    // Calculate the length of the output string
-    size_t output_length = 4 * ((input_length + 2) / 3);
-
-    // Allocate memory for the encoded string
-    char* encoded_data = malloc(output_length + 1);
-    if (encoded_data == NULL) return NULL;
-
-    // Process the input data in chunks of 3 bytes
-    for (int i = 0, j = 0; i < input_length;) {
-        uint32_t octet_a = i < input_length ? (unsigned char)data[i++] : 0;
-        uint32_t octet_b = i < input_length ? (unsigned char)data[i++] : 0;
-        uint32_t octet_c = i < input_length ? (unsigned char)data[i++] : 0;
-
-        uint32_t triple = (octet_a << 16) + (octet_b << 8) + octet_c;
-
-        encoded_data[j++] = encoding_table[(triple >> 18) & 0x3F];
-        encoded_data[j++] = encoding_table[(triple >> 12) & 0x3F];
-        encoded_data[j++] = encoding_table[(triple >> 6) & 0x3F];
-        encoded_data[j++] = encoding_table[triple & 0x3F];
-    }
-
-    // Add padding if necessary
-    int mod_table[] = {0, 2, 1};
-    for (int i = 0; i < mod_table[input_length % 3]; i++) {
-        encoded_data[output_length - 1 - i] = '=';
-    }
-
-    // Null-terminate the string
-    encoded_data[output_length] = '\0';
-
-    return encoded_data;
 }
 
 static struct dfs_fd fd;
@@ -292,7 +401,7 @@ void save_pic(int argc, char **argv){
 }
 
 MSH_CMD_EXPORT(web_jpeg_stream, web_jpeg_stream server);
-MSH_CMD_EXPORT(fream_set_video_param, fream_set_video_param cmd);
+//MSH_CMD_EXPORT(fream_set_video_param, fream_set_video_param cmd);
 
 MSH_CMD_EXPORT(save_pic, save_pic to sd);
 

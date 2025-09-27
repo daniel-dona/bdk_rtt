@@ -257,7 +257,7 @@ void enter_dut_fcc_mode(void)
 					bk7011_reduce_vdddig_for_rx(1);
 					ble_dut_status = DUT_RUNNING;
 					sddev_control(SCTRL_DEV_NAME, CMD_SCTRL_MCLK_MUX_GET, &default_mclk_mux);
-					sddev_control(SCTRL_DEV_NAME, CMD_SCTRL_MCLK_DIV_GET, &default_mclk_div);
+					sddev_control(SCTRL_DEV_NAME, CMD_SCTRL_MCLK_DIV_GET, &default_);
 					reg = MCLK_SELECT_DPLL;
 					sddev_control(SCTRL_DEV_NAME, CMD_SCTRL_MCLK_SELECT, &reg);
 					reg = BLE_DUT_DIVISION;

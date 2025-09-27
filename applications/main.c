@@ -78,7 +78,7 @@ int main(int argc, char **argv){
             rt_kprintf("SD File System initialzation failed!\n");
     #endif
 
-    #if 0
+    #if 1
         const struct fal_partition *dl_part = RT_NULL;
 
         if ((dl_part = fal_partition_find("app")) != RT_NULL)

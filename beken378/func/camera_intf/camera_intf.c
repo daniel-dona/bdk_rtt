@@ -106,7 +106,7 @@ static void camera_intf_start_delay_timer(void){
     //REG_WRITE((0x00802800+(16*4)), 0x02);
 
     param.channel = EJPEG_DELAY_HTIMER_CHNAL;
-    param.div = 1;
+    param.div = 1; // WTF
     param.period = EJPEG_DELAY_HTIMER_VAL;
     param.t_Int_Handler = camera_intf_delay_timer_hdl;
 
@@ -387,7 +387,7 @@ camera_sensor_t* camera_detect(){
                              | (I2C2_MSG_WORK_MODE_IA_BIT); // with inner address
 
     i2c_hdl = ddev_open(I2C2_DEV_NAME, &status, i2c2_trans_mode);
-    
+
     os_printf("Searching for camera sensors, using I2C2 bus...\r\n");
 
     camera_sensor_t* sensor = malloc(sizeof(camera_sensor_t));

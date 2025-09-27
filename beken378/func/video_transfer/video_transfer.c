@@ -354,7 +354,7 @@ static void tvideo_config_desc(void)
     // only bk7236 support 720P
     //CMPARAM_SET_PPI(tvideo_st.sener_cfg, VGA_1280_720);
 
-    CMPARAM_SET_FPS(tvideo_st.sener_cfg, TYPE_20FPS);
+    CMPARAM_SET_FPS(tvideo_st.sener_cfg, FPS_MAX);
 
     tvideo_st.node_full_handler = tvideo_rx_handler;
     tvideo_st.data_end_handler = tvideo_end_frame_handler;
