@@ -9,8 +9,8 @@ ifeq ($(CFG_USE_WPA_29),0)
 WPA_VERSION := hostapd-2.5
 endif
 
-$(NAME)_INCLUDES := ../../app/standalone-ap \
-					../../app/standalone-station \
+$(NAME)_INCLUDES := ../../old_app/standalone-ap \
+					../../old_app/standalone-station \
 					../../driver/sdio \
 					../../driver/uart \
 					../../driver/sys_ctrl \

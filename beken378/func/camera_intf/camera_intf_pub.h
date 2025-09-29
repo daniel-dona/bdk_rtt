@@ -11,6 +11,7 @@ typedef void (*sensor_init_func_t)(DD_HANDLE, DD_HANDLE, camera_sensor_t*);
 
 struct camera_sensor_t{
   char *name;
+  char *i2c_bus;
   I2C_OP_ST *i2c_cfg;
   DJPEG_DESC_ST *ejpeg_cfg;
   sensor_init_func_t init;;

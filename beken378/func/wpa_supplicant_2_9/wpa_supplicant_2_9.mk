@@ -41,7 +41,7 @@ $(NAME)_INCLUDES += ../../driver/dma\
                     ../../func/user_driver\
                     ../../func/temp_detect\
                     ../../func/rwnx_intf\
-                    ../../app/standalone-station\
+                    ../../old_app/standalone-station\
                     ../../demo
 
 

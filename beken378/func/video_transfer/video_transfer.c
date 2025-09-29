@@ -407,6 +407,8 @@ static void video_transfer_main(beken_thread_arg_t data)
         else //if(tvideo_pool.open_type == TVIDEO_OPEN_SCCB)
         {
             camera_sensor = camera_detect();
+            camera_sensor = camera_detect();
+            camera_sensor = camera_detect();
             if(camera_sensor != NULLPTR){
                 camera_intfer_init(&tvideo_st, camera_sensor);
             }else{

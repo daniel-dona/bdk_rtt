@@ -7,3 +7,4 @@ config.json
 link.lds
 rtconfig.h
 sys_config.h
+*.map

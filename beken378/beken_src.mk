@@ -19,9 +19,9 @@ INCLUDES += -I./beken378/common
 INCLUDES += -I./beken378/release
 INCLUDES += -I./beken378/demo
 INCLUDES += -I./beken378/app
-INCLUDES += -I./beken378/app/config
-INCLUDES += -I./beken378/app/standalone-station
-INCLUDES += -I./beken378/app/standalone-ap
+INCLUDES += -I./beken378/old_app/config
+INCLUDES += -I./beken378/old_app/standalone-station
+INCLUDES += -I./beken378/old_app/standalone-ap
 INCLUDES += -I./beken378/ip/common
 INCLUDES += -I./beken378/ip/ke/
 INCLUDES += -I./beken378/ip/mac/
@@ -53,8 +53,8 @@ INCLUDES += -I./beken378/ip/umac/src/rxu
 INCLUDES += -I./beken378/ip/umac/src/scanu
 INCLUDES += -I./beken378/ip/umac/src/sm
 INCLUDES += -I./beken378/ip/umac/src/txu
-INCLUDES += -I./beken378/app/video_work
-INCLUDES += -I./beken378/app/net_work
+INCLUDES += -I./beken378/old_app/video_work
+INCLUDES += -I./beken378/old_app/net_work
 INCLUDES += -I./beken378/driver/include
 INCLUDES += -I./beken378/driver/common/reg
 INCLUDES += -I./beken378/driver/entry
@@ -114,7 +114,7 @@ INCLUDES += -I./beken378/func/sensor
 INCLUDES += -I./beken378/os/include
 INCLUDES += -I./beken378/os/FreeRTOSv9.0.0
 INCLUDES += -I./beken378/func/utf8
-INCLUDES += -I./beken378/app/http
+INCLUDES += -I./beken378/old_app/http
 
 ifeq ($(CFG_BK_AWARE),1)
 INCLUDES += -I./beken378/func/bk_aware
@@ -265,17 +265,17 @@ endif
 # -------------------------------------------------------------------
 
 #application layer
-SRC_C += ./beken378/app/app.c
-SRC_C += ./beken378/app/ate_app.c
-SRC_C += ./beken378/app/config/param_config.c
-SRC_C += ./beken378/app/standalone-ap/sa_ap.c
-SRC_C += ./beken378/app/standalone-station/sa_station.c
-SRC_C += ./beken378/app/video_work/video_transfer_tcp.c
-SRC_C += ./beken378/app/video_work/video_transfer_udp.c
-SRC_C += ./beken378/app/video_work/video_buffer.c
-SRC_C += ./beken378/app/net_work/video_demo_main.c
-SRC_C += ./beken378/app/net_work/video_demo_station.c
-SRC_C += ./beken378/app/net_work/video_demo_softap.c
+SRC_C += ./beken378/old_app/app.c
+SRC_C += ./beken378/ate/ate_app.c
+SRC_C += ./beken378/old_app/config/param_config.c
+SRC_C += ./beken378/old_app/standalone-ap/sa_ap.c
+SRC_C += ./beken378/old_app/standalone-station/sa_station.c
+SRC_C += ./beken378/old_app/video_work/video_transfer_tcp.c
+SRC_C += ./beken378/old_app/video_work/video_transfer_udp.c
+SRC_C += ./beken378/old_app/video_work/video_buffer.c
+SRC_C += ./beken378/old_app/net_work/video_demo_main.c
+SRC_C += ./beken378/old_app/net_work/video_demo_station.c
+SRC_C += ./beken378/old_app/net_work/video_demo_softap.c
 
 #demo module
 #SRC_C += ./beken378/demo/ieee802_11_demo.c
@@ -329,10 +329,10 @@ SRC_C += ./beken378/func/func.c
 SRC_C += ./beken378/func/usb_plug/usb_plug.c
 SRC_C += ./beken378/func/security/security_func.c
 SRC_C += ./beken378/func/joint_up/role_launch.c
-SRC_C += ./beken378/app/http/utils_httpc.c
-SRC_C += ./beken378/app/http/utils_net.c
-SRC_C += ./beken378/app/http/utils_timer.c
-SRC_C += ./beken378/app/http/lite-log.c
+SRC_C += ./beken378/old_app/http/utils_httpc.c
+SRC_C += ./beken378/old_app/http/utils_net.c
+SRC_C += ./beken378/old_app/http/utils_timer.c
+SRC_C += ./beken378/old_app/http/lite-log.c
 
 ifeq ($(CFG_BK_AWARE),1)
 SRC_C += ./beken378/func/bk_aware/bk_aware.c

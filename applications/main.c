@@ -30,8 +30,8 @@
 #include "include.h"
 #include "driver_pub.h"
 #include "func_pub.h"
-#include "app.h"
-#include "ate_app.h"
+//#include "app.h"
+//#include "ate_app.h"
 #include "shell.h"
 #include <fal.h>
 #include "rt_ota.h"
@@ -39,21 +39,15 @@
 #include "sdcard.h"
 #include "saradc_intf.h"
 
-static int wlan_app_init(void);
-
 extern const struct romfs_dirent romfs_root;
 #define DFS_ROMFS_ROOT          (&romfs_root) 
-extern rt_err_t rt_audio_codec_hw_init(void);
-extern int player_system_init(void);
-extern void user_main( beken_thread_arg_t args );
 
 extern int rt_hw_flash_disk_readonly_init(const char *name, uint32_t base, uint32_t sector_size, uint32_t capacity);
-extern void rt_hw_wdg_start(int argc, char **argv);
-extern int bk_wlan_dtim_rf_ps_mode_enable(void );
 
 extern void saradc_config_vddram_voltage(UINT32 vol);
+extern void app_start(void); 
 
-int main(int argc, char **argv){
+void mount_fs(){
 
     /* mount ROMFS as root directory */
 
@@ -76,9 +70,10 @@ int main(int argc, char **argv){
             rt_kprintf("SD File System initialized!\n");
         else
             rt_kprintf("SD File System initialzation failed!\n");
+    
     #endif
 
-    #if 1
+    #if 0
         const struct fal_partition *dl_part = RT_NULL;
 
         if ((dl_part = fal_partition_find("app")) != RT_NULL)
@@ -99,39 +94,18 @@ int main(int argc, char **argv){
         }
 
     #endif
-
-    wlan_app_init();
-
+    
 }
 
-#ifdef BEKEN_USING_WLAN
+int main(int argc, char **argv){
 
-extern void ate_app_init(void);
-extern void ate_start(void);
+    rt_kprintf("\r\n[+++] Mounting filesystems...\r\n\r\n");
 
-static int wlan_app_init(void)
-{
-	/* init ate mode check. */
-	ate_app_init();
+    mount_fs();
 
-	if (get_ate_mode_state())
-	{
-		rt_kprintf("\r\n\r\nEnter automatic test mode...\r\n\r\n");
+    rt_kprintf("\r\n[+++] Running project code...\r\n\r\n");
 
-		finsh_set_echo(0);
-		finsh_set_prompt("#");
+    // Project main
+	app_start(); 
 
-		ate_start();
-	}
-	else
-	{
-		rt_kprintf("\r\n\r\nEnter normal mode...\r\n\r\n");
-		app_start();
-
-		//user_app_start();
-	}
-
-	return 0;
 }
-
-#endif

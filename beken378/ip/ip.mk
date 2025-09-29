@@ -39,8 +39,8 @@ $(NAME)_INCLUDES := ke \
 					umac/src/mesh \
 					umac/src/rc 
 					
-$(NAME)_INCLUDES += ../app/standalone-ap \
-                    ../app/standalone-station \
+$(NAME)_INCLUDES += ../old_app/standalone-ap \
+                    ../old_app/standalone-station \
 					../driver/sdio \
                     ../driver/uart \
                     ../driver/sys_ctrl \

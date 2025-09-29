@@ -9,11 +9,11 @@ ifeq ($(CFG_USE_WPA_29),0)
 WPA_VERSION := hostapd-2.5
 endif
 
-$(NAME)_INCLUDES := app/standalone-ap \
-					app/standalone-station \
-					app/video_work \
-					app/net_work \
-					app/http \
+$(NAME)_INCLUDES := old_app/standalone-ap \
+					old_app/standalone-station \
+					old_app/video_work \
+					old_app/net_work \
+					old_app/http \
 					driver/sdio \
 					driver/uart \
 					driver/sys_ctrl \
@@ -75,20 +75,20 @@ $(NAME)_INCLUDES += ip/ke \
 					ip/umac/src/mesh \
 					ip/umac/src/rc
 
-$(NAME)_SOURCES :=  app/app.c \
-					app/config/param_config.c \
-					app/standalone-ap/sa_ap.c \
-					app/standalone-station/sa_station.c \
-					app/video_work/video_transfer_tcp.c \
-					app/video_work/video_transfer_udp.c \
-					app/video_work/video_buffer.c \
-					app/net_work/video_demo_main.c \
-					app/net_work/video_demo_station.c \
-					app/net_work/video_demo_softap.c \
-					app/http/utils_httpc.c \
-					app/http/utils_net.c \
-					app/http/utils_timer.c \
-					app/http/lite-log.c \
+$(NAME)_SOURCES :=  old_app/app.c \
+					old_app/config/param_config.c \
+					old_app/standalone-ap/sa_ap.c \
+					old_app/standalone-station/sa_station.c \
+					old_app/video_work/video_transfer_tcp.c \
+					old_app/video_work/video_transfer_udp.c \
+					old_app/video_work/video_buffer.c \
+					old_app/net_work/video_demo_main.c \
+					old_app/net_work/video_demo_station.c \
+					old_app/net_work/video_demo_softap.c \
+					old_app/http/utils_httpc.c \
+					old_app/http/utils_net.c \
+					old_app/http/utils_timer.c \
+					old_app/http/lite-log.c \
 					driver/common/dd.c \
 					driver/common/drv_model.c \
 					driver/dma/dma.c \

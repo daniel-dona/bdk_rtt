@@ -325,11 +325,23 @@ void camera_intfer_init(void *ejpeg_config, camera_sensor_t *sensor){
     
     //camera_reset();
 
-    UINT32 i2c2_trans_mode = (0 & (~I2C2_MSG_WORK_MODE_MS_BIT)// master
-                              & (~I2C2_MSG_WORK_MODE_AL_BIT))// 7bit address
-                             | (I2C2_MSG_WORK_MODE_IA_BIT); // with inner address
-    i2c_hdl = ddev_open(I2C2_DEV_NAME, &status, i2c2_trans_mode);
-    bk_printf("open I2C2\r\n");
+    if(sensor->i2c_bus == (char*) &I2C2_DEV_NAME){
+
+        UINT32 i2c2_trans_mode = (0 & (~I2C2_MSG_WORK_MODE_MS_BIT)// master
+                                & (~I2C2_MSG_WORK_MODE_AL_BIT))// 7bit address
+                                | (I2C2_MSG_WORK_MODE_IA_BIT); // with inner address
+
+        i2c_hdl = ddev_open(I2C2_DEV_NAME, &status, i2c2_trans_mode);
+
+        bk_printf("open I2C2\r\n");
+
+    }else{
+
+        i2c_hdl = ddev_open(I2C2_DEV_NAME, &status, 0);
+
+        bk_printf("open I2C1\r\n");
+        
+    }
 
     
     /*{
@@ -392,6 +404,8 @@ camera_sensor_t* camera_detect(){
 
     camera_sensor_t* sensor = malloc(sizeof(camera_sensor_t));
 
+    sensor->i2c_bus = I2C2_DEV_NAME;
+
 
     if(gc0328c_sensor_detect()){
 
@@ -412,7 +426,52 @@ camera_sensor_t* camera_detect(){
         /*sensor->name = rt_strdup("None");
         sensor->init = hi704_sensor_init;*/
         os_printf("No compatible sensor found!\r\n");
-        return NULLPTR;
+        free(sensor);
+        sensor = NULLPTR;
+    }
+    
+
+    //GLOBAL_INT_DECLARATION();
+    //os_printf("camera_intfer_deinit,%p-%p\r\n", ejpeg_hdl, i2c_hdl);
+
+    
+
+
+    if(sensor == NULLPTR){
+
+        ddev_close(i2c_hdl);
+
+        UINT32 i2c1_trans_mode = 0;
+
+        i2c_hdl = ddev_open(I2C1_DEV_NAME, &status, i2c1_trans_mode);
+
+        os_printf("Searching for camera sensors, using I2C1 bus...\r\n");
+
+        sensor = malloc(sizeof(camera_sensor_t));
+
+        sensor->i2c_bus = I2C1_DEV_NAME;
+
+        if(gc0328c_sensor_detect()){
+
+            sensor->name = rt_strdup("GalaxyCore 328C");
+            sensor->init = gc0328c_sensor_init;
+
+        }else if (gc0311_sensor_detect()){
+
+            sensor->name = rt_strdup("GalaxyCore 311");
+            sensor->init = gc0311_sensor_init;
+
+        }else if (hi704_sensor_detect()){
+
+            sensor->name = rt_strdup("Hynix 704");
+            sensor->init = hi704_sensor_init;
+
+        }else{
+            os_printf("No compatible sensor found!\r\n");
+            free(sensor);
+            sensor = NULLPTR;
+        }
+
     }
     
 
