@@ -66,9 +66,9 @@ def generate_beken_packager_json(beken_str, bootloader_str, firmware_str, out_js
         print(out_json)
 
     with open(str(out_json_str), "w") as f:
-	if beken_str == "bk7251":
+        if beken_str == "bk7251":
             f.write(bk7251_out_json)
-	else:
+        else:
             f.write(out_json)
             
 def generate_ota_package(firmware_str, ota_str):
@@ -118,7 +118,7 @@ def gather_out_files(bootloader_str):
     os.system(cmd_mv + "rtthread_uart_2M.1220.bin" + out_folder)
     os.system(cmd_mv + "rtthread_ota.rbl" + out_folder)
     os.system(cmd_cp + bootloader_str + out_folder)
-    print 'rtthread.bin and other generated files were moved to folder %s' % out_folder
+    print('rtthread.bin and other generated files were moved to folder %s' % out_folder)
 
 if __name__=='__main__':
     # from --beken=xxx

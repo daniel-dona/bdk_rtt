@@ -2,9 +2,9 @@ import os
 import sys
 
 def usage():
-    print '%s all     -- build all bsp' % os.path.basename(sys.argv[0])
-    print '%s clean   -- clean all bsp' % os.path.basename(sys.argv[0])
-    print '%s project -- update all prject files' % os.path.basename(sys.argv[0])
+    print('%s all     -- build all bsp' % os.path.basename(sys.argv[0]))
+    print('%s clean   -- clean all bsp' % os.path.basename(sys.argv[0]))
+    print('%s project -- update all prject files' % os.path.basename(sys.argv[0]))
 
 BSP_ROOT = os.path.join("..", "bsp")
 
@@ -58,5 +58,5 @@ for item in projects:
     project_dir = os.path.join(BSP_ROOT, item)
     if os.path.isfile(os.path.join(project_dir, 'SConstruct')):
         if os.system('scons --directory=' + project_dir + command) != 0:
-            print 'build failed!!'
+            print('build failed!!')
             break

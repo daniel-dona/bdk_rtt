@@ -48,7 +48,7 @@ def do_copy_folder(src_dir, dst_dir, ignore=None):
         if os.path.exists(dst_dir):
             shutil.rmtree(dst_dir)
     except:
-        print('Deletes folder: %s failed.' % dst_dir)
+        print('Deletes folder: {} failed.'.format(dst_dir))
         return
 
     shutil.copytree(src_dir, dst_dir, ignore = ignore)
@@ -136,7 +136,7 @@ def MakeCopy(program, BSP_ROOT, RTT_ROOT, Env):
         dst = src.replace(RTT_ROOT, '')
         if dst[0] == os.sep or dst[0] == '/':
             dst = dst[1:]
-        print '=> ', dst
+        print('=>', dst)
         dst = os.path.join(target_path, dst)
         do_copy_file(src, dst)
 
@@ -185,12 +185,12 @@ def MakeCopyHeader(program, BSP_ROOT, RTT_ROOT, Env):
         dst = src.replace(RTT_ROOT, '')
         if dst[0] == os.sep or dst[0] == '/':
             dst = dst[1:]
-        print '=> ', dst
+        print('=>', dst)
         dst = os.path.join(target_path, dst)
         do_copy_file(src, dst)
 
     # copy tools directory
-    print "=>  tools"
+    print("=>  tools")
     do_copy_folder(os.path.join(RTT_ROOT, "tools"), os.path.join(target_path, "tools"), ignore_patterns('*.pyc'))
     do_copy_file(os.path.join(RTT_ROOT, 'Kconfig'), os.path.join(target_path, 'Kconfig'))
     do_copy_file(os.path.join(RTT_ROOT, 'AUTHORS'), os.path.join(target_path, 'AUTHORS'))
@@ -257,7 +257,7 @@ def MkDist(program, BSP_ROOT, RTT_ROOT, Env):
         if dst[0] == os.sep or dst[0] == '/':
             dst = dst[1:]
 
-        print('=> %s' % dst)
+        print('=> {}'.format(dst))
         dst = os.path.join(target_path, dst)
         do_copy_file(src, dst)
 

@@ -72,7 +72,7 @@ src += ["old_app/http/lite-log.c"]
 if (GetLocalDepend(options, 'CFG_PCM_RESAMPLER') == 1):
 	src += ["func/pcm_resampler/pcm_resampler_port.c"]
 
-if (0 == string.find(GetLocalDepend(options, 'CFG_SOC_NAME'), 'SOC_BK7271')):
+if (0 == GetLocalDepend(options, 'CFG_SOC_NAME').find('SOC_BK7271')):
 	src += ["driver/i2c/i2c1_bk7271.c"]
 	src += ["driver/mailbox/mailbox.c"]
 	src += ["driver/gpio/gpio_bk7271.c"]
@@ -281,7 +281,7 @@ path += [cwd + '/func/sensor']
 if (GetLocalDepend(options, 'CFG_WPA3') == 1):
     path += [cwd + '/func/wolfssl']
 
-if (0 == string.find(GetLocalDepend(options, 'CFG_SOC_NAME'), 'SOC_BK7231N')):
+if (0 == GetLocalDepend(options, 'CFG_SOC_NAME').find('SOC_BK7231N')):
     src += ["driver/calendar/calendar.c"]
     path += [cwd + '/driver/calendar']
 
@@ -298,7 +298,7 @@ group = DefineGroup('beken_sdk', src, depend = [], CPPPATH = path, CPPDEFINES = 
 for d in list:
     path = os.path.join(cwd, d)
     if os.path.isfile(os.path.join(path, 'SConscript')):
-        print "Found SConscript on:" + path
+        print("Found SConscript on: " + path)
         objs = objs + SConscript(os.path.join(d, 'SConscript'))
 objs = objs + group
 Return('objs')

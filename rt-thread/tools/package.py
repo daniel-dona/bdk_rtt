@@ -28,7 +28,7 @@ from building import *
 
 def ExtendPackageVar(package, var):
     v = []
-    if not package.has_key(var):
+    if var not in package:
         return v
 
     for item in package[var]:
@@ -46,21 +46,21 @@ def BuildPackage(package):
 
     package = json.loads(package_json)
 
-    # check package name 
-    if not package.has_key('name'):
+    # check package name
+    if 'name' not in package:
         return []
 
     # get depends
     depend = ExtendPackageVar(package, 'depends')
 
     src = []
-    if package.has_key('source_files'):
+    if 'source_files' in package:
         for src_file in package['source_files']:
             src_file = os.path.join(cwd, src_file)
             src += Glob(src_file)
 
     CPPPATH = []
-    if package.has_key('CPPPATH'):
+    if 'CPPPATH' in package:
         for path in package['CPPPATH']:
             if path.startswith('/') and os.path.isdir(path):
                 CPPPATH = CPPPATH + [path]

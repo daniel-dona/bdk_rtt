@@ -73,28 +73,28 @@ def _CDKProject(tree, target, script):
         group_tree = SDKAddGroup(ProjectFiles, root, group['name'], group['src'], project_path)
 
         # get each include path
-        if group.has_key('CPPPATH') and group['CPPPATH']:
+        if 'CPPPATH' in group and group['CPPPATH']:
             if CPPPATH:
                 CPPPATH += group['CPPPATH']
             else:
                 CPPPATH += group['CPPPATH']
 
         # get each group's definitions
-        if group.has_key('CPPDEFINES') and group['CPPDEFINES']:
+        if 'CPPDEFINES' in group and group['CPPDEFINES']:
             if CPPDEFINES:
                 CPPDEFINES += group['CPPDEFINES']
             else:
                 CPPDEFINES += group['CPPDEFINES']
 
         # get each group's cc flags
-        if group.has_key('CCFLAGS') and group['CCFLAGS']:
+        if 'CCFLAGS' in group and group['CCFLAGS']:
             if CCFLAGS:
                 CCFLAGS += ' ' + group['CCFLAGS']
             else:
                 CCFLAGS += group['CCFLAGS']   
                 
         # get each group's link flags
-        if group.has_key('LINKFLAGS') and group['LINKFLAGS']:
+        if 'LINKFLAGS' in group and group['LINKFLAGS']:
             if LINKFLAGS:
                 LINKFLAGS += ' ' + group['LINKFLAGS']
             else:

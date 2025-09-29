@@ -191,51 +191,51 @@ def MDK45Project(tree, target, script):
         group_tree = MDK4AddGroup(ProjectFiles, groups, group['name'], group['src'], project_path)
 
         # for local CPPPATH/CPPDEFINES
-        if (group_tree != None) and (group.has_key('LOCAL_CPPPATH') or group.has_key('LOCAL_CCFLAGS')):
+        if (group_tree != None) and ('LOCAL_CPPPATH' in group or 'LOCAL_CCFLAGS' in group):
             GroupOption     = SubElement(group_tree,  'GroupOption')
             GroupArmAds     = SubElement(GroupOption, 'GroupArmAds')
             Cads            = SubElement(GroupArmAds, 'Cads')
             VariousControls = SubElement(Cads, 'VariousControls')
             MiscControls    = SubElement(VariousControls, 'MiscControls')
-            if group.has_key('LOCAL_CCFLAGS'):
+            if 'LOCAL_CCFLAGS' in group:
                 MiscControls.text = group['LOCAL_CCFLAGS']
             else:
                 MiscControls.text = ' '
             Define          = SubElement(VariousControls, 'Define')
-            if group.has_key('LOCAL_CPPDEFINES'):
+            if 'LOCAL_CPPDEFINES' in group:
                 Define.text     = ', '.join(set(group['LOCAL_CPPDEFINES']))
             else:
                 Define.text     = ' '
             Undefine        = SubElement(VariousControls, 'Undefine')
             Undefine.text   = ' '
             IncludePath     = SubElement(VariousControls, 'IncludePath')
-            if group.has_key('LOCAL_CPPPATH'):
+            if 'LOCAL_CPPPATH' in group:
                 IncludePath.text = ';'.join([_make_path_relative(project_path, os.path.normpath(i)) for i in group['LOCAL_CPPPATH']])
             else:
                 IncludePath.text = ' '
 
         # get each include path
-        if group.has_key('CPPPATH') and group['CPPPATH']:
+        if 'CPPPATH' in group and group['CPPPATH']:
             if CPPPATH:
                 CPPPATH += group['CPPPATH']
             else:
                 CPPPATH += group['CPPPATH']
 
         # get each group's definitions
-        if group.has_key('CPPDEFINES') and group['CPPDEFINES']:
+        if 'CPPDEFINES' in group and group['CPPDEFINES']:
             if CPPDEFINES:
                 CPPDEFINES += group['CPPDEFINES']
             else:
                 CPPDEFINES = group['CPPDEFINES']
 
         # get each group's link flags
-        if group.has_key('LINKFLAGS') and group['LINKFLAGS']:
+        if 'LINKFLAGS' in group and group['LINKFLAGS']:
             if LINKFLAGS:
                 LINKFLAGS += ' ' + group['LINKFLAGS']
             else:
                 LINKFLAGS += group['LINKFLAGS']
 
-        if group.has_key('LIBS') and group['LIBS']:
+        if 'LIBS' in group and group['LIBS']:
             for item in group['LIBS']:
                 lib_path = ''
                 for path_item in group['LIBPATH']:
@@ -323,21 +323,21 @@ def MDKProject(target, script):
         # print group['name']
 
         # get each include path
-        if group.has_key('CPPPATH') and group['CPPPATH']:
+        if 'CPPPATH' in group and group['CPPPATH']:
             if CPPPATH:
                 CPPPATH += group['CPPPATH']
             else:
                 CPPPATH += group['CPPPATH']
 
         # get each group's definitions
-        if group.has_key('CPPDEFINES') and group['CPPDEFINES']:
+        if 'CPPDEFINES' in group and group['CPPDEFINES']:
             if CPPDEFINES:
                 CPPDEFINES += group['CPPDEFINES']
             else:
                 CPPDEFINES = group['CPPDEFINES']
 
         # get each group's link flags
-        if group.has_key('LINKFLAGS') and group['LINKFLAGS']:
+        if 'LINKFLAGS' in group and group['LINKFLAGS']:
             if LINKFLAGS:
                 LINKFLAGS += ' ' + group['LINKFLAGS']
             else:

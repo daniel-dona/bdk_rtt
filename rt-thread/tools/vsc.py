@@ -70,7 +70,7 @@ def GenerateCFiles(env):
     return
 
 def GenerateVSCode(env):
-    print('Update setting files for VSCode...'),
+    print('Update setting files for VSCode...')
     GenerateCFiles(env)
     print('Done!')
 

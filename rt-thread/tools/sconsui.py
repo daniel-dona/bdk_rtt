@@ -100,7 +100,7 @@ class CmdExecutor(threading.Thread):
 def ExecCmd(cmd):
     global executor
     if executor:
-        print 'last task does not exit'
+        print('last task does not exit')
         return
 
     executor = CmdExecutor(cmd, builder)
@@ -215,7 +215,7 @@ class SconsUI():
             setting.close()
 
         # set  RT-Thread Root Directory according environ
-        if os.environ.has_key('RTT_ROOT'):
+        if 'RTT_ROOT' in os.environ:
             self.RTTRoot.set_path(os.environ['RTT_ROOT'])
         
         if self.RTTRoot.get_path() == '':

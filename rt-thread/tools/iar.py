@@ -93,18 +93,18 @@ def IARProject(target, script):
         IARAddGroup(root, group['name'], group['src'], project_path)
 
         # get each include path
-        if group.has_key('CPPPATH') and group['CPPPATH']:
+        if 'CPPPATH' in group and group['CPPPATH']:
             CPPPATH += group['CPPPATH']
         
         # get each group's definitions
-        if group.has_key('CPPDEFINES') and group['CPPDEFINES']:
+        if 'CPPDEFINES' in group and group['CPPDEFINES']:
             CPPDEFINES += group['CPPDEFINES']
         
         # get each group's link flags
-        if group.has_key('LINKFLAGS') and group['LINKFLAGS']:
+        if 'LINKFLAGS' in group and group['LINKFLAGS']:
             LINKFLAGS += group['LINKFLAGS']
             
-        if group.has_key('LIBS') and group['LIBS']:
+        if 'LIBS' in group and group['LIBS']:
             for item in group['LIBS']:
                 lib_path = ''
 
@@ -167,14 +167,16 @@ def IARVersion():
         # backup environ
         old_environ = os.environ
         os.environ['RTT_CC'] = 'iar'
-        reload(rtconfig)
+        import importlib
+        importlib.reload(rtconfig)
 
         # get iar path
         path = rtconfig.EXEC_PATH
 
         # restore environ
         os.environ = old_environ
-        reload(rtconfig)
+        import importlib
+        importlib.reload(rtconfig)
 
         return path
 
