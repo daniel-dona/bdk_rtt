@@ -14,10 +14,10 @@ void gc0328c_camera_inf_cfg_ppi(UINT32 ppi_type);
 void gc0328c_camera_inf_cfg_fps(UINT32 fps_type);
 
 // Register tables
-const UINT8 gc0328c_init_talbe[374][2];
-const UINT8 gc0328c_5pfs_talbe[9][2];
-const UINT8 gc0328c_10pfs_talbe[9][2];
-const UINT8 gc0328c_20pfs_talbe[9][2];
-const UINT8 gc0328c_QVGA_320_240_talbe[12][2];
-const UINT8 gc0328c_VGA_640_480_talbe[10][2];
+extern const UINT8 gc0328c_init_talbe[374][2];
+extern const UINT8 gc0328c_5pfs_talbe[9][2];
+extern const UINT8 gc0328c_10pfs_talbe[9][2];
+extern const UINT8 gc0328c_20pfs_talbe[9][2];
+extern const UINT8 gc0328c_QVGA_320_240_talbe[12][2];
+extern const UINT8 gc0328c_VGA_640_480_talbe[10][2];
 

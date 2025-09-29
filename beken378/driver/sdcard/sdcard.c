@@ -120,7 +120,7 @@ static UINT32 last_WR_addr = 0;
 /******************************************************************************/
 static void sdcard_clock_set(uint8 clk_index)
 {
-	if(clk_index <= CLK_200K);
+	if(clk_index <= CLK_200K)
 	{
 		sdio_set_clock(clk_index);
 		sdcard.clk_cfg = clk_index;
@@ -257,6 +257,7 @@ static SDIO_Error sdcard_mmc_cmd8_process(void)
         return 1;
     os_memset(tmpptr, 0, 512);
 
+    cmd.err = SD_OK;  // Initialize cmd.err
     cmd.index = SEND_IF_COND;
     cmd.arg = 0;
     cmd.flags = SD_CMD_SHORT;

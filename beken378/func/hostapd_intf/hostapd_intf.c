@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "hostapd_intf.h"
 #include "hostapd_intf_pub.h"
@@ -45,11 +46,11 @@ void bk_ap_no_password_connected_register_cb(bk_ap_no_password_cb_t func)
 
 struct scanu_rst_upload *s_scan_result_upload_ptr;
 
-struct mm_bcn_change_req *hadp_intf_get_bcn_change_req(uint8_t vif_id, struct beacon_data *bcn_info)
+struct mm_bcn_change_req *hadp_intf_get_bcn_change_req(uint8 vif_id, struct beacon_data *bcn_info)
 {
-    uint8_t tim_ie[BCN_TIM_IE_LEN] = {5, 4, 0, 2, 0, 0};
-    uint8_t *beacon_ptr = 0;
-    uint32_t bcn_len;
+    uint8 tim_ie[BCN_TIM_IE_LEN] = {5, 4, 0, 2, 0, 0};
+    uint8 *beacon_ptr = 0;
+    uint32 bcn_len;
     struct mm_bcn_change_req *req = 0;
 
 #ifdef ADD_BEACON_IES_ENABLE
@@ -59,7 +60,7 @@ struct mm_bcn_change_req *hadp_intf_get_bcn_change_req(uint8_t vif_id, struct be
     bcn_len = bcn_info->head_len + BCN_TIM_IE_LEN + bcn_info->tail_len;
 #endif
 
-    beacon_ptr = (uint8_t *)os_malloc(bcn_len);
+    beacon_ptr = (uint8 *)os_malloc(bcn_len);
     if (!beacon_ptr)
         goto exit_get_failed;
 
@@ -73,11 +74,11 @@ struct mm_bcn_change_req *hadp_intf_get_bcn_change_req(uint8_t vif_id, struct be
         os_memcpy(beacon_ptr, bcn_info->head, bcn_info->head_len);
     }
 
-    os_memcpy((void *)((uint32_t)beacon_ptr + bcn_info->head_len), tim_ie, BCN_TIM_IE_LEN);
+    os_memcpy((void *)((uint32)beacon_ptr + bcn_info->head_len), tim_ie, BCN_TIM_IE_LEN);
 
     if(bcn_info->tail && bcn_info->tail_len)
     {
-        os_memcpy((void *)((uint32_t)beacon_ptr + bcn_info->head_len + BCN_TIM_IE_LEN),
+        os_memcpy((void *)((uint32)beacon_ptr + bcn_info->head_len + BCN_TIM_IE_LEN),
                   bcn_info->tail, bcn_info->tail_len);
     }
 
@@ -109,9 +110,9 @@ exit_get_failed:
 }
 
 struct mm_bcn_change_req *hadp_intf_get_csa_bcn_req(struct csa_settings *settings,
-        uint8_t vif_id, struct beacon_data *bcn_info)
+        uint8 vif_id, struct beacon_data *bcn_info)
 {
-    uint16_t csa_cnt_offset;
+    uint16 csa_cnt_offset;
     struct mm_bcn_change_req *req;
 
     req = hadp_intf_get_bcn_change_req(vif_id, bcn_info);
@@ -124,17 +125,17 @@ struct mm_bcn_change_req *hadp_intf_get_csa_bcn_req(struct csa_settings *setting
     return req;
 }
 
-struct mm_bcn_change_req *hadp_intf_get_csa_after_bcn_req(uint8_t vif_id, struct beacon_data *bcn_info)
+struct mm_bcn_change_req *hadp_intf_get_csa_after_bcn_req(uint8 vif_id, struct beacon_data *bcn_info)
 {
     return hadp_intf_get_bcn_change_req(vif_id, bcn_info);
 }
 
 int wpa_intf_channel_switch(struct prism2_hostapd_param *param, int len)
 {
-    uint8_t vif_id;
-	uint8_t chann;
-    uint32_t freq;
-    uint32_t csa_count;
+    uint8 vif_id;
+	uint8 chann;
+    uint32 freq;
+    uint32 csa_count;
     struct vif_info_tag *vif;
     struct csa_settings *settings;
     struct mm_bcn_change_req *param_csa;
@@ -238,7 +239,7 @@ int hapd_get_sta_info(struct prism2_hostapd_param *param, int len)
 int hapd_intf_sta_del(struct prism2_hostapd_param *param, int len)
 {
     bool tdls_sta = 0;
-    u8 sta_idx;
+    UINT8 sta_idx;
     sta_idx = rwm_mgmt_sta_mac2idx(param->sta_addr);
 
     if(sta_idx == 0xff)
@@ -337,15 +338,15 @@ int hapd_intf_add_key(struct prism2_hostapd_param *param, int len)
 
 int hapd_intf_del_key(struct prism2_hostapd_param *param, int len)
 {
-    u8 hw_key_idx = 0;
+    UINT8 hw_key_idx = 0;
 
-    if( (param->sta_addr == NULL) || is_broadcast_ether_addr(param->sta_addr))
+    if(is_broadcast_ether_addr(param->sta_addr))
     {
         hw_key_idx = rwm_mgmt_get_hwkeyidx(param->vif_idx, 0xff);
     }
     else
     {
-        u8 staid = rwm_mgmt_sta_mac2idx(param->sta_addr);
+        UINT8 staid = rwm_mgmt_sta_mac2idx(param->sta_addr);
         if(staid == 0xff)
             return 0;
         hw_key_idx = rwm_mgmt_get_hwkeyidx(param->vif_idx, staid);
@@ -395,7 +396,7 @@ int hapd_intf_add_vif(struct prism2_hostapd_param *param, int len)
 
 int hapd_intf_remove_vif(struct prism2_hostapd_param *param, int len)
 {
-    u8 vif_index = param->vif_idx;
+    UINT8 vif_index = param->vif_idx;
 
     if(vif_index >= NX_VIRT_DEV_MAX)
         return -1;
@@ -890,7 +891,7 @@ int wpa_hostapd_set_sta_flag(struct prism2_hostapd_param *param, int len)
 	u32 mask = param->u.set_flags_sta.flags_and;
 	u32 flag = 0;
 	bool opened = 0;
-	u8 sta_idx;
+	UINT8 sta_idx;
 
 	flag |= set_flag;
 	flag &= mask;
@@ -909,7 +910,7 @@ int wpa_hostapd_set_sta_flag(struct prism2_hostapd_param *param, int len)
 
 		{
 			FUNC_1PARAM_PTR fn = bk_wlan_get_status_cb();
-			uint32_t val;
+			uint32 val;
 
 			if (fn) {
 				val = RW_EVT_AP_CONNECTED;
@@ -966,7 +967,7 @@ void hapd_poll_callback(void *env, uint32_t status)
 
 int hapd_poll_null_frame(struct prism2_hostapd_param *param, int len)
 {
-	uint32_t sta_id;
+	uint32 sta_id;
 
 	sta_id = sta_mgmt_get_sta_id(param->u.poll_null_data.sta_addr);
 	if(INVALID_STA_IDX == sta_id)

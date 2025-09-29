@@ -11,7 +11,7 @@ uint8_t hi704_sensor_detect(void);
 void hi704_sensor_init(DD_HANDLE i2c_hdl, DD_HANDLE ejpeg_hdl, camera_sensor_t * sensor);
 
 // Register tables
-const unsigned char hi704_sensor_init_sequence[704][2];
+extern const unsigned char hi704_sensor_init_sequence[704][2];
 
 /*
 

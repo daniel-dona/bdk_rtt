@@ -52,7 +52,7 @@
 #define TVIDEO_RXBUF_LEN            (TVIDEO_RXNODE_SIZE_UDP * 4)
 
 UINT8 tvideo_rxbuf[TVIDEO_RXBUF_LEN];
-TVIDEO_DESC_ST tvideo_st;
+extern TVIDEO_DESC_ST tvideo_st;
 
 camera_sensor_t* camera_sensor = NULLPTR;
 

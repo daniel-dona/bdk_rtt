@@ -105,27 +105,27 @@ extern void bk_printf(const char *fmt, ...);
 
 #define BIT(i)                   (1UL << (i))
 
-static inline __uint16_t __bswap16(__uint16_t _x)
+static inline uint16_t __bswap16(uint16_t _x)
 {
 
-	return ((__uint16_t)((_x >> 8) | ((_x << 8) & 0xff00)));
+	return ((uint16_t)((_x >> 8) | ((_x << 8) & 0xff00)));
 }
 
-static inline __uint32_t __bswap32(__uint32_t _x)
+static inline uint32_t __bswap32(uint32_t _x)
 {
 
-	return ((__uint32_t)((_x >> 24) | ((_x >> 8) & 0xff00) |
+	return ((uint32_t)((_x >> 24) | ((_x >> 8) & 0xff00) |
 	    ((_x << 8) & 0xff0000) | ((_x << 24) & 0xff000000)));
 }
 
-static inline __uint64_t __bswap64(__uint64_t _x)
+static inline uint64_t __bswap64(uint64_t _x)
 {
 
-	return ((__uint64_t)((_x >> 56) | ((_x >> 40) & 0xff00) |
+	return ((uint64_t)((_x >> 56) | ((_x >> 40) & 0xff00) |
 	    ((_x >> 24) & 0xff0000) | ((_x >> 8) & 0xff000000) |
-	    ((_x << 8) & ((__uint64_t)0xff << 32)) |
-	    ((_x << 24) & ((__uint64_t)0xff << 40)) |
-	    ((_x << 40) & ((__uint64_t)0xff << 48)) | ((_x << 56))));
+	    ((_x << 8) & ((uint64_t)0xff << 32)) |
+	    ((_x << 24) & ((uint64_t)0xff << 40)) |
+	    ((_x << 40) & ((uint64_t)0xff << 48)) | ((_x << 56))));
 }
 
 #define __swab16(x) __bswap16((__u8 *)&(x))

@@ -19,6 +19,7 @@
 #define __MUSB_SYSTEM_H__
 
 #include "mu_tools.h"
+#include <stdint.h>
 
 /****************** SYSTEM INTERFACE CONSTANTS ********************/
 

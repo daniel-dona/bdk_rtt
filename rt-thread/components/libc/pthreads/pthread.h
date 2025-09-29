@@ -25,6 +25,12 @@
 #ifndef __PTHREAD_H__
 #define __PTHREAD_H__
 
+/* Prevent system pthread headers from being included */
+#define _PTHREAD_H
+#define __PTHREAD_H
+#define _SCHED_H
+#define __SCHED_H
+
 #include <rtthread.h>
 #include <posix_types.h>
 #include <sched.h>

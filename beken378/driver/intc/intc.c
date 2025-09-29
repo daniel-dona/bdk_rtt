@@ -250,13 +250,13 @@ void intc_init(void)
 {
     UINT32 param;
 
-    *((volatile uint32_t *)0x400000) = (uint32_t)&do_irq;
-    *((volatile uint32_t *)0x400004) = (uint32_t)&do_fiq;
-    *((volatile uint32_t *)0x400008) = (uint32_t)&do_swi;
-    *((volatile uint32_t *)0x40000c) = (uint32_t)&do_undefined;
-    *((volatile uint32_t *)0x400010) = (uint32_t)&do_pabort;
-    *((volatile uint32_t *)0x400014) = (uint32_t)&do_dabort;
-    *((volatile uint32_t *)0x400018) = (uint32_t)&do_reserved;
+    *((volatile uint32 *)0x400000) = (uint32)&do_irq;
+    *((volatile uint32 *)0x400004) = (uint32)&do_fiq;
+    *((volatile uint32 *)0x400008) = (uint32)&do_swi;
+    *((volatile uint32 *)0x40000c) = (uint32)&do_undefined;
+    *((volatile uint32 *)0x400010) = (uint32)&do_pabort;
+    *((volatile uint32 *)0x400014) = (uint32)&do_dabort;
+    *((volatile uint32 *)0x400018) = (uint32)&do_reserved;
 
     intc_enable(FIQ_MAC_GENERAL);
     intc_enable(FIQ_MAC_PROT_TRIGGER);
@@ -296,8 +296,9 @@ void bk_cpu_shutdown(void)
 	
     os_printf("shutdown...\n");
 	
-    GLOBAL_INT_DISABLE();	
-    while(1);
+    GLOBAL_INT_DISABLE();
+    while(1)
+        ;
 	GLOBAL_INT_RESTORE();
 }
 
@@ -373,7 +374,7 @@ void bk_trap_udef(struct arm_registers *regs)
 #if (CFG_SOC_NAME == SOC_BK7231N)
     *((volatile uint32_t *)START_TYPE_ADDR) = (uint32_t)(CRASH_UNDEFINED_VALUE & 0xffff);
 #else
-    *((volatile uint32_t *)START_TYPE_ADDR) = (uint32_t)CRASH_UNDEFINED_VALUE;
+    *((volatile uint32 *)START_TYPE_ADDR) = (uint32)CRASH_UNDEFINED_VALUE;
 #endif
     os_printf("undefined instruction\n");
     bk_show_register(regs);
@@ -385,7 +386,7 @@ void bk_trap_pabt(struct arm_registers *regs)
 #if (CFG_SOC_NAME == SOC_BK7231N)
     *((volatile uint32_t *)START_TYPE_ADDR) = (uint32_t)(CRASH_PREFETCH_ABORT_VALUE & 0xffff);
 #else
-    *((volatile uint32_t *)START_TYPE_ADDR) = (uint32_t)CRASH_PREFETCH_ABORT_VALUE;
+    *((volatile uint32 *)START_TYPE_ADDR) = (uint32)CRASH_PREFETCH_ABORT_VALUE;
 #endif
     os_printf("prefetch abort\n");
     bk_show_register(regs);
@@ -397,7 +398,7 @@ void bk_trap_dabt(struct arm_registers *regs)
 #if (CFG_SOC_NAME == SOC_BK7231N)
     *((volatile uint32_t *)START_TYPE_ADDR) = (uint32_t)(CRASH_DATA_ABORT_VALUE & 0xffff);
 #else
-    *((volatile uint32_t *)START_TYPE_ADDR) = (uint32_t)CRASH_DATA_ABORT_VALUE;
+    *((volatile uint32 *)START_TYPE_ADDR) = (uint32)CRASH_DATA_ABORT_VALUE;
 #endif
     os_printf("data abort\n");
     bk_show_register(regs);
@@ -409,7 +410,7 @@ void bk_trap_resv(struct arm_registers *regs)
 #if (CFG_SOC_NAME == SOC_BK7231N)
     *((volatile uint32_t *)START_TYPE_ADDR) = (uint32_t)(CRASH_UNUSED_VALUE & 0xffff);
 #else
-    *((volatile uint32_t *)START_TYPE_ADDR) = (uint32_t)CRASH_UNUSED_VALUE;
+    *((volatile uint32 *)START_TYPE_ADDR) = (uint32)CRASH_UNUSED_VALUE;
 #endif
     os_printf("not used\n");
     bk_show_register(regs);

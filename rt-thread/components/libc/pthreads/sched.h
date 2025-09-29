@@ -24,6 +24,12 @@
 #ifndef __SCHED_H__
 #define __SCHED_H__
 
+/* Prevent system sched headers from being included */
+#define _SCHED_H
+#define __SCHED_H
+#define _PTHREAD_H
+#define __PTHREAD_H
+
 #include <rtthread.h>
 #include <pthread.h>
 

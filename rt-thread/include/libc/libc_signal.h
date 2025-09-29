@@ -78,7 +78,8 @@ typedef struct siginfo siginfo_t;
                                message on an empty message queue. */
 
 #ifdef RT_USING_NEWLIB
-#include <sys/signal.h>
+/* Skip including system signal.h to avoid conflicts with new GCC versions */
+/* #include <sys/signal.h> */
 #endif
 
 #ifdef __CC_ARM
