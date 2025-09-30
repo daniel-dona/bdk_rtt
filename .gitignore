@@ -4,7 +4,7 @@ out/
 .platform
 .sconsign.dblite
 config.json
-link.lds
+#link.lds
 #rtconfig.h
 #sys_config.h
 *.map
