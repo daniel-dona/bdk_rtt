@@ -41,7 +41,7 @@
 #define RT_USING_DEVICE
 #define RT_USING_DEVICE_OPS
 #define RT_USING_CONSOLE
-#define RT_CONSOLEBUF_SIZE     128
+#define RT_CONSOLEBUF_SIZE     1024
 #define RT_CONSOLE_DEVICE_NAME "uart1"
 
 /* RT-Thread Components */
