@@ -1,0 +1,20 @@
+# Formatting for BDK
+
+Language: Cpp
+BasedOnStyle: LLVM
+
+IndentWidth: 4
+TabWidth: 4
+ColumnLimit: 80
+
+BreakBeforeBraces: Attach
+PointerAlignment: Left
+
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+
+MaxEmptyLinesToKeep: 1
+SeparateDefinitionBlocks: Always
+
+ReflowComments: false
