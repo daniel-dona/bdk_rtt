@@ -4,6 +4,7 @@ out/
 .platform
 .sconsign.dblite
 config.json
+cconfig.h
 #link.lds
 #rtconfig.h
 #sys_config.h

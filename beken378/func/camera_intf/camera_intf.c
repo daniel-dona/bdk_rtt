@@ -237,7 +237,7 @@ uint8_t camera_intf_sccb_write2(uint8_t device_addr, uint8_t register_addr, uint
     status = ddev_write(i2c_hdl, (char *)data, (uint32_t)len, (uint32_t)&i2c_operater);
 
     if(status != 0){
-        os_printf("Unable to read I2C.");
+        os_printf("Unable to write I2C.\r\n");
     }
 
     return status;
@@ -253,7 +253,7 @@ uint8_t camera_intf_sccb_read2(uint8_t device_addr, uint8_t register_addr, uint8
     status = ddev_read(i2c_hdl, (char *)data, (uint32_t)len, (uint32_t)&i2c_operater);
 
     if(status != 0){
-        os_printf("Unable to read I2C.");
+        os_printf("Unable to read I2C.\r\n");
     }
 
     return status;
@@ -338,7 +338,7 @@ void camera_intfer_init(void *ejpeg_config, camera_sensor_t *sensor){
 
     }else{
 
-        i2c_hdl = ddev_open(I2C2_DEV_NAME, &status, 0);
+        i2c_hdl = ddev_open(I2C1_DEV_NAME, &status, 0);
 
         bk_printf("open I2C1\r\n");
         

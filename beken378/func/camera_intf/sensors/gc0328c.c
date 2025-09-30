@@ -20,7 +20,9 @@ uint8_t gc0328c_sensor_detect(void){
     uint8_t found = (data == GC0328C_DEV_CHIPID);
 
     if(found){
-        os_printf("Found sensor GC0328C!");
+        os_printf("Found sensor GC0328C!\r\n");
+    }else{
+        os_printf("NOT found sensor GC0328C!\r\n");
     }
 
     return found;

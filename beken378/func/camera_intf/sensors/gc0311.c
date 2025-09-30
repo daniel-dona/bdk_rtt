@@ -12,7 +12,7 @@
 
 uint8_t gc0311_sensor_detect(void){
 
-    uint8_t data;
+    uint8_t data = 0x00;
     uint8_t addr = 0xF0;
 
     camera_intf_sccb_read2(GC0311_DEV_ID, addr, &data, 1);
@@ -20,7 +20,9 @@ uint8_t gc0311_sensor_detect(void){
     uint8_t found = (data == GC0311_DEV_CHIPID);
 
     if(found){
-        os_printf("Found sensor GC0311!");
+        os_printf("Found sensor GC0311! %02X at %02X\r\n", data, addr);
+    }else{
+        os_printf("NOT found sensor GC0311!\r\n");
     }
 
     return found;
@@ -43,7 +45,7 @@ void gc0311_sensor_init(DD_HANDLE i2c_hdl, DD_HANDLE ejpeg_hdl, camera_sensor_t 
 
         addr = gc0311_init_talbe[i][0];
         data = gc0311_init_talbe[i][1];
-        camera_intf_sccb_write(addr, data);
+        camera_intf_sccb_write2(GC0311_DEV_ID, addr, &data, 1);
     }
 
     gc0311_camera_inf_cfg_ppi(CMPARAM_GET_PPI(sensor->ejpeg_cfg->sener_cfg));
@@ -69,7 +71,7 @@ void gc0311_camera_inf_cfg_ppi(uint32_t ppi_type){
             {
                 addr = gc0311_QVGA_320_240_talbe[i][0];
                 data = gc0311_QVGA_320_240_talbe[i][1];
-                camera_intf_sccb_write(addr, data);
+                camera_intf_sccb_write2(GC0311_DEV_ID, addr, &data, 1);;
             }
             break;
 
@@ -79,7 +81,7 @@ void gc0311_camera_inf_cfg_ppi(uint32_t ppi_type){
             {
                 addr = gc0311_VGA_640_480_talbe[i][0];
                 data = gc0311_VGA_640_480_talbe[i][1];
-                camera_intf_sccb_write(addr, data);
+                camera_intf_sccb_write2(GC0311_DEV_ID, addr, &data, 1);;
             }
             break;
 
@@ -104,7 +106,7 @@ void gc0311_camera_inf_cfg_fps(uint32_t fps_type){
             {
                 addr = gc0311_5pfs_talbe[i][0];
                 data = gc0311_5pfs_talbe[i][1];
-                camera_intf_sccb_write(addr, data);
+                camera_intf_sccb_write2(GC0311_DEV_ID, addr, &data, 1);;
             }
             break;
 
@@ -114,7 +116,7 @@ void gc0311_camera_inf_cfg_fps(uint32_t fps_type){
             {
                 addr = gc0311_10pfs_talbe[i][0];
                 data = gc0311_10pfs_talbe[i][1];
-                camera_intf_sccb_write(addr, data);
+                camera_intf_sccb_write2(GC0311_DEV_ID, addr, &data, 1);;
             }
             break;
 
@@ -124,12 +126,19 @@ void gc0311_camera_inf_cfg_fps(uint32_t fps_type){
             {
                 addr = gc0311_20pfs_talbe[i][0];
                 data = gc0311_20pfs_talbe[i][1];
-                camera_intf_sccb_write(addr, data);
+                camera_intf_sccb_write2(GC0311_DEV_ID, addr, &data, 1);;
             }
             break;
 
         default:
             os_printf("set FPS unknown\r\n");
+            size = sizeof(gc0311_20pfs_talbe) / 2;
+            for (i = 0; i < size; i++)
+            {
+                addr = gc0311_20pfs_talbe[i][0];
+                data = gc0311_20pfs_talbe[i][1];
+                camera_intf_sccb_write2(GC0311_DEV_ID, addr, &data, 1);;
+            }
             break;
     }
 }
