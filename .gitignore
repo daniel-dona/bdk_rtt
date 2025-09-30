@@ -5,6 +5,6 @@ out/
 .sconsign.dblite
 config.json
 link.lds
-rtconfig.h
-sys_config.h
+#rtconfig.h
+#sys_config.h
 *.map
