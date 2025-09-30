@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : spi.h
  * This file is part of RT-Thread RTOS
@@ -83,11 +84,11 @@ struct rt_spi_message
  */
 struct rt_spi_configuration
 {
-    rt_uint8_t mode;
-    rt_uint8_t data_width;
-    rt_uint16_t reserved;
+    uint8_t mode;
+    uint8_t data_width;
+    uint16_t reserved;
 
-    rt_uint32_t max_hz;
+    uint32_t max_hz;
 };
 
 struct rt_spi_ops;
@@ -106,7 +107,7 @@ struct rt_spi_bus
 struct rt_spi_ops
 {
     rt_err_t (*configure)(struct rt_spi_device *device, struct rt_spi_configuration *configuration);
-    rt_uint32_t (*xfer)(struct rt_spi_device *device, struct rt_spi_message *message);
+    uint32_t (*xfer)(struct rt_spi_device *device, struct rt_spi_message *message);
 };
 
 /**
@@ -226,20 +227,20 @@ rt_inline rt_size_t rt_spi_send(struct rt_spi_device *device,
     return rt_spi_transfer(device, send_buf, RT_NULL, length);
 }
 
-rt_inline rt_uint8_t rt_spi_sendrecv8(struct rt_spi_device *device,
-                                      rt_uint8_t            data)
+rt_inline uint8_t rt_spi_sendrecv8(struct rt_spi_device *device,
+                                      uint8_t            data)
 {
-    rt_uint8_t value;
+    uint8_t value;
 
     rt_spi_send_then_recv(device, &data, 1, &value, 1);
 
     return value;
 }
 
-rt_inline rt_uint16_t rt_spi_sendrecv16(struct rt_spi_device *device,
-                                        rt_uint16_t           data)
+rt_inline uint16_t rt_spi_sendrecv16(struct rt_spi_device *device,
+                                        uint16_t           data)
 {
-    rt_uint16_t value;
+    uint16_t value;
 
     rt_spi_send_then_recv(device, &data, 2, &value, 2);
 

@@ -1,3 +1,4 @@
+#include <stdint.h>
 
 #include "include.h"
 #include "arm_arch.h"
@@ -39,13 +40,13 @@
 
 typedef struct send_data_hd
 {
-    u32 total_len;
-    u16 seq;
-    u16 total_seq;
-    u32 os0_ex_addr;
-    u32 os_hd_addr;
-    u32 os0_flash_addr;
-    u32 os1_flash_addr;
+    uint32_t total_len;
+    uint16_t seq;
+    uint16_t total_seq;
+    uint32_t os0_ex_addr;
+    uint32_t os_hd_addr;
+    uint32_t os0_flash_addr;
+    uint32_t os1_flash_addr;
 } SEND_PTK_HD;
 
 typedef struct img_head
@@ -62,9 +63,9 @@ typedef struct img_head
 
 #define TFTP_PKT_HD_LEN (sizeof(SEND_PTK_HD))
 
-extern UINT32 flash_read(char *user_buf, UINT32 count, UINT32 address);
-extern UINT32 flash_write(char *user_buf, UINT32 count, UINT32 address);
-extern UINT32 flash_ctrl(UINT32 cmd, void *parm);
+extern uint32_t flash_read(char *user_buf, uint32_t count, uint32_t address);
+extern uint32_t flash_write(char *user_buf, uint32_t count, uint32_t address);
+extern uint32_t flash_ctrl(uint32_t cmd, void *parm);
 void store_block (unsigned block, uint8_t *src, unsigned len);
 
 

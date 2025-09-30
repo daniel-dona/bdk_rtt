@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _BK_SPI_PSRAM_H_
 #define _BK_SPI_PSRAM_H_
 

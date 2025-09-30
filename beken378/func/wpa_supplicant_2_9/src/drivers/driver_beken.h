@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * Driver interaction with Linux Host AP driver
  * Copyright (c) 2002-2006, Jouni Malinen <j@w1.fi>
@@ -185,8 +186,8 @@ typedef void * c_addr_t;
 struct	iw_point
 {
   void   	*pointer;	/* Pointer to the data  (in user space) */
-  __u16		length;		/* number of fields or size in bytes */
-  __u16		flags;		/* Optional params */
+  uint16_t		length;		/* number of fields or size in bytes */
+  uint16_t		flags;		/* Optional params */
 };
 
 
@@ -196,10 +197,10 @@ struct	iw_point
  */
 struct	iw_param
 {
-  __s32		value;		/* The value of the parameter itself */
-  __u8		fixed;		/* Hardware should not use auto select */
-  __u8		disabled;	/* Disable the feature */
-  __u16		flags;		/* Various specifc flags (if any) */
+  int32_t		value;		/* The value of the parameter itself */
+  uint8_t		fixed;		/* Hardware should not use auto select */
+  uint8_t		disabled;	/* Disable the feature */
+  uint16_t		flags;		/* Various specifc flags (if any) */
 };
 /*
  *	A frequency
@@ -211,10 +212,10 @@ struct	iw_param
  */
 struct	iw_freq
 {
-	__s32		m;		/* Mantissa */
-	__s16		e;		/* Exponent */
-	__u8		i;		/* List index (when in range struct) */
-	__u8		flags;		/* Flags (fixed/auto) */
+	int32_t		m;		/* Mantissa */
+	int16_t		e;		/* Exponent */
+	uint8_t		i;		/* List index (when in range struct) */
+	uint8_t		flags;		/* Flags (fixed/auto) */
 };
 
 /*
@@ -222,11 +223,11 @@ struct	iw_freq
  */
 struct	iw_quality
 {
-	__u8		qual;		/* link quality (%retries, SNR,
+	uint8_t		qual;		/* link quality (%retries, SNR,
 					   %missed beacons or better...) */
-	__u8		level;		/* signal level (dBm) */
-	__u8		noise;		/* noise level (dBm) */
-	__u8		updated;	/* Flags to know if updated */
+	uint8_t		level;		/* signal level (dBm) */
+	uint8_t		noise;		/* noise level (dBm) */
+	uint8_t		updated;	/* Flags to know if updated */
 };
 
 /*
@@ -238,11 +239,11 @@ struct	iw_quality
  */
 struct	iw_discarded
 {
-	__u32		nwid;		/* Rx : Wrong nwid/essid */
-	__u32		code;		/* Rx : Unable to code/decode (WEP) */
-	__u32		fragment;	/* Rx : Can't perform MAC reassembly */
-	__u32		retries;	/* Tx : Max MAC retries num reached */
-	__u32		misc;		/* Others cases */
+	uint32_t		nwid;		/* Rx : Wrong nwid/essid */
+	uint32_t		code;		/* Rx : Unable to code/decode (WEP) */
+	uint32_t		fragment;	/* Rx : Can't perform MAC reassembly */
+	uint32_t		retries;	/* Tx : Max MAC retries num reached */
+	uint32_t		misc;		/* Others cases */
 };
 
 /*
@@ -251,7 +252,7 @@ struct	iw_discarded
  */
 struct	iw_missed
 {
-	__u32		beacon;		/* Missed beacons/superframe */
+	uint32_t		beacon;		/* Missed beacons/superframe */
 };
 
 /*
@@ -282,7 +283,7 @@ union	iwreq_data
 	struct iw_param	txpower;	/* default transmit power */
 	struct iw_param	rts;		/* RTS threshold threshold */
 	struct iw_param	frag;		/* Fragmentation threshold */
-	__u32		mode;		/* Operation mode */
+	uint32_t		mode;		/* Operation mode */
 	struct iw_param	retry;		/* Retry limits & lifetime */
 
 	struct iw_point	encoding;	/* Encoding stuff : tokens */
@@ -354,7 +355,7 @@ struct	iwreq
 struct	iw_range
 {
 	/* Informative stuff (to choose between different interface) */
-	__u32		throughput;	/* To give an idea... */
+	uint32_t		throughput;	/* To give an idea... */
 	/* In theory this value should be the maximum benchmarked
 	 * TCP/IP throughput, because with most of these devices the
 	 * bit rate is meaningless (overhead an co) to estimate how
@@ -363,21 +364,21 @@ struct	iw_range
 	 */
 
 	/* NWID (or domain id) */
-	__u32		min_nwid;	/* Minimal NWID we are able to set */
-	__u32		max_nwid;	/* Maximal NWID we are able to set */
+	uint32_t		min_nwid;	/* Minimal NWID we are able to set */
+	uint32_t		max_nwid;	/* Maximal NWID we are able to set */
 
 	/* Old Frequency (backward compat - moved lower ) */
-	__u16		old_num_channels;
-	__u8		old_num_frequency;
+	uint16_t		old_num_channels;
+	uint8_t		old_num_frequency;
 
 	/* Scan capabilities */
-	__u8		scan_capa; 	/* IW_SCAN_CAPA_* bit field */
+	uint8_t		scan_capa; 	/* IW_SCAN_CAPA_* bit field */
 
 	/* Wireless event capability bitmasks */
-	__u32		event_capa[6];
+	uint32_t		event_capa[6];
 
 	/* signal level threshold range */
-	__s32		sensitivity;
+	int32_t		sensitivity;
 
 	/* Quality of link & SNR stuff */
 	/* Quality range (link, level, noise)
@@ -397,59 +398,59 @@ struct	iw_range
 	struct iw_quality	avg_qual;	/* Quality of the link */
 
 	/* Rates */
-	__u8		num_bitrates;	/* Number of entries in the list */
-	__s32		bitrate[IW_MAX_BITRATES];	/* list, in bps */
+	uint8_t		num_bitrates;	/* Number of entries in the list */
+	int32_t		bitrate[IW_MAX_BITRATES];	/* list, in bps */
 
 	/* RTS threshold */
-	__s32		min_rts;	/* Minimal RTS threshold */
-	__s32		max_rts;	/* Maximal RTS threshold */
+	int32_t		min_rts;	/* Minimal RTS threshold */
+	int32_t		max_rts;	/* Maximal RTS threshold */
 
 	/* Frag threshold */
-	__s32		min_frag;	/* Minimal frag threshold */
-	__s32		max_frag;	/* Maximal frag threshold */
+	int32_t		min_frag;	/* Minimal frag threshold */
+	int32_t		max_frag;	/* Maximal frag threshold */
 
 	/* Power Management duration & timeout */
-	__s32		min_pmp;	/* Minimal PM period */
-	__s32		max_pmp;	/* Maximal PM period */
-	__s32		min_pmt;	/* Minimal PM timeout */
-	__s32		max_pmt;	/* Maximal PM timeout */
-	__u16		pmp_flags;	/* How to decode max/min PM period */
-	__u16		pmt_flags;	/* How to decode max/min PM timeout */
-	__u16		pm_capa;	/* What PM options are supported */
+	int32_t		min_pmp;	/* Minimal PM period */
+	int32_t		max_pmp;	/* Maximal PM period */
+	int32_t		min_pmt;	/* Minimal PM timeout */
+	int32_t		max_pmt;	/* Maximal PM timeout */
+	uint16_t		pmp_flags;	/* How to decode max/min PM period */
+	uint16_t		pmt_flags;	/* How to decode max/min PM timeout */
+	uint16_t		pm_capa;	/* What PM options are supported */
 
 	/* Encoder stuff */
-	__u16	encoding_size[IW_MAX_ENCODING_SIZES];	/* Different token sizes */
-	__u8	num_encoding_sizes;	/* Number of entry in the list */
-	__u8	max_encoding_tokens;	/* Max number of tokens */
+	uint16_t	encoding_size[IW_MAX_ENCODING_SIZES];	/* Different token sizes */
+	uint8_t	num_encoding_sizes;	/* Number of entry in the list */
+	uint8_t	max_encoding_tokens;	/* Max number of tokens */
 	/* For drivers that need a "login/passwd" form */
-	__u8	encoding_login_index;	/* token index for login token */
+	uint8_t	encoding_login_index;	/* token index for login token */
 
 	/* Transmit power */
-	__u16		txpower_capa;	/* What options are supported */
-	__u8		num_txpower;	/* Number of entries in the list */
-	__s32		txpower[IW_MAX_TXPOWER];	/* list, in bps */
+	uint16_t		txpower_capa;	/* What options are supported */
+	uint8_t		num_txpower;	/* Number of entries in the list */
+	int32_t		txpower[IW_MAX_TXPOWER];	/* list, in bps */
 
 	/* Wireless Extension version info */
-	__u8		we_version_compiled;	/* Must be WIRELESS_EXT */
-	__u8		we_version_source;	/* Last update of source */
+	uint8_t		we_version_compiled;	/* Must be WIRELESS_EXT */
+	uint8_t		we_version_source;	/* Last update of source */
 
 	/* Retry limits and lifetime */
-	__u16		retry_capa;	/* What retry options are supported */
-	__u16		retry_flags;	/* How to decode max/min retry limit */
-	__u16		r_time_flags;	/* How to decode max/min retry life */
-	__s32		min_retry;	/* Minimal number of retries */
-	__s32		max_retry;	/* Maximal number of retries */
-	__s32		min_r_time;	/* Minimal retry lifetime */
-	__s32		max_r_time;	/* Maximal retry lifetime */
+	uint16_t		retry_capa;	/* What retry options are supported */
+	uint16_t		retry_flags;	/* How to decode max/min retry limit */
+	uint16_t		r_time_flags;	/* How to decode max/min retry life */
+	int32_t		min_retry;	/* Minimal number of retries */
+	int32_t		max_retry;	/* Maximal number of retries */
+	int32_t		min_r_time;	/* Minimal retry lifetime */
+	int32_t		max_r_time;	/* Maximal retry lifetime */
 
 	/* Frequency */
-	__u16		num_channels;	/* Number of channels [0; num - 1] */
-	__u8		num_frequency;	/* Number of entry in the list */
+	uint16_t		num_channels;	/* Number of channels [0; num - 1] */
+	uint8_t		num_frequency;	/* Number of entry in the list */
 	struct iw_freq	freq[IW_MAX_FREQUENCIES];	/* list */
 	/* Note : this frequency list doesn't need to fit channel numbers,
 	 * because each entry contain its channel index */
 
-	__u32		enc_capa;	/* IW_ENC_CAPA_* bit field */
+	uint32_t		enc_capa;	/* IW_ENC_CAPA_* bit field */
 };
 
 /* ----------------------- WIRELESS EVENTS ----------------------- */
@@ -464,8 +465,8 @@ struct	iw_range
  */
 struct iw_event
 {
-	__u16		len;			/* Real length of this stuff */
-	__u16		cmd;			/* Wireless IOCTL */
+	uint16_t		len;			/* Real length of this stuff */
+	uint16_t		cmd;			/* Wireless IOCTL */
 	union iwreq_data	u;		/* IOCTL fixed payload */
 };
 
@@ -473,7 +474,7 @@ struct iw_event
 #define IW_EV_LCP_LEN	(sizeof(struct iw_event) - sizeof(union iwreq_data))
 /* Size of the various events */
 #define IW_EV_CHAR_LEN	(IW_EV_LCP_LEN + IFNAMSIZ)
-#define IW_EV_UINT_LEN	(IW_EV_LCP_LEN + sizeof(__u32))
+#define IW_EV_UINT_LEN	(IW_EV_LCP_LEN + sizeof(uint32_t))
 #define IW_EV_FREQ_LEN	(IW_EV_LCP_LEN + sizeof(struct iw_freq))
 #define IW_EV_PARAM_LEN	(IW_EV_LCP_LEN + sizeof(struct iw_param))
 #define IW_EV_ADDR_LEN	(IW_EV_LCP_LEN + sizeof(struct sockaddr))
@@ -589,13 +590,13 @@ enum {
 };
 
 struct prism2_download_param {
-	u32 dl_cmd;
-	u32 start_addr;
-	u32 num_areas;
+	uint32_t dl_cmd;
+	uint32_t start_addr;
+	uint32_t num_areas;
 
 	struct prism2_download_area {
-		u32 addr; /* wlan card address */
-		u32 len;
+		uint32_t addr; /* wlan card address */
+		uint32_t len;
 		c_addr_t ptr; /* pointer to data in user space */
 	} *data;
 };
@@ -672,14 +673,14 @@ enum {
 #define HOSTAP_AUTH_SAE		3
 
 struct prism2_hostapd_param {
-	u32 cmd;
-	u8 sta_addr[ETH_ALEN];
-    u8 vif_idx ;
+	uint32_t cmd;
+	uint8_t sta_addr[ETH_ALEN];
+    uint8_t vif_idx ;
 
 	union {
 		struct{
-			u8* own_addr;
-			u8* sta_addr;
+			uint8_t* own_addr;
+			uint8_t* sta_addr;
 		}poll_null_data;
 
 		struct {
@@ -703,115 +704,115 @@ struct prism2_hostapd_param {
 		} reg_disassoc_evt, reg_deauth_evt;
 
 		struct {
-			u16 aid;
-			u16 capability;
-			u8 tx_supp_rates;
-			u8 plink_state;
-			u8 set;
+			uint16_t aid;
+			uint16_t capability;
+			uint8_t tx_supp_rates;
+			uint8_t plink_state;
+			uint8_t set;
 			void *arg;
 		} add_sta;
 
         struct {
-            u32 type;
-			u8* indx_ptr;
+            uint32_t type;
+			uint8_t* indx_ptr;
 		} add_if;
 
 		struct {
-			u32 inactive_sec;
+			uint32_t inactive_sec;
 		} get_info_sta;
 
         struct {
             void *beacon;
-            u16 bcn_len;
-            u16 head_len;
-            u8 tim_len;
+            uint16_t bcn_len;
+            uint16_t head_len;
+            uint8_t tim_len;
         } bcn_change;
 
 		struct {
-			u8 alg[HOSTAP_CRYPT_ALG_NAME_LEN];
-			u32 flags;
-			u32 err;
-			u8 idx;
-			u8 seq[8]; /* sequence counter (set: RX, get: TX) */
-			u16 key_len;
-			u8 key[0];
+			uint8_t alg[HOSTAP_CRYPT_ALG_NAME_LEN];
+			uint32_t flags;
+			uint32_t err;
+			uint8_t idx;
+			uint8_t seq[8]; /* sequence counter (set: RX, get: TX) */
+			uint16_t key_len;
+			uint8_t key[0];
 		} crypt;
 
 		struct {
-			u32 flags_and;
-			u32 flags_or;
+			uint32_t flags_and;
+			uint32_t flags_or;
 		} set_flags_sta;
 
 		struct {
-			u16 rid;
-			u16 len;
-			u8 data[0];
+			uint16_t rid;
+			uint16_t len;
+			uint8_t data[0];
 		} rid;
 
 		struct {
-			u8 len;
-			u8 data[0];
+			uint8_t len;
+			uint8_t data[0];
 		} generic_elem;
 
 		struct {
 #define MLME_STA_DEAUTH 0
 #define MLME_STA_DISASSOC 1
-			u16 cmd;
-			u16 reason_code;
+			uint16_t cmd;
+			uint16_t reason_code;
 		} mlme;
 
 		struct {
 			struct {
-				u8 ssid_len;
-				u8 ssid[SSID_MAX_LEN];
+				uint8_t ssid_len;
+				uint8_t ssid[SSID_MAX_LEN];
 #if CFG_SUPPORT_BSSID_CONNECT
-				u8 bssid[ETH_ALEN];
+				uint8_t bssid[ETH_ALEN];
 #endif
 			}ssids[SCAN_SSID_MAX];
-			u8 ssids_num;
+			uint8_t ssids_num;
 			int freqs[14];		//FIXME: 5G
 		} scan_req;
 
 		struct wpa_scan_results *scan_rst;
 
 		struct {
-			u8 bssid[ETH_ALEN];
-			u8 ssid[SSID_MAX_LEN];
-			u8 ssid_len;
-			u16 freq;
-			u8 proto;			// wpa proto: wpa or rsn
-			u32 key_mgmt_suite;	//
-			u32 pairwise_suite;
-			u32 group_suite;
-			u8 auth_alg;
-			u8 mfp;
-			u16 ie_len;
-			u32 ie_buf[64];		// assoc ie
-			u16 bcn_len;
-			u8 bcn_buf[0];
+			uint8_t bssid[ETH_ALEN];
+			uint8_t ssid[SSID_MAX_LEN];
+			uint8_t ssid_len;
+			uint16_t freq;
+			uint8_t proto;			// wpa proto: wpa or rsn
+			uint32_t key_mgmt_suite;	//
+			uint32_t pairwise_suite;
+			uint32_t group_suite;
+			uint8_t auth_alg;
+			uint8_t mfp;
+			uint16_t ie_len;
+			uint32_t ie_buf[64];		// assoc ie
+			uint16_t bcn_len;
+			uint8_t bcn_buf[0];
 		} assoc_req;
 
 #ifdef CONFIG_SME
 		struct {
-			u8 bssid[ETH_ALEN];
-			u8 ssid[SSID_MAX_LEN];
-			u8 ssid_len;
-			u16 freq;
-			u8 auth_alg;
-			u16 ie_len;
-			u8 ie[128];
-			u16 sae_data_len;
-			u8 sae_data[0];
+			uint8_t bssid[ETH_ALEN];
+			uint8_t ssid[SSID_MAX_LEN];
+			uint8_t ssid_len;
+			uint16_t freq;
+			uint8_t auth_alg;
+			uint16_t ie_len;
+			uint8_t ie[128];
+			uint16_t sae_data_len;
+			uint8_t sae_data[0];
 		} authen_req;
 #endif
 
 		struct {
-			u32 reason;
+			uint32_t reason;
 		} disconnect_req;
 
 		struct {
-			u32 freq;
-			u32 csa_cnt;
+			uint32_t freq;
+			uint32_t csa_cnt;
 
             struct csa_settings *settings;
 		} chan_switch;
@@ -822,8 +823,8 @@ struct prism2_hostapd_param {
 		} reg_csa_event;
 
 		struct {
-			u8 bssid[ETH_ALEN];
-			u8 ssid[SSID_MAX_LEN];
+			uint8_t bssid[ETH_ALEN];
+			uint8_t ssid[SSID_MAX_LEN];
 		} bss_info;
 #if CFG_MESH
 		struct {
@@ -837,7 +838,7 @@ struct prism2_hostapd_param {
 		} oper_state;
 
 		struct {
-			u16 status;
+			uint16_t status;
 		} external_auth_status;
 
 	} u;
@@ -853,7 +854,7 @@ struct prism2_hostapd_param {
 #define HOSTAP_CRYPT_ERR_TX_KEY_SET_FAILED    6
 #define HOSTAP_CRYPT_ERR_CARD_CONF_FAILED     7
 
-void wpa_handler_signal(void *arg, u8 vif_idx);
+void wpa_handler_signal(void *arg, uint8_t vif_idx);
 void wpa_driver_scan_sig_handler(int sig, void *signal_ctx);
 void wpa_driver_assoc_sig_handler(int sig, void *signal_ctx);
 void wpa_driver_disassoc_sig_handler(int sig, void *signal_ctx);

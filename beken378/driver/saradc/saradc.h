@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _SARADC_H_
 #define _SARADC_H_
 
@@ -144,7 +145,7 @@
 /*******************************************************************************
 * Function Declarations
 *******************************************************************************/
-static UINT32 saradc_open(UINT32 op_flag);
-static UINT32 saradc_close(void);
-static UINT32 saradc_ctrl(UINT32 cmd, void *param);
+static uint32_t saradc_open(uint32_t op_flag);
+static uint32_t saradc_close(void);
+static uint32_t saradc_ctrl(uint32_t cmd, void *param);
 #endif //_SARADC_H_

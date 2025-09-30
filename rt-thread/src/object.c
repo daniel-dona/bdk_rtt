@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  * File      : object.c
  * This file is part of RT-Thread RTOS
@@ -424,7 +426,7 @@ rt_bool_t rt_object_is_systemobject(rt_object_t object)
  *
  * @note this function shall not be invoked in interrupt status.
  */
-rt_object_t rt_object_find(const char *name, rt_uint8_t type)
+rt_object_t rt_object_find(const char *name, uint8_t type)
 {
     struct rt_object *object = RT_NULL;
     struct rt_list_node *node = RT_NULL;

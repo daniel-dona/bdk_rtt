@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef __SARADC_INTF_H__
 #define __SARADC_INTF_H__
 
@@ -18,12 +19,12 @@ typedef void (*adc_obj_callback)(int new_mv, void *user_data);
 
 typedef struct _adc_obj_ {
 	void *user_data;
-    UINT32 channel;
+    uint32_t channel;
 	adc_obj_callback cb;
 	struct _adc_obj_ *next;
 }ADC_OBJ;
 
-void adc_obj_init(ADC_OBJ* handle, adc_obj_callback cb, UINT32 channel, void *user_data);
+void adc_obj_init(ADC_OBJ* handle, adc_obj_callback cb, uint32_t channel, void *user_data);
 int adc_obj_start(ADC_OBJ* handle);
 void adc_obj_stop(ADC_OBJ* handle);
 

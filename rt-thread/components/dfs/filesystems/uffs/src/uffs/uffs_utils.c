@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
   This file is part of UFFS, the Ultra-low-cost Flash File System.
   
@@ -95,7 +96,7 @@ static void _ForceFormatAndCheckBlock(uffs_Device *dev, int block)
 	URET ret;
 	struct uffs_FlashOpsSt *ops = dev->ops;
 	struct uffs_TagStoreSt ts;
-	u8 *spare = NULL;
+	uint8_t *spare = NULL;
 
 	buf = uffs_BufClone(dev, NULL);
 	if (buf == NULL) {
@@ -104,7 +105,7 @@ static void _ForceFormatAndCheckBlock(uffs_Device *dev, int block)
 		goto ext;
 	}
 
-	spare = (u8 *)uffs_PoolGet(SPOOL(dev));
+	spare = (uint8_t *)uffs_PoolGet(SPOOL(dev));
 	if (spare == NULL)
 		goto ext;
 
@@ -139,7 +140,7 @@ static void _ForceFormatAndCheckBlock(uffs_Device *dev, int block)
 				if (buf->header[j] != 0)
 					goto bad_out;
 			for (j = 0; j < sizeof(ts); j++)
-				if (((u8 *)&ts)[j] != 0)
+				if (((uint8_t *)&ts)[j] != 0)
 					goto bad_out;
 		}
 		else {
@@ -173,7 +174,7 @@ static void _ForceFormatAndCheckBlock(uffs_Device *dev, int block)
 				if (buf->header[j] != 0xFF)
 					goto bad_out;
 			for (j = 0; j < sizeof(ts); j++)
-				if (((u8 *)&ts)[j] != 0xFF)
+				if (((uint8_t *)&ts)[j] != 0xFF)
 					goto bad_out;
 		}
 		else {
@@ -210,7 +211,7 @@ ext:
 
 URET uffs_FormatDevice(uffs_Device *dev, UBOOL force)
 {
-	u16 i, slot;
+	uint16_t i, slot;
 	URET ret = U_SUCC;
 	
 	if (dev == NULL)
@@ -310,7 +311,7 @@ static const char * GetTagName(struct uffs_TagStoreSt *s)
 	return name;
 }
 
-static void DumpBufHex(struct uffs_DeviceSt *dev, const u8* buf, int len, dump_msg_cb *dump)
+static void DumpBufHex(struct uffs_DeviceSt *dev, const uint8_t* buf, int len, dump_msg_cb *dump)
 {
 	int i;
 	for (i = 0; i < len; i++)
@@ -335,9 +336,9 @@ static int DumpTag(struct uffs_DeviceSt *dev, int block, int page, uffs_Tags *ta
 				dump(dev, "page %d CLEAN\n", page);
 			else {
 				dump(dev, "page %d NOT clean ! header: ", page);
-				DumpBufHex(dev, (u8 *)&header, sizeof(header), dump);
+				DumpBufHex(dev, (uint8_t *)&header, sizeof(header), dump);
 				dump(dev, ", tag: ");
-				DumpBufHex(dev, (u8 *)s, sizeof(struct uffs_TagStoreSt), dump);
+				DumpBufHex(dev, (uint8_t *)s, sizeof(struct uffs_TagStoreSt), dump);
 				dump(dev, "\n");
 			}
 		}

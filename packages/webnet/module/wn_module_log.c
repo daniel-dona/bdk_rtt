@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : wn_module_log.c
  * This file is part of RT-Thread RTOS
@@ -57,7 +58,7 @@ int webnet_module_log(struct webnet_session* session, int event)
     }
     else if (event == WEBNET_EVENT_URI_PHYSICAL)
     {
-        rt_uint32_t index;
+        uint32_t index;
         LOG_RAW("\n");
         LOG_D("  new client: %s:%u",
                    inet_ntoa(session->cliaddr.sin_addr),

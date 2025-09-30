@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  *  RT-Thread finsh shell commands
  *
@@ -108,7 +109,7 @@ rt_inline void object_split(int len)
 static long _list_thread(struct rt_list_node *list)
 {
     int maxlen;
-    rt_uint8_t *ptr;
+    uint8_t *ptr;
     struct rt_thread *thread;
     struct rt_list_node *node;
     const char *item_title = "thread";
@@ -119,7 +120,7 @@ static long _list_thread(struct rt_list_node *list)
     rt_kprintf(     " ---  ------- ---------- ---------- ----------  -------- ---------- -----\n");
     for (node = list->next; node != list; node = node->next)
     {
-        rt_uint8_t stat;
+        uint8_t stat;
         thread = rt_list_entry(node, struct rt_thread, list);
         rt_kprintf("%-*.*s %3d ", maxlen, RT_NAME_MAX, thread->name, thread->current_priority);
 
@@ -129,14 +130,14 @@ static long _list_thread(struct rt_list_node *list)
         else if (stat == RT_THREAD_INIT)    rt_kprintf(" init   ");
         else if (stat == RT_THREAD_CLOSE)   rt_kprintf(" close  ");
 
-        ptr = (rt_uint8_t *)thread->stack_addr;
+        ptr = (uint8_t *)thread->stack_addr;
         while (*ptr == '#')ptr ++;
 
         rt_kprintf(" 0x%08x 0x%08x 0x%08x    %02d%%    0x%08x %03d\n",
                    thread->stack_addr,
                     thread->sp,
                    thread->stack_size,
-                   (thread->stack_size - ((rt_uint32_t) ptr - (rt_uint32_t) thread->stack_addr)) * 100
+                   (thread->stack_size - ((uint32_t) ptr - (uint32_t) thread->stack_addr)) * 100
                         / thread->stack_size,
                    thread->remaining_tick,
                    thread->error);
@@ -723,7 +724,7 @@ void list_prefix(char *prefix)
 {
     struct finsh_syscall_item *syscall_item;
     struct finsh_sysvar_item *sysvar_item;
-    rt_uint16_t func_cnt, var_cnt;
+    uint16_t func_cnt, var_cnt;
     int length, min_length;
     const char *name_ptr;
 

@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : module_asp.c
  * This file is part of RT-Thread RTOS/WebNet Server
@@ -24,7 +25,7 @@ struct webnet_asp_variable
     void (*handler)(struct webnet_session* session);
 };
 static struct webnet_asp_variable* _webnet_asp_vars = RT_NULL;
-rt_uint32_t _webnet_asp_vars_count = 0;
+uint32_t _webnet_asp_vars_count = 0;
 void webnet_asp_add_var(const char* name, void (*handler)(struct webnet_session* session))
 {
     if (_webnet_asp_vars == RT_NULL)
@@ -95,7 +96,7 @@ static void _default_asp_handler(struct webnet_session* session, const char* nam
     }
     else if (strncmp(name, "MEMUSAGE", 8) == 0)
     {
-        rt_uint32_t total, used, max_used;
+        uint32_t total, used, max_used;
 
         //rt_memory_info(&total, &used, &max_used);
         total = 1024*32;
@@ -106,8 +107,8 @@ static void _default_asp_handler(struct webnet_session* session, const char* nam
     }
     else if (strncmp(name, "TICK", 4) == 0)
     {
-        rt_uint32_t tick;
-        rt_uint32_t hour, min, second;
+        uint32_t tick;
+        uint32_t hour, min, second;
 
         tick = rt_tick_get()/RT_TICK_PER_SECOND;
         second = tick % 60;
@@ -123,7 +124,7 @@ static void _webnet_asp_dofile(struct webnet_session* session, int fd)
     char *asp_begin, *asp_end;
     char *offset, *end;
     char *buffer;
-    rt_uint32_t length, index;
+    uint32_t length, index;
 
     /* get file length */
     length = lseek(fd, 0, SEEK_END);
@@ -156,7 +157,7 @@ static void _webnet_asp_dofile(struct webnet_session* session, int fd)
         if (asp_begin == RT_NULL)
         {
             /* write content directly */
-            webnet_session_write(session, (const rt_uint8_t*)offset, end - offset);
+            webnet_session_write(session, (const uint8_t*)offset, end - offset);
             break;
         }
 
@@ -165,13 +166,13 @@ static void _webnet_asp_dofile(struct webnet_session* session, int fd)
         if (asp_end == RT_NULL)
         {
             /* write content directly */
-            webnet_session_write(session, (const rt_uint8_t*)offset, end - offset);
+            webnet_session_write(session, (const uint8_t*)offset, end - offset);
             break;
         }
         else
         {
             /* write content */
-            webnet_session_write(session, (const rt_uint8_t*)offset, asp_begin - offset);
+            webnet_session_write(session, (const uint8_t*)offset, asp_begin - offset);
 
             offset = asp_begin + 2;
             while ((*offset == ' ') || (*offset == '\t')) offset ++;

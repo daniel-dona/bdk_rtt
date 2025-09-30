@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "rwip_config.h"             // SW configuration
 
 

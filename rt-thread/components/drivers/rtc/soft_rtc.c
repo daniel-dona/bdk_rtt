@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  * File      : soft_rtc.c
  * This file is part of RT-Thread RTOS

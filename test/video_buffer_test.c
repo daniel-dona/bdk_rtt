@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <rtthread.h>
 #include <rthw.h>
 #include <rtdevice.h>
@@ -66,12 +67,12 @@ void vbuf(int argc, char** argv)
 MSH_CMD_EXPORT(vbuf, vbuf);
 
 #include "common.h"
-extern void camera_intf_sccb_write(UINT8 addr, UINT8 data);
-extern void camera_intf_sccb_read(UINT8 addr, UINT8 *data);
+extern void camera_intf_sccb_write(uint8_t addr, uint8_t data);
+extern void camera_intf_sccb_read(uint8_t addr, uint8_t *data);
 void sccb_read(int argc, char** argv)
 {
-    u8 addr;
-    u8 data = 0;
+    uint8_t addr;
+    uint8_t data = 0;
 
     hexstr2bin(argv[1], &addr, 1);
     
@@ -83,8 +84,8 @@ MSH_CMD_EXPORT(sccb_read, sccb_read);
 
 void sccb_write(int argc, char** argv)
 {
-    u8 addr;
-    u8 data = 0;
+    uint8_t addr;
+    uint8_t data = 0;
 
     hexstr2bin(argv[1], &addr, 1);
     hexstr2bin(argv[2], &data, 1);

@@ -1,3 +1,4 @@
+#include <stdint.h>
 /* $Id: jffs2_fs_i.h,v 1.18 2005/07/17 11:13:48 dedekind Exp $ */
 
 #ifndef _JFFS2_FS_I

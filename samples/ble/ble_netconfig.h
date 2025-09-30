@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef __BLE_CONFIG_H_
 #define __BLE_CONFIG_H_
 
@@ -39,7 +40,7 @@ struct ble_session
     char* response_buf;
     rt_tick_t tick;
     rt_ble_netconfig_result_cb result_cb;
-    rt_uint8_t status;
+    uint8_t status;
 };
 
 int bk_ble_netconfig_start(void);

@@ -1,8 +1,9 @@
+#include <stdint.h>
 #define OV_7670_DEV             (0xABC01)
 #define OV_7670_DEV_ID          (0x21)
 
 
-const UINT8 ov_7670_init_talbe[][2] = {
+const uint8_t ov_7670_init_talbe[][2] = {
     {0x12, 0x80},
     {0x11, 0x80},   // 0x02	 // 30fps
     {0x6b, 0x0a},   // 0x8a	 // pclk*6

@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : mtd_core.c
  * This file is part of RT-Thread RTOS
@@ -38,7 +39,7 @@ static rt_err_t _mtd_init(rt_device_t dev)
     return RT_EOK;
 }
 
-static rt_err_t _mtd_open(rt_device_t dev, rt_uint16_t oflag)
+static rt_err_t _mtd_open(rt_device_t dev, uint16_t oflag)
 {
     return RT_EOK;
 }
@@ -113,7 +114,7 @@ rt_err_t rt_mtd_nand_register_device(const char                *name,
 #include <finsh.h>
 #define __is_print(ch) ((unsigned int)((ch) - ' ') < 127u - ' ')
 
-static void mtd_dump_hex(const rt_uint8_t *ptr, rt_size_t buflen)
+static void mtd_dump_hex(const uint8_t *ptr, rt_size_t buflen)
 {
 	unsigned char *buf = (unsigned char*)ptr;
 	int i, j;
@@ -150,8 +151,8 @@ FINSH_FUNCTION_EXPORT_ALIAS(mtd_nandid, nand_id, read ID - nandid(name));
 int mtd_nand_read(const char* name, int block, int page)
 {
 	rt_err_t result;
-	rt_uint8_t *page_ptr;
-	rt_uint8_t *oob_ptr;
+	uint8_t *page_ptr;
+	uint8_t *oob_ptr;
 	struct rt_mtd_nand_device *nand;
 
 	nand = RT_MTD_NAND_DEVICE(rt_device_find(name));
@@ -188,7 +189,7 @@ FINSH_FUNCTION_EXPORT_ALIAS(mtd_nand_read, nand_read, read page in nand - nand_r
 int mtd_nand_readoob(const char* name, int block, int page)
 {
 	struct rt_mtd_nand_device *nand;
-	rt_uint8_t *oob_ptr;
+	uint8_t *oob_ptr;
 
 	nand = RT_MTD_NAND_DEVICE(rt_device_find(name));
 	if (nand == RT_NULL)
@@ -218,9 +219,9 @@ FINSH_FUNCTION_EXPORT_ALIAS(mtd_nand_readoob, nand_readoob, read spare data in n
 int mtd_nand_write(const char* name, int block, int page)
 {
 	rt_err_t result;
-	rt_uint8_t *page_ptr;
-	rt_uint8_t *oob_ptr;
-	rt_uint32_t index;
+	uint8_t *page_ptr;
+	uint8_t *oob_ptr;
+	uint32_t index;
 	struct rt_mtd_nand_device *nand;
 
 	nand = RT_MTD_NAND_DEVICE(rt_device_find(name));
@@ -279,7 +280,7 @@ FINSH_FUNCTION_EXPORT_ALIAS(mtd_nand_erase, nand_erase, nand_erase(name, block))
 
 int mtd_nand_erase_all(const char* name)
 {
-	rt_uint32_t index = 0;
+	uint32_t index = 0;
 	struct rt_mtd_nand_device *nand;
 	
 	nand = RT_MTD_NAND_DEVICE(rt_device_find(name));

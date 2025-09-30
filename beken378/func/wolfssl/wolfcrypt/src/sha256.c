@@ -1,3 +1,4 @@
+#include <stdint.h>
 /* sha256.c
  *
  * Copyright (C) 2006-2019 wolfSSL Inc.

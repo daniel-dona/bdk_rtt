@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 #include "rwip_config.h"             // SW configuration
 #if (BLE_APP_SDP)
 #include "app_task.h"                // Application task Definition

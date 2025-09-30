@@ -1,3 +1,4 @@
+#include <stdint.h>
 /**
  ******************************************************************************
  * @file    BkDriverTimer.h
@@ -44,7 +45,7 @@
  */
 OSStatus bk_timer_initialize(uint8_t timer_id, uint32_t time_ms, void *callback)
 {
-    UINT32 ret;
+    uint32_t ret;
     timer_param_t param;
     
     param.channel = timer_id;
@@ -55,7 +56,7 @@ OSStatus bk_timer_initialize(uint8_t timer_id, uint32_t time_ms, void *callback)
     ret = sddev_control(TIMER_DEV_NAME, CMD_TIMER_INIT_PARAM, &param);
     ASSERT(BK_TIMER_SUCCESS == ret);
 
-    UINT32 timer_channel;
+    uint32_t timer_channel;
     timer_channel = param.channel;
     ret = sddev_control(TIMER_DEV_NAME, CMD_TIMER_UNIT_ENABLE, &timer_channel);
     ASSERT(BK_TIMER_SUCCESS == ret);
@@ -66,7 +67,7 @@ OSStatus bk_timer_initialize(uint8_t timer_id, uint32_t time_ms, void *callback)
 
 OSStatus bk_timer_initialize_us(uint8_t timer_id, uint32_t time_us, void *callback)
 {
-    UINT32 ret;
+    uint32_t ret;
     timer_param_t param;
     
     param.channel = timer_id;
@@ -77,7 +78,7 @@ OSStatus bk_timer_initialize_us(uint8_t timer_id, uint32_t time_us, void *callba
     ret = sddev_control(TIMER_DEV_NAME, CMD_TIMER_INIT_PARAM_US, &param);
     ASSERT(BK_TIMER_SUCCESS == ret);
 
-    UINT32 timer_channel;
+    uint32_t timer_channel;
     timer_channel = param.channel;
     ret = sddev_control(TIMER_DEV_NAME, CMD_TIMER_UNIT_ENABLE, &timer_channel);
     ASSERT(BK_TIMER_SUCCESS == ret);
@@ -85,7 +86,7 @@ OSStatus bk_timer_initialize_us(uint8_t timer_id, uint32_t time_us, void *callba
     return kNoErr;
 }
 
-UINT32 bk_get_timer_cnt(uint8_t timer_id)
+uint32_t bk_get_timer_cnt(uint8_t timer_id)
 {
     timer_param_t param;
 
@@ -109,8 +110,8 @@ UINT32 bk_get_timer_cnt(uint8_t timer_id)
  */
 OSStatus bk_timer_stop(uint8_t timer_id)
 {
-    UINT32 ret;
-    UINT32 timer_channel;
+    uint32_t ret;
+    uint32_t timer_channel;
     
     timer_channel = timer_id;
     ret = sddev_control(TIMER_DEV_NAME, CMD_TIMER_UNIT_DISABLE, &timer_channel);
@@ -121,7 +122,7 @@ OSStatus bk_timer_stop(uint8_t timer_id)
 
 ///////////////////
 #if BKDRIVERTIMRE_TEST_DEMO
-static void bk_timer_test_isr_cb(UINT8 arg)
+static void bk_timer_test_isr_cb(uint8_t arg)
 {
 	bk_printf("%s %d rtos-time: %d mS\r\n",__FUNCTION__,__LINE__,rtos_get_time());
 }

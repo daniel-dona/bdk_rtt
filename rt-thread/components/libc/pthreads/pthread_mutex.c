@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : pthread_mutex.c
  * This file is part of RT-Thread RTOS
@@ -122,7 +123,7 @@ int pthread_mutex_init(pthread_mutex_t *mutex, const pthread_mutexattr_t *attr)
 {
     rt_err_t result;
     char name[RT_NAME_MAX];
-    static rt_uint16_t pthread_mutex_number = 0;
+    static uint16_t pthread_mutex_number = 0;
 
     if (!mutex)
         return EINVAL;

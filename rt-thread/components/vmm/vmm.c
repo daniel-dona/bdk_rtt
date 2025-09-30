@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  *  VMM startup file.
  *
@@ -49,8 +50,8 @@ static struct log_trace_session _lgs = {
 #endif
 
 struct rt_thread vmm_thread SECTION(".bss.share.vmm");
-extern rt_uint8_t vmm_stack_start;
-extern rt_uint8_t vmm_stack_end;
+extern uint8_t vmm_stack_start;
+extern uint8_t vmm_stack_end;
 
 void vmm_thread_init(struct rt_thread *thread, const char *name)
 {
@@ -94,13 +95,13 @@ extern unsigned long guest_domain_val;
 extern unsigned long vmm_domain_val;
 #endif
 
-static void vmm_entry_glue(rt_uint32_t level,
+static void vmm_entry_glue(uint32_t level,
                            unsigned int vmm_domain,
                            unsigned int kernel_domain)
     /* inline would make the section setting meaningless */
     __attribute__((noinline))
     SECTION(".vmm_glue");
-static void vmm_entry_glue(rt_uint32_t level,
+static void vmm_entry_glue(uint32_t level,
                            unsigned int vmm_domain,
                            unsigned int kernel_domain)
 {
@@ -120,7 +121,7 @@ static void vmm_entry_glue(rt_uint32_t level,
 
 void vmm_entry(struct vmm_entry_param *param)
 {
-    rt_uint32_t level;
+    uint32_t level;
 
     level = rt_hw_interrupt_disable();
 
@@ -156,7 +157,7 @@ void vmm_entry(struct vmm_entry_param *param)
     rt_system_timer_init();
 
     {
-        rt_uint32_t ttbr;
+        uint32_t ttbr;
         asm volatile ("mrc p15, 0, %0, c2, c0, 0\n"
                       : "=r"(ttbr));
         rt_kprintf("Linux TTBR: 0x%08x\n", ttbr);

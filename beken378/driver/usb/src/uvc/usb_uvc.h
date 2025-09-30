@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _USB_UVC_H_
 #define _USB_UVC_H_
 

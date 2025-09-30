@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 
@@ -44,10 +45,10 @@ DD_HANDLE spidma_hdl = DD_HANDLE_UNVALID;
 SPIDMA_DESC_ST spidma_intf;
 
 #if CFG_GENERAL_DMA
-static void spidma_intf_node_rx_handler(UINT32 dma)
+static void spidma_intf_node_rx_handler(uint32_t dma)
 {   
-    UINT16 already_len = spidma_intf.rx_read_len;
-    UINT16 copy_len = spidma_intf.node_len;
+    uint16_t already_len = spidma_intf.rx_read_len;
+    uint16_t copy_len = spidma_intf.node_len;
     GLOBAL_INT_DECLARATION();
 
     if(spidma_intf.node_full_handler != NULL) {
@@ -69,8 +70,8 @@ static void spidma_intf_frame_end_handler(void)
 {   
     #if CFG_GENERAL_DMA
     GDMA_CFG_ST en_cfg;
-    UINT16 already_len = spidma_intf.rx_read_len;
-    UINT32 channel = SPIDMA_CHNAL;
+    uint16_t already_len = spidma_intf.rx_read_len;
+    uint32_t channel = SPIDMA_CHNAL;
     int left_len = sddev_control(GDMA_DEV_NAME, CMD_GDMA_GET_LEFT_LEN, (void*)channel);
     int rec_len = spidma_intf.node_len - left_len;
     
@@ -125,10 +126,10 @@ static void spidma_intfer_config_desc(void* data)
 /*---------------------------------------------------------------------------*/
 void spidma_intfer_init(void* data)
 {
-    UINT32 status;
+    uint32_t status;
     spidma_intfer_config_desc(data);
         
-    spidma_hdl = ddev_open(SPIDMA_DEV_NAME, &status, (UINT32)&spidma_intf);
+    spidma_hdl = ddev_open(SPIDMA_DEV_NAME, &status, (uint32_t)&spidma_intf);
     SPIDMA_INTF_FATAL("spidma_intfer_init,%p\r\n", spidma_hdl);
 }
 
@@ -141,9 +142,9 @@ void spidma_intfer_deinit(void)
     spidma_hdl = DD_HANDLE_UNVALID;
 }
 
-void spi_camera_flip(UINT8 n)
+void spi_camera_flip(uint8_t n)
 {    
-    UINT8 data;
+    uint8_t data;
 
     if(n)
     {

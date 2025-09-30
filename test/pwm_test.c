@@ -13,7 +13,7 @@
 
 static void pwm_test(int argc,char *argv[])
 {
-	UINT32 channel,duty_cycle,cycle;
+	uint32_t channel,duty_cycle,cycle;
 
 	if(argc != 4)
 		return;
@@ -45,7 +45,7 @@ static void pwm_test(int argc,char *argv[])
 
 static void pwm_cap_test(int argc,char *argv[])
 {
-	UINT32 channel,PwmMode;
+	uint32_t channel,PwmMode;
 
 	if(argc != 3)
 		return;

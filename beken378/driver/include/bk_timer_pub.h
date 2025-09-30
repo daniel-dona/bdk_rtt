@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _BK_TIMER_PUB_H_
 #define _BK_TIMER_PUB_H_
 
@@ -28,13 +29,13 @@ enum
     BKTIMER_COUNT
 };
 
-typedef void (*TFUNC)(UINT8);
+typedef void (*TFUNC)(uint8_t);
 
 typedef struct
 {
-    UINT8 channel;
-    UINT8 div;
-    UINT32 period;
+    uint8_t channel;
+    uint8_t div;
+    uint32_t period;
     TFUNC t_Int_Handler;
 } timer_param_t;
 

@@ -1165,7 +1165,7 @@ __mqtt_disconnect_exit:
 ** output parameters:   NULL
 ** Returned value:      初始化结果。PAHO_SUCCESS：成功； 其它：失败
 *********************************************************************************************************/
-int paho_mqtt_start(mqtt_client *client, rt_uint32_t stack_size, rt_uint8_t  priority)
+int paho_mqtt_start(mqtt_client *client, uint32_t stack_size, uint8_t  priority)
 {
   static uint8_t counts = 0;
   rt_thread_t tid;

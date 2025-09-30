@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /**
  ******************************************************************************
  * @file    BkDriverGpio.h
@@ -39,8 +41,8 @@ OSStatus BkGpioAssert( bk_gpio_t gpio )
 
 OSStatus BkGpioInitialize( bk_gpio_t gpio, bk_gpio_config_t configuration )
 {
-    UINT32 ret, flag;
-    UINT32 mode, param;
+    uint32_t ret, flag;
+    uint32_t mode, param;
 
     BkGpioAssert(gpio);
 

@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "rwip_config.h"             // SW configuration
 
 
@@ -44,7 +45,7 @@ void app_sdp_characteristic_callback_handler(unsigned char conidx,uint16_t chars
 	}
 }
 
-void app_sdp_charac_callback_handler(CHAR_TYPE type,uint8 conidx,uint16_t hdl,uint16_t len,uint8 *data)
+void app_sdp_charac_callback_handler(CHAR_TYPE type,uint8_t conidx,uint16_t hdl,uint16_t len,uint8_t *data)
 {
 	if (app_sdp_env.charac_cb)
 	{

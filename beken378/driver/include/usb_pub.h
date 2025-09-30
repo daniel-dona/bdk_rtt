@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _USB_PUB_H_
 #define _USB_PUB_H_
 

@@ -38,7 +38,7 @@ struct rt_poll_node;
 struct rt_poll_table
 {
     rt_pollreq_t req;
-    rt_uint32_t triggered; /* the waited thread whether triggered */
+    uint32_t triggered; /* the waited thread whether triggered */
     rt_thread_t polling_thread;
     struct rt_poll_node *nodes;
 };
@@ -54,7 +54,7 @@ static int __wqueue_pollwake(struct rt_wqueue_node *wait, void *key)
 {
     struct rt_poll_node *pn;
 
-    if (key && !((rt_uint32_t)key & wait->key))
+    if (key && !((uint32_t)key & wait->key))
         return -1;
 
     pn = rt_container_of(wait, struct rt_poll_node, wqn);
@@ -94,7 +94,7 @@ static void poll_table_init(struct rt_poll_table *pt)
 
 static int poll_wait_timeout(struct rt_poll_table *pt, int msec)
 {
-    rt_int32_t timeout;
+    int32_t timeout;
     int ret = 0;
     struct rt_thread *thread;
     rt_base_t level;

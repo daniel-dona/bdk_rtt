@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  *  Copyright (C) 2008-2015, Marvell International Ltd.
  *  All Rights Reserved.

@@ -1,3 +1,4 @@
+#include <stdint.h>
 /* Copyright (C) 2003 Epic Games
    Written by Jean-Marc Valin */
 /**
@@ -160,22 +161,22 @@ int speex_preprocess_ctl(SpeexPreprocessState *st, int request, void *ptr);
 /** Get the corresponding echo canceller state */
 #define SPEEX_PREPROCESS_GET_ECHO_STATE 25
 
-/** Set maximal gain increase in dB/second (int32) */
+/** Set maximal gain increase in dB/second (int32_t) */
 #define SPEEX_PREPROCESS_SET_AGC_INCREMENT 26
 
-/** Get maximal gain increase in dB/second (int32) */
+/** Get maximal gain increase in dB/second (int32_t) */
 #define SPEEX_PREPROCESS_GET_AGC_INCREMENT 27
 
-/** Set maximal gain decrease in dB/second (int32) */
+/** Set maximal gain decrease in dB/second (int32_t) */
 #define SPEEX_PREPROCESS_SET_AGC_DECREMENT 28
 
-/** Get maximal gain decrease in dB/second (int32) */
+/** Get maximal gain decrease in dB/second (int32_t) */
 #define SPEEX_PREPROCESS_GET_AGC_DECREMENT 29
 
-/** Set maximal gain in dB (int32) */
+/** Set maximal gain in dB (int32_t) */
 #define SPEEX_PREPROCESS_SET_AGC_MAX_GAIN 30
 
-/** Get maximal gain in dB (int32) */
+/** Get maximal gain in dB (int32_t) */
 #define SPEEX_PREPROCESS_GET_AGC_MAX_GAIN 31
 
 /*  Can't set loudness */
@@ -183,32 +184,32 @@ int speex_preprocess_ctl(SpeexPreprocessState *st, int request, void *ptr);
 #define SPEEX_PREPROCESS_GET_AGC_LOUDNESS 33
 
 /*  Can't set gain */
-/** Get current gain (int32 percent) */
+/** Get current gain (int32_t percent) */
 #define SPEEX_PREPROCESS_GET_AGC_GAIN 35
 
 /*  Can't set spectrum size */
-/** Get spectrum size for power spectrum (int32) */
+/** Get spectrum size for power spectrum (int32_t) */
 #define SPEEX_PREPROCESS_GET_PSD_SIZE 37
 
 /*  Can't set power spectrum */
-/** Get power spectrum (int32[] of squared values) */
+/** Get power spectrum (int32_t[] of squared values) */
 #define SPEEX_PREPROCESS_GET_PSD 39
 
 /*  Can't set noise size */
-/** Get spectrum size for noise estimate (int32)  */
+/** Get spectrum size for noise estimate (int32_t)  */
 #define SPEEX_PREPROCESS_GET_NOISE_PSD_SIZE 41
 
 /*  Can't set noise estimate */
-/** Get noise estimate (int32[] of squared values) */
+/** Get noise estimate (int32_t[] of squared values) */
 #define SPEEX_PREPROCESS_GET_NOISE_PSD 43
 
 /* Can't set speech probability */
-/** Get speech probability in last frame (int32).  */
+/** Get speech probability in last frame (int32_t).  */
 #define SPEEX_PREPROCESS_GET_PROB 45
 
-/** Set preprocessor Automatic Gain Control level (int32) */
+/** Set preprocessor Automatic Gain Control level (int32_t) */
 #define SPEEX_PREPROCESS_SET_AGC_TARGET 46
-/** Get preprocessor Automatic Gain Control level (int32) */
+/** Get preprocessor Automatic Gain Control level (int32_t) */
 #define SPEEX_PREPROCESS_GET_AGC_TARGET 47
 
 #ifdef __cplusplus

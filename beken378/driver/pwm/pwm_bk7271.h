@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _PWM_H_
 #define _PWM_H_
 
@@ -95,8 +96,8 @@ enum
 /*******************************************************************************
 * Function Declarations
 *******************************************************************************/
-UINT32 pwm_ctrl(UINT32 cmd, void *param);
-bk_err_t pwm_update_param_enable(UINT8 ucChannel);
+uint32_t pwm_ctrl(uint32_t cmd, void *param);
+bk_err_t pwm_update_param_enable(uint8_t ucChannel);
 
 #endif
 #endif //_PWM_H_

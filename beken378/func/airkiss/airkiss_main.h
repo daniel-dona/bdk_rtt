@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _AIRKISS_MAIN_H_
 #define _AIRKISS_MAIN_H_
 
@@ -33,32 +34,32 @@ typedef enum
 
 typedef struct
 {
-    u8 bcn_cnt;
-    u8 data_cnt;
-    u16 channel;
+    uint8_t bcn_cnt;
+    uint8_t data_cnt;
+    uint16_t channel;
 } chan_param_t;
 
 typedef struct
 {
-    u8 frame_cnt;
-    u8 mac_crc;
-    u8 ap_sta;
-    u16 channel;
+    uint8_t frame_cnt;
+    uint8_t mac_crc;
+    uint8_t ap_sta;
+    uint16_t channel;
 } mac_param_t;
 
 typedef struct
 {
     chan_param_t chan[MAX_CHANNELS];
-    u8 cur_chan_idx;
-    u8 all_chan_nums;
-    u8 selected_chan_nums;
-    u8 mode;
+    uint8_t cur_chan_idx;
+    uint8_t all_chan_nums;
+    uint8_t selected_chan_nums;
+    uint8_t mode;
 } airkiss_channel_t;
 
 typedef struct
 {
     mac_param_t mac[MAX_MAC];
-    u8 mac_cnt;
+    uint8_t mac_cnt;
 } airkiss_mac_t;
 
 extern uint32_t airkiss_is_at_its_context(void);

@@ -1,3 +1,4 @@
+#include <stdint.h>
 
 #include "include.h"
 
@@ -13,16 +14,16 @@
 #define	_MAX_SS		    512
 #define _FS_REENTRANT	0		/* 0:Disable or 1:Enable */
 
-typedef unsigned char  uint8;                   /* 无符号8位整型变量                        */
-typedef signed   char  int8;                    /* 有符号8位整型变量                        */
-typedef unsigned short uint16;                  /* 无符号16位整型变量                       */
-typedef signed   short int16;                   /* 有符号16位整型变量                       */
-typedef unsigned int   uint32;                  /* 无符号32位整型变量                       */
-typedef signed   int   int32;                   /* 有符号32位整型变量                       */
+typedef unsigned char  uint8_t;                   /* 无符号8位整型变量                        */
+typedef signed   char  int8_t;                    /* 有符号8位整型变量                        */
+typedef unsigned short uint16_t;                  /* 无符号16位整型变量                       */
+typedef signed   short int16_t;                   /* 有符号16位整型变量                       */
+typedef unsigned int   uint32_t;                  /* 无符号32位整型变量                       */
+typedef signed   int   int32_t;                   /* 有符号32位整型变量                       */
 typedef float          fp32;                    /* 单精度浮点数（32位长度）                 */
 typedef double         fp64;                    /* 双精度浮点数（64位长度）                 */
-typedef unsigned long long uint64;
-typedef long long   int64;
+typedef unsigned long long uint64_t;
+typedef long long   int64_t;
 
 typedef unsigned char  u_int8;                   /* 无符号8位整型变量                        */
 typedef unsigned short u_int16;                  /* 无符号16位整型变量                       */
@@ -302,16 +303,16 @@ typedef unsigned int   u_int32;                  /* 无符号32位整型变量 */
 /* #include <windows.h>	// O/S definitions  */
 
 
-typedef unsigned char  uint8;                   /* 无符号8位整型变量                        */
-typedef signed   char  int8;                    /* 有符号8位整型变量                        */
-typedef unsigned short uint16;                  /* 无符号16位整型变量                       */
-typedef signed   short int16;                   /* 有符号16位整型变量                       */
-typedef unsigned int   uint32;                  /* 无符号32位整型变量                       */
-typedef signed   int   int32;                   /* 有符号32位整型变量                       */
+typedef unsigned char  uint8_t;                   /* 无符号8位整型变量                        */
+typedef signed   char  int8_t;                    /* 有符号8位整型变量                        */
+typedef unsigned short uint16_t;                  /* 无符号16位整型变量                       */
+typedef signed   short int16_t;                   /* 有符号16位整型变量                       */
+typedef unsigned int   uint32_t;                  /* 无符号32位整型变量                       */
+typedef signed   int   int32_t;                   /* 有符号32位整型变量                       */
 typedef float          fp32;                    /* 单精度浮点数（32位长度）                 */
 typedef double         fp64;                    /* 双精度浮点数（64位长度）                 */
-typedef unsigned long long uint64;
-typedef long long   int64;
+typedef unsigned long long uint64_t;
+typedef long long   int64_t;
 
 typedef unsigned char  u_int8;                   /* 无符号8位整型变量                        */
 typedef unsigned short u_int16;                  /* 无符号16位整型变量                       */

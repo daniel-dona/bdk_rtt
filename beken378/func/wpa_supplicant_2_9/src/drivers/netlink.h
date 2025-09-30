@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * Netlink helper functions for driver wrappers
  * Copyright (c) 2002-2009, Jouni Malinen <j@w1.fi>
@@ -14,9 +15,9 @@ struct ifinfomsg;
 
 struct netlink_config {
 	void *ctx;
-	void (*newlink_cb)(void *ctx, struct ifinfomsg *ifi, u8 *buf,
+	void (*newlink_cb)(void *ctx, struct ifinfomsg *ifi, uint8_t *buf,
 			   size_t len);
-	void (*dellink_cb)(void *ctx, struct ifinfomsg *ifi, u8 *buf,
+	void (*dellink_cb)(void *ctx, struct ifinfomsg *ifi, uint8_t *buf,
 			   size_t len);
 };
 

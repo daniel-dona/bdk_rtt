@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "test_config.h"
 #include <string.h>
 #include <stdlib.h>
@@ -49,7 +50,7 @@ static int flash_erase(int argc, char **argv)
 MSH_CMD_EXPORT(flash_erase, flash_erase 2093056);
 
 #define __is_print(ch) ((unsigned int)((ch) - ' ') < 127u - ' ')
-static void dump_hex(const rt_uint8_t *ptr, rt_size_t buflen)
+static void dump_hex(const uint8_t *ptr, rt_size_t buflen)
 {
     unsigned char *buf = (unsigned char*)ptr;
     int i, j;

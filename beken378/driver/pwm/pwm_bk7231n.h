@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _PWM_H_
 #define _PWM_H_
 
@@ -107,22 +108,22 @@
 
 #define CHANNEL_NO                                  6
 
-UINT32 pwm_ctrl(UINT32 cmd, void *param);
+uint32_t pwm_ctrl(uint32_t cmd, void *param);
 
 void pwm_init(void);
 void pwm_exit(void);
 void pwm_isr(void);
-bk_err_t init_pwm_param(pwm_param_t *pwm_param, UINT8 enable);
-bk_err_t pwm_unit_enable(UINT8 ucChannel);
-bk_err_t pwm_unit_disable(UINT8 ucChannel);
-bk_err_t pwm_group_mode_enable(UINT8 ucChannel);
-bk_err_t pwm_group_mode_disable(UINT8 ucChannel);
-bk_err_t pwm_update_param_enable(UINT8 channel);
-bk_err_t pwm_group_update_param_enable(UINT8 channel1,UINT8 channel2);
-bk_err_t pwm_init_levl_set_low(UINT8 ucChannel);
-bk_err_t pwm_init_levl_set_high(UINT8 ucChannel);
-bk_err_t pwm_init_levl_get(UINT8 ucChannel);
-bk_err_t pwm_check_group(UINT32 channel1, UINT32 channel2);
+bk_err_t init_pwm_param(pwm_param_t *pwm_param, uint8_t enable);
+bk_err_t pwm_unit_enable(uint8_t ucChannel);
+bk_err_t pwm_unit_disable(uint8_t ucChannel);
+bk_err_t pwm_group_mode_enable(uint8_t ucChannel);
+bk_err_t pwm_group_mode_disable(uint8_t ucChannel);
+bk_err_t pwm_update_param_enable(uint8_t channel);
+bk_err_t pwm_group_update_param_enable(uint8_t channel1,uint8_t channel2);
+bk_err_t pwm_init_levl_set_low(uint8_t ucChannel);
+bk_err_t pwm_init_levl_set_high(uint8_t ucChannel);
+bk_err_t pwm_init_levl_get(uint8_t ucChannel);
+bk_err_t pwm_check_group(uint32_t channel1, uint32_t channel2);
 
 #endif
 #endif //_PWM_H_

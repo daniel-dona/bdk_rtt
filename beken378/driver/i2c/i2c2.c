@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 
@@ -21,13 +22,13 @@ static DD_OPERATIONS i2c2_op =
     i2c2_ctrl
 };
 
-__maybe_unused static void i2c2_set_slave_addr(UINT32 addr);
+__maybe_unused static void i2c2_set_slave_addr(uint32_t addr);
 __maybe_unused static void i2c2_clk_source_set_26M(void);
 static volatile I2C2_MSG_ST *gi2c2 ;
 
-static void i2c2_set_idle_cr(UINT32 idle_cr)
+static void i2c2_set_idle_cr(uint32_t idle_cr)
 {
-    UINT32 reg_val = REG_READ(REG_I2C2_CONFIG);
+    uint32_t reg_val = REG_READ(REG_I2C2_CONFIG);
 
     reg_val = (reg_val & ~(I2C2_IDLE_CR_MASK<< I2C2_IDLE_CR_POSI)) 
         | ((idle_cr & I2C2_IDLE_CR_MASK) << I2C2_IDLE_CR_POSI);
@@ -35,9 +36,9 @@ static void i2c2_set_idle_cr(UINT32 idle_cr)
     REG_WRITE(REG_I2C2_CONFIG, reg_val);
 }
 
-static void i2c2_set_scl_cr(UINT32 scl_cr)
+static void i2c2_set_scl_cr(uint32_t scl_cr)
 {
-    UINT32 reg_val = REG_READ(REG_I2C2_CONFIG);
+    uint32_t reg_val = REG_READ(REG_I2C2_CONFIG);
 	
     reg_val = (reg_val & ~(I2C2_SCL_CR_MASK<< I2C2_SCL_CR_POSI)) 
         | ((scl_cr & I2C2_SCL_CR_MASK) << I2C2_SCL_CR_POSI);
@@ -45,9 +46,9 @@ static void i2c2_set_scl_cr(UINT32 scl_cr)
     REG_WRITE(REG_I2C2_CONFIG, reg_val);
 }
 
-static void i2c2_set_freq_div(UINT32 div)
+static void i2c2_set_freq_div(uint32_t div)
 {
-    UINT32 reg_val = REG_READ(REG_I2C2_CONFIG);
+    uint32_t reg_val = REG_READ(REG_I2C2_CONFIG);
 
     reg_val = (reg_val & ~(I2C2_FREQ_DIV_MASK<< I2C2_FREQ_DIV_POSI)) 
         | ((div & I2C2_FREQ_DIV_MASK) << I2C2_FREQ_DIV_POSI);
@@ -55,27 +56,27 @@ static void i2c2_set_freq_div(UINT32 div)
     REG_WRITE(REG_I2C2_CONFIG, reg_val);
 }
 
-static void i2c2_set_slave_addr(UINT32 addr)
+static void i2c2_set_slave_addr(uint32_t addr)
 {
-    UINT32 reg_val = REG_READ(REG_I2C2_CONFIG);
+    uint32_t reg_val = REG_READ(REG_I2C2_CONFIG);
     
     reg_val = (reg_val & ~(I2C2_SLV_ADDR_MASK<< I2C2_SLV_ADDR_POSI)) 
         | ((addr & I2C2_SLV_ADDR_MASK) << I2C2_SLV_ADDR_POSI);
     REG_WRITE(REG_I2C2_CONFIG, reg_val);
 }
 
-static void i2c2_set_smbus_cs(UINT32 cs)
+static void i2c2_set_smbus_cs(uint32_t cs)
 {
-    UINT32 reg_val = REG_READ(REG_I2C2_CONFIG);
+    uint32_t reg_val = REG_READ(REG_I2C2_CONFIG);
     
     reg_val = (reg_val & ~(I2C2_SMB_CS_MASK<< I2C2_SMB_CS_POSI)) 
         | ((cs & I2C2_SMB_CS_MASK) << I2C2_SMB_CS_POSI);
     REG_WRITE(REG_I2C2_CONFIG, reg_val);
 }
 
-static void i2c2_set_timeout_en(UINT32 timeout)
+static void i2c2_set_timeout_en(uint32_t timeout)
 {
-    UINT32 reg_val = REG_READ(REG_I2C2_CONFIG);
+    uint32_t reg_val = REG_READ(REG_I2C2_CONFIG);
     
     if(timeout)
         reg_val |= I2C2_SMB_TOE;
@@ -84,9 +85,9 @@ static void i2c2_set_timeout_en(UINT32 timeout)
     REG_WRITE(REG_I2C2_CONFIG, reg_val);
 }
 
-static void i2c2_set_free_detect(UINT32 free)
+static void i2c2_set_free_detect(uint32_t free)
 {
-    UINT32 reg_val = REG_READ(REG_I2C2_CONFIG);
+    uint32_t reg_val = REG_READ(REG_I2C2_CONFIG);
     
     if(free)
         reg_val |= I2C2_SMB_FTE;
@@ -95,9 +96,9 @@ static void i2c2_set_free_detect(UINT32 free)
     REG_WRITE(REG_I2C2_CONFIG, reg_val);
 }
 
-static void i2c2_set_salve_en(UINT32 en)
+static void i2c2_set_salve_en(uint32_t en)
 {
-    UINT32 reg_val = REG_READ(REG_I2C2_CONFIG);
+    uint32_t reg_val = REG_READ(REG_I2C2_CONFIG);
     
     if(en)
         reg_val |= I2C2_INH;
@@ -106,9 +107,9 @@ static void i2c2_set_salve_en(UINT32 en)
     REG_WRITE(REG_I2C2_CONFIG, reg_val);
 }
 
-static void i2c2_set_smbus_en(UINT32 en)
+static void i2c2_set_smbus_en(uint32_t en)
 {
-    UINT32 reg_val = REG_READ(REG_I2C2_CONFIG);
+    uint32_t reg_val = REG_READ(REG_I2C2_CONFIG);
     
     if(en)
         reg_val |= I2C2_ENSMB;
@@ -120,14 +121,14 @@ static void i2c2_set_smbus_en(UINT32 en)
 ////////////////////////////////////////////////////////////////////////////////
 static void i2c2_clk_source_set_26M(void)
 {   
-	UINT32 param;
+	uint32_t param;
 	param = PCLK_POSI_I2C2;
 	sddev_control(ICU_DEV_NAME, CMD_CONF_PCLK_26M, &param);	
 }
 
 static void i2c2_gpio_config(void)
 {
-    UINT32 param;
+    uint32_t param;
 
     param = GFUNC_MODE_I2C2;
     sddev_control(GPIO_DEV_NAME, CMD_GPIO_ENABLE_SECOND, &param);
@@ -135,7 +136,7 @@ static void i2c2_gpio_config(void)
 
 static void i2c2_power_up(void)
 {
-    UINT32 param;
+    uint32_t param;
 	
 	//set 26M clock
 	param = PCLK_POSI_I2C2;
@@ -147,21 +148,21 @@ static void i2c2_power_up(void)
 
 static void i2c2_power_down(void)
 {
-    UINT32 param;
+    uint32_t param;
     param = PWD_I2C2_CLK_BIT;
 	sddev_control(ICU_DEV_NAME, CMD_CLK_PWR_DOWN, &param);
 }
 
 static void i2c2_enable_interrupt(void)
 {
-    UINT32 param;
+    uint32_t param;
     param = (IRQ_I2C2_BIT);
     sddev_control(ICU_DEV_NAME, CMD_ICU_INT_ENABLE, &param);
 }
 
 static void i2c2_disable_interrupt(void)
 {
-    UINT32 param;
+    uint32_t param;
     param = (IRQ_I2C2_BIT);
     sddev_control(ICU_DEV_NAME, CMD_ICU_INT_DISABLE, &param);
 }
@@ -275,9 +276,9 @@ static void i2c2_get_message(I2C2_MSG_ST *i2c2_config)
     I2C2_PRT("gi2c2.AllDataNum = %d\r\n", gi2c2->AllDataNum);
 }
 
-static UINT8  i2c2_get_busy(void)
+static uint8_t  i2c2_get_busy(void)
 {
-	UINT32 value;
+	uint32_t value;
 
 	value = REG_READ(REG_I2C2_STA);
 
@@ -297,11 +298,11 @@ static UINT8  i2c2_get_busy(void)
 
 static void i2c2_isr(void)
 {
-    UINT32 i2c2_stat,i2c2_config;
-	UINT32 work_mode, ack, sta, sto, si;
-	volatile UINT8 fifo_empty_num = 0;
-	volatile UINT8 data_num = 0;
-	UINT8 i, uctemp, remain_data_cnt;
+    uint32_t i2c2_stat,i2c2_config;
+	uint32_t work_mode, ack, sta, sto, si;
+	volatile uint8_t fifo_empty_num = 0;
+	volatile uint8_t data_num = 0;
+	uint8_t i, uctemp, remain_data_cnt;
 
     i2c2_stat = REG_READ(REG_I2C2_STA);
 	si = i2c2_stat & I2C2_SMBUS_SI;
@@ -772,7 +773,7 @@ static void i2c2_software_init(void)
 
 static void i2c2_hardware_init(void)
 {
-    //UINT32 reg;
+    //uint32_t reg;
     /* register interrupt */
     intc_service_register(IRQ_I2C2, PRI_IRQ_I2C2, i2c2_isr);
 
@@ -799,9 +800,9 @@ void i2c2_exit(void)
     ddev_unregister_dev(I2C2_DEV_NAME);
 }
 
-static UINT32 i2c2_open(UINT32 op_flag)
+static uint32_t i2c2_open(uint32_t op_flag)
 {
-    UINT32 reg , reg1;
+    uint32_t reg , reg1;
 	
 	reg = REG_READ(REG_I2C2_CONFIG);
 	reg1= REG_READ(REG_I2C2_STA);
@@ -843,7 +844,7 @@ static UINT32 i2c2_open(UINT32 op_flag)
     return I2C2_SUCCESS;
 }
 
-static UINT32 i2c2_close(void)
+static uint32_t i2c2_close(void)
 {
     i2c2_set_smbus_en(0);
     
@@ -853,9 +854,9 @@ static UINT32 i2c2_close(void)
     return I2C2_SUCCESS;
 }
 
-static UINT32 i2c2_read(char *user_buf, UINT32 count, UINT32 op_flag)
+static uint32_t i2c2_read(char *user_buf, uint32_t count, uint32_t op_flag)
 {
-    UINT32 reg;
+    uint32_t reg;
     I2C_OP_PTR i2c_op;
 	
     i2c_op = (I2C_OP_PTR)op_flag;
@@ -865,7 +866,7 @@ static UINT32 i2c2_read(char *user_buf, UINT32 count, UINT32 op_flag)
 	gi2c2->ack_check  = 1;
 	gi2c2->CurrentNum = 0;
 	gi2c2->AllDataNum = count;
-    gi2c2->pData      = (UINT8 *)user_buf;
+    gi2c2->pData      = (uint8_t *)user_buf;
 	gi2c2->InnerAddr  = i2c_op->op_addr;
 	gi2c2->SendAddr   = i2c_op->salve_id;
 	gi2c2->Slave_addr = i2c_op->slave_addr;
@@ -907,9 +908,9 @@ static UINT32 i2c2_read(char *user_buf, UINT32 count, UINT32 op_flag)
 
 }
 
-static UINT32 i2c2_write(char *user_buf, UINT32 count, UINT32 op_flag)
+static uint32_t i2c2_write(char *user_buf, uint32_t count, uint32_t op_flag)
 {
-    UINT32 reg;
+    uint32_t reg;
     I2C_OP_PTR i2c_op;
 	
     i2c_op = (I2C_OP_PTR)op_flag;
@@ -921,7 +922,7 @@ static UINT32 i2c2_write(char *user_buf, UINT32 count, UINT32 op_flag)
 	gi2c2->ack_check  = 1;
 	gi2c2->CurrentNum = 0;
 	gi2c2->AllDataNum = count;
-    gi2c2->pData      = (UINT8 *)user_buf;
+    gi2c2->pData      = (uint8_t *)user_buf;
 	gi2c2->InnerAddr  = i2c_op->op_addr;
 	gi2c2->SendAddr   = i2c_op->salve_id;
 	gi2c2->Slave_addr = i2c_op->slave_addr;
@@ -961,35 +962,35 @@ static UINT32 i2c2_write(char *user_buf, UINT32 count, UINT32 op_flag)
     return 0;
 }
 
-static UINT32 i2c2_ctrl(UINT32 cmd, void *param)
+static uint32_t i2c2_ctrl(uint32_t cmd, void *param)
 {
-    UINT32 ret = I2C2_SUCCESS;
+    uint32_t ret = I2C2_SUCCESS;
 
     switch(cmd)
     {
 	case I2C2_CMD_SET_IDLE_CR:
-		i2c2_set_idle_cr(*((UINT32 *)param));
+		i2c2_set_idle_cr(*((uint32_t *)param));
 		break;
 	case I2C2_CMD_SET_SCL_CR:
-		i2c2_set_scl_cr(*((UINT32 *)param));
+		i2c2_set_scl_cr(*((uint32_t *)param));
 		break;
 	case I2C2_CMD_SET_FREQ_DIV:
-		i2c2_set_freq_div(*((UINT32 *)param));
+		i2c2_set_freq_div(*((uint32_t *)param));
 		break;
 	case I2C2_CMD_SET_SMBUS_CS:
-		i2c2_set_smbus_cs(*((UINT32 *)param));
+		i2c2_set_smbus_cs(*((uint32_t *)param));
 		break;
 	case I2C2_CMD_SET_TIMEOUT_EN:
-		i2c2_set_timeout_en(*((UINT32 *)param));
+		i2c2_set_timeout_en(*((uint32_t *)param));
 		break;
 	case I2C2_CMD_SET_FREE_DETECT:
-		i2c2_set_free_detect(*((UINT32 *)param));
+		i2c2_set_free_detect(*((uint32_t *)param));
 		break;
 	case I2C2_CMD_SET_SLAVE_EN:
-		i2c2_set_salve_en(*((UINT32 *)param));
+		i2c2_set_salve_en(*((uint32_t *)param));
 		break;
 	case I2C2_CMD_SET_SMBUS_EN:
-		i2c2_set_smbus_en(*((UINT32 *)param));
+		i2c2_set_smbus_en(*((uint32_t *)param));
 		break;
 	case I2C2_CMD_SET_POWER_UP:
 		i2c2_power_up();

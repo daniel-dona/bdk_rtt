@@ -1,3 +1,4 @@
+#include <stdbool.h>
 /*
  * File      : Semaphore.h
  * This file is part of RT-Thread RTOS

@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -68,7 +69,7 @@ static uint32_t http_data_fetch_aac(void *buffer, uint32_t size, uint32_t count,
 
     while ((bytes_read < need_read) && (retry--))
     {
-        tmp = audio_stream_fetch(stream, ((rt_uint8_t *)buffer) + bytes_read, need_read - bytes_read);
+        tmp = audio_stream_fetch(stream, ((uint8_t *)buffer) + bytes_read, need_read - bytes_read);
         //debug_printf("%s:%d read: %d\n", __FUNCTION__, __LINE__, tmp);
 
         if (tmp > 0)
@@ -195,7 +196,7 @@ static int format_m4a_run(struct audio_codec *codec)
         //debug_printf("%s%d: M4A_PHASE_PARSE_DONE\n", __FUNCTION__, __LINE__);
 
         /* get a decoder buffer */
-        buffer = (rt_uint16_t *)audio_device_get_buffer(&buffer_size);
+        buffer = (uint16_t *)audio_device_get_buffer(&buffer_size);
         if (!buffer)
         {
             printf("get audio device buffer failed!\n");
@@ -208,12 +209,12 @@ static int format_m4a_run(struct audio_codec *codec)
         {
             if (m4a->aac_decoder_num_channels == 2)
             {
-                memcpy(buffer, m4a->aac_decoder_pcm_buffer, m4a->aac_decoder_pcm_samples * 2 * sizeof(rt_uint16_t));
+                memcpy(buffer, m4a->aac_decoder_pcm_buffer, m4a->aac_decoder_pcm_samples * 2 * sizeof(uint16_t));
 
                 /* calc_aac_time */
-                calc_aac_time(m4a, m4a->aac_decoder_pcm_samples * 2 * sizeof(rt_uint16_t)); 
+                calc_aac_time(m4a, m4a->aac_decoder_pcm_samples * 2 * sizeof(uint16_t)); 
 
-                audio_device_write(buffer, m4a->aac_decoder_pcm_samples * 2 * sizeof(rt_uint16_t));
+                audio_device_write(buffer, m4a->aac_decoder_pcm_samples * 2 * sizeof(uint16_t));
             }
             else
             {
@@ -222,7 +223,7 @@ static int format_m4a_run(struct audio_codec *codec)
 
                 memcpy(buffer + m4a->aac_decoder_pcm_samples,
                        m4a->aac_decoder_pcm_buffer,
-                       m4a->aac_decoder_pcm_samples * sizeof(rt_uint16_t));
+                       m4a->aac_decoder_pcm_samples * sizeof(uint16_t));
 
                 // convert to two channel
                 src = (int16_t *)(buffer + m4a->aac_decoder_pcm_samples);
@@ -234,9 +235,9 @@ static int format_m4a_run(struct audio_codec *codec)
                 }
 
                 /* calc_aac_time */
-                calc_aac_time(m4a, m4a->aac_decoder_pcm_samples * 2 * sizeof(rt_uint16_t)); 
+                calc_aac_time(m4a, m4a->aac_decoder_pcm_samples * 2 * sizeof(uint16_t)); 
 
-                audio_device_write(buffer, m4a->aac_decoder_pcm_samples * 2 * sizeof(rt_uint16_t));
+                audio_device_write(buffer, m4a->aac_decoder_pcm_samples * 2 * sizeof(uint16_t));
             }
         }
         else

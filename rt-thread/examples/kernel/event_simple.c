@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * 程序清单：事件例程
  *
@@ -21,7 +22,7 @@ static struct rt_event event;
 /* 线程1入口函数 */
 static void thread1_entry(void *param)
 {
-    rt_uint32_t e;
+    uint32_t e;
 
     while (1)
     {

@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
 This file is part of UFFS, the Ultra-low-cost Flash File System.
 
@@ -60,8 +62,8 @@ struct cli_arg {
 	char _buf[MAX_CLI_ARGS_BUF_LEN];
 };
 
-static BOOL m_exit = FALSE;
-static BOOL m_abort = FALSE;
+static bool m_exit = FALSE;
+static bool m_abort = FALSE;
 static struct cli_commandset *m_cmdset_head = NULL;
 
 // Note: last command return code stored in env 0.
@@ -211,7 +213,7 @@ static int cmd_test(int argc, char *argv[])
 {
 	int a, b;
 	char *op;
-	BOOL tst = FALSE;
+	bool tst = FALSE;
 
 	CHK_ARGC(4, 4);
 
@@ -433,7 +435,7 @@ static struct cli_commandset default_cmdset = {
 	default_cmds,
 };
 
-static BOOL match_cmd(const char *src, int start, int end, const char *des)
+static bool match_cmd(const char *src, int start, int end, const char *des)
 {
 	while (src[start] == ' ' && start < end) 
 		start++;
@@ -450,7 +452,7 @@ static BOOL match_cmd(const char *src, int start, int end, const char *des)
 	return FALSE;
 }
 
-static BOOL check_cmd(const char *cmds, const char *cmd)
+static bool check_cmd(const char *cmds, const char *cmd)
 {
 	int start, end;
 

@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _APP_BLE_INIT_H_
 #define _APP_BLE_INIT_H_
 

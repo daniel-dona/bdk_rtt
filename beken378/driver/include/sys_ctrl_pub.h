@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _SCTRL_PUB_H_
 #define _SCTRL_PUB_H_
 
@@ -5,7 +6,7 @@
 
 #define SCTRL_DEV_NAME       "sys_ctrl"
 
-#define SCTRL_FAILURE        ((UINT32)-1)
+#define SCTRL_FAILURE        ((uint32_t)-1)
 #define SCTRL_SUCCESS        (0)
 
 #define SCTRL_CMD_MAGIC      (0xC123000)
@@ -273,26 +274,26 @@ enum
 
 typedef union
 {
-    UINT32 val;
+    uint32_t val;
     struct
     {
-        UINT32 mclk_mux: 2;
-        UINT32 resv0: 2;
-        UINT32 mclk_div: 4;
-        UINT32 flash_26m_select: 1;
-        UINT32 hclk_div2_en: 1;
-        UINT32 modem_clk480m_pwd: 1;
-        UINT32 mac_clk480m_pwd: 1;
-        UINT32 mpif_clk_inv: 1;
-        UINT32 sdio_clk_inv: 1;
-        UINT32 resv1: 18;
+        uint32_t mclk_mux: 2;
+        uint32_t resv0: 2;
+        uint32_t mclk_div: 4;
+        uint32_t flash_26m_select: 1;
+        uint32_t hclk_div2_en: 1;
+        uint32_t modem_clk480m_pwd: 1;
+        uint32_t mac_clk480m_pwd: 1;
+        uint32_t mpif_clk_inv: 1;
+        uint32_t sdio_clk_inv: 1;
+        uint32_t resv1: 18;
     } bits;
 } SYS_CTRL_U;
 
 typedef struct efuse_oper_st
 {
-    UINT8 addr;
-    UINT8 data;    
+    uint8_t addr;
+    uint8_t data;    
 } EFUSE_OPER_ST, *EFUSE_OPER_PTR;
 
 typedef enum
@@ -318,8 +319,8 @@ typedef struct charge_oper_st
 {
     CHARGE_TYPE type;
     CHARGE_STEP step;
-    UINT32 elect;
-    UINT8 cal[3];
+    uint32_t elect;
+    uint8_t cal[3];
 } CHARGE_OPER_ST, *CHARGE_OPER_PTR;
 
 #define CHARGE_ANALOG_CTRL3_CAL_DEFAULT_VALUE       (0x180004A0)
@@ -364,22 +365,22 @@ extern void sctrl_init(void);
 extern void sctrl_exit(void);
 
 extern void sctrl_normal_exit_sleep(void);
-extern void sctrl_normal_enter_sleep(UINT32 peri_clk);
+extern void sctrl_normal_enter_sleep(uint32_t peri_clk);
 extern void sctrl_mcu_exit(void);
 extern void sctrl_mcu_init(void);
-extern void sctrl_mcu_sleep(UINT32 );
-extern UINT32 sctrl_mcu_wakeup(void);
+extern void sctrl_mcu_sleep(uint32_t );
+extern uint32_t sctrl_mcu_wakeup(void);
 extern void sctrl_ps_dump();
 extern void sctrl_sta_rf_sleep(void);
 extern void sctrl_sta_rf_wakeup(void);
 extern void sctrl_sta_ps_init(void);
 extern void sctrl_flash_select_dco(void);
-extern UINT8 sctrl_if_rf_sleep(void);
-extern UINT32 charger_is_full(void);
-extern UINT32 usb_power_is_pluged(void);
+extern uint8_t sctrl_if_rf_sleep(void);
+extern uint32_t charger_is_full(void);
+extern uint32_t usb_power_is_pluged(void);
 extern void sctrl_rf_ps_enable_set(void);
 extern void sctrl_rf_ps_enable_clear(void);
 extern int sctrl_rf_ps_enabled(void);
 RESET_SOURCE_STATUS sctrl_get_deep_sleep_wake_soure(void);
-UINT8 sctrl_if_mcu_can_sleep(void);
+uint8_t sctrl_if_mcu_can_sleep(void);
 #endif // _SCTRL_PUB_H_

@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : mstorage.h
  * This file is part of RT-Thread RTOS
@@ -43,23 +44,23 @@ typedef struct umass_descriptor* umass_desc_t;
 
 struct capacity_data
 {
-    rt_uint8_t LastLogicalBlockAddress[4];
-    rt_uint8_t BlockLengthInBytes[4];
+    uint8_t LastLogicalBlockAddress[4];
+    uint8_t BlockLengthInBytes[4];
 };
 
 struct request_sense_data
 {
-    rt_uint8_t ErrorCode:7;
-    rt_uint8_t Valid:1;
-    rt_uint8_t Reserved1;
-    rt_uint8_t SenseKey:4;
-    rt_uint8_t Reserved2:4;
-    rt_uint8_t Information[4];
-    rt_uint8_t AdditionalSenseLength;
-    rt_uint8_t Reserved3[4];
-    rt_uint8_t AdditionalSenseCode;
-    rt_uint8_t AdditionalSenseCodeQualifier;
-    rt_uint8_t Reserved4[4];
+    uint8_t ErrorCode:7;
+    uint8_t Valid:1;
+    uint8_t Reserved1;
+    uint8_t SenseKey:4;
+    uint8_t Reserved2:4;
+    uint8_t Information[4];
+    uint8_t AdditionalSenseLength;
+    uint8_t Reserved3[4];
+    uint8_t AdditionalSenseCode;
+    uint8_t AdditionalSenseCodeQualifier;
+    uint8_t Reserved4[4];
 }request_sense_data_t;
 
 #pragma pack()

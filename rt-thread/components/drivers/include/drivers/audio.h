@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  * File      : audio.h
  * This file is part of RT-Thread RTOS
@@ -130,12 +132,12 @@ enum
 /* the preferred number and size of audio pipeline buffer for the audio device */
 struct rt_audio_buf_info
 {
-    rt_uint32_t buffer_size;          /* Preferred qty of buffers */
-    rt_uint32_t buffer_count;           /* Preferred size of the buffers */
+    uint32_t buffer_size;          /* Preferred qty of buffers */
+    uint32_t buffer_count;           /* Preferred size of the buffers */
 };
 struct rt_audio_buf_desc
 {
-    rt_uint8_t *data_ptr;
+    uint8_t *data_ptr;
     rt_size_t data_size;
 };
 
@@ -170,11 +172,11 @@ struct rt_audio_ops
 
 struct rt_audio_configure
 {
-    rt_uint32_t channels;
+    uint32_t channels;
 
-    rt_uint32_t samplefmt;
-    rt_uint32_t samplerate;
-    rt_uint32_t samplefmts;
+    uint32_t samplefmt;
+    uint32_t samplerate;
+    uint32_t samplefmts;
 };
 
 struct rt_audio_caps
@@ -184,7 +186,7 @@ struct rt_audio_caps
 
     union
     {
-        rt_uint32_t mask;
+        uint32_t mask;
         int     value;
         struct rt_audio_configure config;
     } udata;
@@ -212,10 +214,10 @@ struct rt_audio_device
     struct rt_audio_record     *record;
 };
 
-rt_err_t    rt_audio_register(struct rt_audio_device *audio, const char *name, rt_uint32_t flag, void *data);
-void        rt_audio_tx_complete(struct rt_audio_device *audio, rt_uint8_t *pbuf);
-void        rt_audio_rx_done(struct rt_audio_device *audio, rt_uint8_t *pbuf, rt_size_t len);
-rt_uint32_t rt_audio_format_to_bits(rt_uint32_t format);
+rt_err_t    rt_audio_register(struct rt_audio_device *audio, const char *name, uint32_t flag, void *data);
+void        rt_audio_tx_complete(struct rt_audio_device *audio, uint8_t *pbuf);
+void        rt_audio_rx_done(struct rt_audio_device *audio, uint8_t *pbuf, rt_size_t len);
+uint32_t rt_audio_format_to_bits(uint32_t format);
 
 
 /* Device Control Commands */

@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * USB Video Class definitions.
  *

@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _VOICE_CHANGER_CORE_H_
 #define _VOICE_CHANGER_CORE_H_
 
@@ -11,7 +12,7 @@
 #endif
 
 #if 0
-#define VC_INT_DECLARATION()          //uint32 interrupts_info;
+#define VC_INT_DECLARATION()          //uint32_t interrupts_info;
 #define VC_INT_DISABLE()              //VICMR_disable_interrupts(&interrupts_info);
 #define VC_INT_RESTORE()              //VICMR_restore_interrupts(interrupts_info);
 #else

@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef __DRIVER_USB_H__
 #define __DRIVER_USB_H__
 
@@ -19,17 +20,17 @@ extern "C" {
 
 typedef struct __driver_udisk_s
 {
-    uint32        total_block;
-    uint16		  block_size;
-    uint16		  InitFlag;
+    uint32_t        total_block;
+    uint16_t		  block_size;
+    uint16_t		  InitFlag;
 } driver_udisk_t;
 
-extern uint8 udisk_init(void);
+extern uint8_t udisk_init(void);
 extern void udisk_uninit(void);
-extern uint32 udisk_get_size(void);
-extern uint8 udisk_is_attached(void);
-extern int udisk_rd_blk_sync(uint32 first_block, uint32 block_num, uint8 *dest );
-extern int udisk_wr_blk_sync(uint32 first_block, uint32 block_num, uint8 *dest);
+extern uint32_t udisk_get_size(void);
+extern uint8_t udisk_is_attached(void);
+extern int udisk_rd_blk_sync(uint32_t first_block, uint32_t block_num, uint8_t *dest );
+extern int udisk_wr_blk_sync(uint32_t first_block, uint32_t block_num, uint8_t *dest);
 #endif
 
 

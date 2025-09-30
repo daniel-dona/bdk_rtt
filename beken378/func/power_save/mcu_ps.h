@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _MCU_PS_H_
 #define _MCU_PS_H_
 
@@ -13,19 +14,19 @@
 
 typedef struct {
 #if (CFG_SUPPORT_ALIOS)
-	UINT64 first_tick;
+	uint64_t first_tick;
 #else
-	UINT32 first_tick;
+	uint32_t first_tick;
 #endif
-	UINT64 first_tsf;
+	uint64_t first_tsf;
 } MCU_PS_TSF;
 typedef struct {
 #if (CFG_SUPPORT_ALIOS)
-	UINT64 fclk_tick;
+	uint64_t fclk_tick;
 #else
-	UINT32 fclk_tick;
+	uint32_t fclk_tick;
 #endif
-	UINT32 machw_tm;
+	uint32_t machw_tm;
 } MCU_PS_MACHW_TM;
 
 #endif

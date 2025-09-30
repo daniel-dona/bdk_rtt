@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
   This file is part of UFFS, the Ultra-low-cost Flash File System.
   
@@ -139,7 +140,7 @@ URET uffs_TreeRelease(uffs_Device *dev)
 	return U_SUCC;
 }
 
-static u16 _GetBlockFromNode(u8 type, TreeNode *node)
+static uint16_t _GetBlockFromNode(uint8_t type, TreeNode *node)
 {
 	switch (type) {
 	case UFFS_TYPE_DIR:
@@ -154,7 +155,7 @@ static u16 _GetBlockFromNode(u8 type, TreeNode *node)
 }
 
 #if 0
-static u16 _GetParentFromNode(u8 type, TreeNode *node)
+static uint16_t _GetParentFromNode(uint8_t type, TreeNode *node)
 {
 	switch (type) {
 	case UFFS_TYPE_DIR:
@@ -169,7 +170,7 @@ static u16 _GetParentFromNode(u8 type, TreeNode *node)
 }
 
 
-static u16 _GetSerialFromNode(u8 type, TreeNode *node)
+static uint16_t _GetSerialFromNode(uint8_t type, TreeNode *node)
 {
 	switch (type) {
 	case UFFS_TYPE_DIR:
@@ -190,7 +191,7 @@ static u16 _GetSerialFromNode(u8 type, TreeNode *node)
  * \param[in] type type of node
  * \param[in] node node to be insert to
  */
-void uffs_InsertNodeToTree(uffs_Device *dev, u8 type, TreeNode *node)
+void uffs_InsertNodeToTree(uffs_Device *dev, uint8_t type, TreeNode *node)
 {
 	switch (type) {
 	case UFFS_TYPE_DIR:
@@ -217,7 +218,7 @@ void uffs_InsertNodeToTree(uffs_Device *dev, u8 type, TreeNode *node)
  * \param[in] serial serial num
  */
 TreeNode * uffs_FindFromTree(uffs_Device *dev,
-							 u8 type, u16 parent, u16 serial)
+							 uint8_t type, uint16_t parent, uint16_t serial)
 {
 	switch (type) {
 	case UFFS_TYPE_DIR:
@@ -241,14 +242,14 @@ static URET _BuildValidTreeNode(uffs_Device *dev,
 {
 	uffs_Tags *tag;
 	TreeNode *node_alt;
-	u16 block, parent, serial, block_alt, block_save;
+	uint16_t block, parent, serial, block_alt, block_save;
 	uffs_BlockInfo *bc_alt;
-	u8 type;
+	uint8_t type;
 	int page;
 	UBOOL needToInsertToTree = U_FALSE;
 	uffs_Buf *buf = NULL;
 	uffs_FileInfo *info;
-	u16 data_sum = 0;
+	uint16_t data_sum = 0;
 
 	// check the first page on the block ...
 	uffs_BlockInfoLoad(dev, bc, 0);
@@ -553,8 +554,8 @@ static URET _BuildTreeStepOne(uffs_Device *dev)
 static URET _BuildTreeStepTwo(uffs_Device *dev)
 {
 	//Randomise the start point of erased block to implement wear levelling
-	u32 startCount = 0;
-	u32 endPoint;
+	uint32_t startCount = 0;
+	uint32_t endPoint;
 	TreeNode *node;
 
 	uffs_Perror(UFFS_MSG_NOISY, "build tree step two");
@@ -573,10 +574,10 @@ static URET _BuildTreeStepTwo(uffs_Device *dev)
 	return U_SUCC;
 }
 
-TreeNode * uffs_TreeFindFileNode(uffs_Device *dev, u16 serial)
+TreeNode * uffs_TreeFindFileNode(uffs_Device *dev, uint16_t serial)
 {
 	int hash;
-	u16 x;
+	uint16_t x;
 	TreeNode *node;
 	struct uffs_TreeSt *tree = &(dev->tree);
 
@@ -606,7 +607,7 @@ void uffs_TreeSuspendAdd(uffs_Device *dev, TreeNode *node)
 }
 
 /** search suspend list */
-TreeNode * uffs_TreeFindSuspendNode(uffs_Device *dev, u16 serial)
+TreeNode * uffs_TreeFindSuspendNode(uffs_Device *dev, uint16_t serial)
 {
 	TreeNode *node = dev->tree.suspend;
 	while (node) {
@@ -630,10 +631,10 @@ void uffs_TreeRemoveSuspendNode(uffs_Device *dev, TreeNode *node)
 		dev->tree.suspend = NULL;
 }
 
-TreeNode * uffs_TreeFindFileNodeWithParent(uffs_Device *dev, u16 parent)
+TreeNode * uffs_TreeFindFileNodeWithParent(uffs_Device *dev, uint16_t parent)
 {
 	int hash;
-	u16 x;
+	uint16_t x;
 	TreeNode *node;
 	struct uffs_TreeSt *tree = &(dev->tree);
 
@@ -653,10 +654,10 @@ TreeNode * uffs_TreeFindFileNodeWithParent(uffs_Device *dev, u16 parent)
 	return NULL;
 }
 
-TreeNode * uffs_TreeFindDirNode(uffs_Device *dev, u16 serial)
+TreeNode * uffs_TreeFindDirNode(uffs_Device *dev, uint16_t serial)
 {
 	int hash;
-	u16 x;
+	uint16_t x;
 	TreeNode *node;
 	struct uffs_TreeSt *tree = &(dev->tree);
 
@@ -674,10 +675,10 @@ TreeNode * uffs_TreeFindDirNode(uffs_Device *dev, u16 serial)
 	return NULL;
 }
 
-TreeNode * uffs_TreeFindDirNodeWithParent(uffs_Device *dev, u16 parent)
+TreeNode * uffs_TreeFindDirNodeWithParent(uffs_Device *dev, uint16_t parent)
 {
 	int hash;
-	u16 x;
+	uint16_t x;
 	TreeNode *node;
 	struct uffs_TreeSt *tree = &(dev->tree);
 
@@ -699,11 +700,11 @@ TreeNode * uffs_TreeFindDirNodeWithParent(uffs_Device *dev, u16 parent)
 
 TreeNode * uffs_TreeFindFileNodeByName(uffs_Device *dev,
 										const char *name,
-										u32 len,
-										u16 sum, u16 parent)
+										uint32_t len,
+										uint16_t sum, uint16_t parent)
 {
 	int i;
-	u16 x;
+	uint16_t x;
 	TreeNode *node;
 	struct uffs_TreeSt *tree = &(dev->tree);
 	
@@ -726,12 +727,12 @@ TreeNode * uffs_TreeFindFileNodeByName(uffs_Device *dev,
 	return NULL;
 }
 
-TreeNode * uffs_TreeFindDataNode(uffs_Device *dev, u16 parent, u16 serial)
+TreeNode * uffs_TreeFindDataNode(uffs_Device *dev, uint16_t parent, uint16_t serial)
 {
 	int hash;
 	TreeNode *node;
 	struct uffs_TreeSt *tree = &(dev->tree);
-	u16 x;
+	uint16_t x;
 
 	hash = GET_DATA_HASH(parent, serial);
 	x = tree->data_entry[hash];
@@ -748,12 +749,12 @@ TreeNode * uffs_TreeFindDataNode(uffs_Device *dev, u16 parent, u16 serial)
 	return NULL;
 }
 
-TreeNode * uffs_TreeFindDirNodeByBlock(uffs_Device *dev, u16 block)
+TreeNode * uffs_TreeFindDirNodeByBlock(uffs_Device *dev, uint16_t block)
 {
 	int hash;
 	TreeNode *node;
 	struct uffs_TreeSt *tree = &(dev->tree);
-	u16 x;
+	uint16_t x;
 
 	for (hash = 0; hash < DIR_NODE_ENTRY_LEN; hash++) {
 		x = tree->dir_entry[hash];
@@ -768,7 +769,7 @@ TreeNode * uffs_TreeFindDirNodeByBlock(uffs_Device *dev, u16 block)
 	return NULL;
 }
 
-TreeNode * uffs_TreeFindErasedNodeByBlock(uffs_Device *dev, u16 block)
+TreeNode * uffs_TreeFindErasedNodeByBlock(uffs_Device *dev, uint16_t block)
 {
 	TreeNode *node;
 	node = dev->tree.erased;
@@ -782,7 +783,7 @@ TreeNode * uffs_TreeFindErasedNodeByBlock(uffs_Device *dev, u16 block)
 	return NULL;
 }
 
-TreeNode * uffs_TreeFindBadNodeByBlock(uffs_Device *dev, u16 block)
+TreeNode * uffs_TreeFindBadNodeByBlock(uffs_Device *dev, uint16_t block)
 {
 	TreeNode *node;
 	node = dev->tree.bad;
@@ -796,12 +797,12 @@ TreeNode * uffs_TreeFindBadNodeByBlock(uffs_Device *dev, u16 block)
 	return NULL;
 }
 
-TreeNode * uffs_TreeFindFileNodeByBlock(uffs_Device *dev, u16 block)
+TreeNode * uffs_TreeFindFileNodeByBlock(uffs_Device *dev, uint16_t block)
 {
 	int hash;
 	TreeNode *node;
 	struct uffs_TreeSt *tree = &(dev->tree);
-	u16 x;
+	uint16_t x;
 
 	for (hash = 0; hash < FILE_NODE_ENTRY_LEN; hash++) {
 		x = tree->file_entry[hash];
@@ -816,12 +817,12 @@ TreeNode * uffs_TreeFindFileNodeByBlock(uffs_Device *dev, u16 block)
 	return NULL;
 }
 
-TreeNode * uffs_TreeFindDataNodeByBlock(uffs_Device *dev, u16 block)
+TreeNode * uffs_TreeFindDataNodeByBlock(uffs_Device *dev, uint16_t block)
 {
 	int hash;
 	TreeNode *node;
 	struct uffs_TreeSt *tree = &(dev->tree);
-	u16 x;
+	uint16_t x;
 
 	for (hash = 0; hash < DATA_NODE_ENTRY_LEN; hash++) {
 		x = tree->data_entry[hash];
@@ -836,7 +837,7 @@ TreeNode * uffs_TreeFindDataNodeByBlock(uffs_Device *dev, u16 block)
 	return NULL;
 }
 
-TreeNode * uffs_TreeFindNodeByBlock(uffs_Device *dev, u16 block, int *region)
+TreeNode * uffs_TreeFindNodeByBlock(uffs_Device *dev, uint16_t block, int *region)
 {
 	TreeNode *node = NULL;
 
@@ -880,11 +881,11 @@ TreeNode * uffs_TreeFindNodeByBlock(uffs_Device *dev, u16 block, int *region)
 }
 
 TreeNode * uffs_TreeFindDirNodeByName(uffs_Device *dev,
-									  const char *name, u32 len,
-									  u16 sum, u16 parent)
+									  const char *name, uint32_t len,
+									  uint16_t sum, uint16_t parent)
 {
 	int i;
-	u16 x;
+	uint16_t x;
 	TreeNode *node;
 	struct uffs_TreeSt *tree = &(dev->tree);
 	
@@ -922,13 +923,13 @@ UBOOL uffs_CompareFileName(const char *src, int src_len, const char *des)
 /** compare [name] with tree [node] represented object name by loading
 	uffs_FileInfo from storage */
 UBOOL uffs_TreeCompareFileName(uffs_Device *dev,
-							   const char *name, u32 len, u16 sum,
+							   const char *name, uint32_t len, uint16_t sum,
 							   TreeNode *node, int type)
 {
 	UBOOL matched = U_FALSE;
 	uffs_FileInfo *fi;
 	uffs_Buf *buf;
-	u16 data_sum;
+	uint16_t data_sum;
 
 	buf = uffs_BufGetEx(dev, type, node, 0, 0);
 	if (buf == NULL) {
@@ -961,15 +962,15 @@ ext:
 static URET _BuildTreeStepThree(uffs_Device *dev)
 {
 	int i;
-	u16 x;
+	uint16_t x;
 	TreeNode *work;
 	TreeNode *node;
 	struct uffs_TreeSt *tree;
 	uffs_Pool *pool;
-	u16 blockSave;
+	uint16_t blockSave;
 
 	TreeNode *cache = NULL;
-	u16 cacheSerial = INVALID_UFFS_SERIAL;
+	uint16_t cacheSerial = INVALID_UFFS_SERIAL;
 
 	tree = &(dev->tree);
 	pool = TPOOL(dev);
@@ -1062,9 +1063,9 @@ URET uffs_BuildTree(uffs_Device *dev)
  * \param[in] dev uffs device
  * \return if no free serial found, return #INVALID_UFFS_SERIAL
  */
-u16 uffs_FindFreeFsnSerial(uffs_Device *dev)
+uint16_t uffs_FindFreeFsnSerial(uffs_Device *dev)
 {
-	u16 i;
+	uint16_t i;
 	TreeNode *node;
 
 	//TODO!! Do we need a faster serial number generating method?
@@ -1103,7 +1104,7 @@ static TreeNode * uffs_TreeGetErasedNodeNoCheck(uffs_Device *dev)
 TreeNode * uffs_TreeGetErasedNode(uffs_Device *dev)
 {
 	TreeNode *node = uffs_TreeGetErasedNodeNoCheck(dev);
-	u16 block;
+	uint16_t block;
 	
 	if (node && node->u.list.u.need_check) {
 		block = node->u.list.block;
@@ -1116,7 +1117,7 @@ TreeNode * uffs_TreeGetErasedNode(uffs_Device *dev)
 	return node;
 }
 
-static void _InsertToEntry(uffs_Device *dev, u16 *entry,
+static void _InsertToEntry(uffs_Device *dev, uint16_t *entry,
 						   int hash, TreeNode *node)
 {
 	node->hash_next = entry[hash];
@@ -1131,9 +1132,9 @@ static void _InsertToEntry(uffs_Device *dev, u16 *entry,
 /** 
  * break the node from entry
  */
-void uffs_BreakFromEntry(uffs_Device *dev, u8 type, TreeNode *node)
+void uffs_BreakFromEntry(uffs_Device *dev, uint8_t type, TreeNode *node)
 {
-	u16 *entry;
+	uint16_t *entry;
 	int hash;
 	TreeNode *work;
 
@@ -1261,7 +1262,7 @@ void uffs_TreeInsertToBadBlockList(uffs_Device *dev, TreeNode *node)
 /** 
  * set tree node block value
  */
-void uffs_TreeSetNodeBlock(u8 type, TreeNode *node, u16 block)
+void uffs_TreeSetNodeBlock(uint8_t type, TreeNode *node, uint16_t block)
 {
 	switch (type) {
 	case UFFS_TYPE_FILE:

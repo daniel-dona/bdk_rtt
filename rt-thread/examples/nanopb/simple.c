@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 #include <rthw.h>
 #include <stm32f10x.h>
 #include <pb_encode.h>

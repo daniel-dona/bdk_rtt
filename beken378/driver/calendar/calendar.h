@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _CALENDAR_H_
 #define _CALENDAR_H_
 
@@ -20,7 +21,7 @@
 #define CAL_31_25US_MASK                    (0x0000FFFF)
 #define CAL_3125_TU_VAL                     (3125)
 
-extern UINT32 cal_ctrl(UINT32 cmd, void *param);
+extern uint32_t cal_ctrl(uint32_t cmd, void *param);
 
 #endif // _CALENDAR_H_
 // eof

@@ -1,3 +1,4 @@
+#include <stdint.h>
 /**
  * @file
  * Management Information Base II (RFC1213) TCP objects and functions.
@@ -162,26 +163,26 @@ tcp_ConnTable_get_cell_value_core(struct tcp_pcb *pcb, const u32_t* column, unio
   /* value */
   switch (*column) {
   case 1: /* tcpConnState */
-    value->u32 = pcb->state + 1;
+    value->uint32_t = pcb->state + 1;
     break;
   case 2: /* tcpConnLocalAddress */
-    value->u32 = ip_2_ip4(&pcb->local_ip)->addr;
+    value->uint32_t = ip_2_ip4(&pcb->local_ip)->addr;
     break;
   case 3: /* tcpConnLocalPort */
-    value->u32 = pcb->local_port;
+    value->uint32_t = pcb->local_port;
     break;
   case 4: /* tcpConnRemAddress */
     if (pcb->state == LISTEN) {
-      value->u32 = IP4_ADDR_ANY4->addr;
+      value->uint32_t = IP4_ADDR_ANY4->addr;
     } else {
-      value->u32 = ip_2_ip4(&pcb->remote_ip)->addr;
+      value->uint32_t = ip_2_ip4(&pcb->remote_ip)->addr;
     }
     break;
   case 5: /* tcpConnRemPort */
     if (pcb->state == LISTEN) {
-      value->u32 = 0;
+      value->uint32_t = 0;
     } else {
-      value->u32 = pcb->remote_port;
+      value->uint32_t = pcb->remote_port;
     }
     break;
   default:
@@ -307,10 +308,10 @@ tcp_ConnectionTable_get_cell_value_core(const u32_t* column, struct tcp_pcb *pcb
   /* all items except tcpConnectionState and tcpConnectionProcess are declared as not-accessible */
   switch (*column) {
   case 7: /* tcpConnectionState */
-    value->u32 = pcb->state + 1;
+    value->uint32_t = pcb->state + 1;
     break;
   case 8: /* tcpConnectionProcess */
-    value->u32 = 0; /* not supported */
+    value->uint32_t = 0; /* not supported */
     break;
   default:
     return SNMP_ERR_NOSUCHINSTANCE;
@@ -419,7 +420,7 @@ tcp_ListenerTable_get_cell_value_core(const u32_t* column, union snmp_variant_va
   /* all items except tcpListenerProcess are declared as not-accessible */
   switch (*column) {
   case 4: /* tcpListenerProcess */
-    value->u32 = 0; /* not supported */
+    value->uint32_t = 0; /* not supported */
     break;
   default:
     return SNMP_ERR_NOSUCHINSTANCE;

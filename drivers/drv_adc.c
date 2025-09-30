@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 #include <rthw.h>
 #include <rtthread.h>
 #include <rtdevice.h>
@@ -10,26 +12,26 @@
 #ifdef RT_USING_ADC
 static saradc_desc_t *adc_param = NULL;
 static DD_HANDLE saradc_handle;
-static UINT32 status;
+static uint32_t status;
 #endif
 
-static rt_err_t drv_adc_open(struct rt_adc_device *device, rt_uint32_t channel, rt_bool_t enabled)
+static rt_err_t drv_adc_open(struct rt_adc_device *device, uint32_t channel, rt_bool_t enabled)
 {
     return RT_EOK;
 }
 
-static rt_err_t drv_adc_read(struct rt_adc_device *device, rt_uint32_t channel, rt_uint32_t *value)
+static rt_err_t drv_adc_read(struct rt_adc_device *device, uint32_t channel, uint32_t *value)
 {
 #ifdef RT_USING_ADC
     float voltage = 0.0;
-    UINT32 ret = 0;
+    uint32_t ret = 0;
     GLOBAL_INT_DECLARATION();
 
     adc_param->channel = channel;
     do {
         GLOBAL_INT_DISABLE();
         if(saradc_check_busy() == 0) {
-            saradc_handle = ddev_open(SARADC_DEV_NAME, &status, (UINT32)adc_param);
+            saradc_handle = ddev_open(SARADC_DEV_NAME, &status, (uint32_t)adc_param);
             if(DD_HANDLE_UNVALID != saradc_handle)
             {
                 GLOBAL_INT_RESTORE();
@@ -56,8 +58,8 @@ static rt_err_t drv_adc_read(struct rt_adc_device *device, rt_uint32_t channel, 
     }
 
     {
-    UINT32 sum = 0, sum1, sum2;
-    UINT16 *pData = adc_param->pData;
+    uint32_t sum = 0, sum1, sum2;
+    uint16_t *pData = adc_param->pData;
     sum1 = pData[1] + pData[2];
     sum2 = pData[3] + pData[4];
     sum = sum1/ 2  + sum2 / 2;
@@ -67,7 +69,7 @@ static rt_err_t drv_adc_read(struct rt_adc_device *device, rt_uint32_t channel, 
     }
 
     voltage = saradc_calculate(adc_param->pData[0]);
-    *value = (UINT32)(voltage * 1000);
+    *value = (uint32_t)(voltage * 1000);
 #endif
     return RT_EOK;
 }
@@ -93,14 +95,14 @@ void rt_hw_adc_init(void)
 
     adc_param->channel = 1;
     adc_param->data_buff_size = 5;
-    adc_param->pData = (UINT16 *)rt_malloc(adc_param->data_buff_size * sizeof(UINT16));
+    adc_param->pData = (uint16_t *)rt_malloc(adc_param->data_buff_size * sizeof(uint16_t));
     if(adc_param->pData == NULL)
     {
         rt_kprintf("malloc adc param failed!\r\n");
         rt_free(adc_param);
         return;
     }
-    rt_memset(adc_param->pData, 0x00, adc_param->data_buff_size * sizeof(UINT16));
+    rt_memset(adc_param->pData, 0x00, adc_param->data_buff_size * sizeof(uint16_t));
 
     return;
 }

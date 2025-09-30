@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /**
  ****************************************************************************************
  *
@@ -61,10 +63,10 @@ typedef struct rw_tx_info_st {
     void *data;    
 } RW_TXIFO_ST, *RW_TXIFO_PTR;
 
-typedef UINT32 (*pf_msg_outbound)(struct ke_msg *msg);
-typedef UINT32 (*pf_data_outbound)(RW_RXIFO_PTR rx_info);
-typedef UINT32 (*pf_rx_alloc)(struct pbuf **p, UINT32 len);
-typedef UINT32 (*pf_get_rx_valid_status)(void);
+typedef uint32_t (*pf_msg_outbound)(struct ke_msg *msg);
+typedef uint32_t (*pf_data_outbound)(RW_RXIFO_PTR rx_info);
+typedef uint32_t (*pf_rx_alloc)(struct pbuf **p, uint32_t len);
+typedef uint32_t (*pf_get_rx_valid_status)(void);
 typedef void (*pf_tx_confirm)(void *);
 
 typedef struct _rw_connector_

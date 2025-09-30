@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 #ifndef __RTOS_PUB__
 #define __RTOS_PUB__
 
@@ -60,8 +62,8 @@ struct beken_queue
 {
     rt_mailbox_t	handle;
     rt_mp_t       mp;
-    rt_uint32_t   message_size;
-    rt_uint32_t   number_of_messages;
+    uint32_t   message_size;
+    uint32_t   number_of_messages;
 };
 typedef struct beken_queue* beken_queue_t;
 
@@ -173,7 +175,7 @@ OSStatus rtos_delete_thread( beken_thread_t* thread );
   * @return   true   : specified thread is the current thread
   * @return   false  : specified thread is not currently running
   */
-BOOL rtos_is_current_thread(beken_thread_t *thread);
+bool rtos_is_current_thread(beken_thread_t *thread);
 
 
 /** @brief    Suspend a thread
@@ -223,7 +225,7 @@ OSStatus rtos_thread_force_awake( beken_thread_t* thread );
   * @return   true   : specified thread is the current thread
   * @return   false  : specified thread is not currently running
   */
-BOOL rtos_is_current_thread( beken_thread_t* thread );
+bool rtos_is_current_thread( beken_thread_t* thread );
 
 /** @brief    Get current thread handler
   *
@@ -443,7 +445,7 @@ OSStatus rtos_deinit_queue( beken_queue_t* queue );
   * @return   true  : queue is empty.
   * @return   false : queue is not empty.
   */
-BOOL rtos_is_queue_empty( beken_queue_t* queue );
+bool rtos_is_queue_empty( beken_queue_t* queue );
 
 
 /** @brief    Check if a queue is full
@@ -453,7 +455,7 @@ BOOL rtos_is_queue_empty( beken_queue_t* queue );
   * @return   true  : queue is empty.
   * @return   false : queue is not empty.
   */
-BOOL rtos_is_queue_full( beken_queue_t* queue );
+bool rtos_is_queue_full( beken_queue_t* queue );
 
 /**
   * @}
@@ -497,9 +499,9 @@ OSStatus rtos_init_oneshot_timer( beken2_timer_t *timer,
 									void* rarg );
 OSStatus rtos_deinit_oneshot_timer( beken2_timer_t* timer );
 OSStatus rtos_stop_oneshot_timer( beken2_timer_t* timer );
-BOOL rtos_is_oneshot_timer_running( beken2_timer_t* timer );
+bool rtos_is_oneshot_timer_running( beken2_timer_t* timer );
 OSStatus rtos_start_oneshot_timer( beken2_timer_t* timer );
-BOOL rtos_is_oneshot_timer_init( beken2_timer_t* timer );
+bool rtos_is_oneshot_timer_init( beken2_timer_t* timer );
 OSStatus rtos_oneshot_reload_timer( beken2_timer_t* timer );
 OSStatus rtos_change_period( beken_timer_t* timer, uint32_t time_ms);
 uint32_t rtos_get_timer_expiry_time( beken_timer_t* timer );
@@ -552,7 +554,7 @@ OSStatus rtos_reload_timer( beken_timer_t* timer );
   */
 OSStatus rtos_deinit_timer( beken_timer_t* timer );
 
-BOOL rtos_is_timer_running( beken_timer_t* timer );
+bool rtos_is_timer_running( beken_timer_t* timer );
 
 void rtos_deinit_free_beken_timer(rt_timer_t t);
 

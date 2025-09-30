@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : audio.c
  * This file is part of RT-Thread RTOS
@@ -117,7 +118,7 @@ static rt_err_t _audio_dev_init(struct rt_device *dev)
     return result;
 }
 
-static rt_err_t _audio_dev_open(struct rt_device *dev, rt_uint16_t oflag)
+static rt_err_t _audio_dev_open(struct rt_device *dev, uint16_t oflag)
 {
     struct rt_audio_device *audio;
 
@@ -171,7 +172,7 @@ static rt_err_t _audio_dev_open(struct rt_device *dev, rt_uint16_t oflag)
 
             //init pipe for record
             {
-                rt_uint8_t *buf = rt_malloc(CFG_AUDIO_RECORD_PIPE_SIZE);
+                uint8_t *buf = rt_malloc(CFG_AUDIO_RECORD_PIPE_SIZE);
 
                 if (buf == RT_NULL)
                 {
@@ -269,7 +270,7 @@ static rt_size_t _audio_dev_write(struct rt_device *dev, rt_off_t pos, const voi
     if (!(dev->open_flag & RT_DEVICE_OFLAG_WRONLY) || (audio->replay == RT_NULL))
         return 0;
 
-    AUDIO_DBG("audio write : pos = %d,buffer = %x,size = %d\n",pos,(rt_uint32_t)buffer,size);
+    AUDIO_DBG("audio write : pos = %d,buffer = %x,size = %d\n",pos,(uint32_t)buffer,size);
     //push a new frame to tx queue
     {
         result = rt_data_queue_push(&audio->replay->queue, buffer, size,
@@ -405,7 +406,7 @@ static rt_err_t _audio_dev_control(struct rt_device *dev, int cmd, void *args)
         break;
         case AUDIO_CTL_FREEBUFFER:
         {
-            rt_uint8_t *data_ptr = (rt_uint8_t *) args;
+            uint8_t *data_ptr = (uint8_t *) args;
             if (data_ptr)
                 rt_mp_free(data_ptr);
         }
@@ -430,7 +431,7 @@ const static struct rt_device_ops audio_ops =
 };
 #endif
 
-rt_err_t rt_audio_register(struct rt_audio_device *audio, const char *name, rt_uint32_t flag, void *data)
+rt_err_t rt_audio_register(struct rt_audio_device *audio, const char *name, uint32_t flag, void *data)
 {
     struct rt_device *device;
     RT_ASSERT(audio != RT_NULL);
@@ -454,7 +455,7 @@ rt_err_t rt_audio_register(struct rt_audio_device *audio, const char *name, rt_u
 
     //init memory pool for replay
     {
-        rt_uint8_t *mempool = rt_malloc(AUDIO_DEVICE_DECODE_MP_SZ);
+        uint8_t *mempool = rt_malloc(AUDIO_DEVICE_DECODE_MP_SZ);
         rt_mp_init(&audio->mp, "adu_mp", mempool, AUDIO_DEVICE_DECODE_MP_SZ,
         AUDIO_DEVICE_DECODE_MP_BLOCK_SZ * 2);
     }
@@ -463,7 +464,7 @@ rt_err_t rt_audio_register(struct rt_audio_device *audio, const char *name, rt_u
     return rt_device_register(device, name, flag | RT_DEVICE_FLAG_REMOVABLE);
 }
 
-int rt_audio_samplerate_to_speed(rt_uint32_t bitValue)
+int rt_audio_samplerate_to_speed(uint32_t bitValue)
 {
     int speed = 0;
     switch (bitValue)
@@ -512,7 +513,7 @@ int rt_audio_samplerate_to_speed(rt_uint32_t bitValue)
     return speed;
 }
 
-rt_uint32_t rt_audio_format_to_bits(rt_uint32_t format)
+uint32_t rt_audio_format_to_bits(uint32_t format)
 {
     switch (format)
     {
@@ -529,10 +530,10 @@ rt_uint32_t rt_audio_format_to_bits(rt_uint32_t format)
     };
 }
 
-void rt_audio_tx_complete(struct rt_audio_device *audio, rt_uint8_t *pbuf)
+void rt_audio_tx_complete(struct rt_audio_device *audio, uint8_t *pbuf)
 {
     rt_err_t result;
-    AUDIO_DBG("audio tx complete ptr=%x...\n",(rt_uint32_t)pbuf);
+    AUDIO_DBG("audio tx complete ptr=%x...\n",(uint32_t)pbuf);
 
     //try to send all frame
     do
@@ -545,7 +546,7 @@ void rt_audio_tx_complete(struct rt_audio_device *audio, rt_uint8_t *pbuf)
         audio->parent.tx_complete(&audio->parent, (void *) pbuf);
 }
 
-void rt_audio_rx_done(struct rt_audio_device *audio, rt_uint8_t *pbuf, rt_size_t len)
+void rt_audio_rx_done(struct rt_audio_device *audio, uint8_t *pbuf, rt_size_t len)
 {
     //save data to record pipe
     rt_device_write(RT_DEVICE(RT_DEVICE(&audio_pipe)), 0, pbuf, len);

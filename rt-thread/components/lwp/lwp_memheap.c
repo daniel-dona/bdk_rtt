@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  * File      : lwp_memheap.c
  * This file is part of RT-Thread RTOS
@@ -43,7 +45,7 @@
 #define RT_MEMHEAP_MINIALLOC    12
 
 #define RT_MEMHEAP_SIZE         RT_ALIGN(sizeof(struct rt_lwp_memheap_item), RT_ALIGN_SIZE)
-#define MEMITEM_SIZE(item)      ((rt_uint32_t)item->next - (rt_uint32_t)item - RT_MEMHEAP_SIZE)
+#define MEMITEM_SIZE(item)      ((uint32_t)item->next - (uint32_t)item - RT_MEMHEAP_SIZE)
 
 /*
  * The initialized memory pool will be:
@@ -59,7 +61,7 @@
 rt_err_t rt_lwp_memheap_init(struct rt_lwp_memheap *memheap,
                          const char        *name,
                          void              *start_addr,
-                         rt_uint32_t        size)
+                         uint32_t        size)
 {
     struct rt_lwp_memheap_item *item;
 
@@ -93,7 +95,7 @@ rt_err_t rt_lwp_memheap_init(struct rt_lwp_memheap *memheap,
     item->prev_free = item;
 
     item->next = (struct rt_lwp_memheap_item *)
-                 ((rt_uint8_t *)item + memheap->available_size + RT_MEMHEAP_SIZE);
+                 ((uint8_t *)item + memheap->available_size + RT_MEMHEAP_SIZE);
     item->prev = item->next;
 
     /* block list header */
@@ -127,10 +129,10 @@ rt_err_t rt_lwp_memheap_init(struct rt_lwp_memheap *memheap,
     return RT_EOK;
 }
 
-void *rt_lwp_memheap_alloc(struct rt_lwp_memheap *heap, rt_uint32_t size)
+void *rt_lwp_memheap_alloc(struct rt_lwp_memheap *heap, uint32_t size)
 {
     rt_err_t result;
-    rt_uint32_t free_size;
+    uint32_t free_size;
     struct rt_lwp_memheap_item *header_ptr;
 
     RT_ASSERT(heap != RT_NULL);
@@ -182,7 +184,7 @@ void *rt_lwp_memheap_alloc(struct rt_lwp_memheap *heap, rt_uint32_t size)
 
                 /* split the block. */
                 new_ptr = (struct rt_lwp_memheap_item *)
-                          (((rt_uint8_t *)header_ptr) + size + RT_MEMHEAP_SIZE);
+                          (((uint8_t *)header_ptr) + size + RT_MEMHEAP_SIZE);
 
                 RT_DEBUG_LOG(RT_DEBUG_MEMHEAP,
                              ("split: block[0x%08x] nextm[0x%08x] prevm[0x%08x] to new[0x%08x]\n",
@@ -254,11 +256,11 @@ void *rt_lwp_memheap_alloc(struct rt_lwp_memheap *heap, rt_uint32_t size)
             /* Return a memory address to the caller.  */
             RT_DEBUG_LOG(RT_DEBUG_MEMHEAP,
                          ("alloc mem: memory[0x%08x], heap[0x%08x], size: %d\n",
-                          (void *)((rt_uint8_t *)header_ptr + RT_MEMHEAP_SIZE),
+                          (void *)((uint8_t *)header_ptr + RT_MEMHEAP_SIZE),
                           header_ptr,
                           size));
 
-            return (void *)((rt_uint8_t *)header_ptr + RT_MEMHEAP_SIZE);
+            return (void *)((uint8_t *)header_ptr + RT_MEMHEAP_SIZE);
         }
 
         /* release lock */
@@ -296,7 +298,7 @@ void *rt_lwp_memheap_realloc(struct rt_lwp_memheap *heap, void *ptr, rt_size_t n
 
     /* get memory block header and get the size of memory block */
     header_ptr = (struct rt_lwp_memheap_item *)
-                 ((rt_uint8_t *)ptr - RT_MEMHEAP_SIZE);
+                 ((uint8_t *)ptr - RT_MEMHEAP_SIZE);
     oldsize = MEMITEM_SIZE(header_ptr);
     /* re-allocate memory */
     if (newsize > oldsize)
@@ -320,7 +322,7 @@ void *rt_lwp_memheap_realloc(struct rt_lwp_memheap *heap, void *ptr, rt_size_t n
         /* check whether the following free space is enough to expand */
         if (!RT_MEMHEAP_IS_USED(next_ptr))
         {
-            rt_int32_t nextsize;
+            int32_t nextsize;
 
             nextsize = MEMITEM_SIZE(next_ptr);
             RT_ASSERT(next_ptr > 0);
@@ -418,7 +420,7 @@ void *rt_lwp_memheap_realloc(struct rt_lwp_memheap *heap, void *ptr, rt_size_t n
 
     /* split the block. */
     new_ptr = (struct rt_lwp_memheap_item *)
-              (((rt_uint8_t *)header_ptr) + newsize + RT_MEMHEAP_SIZE);
+              (((uint8_t *)header_ptr) + newsize + RT_MEMHEAP_SIZE);
 
     RT_DEBUG_LOG(RT_DEBUG_MEMHEAP,
                  ("split: block[0x%08x] nextm[0x%08x] prevm[0x%08x] to new[0x%08x]\n",
@@ -483,7 +485,7 @@ void rt_lwp_memheap_free(void *ptr)
     rt_err_t result;
     struct rt_lwp_memheap *heap;
     struct rt_lwp_memheap_item *header_ptr, *new_ptr;
-    rt_uint32_t insert_header;
+    uint32_t insert_header;
 
     /* NULL check */
     if (ptr == RT_NULL) return;
@@ -492,7 +494,7 @@ void rt_lwp_memheap_free(void *ptr)
     insert_header = 1;
     new_ptr       = RT_NULL;
     header_ptr    = (struct rt_lwp_memheap_item *)
-                    ((rt_uint8_t *)ptr - RT_MEMHEAP_SIZE);
+                    ((uint8_t *)ptr - RT_MEMHEAP_SIZE);
 
     RT_DEBUG_LOG(RT_DEBUG_MEMHEAP, ("free memory: memory[0x%08x], block[0x%08x]\n",
                                     ptr, header_ptr));

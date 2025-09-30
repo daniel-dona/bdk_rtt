@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include <stdint.h>
 #include "include.h"
 #include "hostapd_intf.h"
@@ -46,11 +47,11 @@ void bk_ap_no_password_connected_register_cb(bk_ap_no_password_cb_t func)
 
 struct scanu_rst_upload *s_scan_result_upload_ptr;
 
-struct mm_bcn_change_req *hadp_intf_get_bcn_change_req(uint8 vif_id, struct beacon_data *bcn_info)
+struct mm_bcn_change_req *hadp_intf_get_bcn_change_req(uint8_t vif_id, struct beacon_data *bcn_info)
 {
-    uint8 tim_ie[BCN_TIM_IE_LEN] = {5, 4, 0, 2, 0, 0};
-    uint8 *beacon_ptr = 0;
-    uint32 bcn_len;
+    uint8_t tim_ie[BCN_TIM_IE_LEN] = {5, 4, 0, 2, 0, 0};
+    uint8_t *beacon_ptr = 0;
+    uint32_t bcn_len;
     struct mm_bcn_change_req *req = 0;
 
 #ifdef ADD_BEACON_IES_ENABLE
@@ -60,7 +61,7 @@ struct mm_bcn_change_req *hadp_intf_get_bcn_change_req(uint8 vif_id, struct beac
     bcn_len = bcn_info->head_len + BCN_TIM_IE_LEN + bcn_info->tail_len;
 #endif
 
-    beacon_ptr = (uint8 *)os_malloc(bcn_len);
+    beacon_ptr = (uint8_t *)os_malloc(bcn_len);
     if (!beacon_ptr)
         goto exit_get_failed;
 
@@ -74,11 +75,11 @@ struct mm_bcn_change_req *hadp_intf_get_bcn_change_req(uint8 vif_id, struct beac
         os_memcpy(beacon_ptr, bcn_info->head, bcn_info->head_len);
     }
 
-    os_memcpy((void *)((uint32)beacon_ptr + bcn_info->head_len), tim_ie, BCN_TIM_IE_LEN);
+    os_memcpy((void *)((uint32_t)beacon_ptr + bcn_info->head_len), tim_ie, BCN_TIM_IE_LEN);
 
     if(bcn_info->tail && bcn_info->tail_len)
     {
-        os_memcpy((void *)((uint32)beacon_ptr + bcn_info->head_len + BCN_TIM_IE_LEN),
+        os_memcpy((void *)((uint32_t)beacon_ptr + bcn_info->head_len + BCN_TIM_IE_LEN),
                   bcn_info->tail, bcn_info->tail_len);
     }
 
@@ -110,9 +111,9 @@ exit_get_failed:
 }
 
 struct mm_bcn_change_req *hadp_intf_get_csa_bcn_req(struct csa_settings *settings,
-        uint8 vif_id, struct beacon_data *bcn_info)
+        uint8_t vif_id, struct beacon_data *bcn_info)
 {
-    uint16 csa_cnt_offset;
+    uint16_t csa_cnt_offset;
     struct mm_bcn_change_req *req;
 
     req = hadp_intf_get_bcn_change_req(vif_id, bcn_info);
@@ -125,17 +126,17 @@ struct mm_bcn_change_req *hadp_intf_get_csa_bcn_req(struct csa_settings *setting
     return req;
 }
 
-struct mm_bcn_change_req *hadp_intf_get_csa_after_bcn_req(uint8 vif_id, struct beacon_data *bcn_info)
+struct mm_bcn_change_req *hadp_intf_get_csa_after_bcn_req(uint8_t vif_id, struct beacon_data *bcn_info)
 {
     return hadp_intf_get_bcn_change_req(vif_id, bcn_info);
 }
 
 int wpa_intf_channel_switch(struct prism2_hostapd_param *param, int len)
 {
-    uint8 vif_id;
-	uint8 chann;
-    uint32 freq;
-    uint32 csa_count;
+    uint8_t vif_id;
+	uint8_t chann;
+    uint32_t freq;
+    uint32_t csa_count;
     struct vif_info_tag *vif;
     struct csa_settings *settings;
     struct mm_bcn_change_req *param_csa;
@@ -209,7 +210,7 @@ int hapd_get_sta_info(struct prism2_hostapd_param *param, int len)
 {
 	int delta_sec = 0;
 	struct sta_info_tag *entry;
-	uint32 tick_cnt;
+	uint32_t tick_cnt;
 
 	if(NULL == param)
 	{
@@ -239,7 +240,7 @@ int hapd_get_sta_info(struct prism2_hostapd_param *param, int len)
 int hapd_intf_sta_del(struct prism2_hostapd_param *param, int len)
 {
     bool tdls_sta = 0;
-    UINT8 sta_idx;
+    uint8_t sta_idx;
     sta_idx = rwm_mgmt_sta_mac2idx(param->sta_addr);
 
     if(sta_idx == 0xff)
@@ -310,14 +311,14 @@ int hapd_intf_add_key(struct prism2_hostapd_param *param, int len)
 
     key_param.key_idx = param->u.crypt.idx;
     key_param.key.length = param->u.crypt.key_len;
-    os_memcpy((u8 *) & (key_param.key.array[0]), (u8 *)&param[1], key_param.key.length);
+    os_memcpy((uint8_t *) & (key_param.key.array[0]), (uint8_t *)&param[1], key_param.key.length);
 
     WPAS_PRT("sta:%d, vif:%d, key:%d\r\n",
              key_param.sta_idx, key_param.inst_nbr, key_param.key_idx);
 
     ps_set_key_prevent();
     mcu_prevent_set(MCU_PS_ADD_KEY);
-    UINT32 reg = RF_HOLD_BY_KEY_BIT;
+    uint32_t reg = RF_HOLD_BY_KEY_BIT;
     sddev_control(SCTRL_DEV_NAME, CMD_RF_HOLD_BIT_SET, &reg);
 #if CFG_USE_STA_PS
     power_save_rf_dtim_manual_do_wakeup();
@@ -338,7 +339,7 @@ int hapd_intf_add_key(struct prism2_hostapd_param *param, int len)
 
 int hapd_intf_del_key(struct prism2_hostapd_param *param, int len)
 {
-    UINT8 hw_key_idx = 0;
+    uint8_t hw_key_idx = 0;
 
     if(is_broadcast_ether_addr(param->sta_addr))
     {
@@ -346,7 +347,7 @@ int hapd_intf_del_key(struct prism2_hostapd_param *param, int len)
     }
     else
     {
-        UINT8 staid = rwm_mgmt_sta_mac2idx(param->sta_addr);
+        uint8_t staid = rwm_mgmt_sta_mac2idx(param->sta_addr);
         if(staid == 0xff)
             return 0;
         hw_key_idx = rwm_mgmt_get_hwkeyidx(param->vif_idx, staid);
@@ -396,7 +397,7 @@ int hapd_intf_add_vif(struct prism2_hostapd_param *param, int len)
 
 int hapd_intf_remove_vif(struct prism2_hostapd_param *param, int len)
 {
-    UINT8 vif_index = param->vif_idx;
+    uint8_t vif_index = param->vif_idx;
 
     if(vif_index >= NX_VIRT_DEV_MAX)
         return -1;
@@ -476,7 +477,7 @@ int hapd_intf_set_ap_bcn(struct prism2_hostapd_param *param, int len)
     os_memcpy(bcn_buf, param->u.bcn_change.beacon, param->u.bcn_change.bcn_len);
     os_memset(&bcn_param, 0, sizeof(BCN_PARAM_ST));
 
-    bcn_param.bcn_ptr = (u32 *)bcn_buf;
+    bcn_param.bcn_ptr = (uint32_t *)bcn_buf;
     bcn_param.bcn_len = param->u.bcn_change.bcn_len;
     bcn_param.tim_len = param->u.bcn_change.tim_len;
     bcn_param.tim_oft = param->u.bcn_change.head_len;
@@ -540,7 +541,7 @@ int wpa_reg_deauth_evt_callback(struct prism2_hostapd_param *param, int len)
 
 int wpa_send_scan_req(struct prism2_hostapd_param *param, int len)
 {
-    UINT8 i;
+    uint8_t i;
     SCAN_PARAM_T scan_param;
 
     WPAS_PRT("wpa_send_scan_req\r\n");
@@ -570,7 +571,7 @@ int wpa_get_scan_rst(struct prism2_hostapd_param *param, int len)
 	struct wpa_scan_res *r;
 	FUNC_1PARAM_PTR fn;
 	int i, ret = 0;
-	u32 val;
+	uint32_t val;
 	GLOBAL_INT_DECLARATION();
 
 	GLOBAL_INT_DISABLE();
@@ -587,7 +588,7 @@ int wpa_get_scan_rst(struct prism2_hostapd_param *param, int len)
 		}
 		mhdr_set_station_status(RW_EVT_STA_NO_AP_FOUND);
 
-		UINT32 reg = RF_HOLD_BY_SCAN_BIT;
+		uint32_t reg = RF_HOLD_BY_SCAN_BIT;
 		sddev_control(SCTRL_DEV_NAME, CMD_RF_HOLD_BIT_CLR, &reg);
 #if CFG_ROLE_LAUNCH
 		if (rl_pre_sta_set_status(RL_STATUS_STA_SCAN_OVER))
@@ -647,7 +648,7 @@ int wpa_send_auth_req(struct prism2_hostapd_param *param, int len)
 		return -1;
 	}
 
-	os_memcpy((UINT8 *)&auth_param->bssid, param->u.authen_req.bssid, ETH_ALEN);
+	os_memcpy((uint8_t *)&auth_param->bssid, param->u.authen_req.bssid, ETH_ALEN);
 	os_printf("%s: ie_len %d, sae_data_len %d\n", __func__,
 		param->u.authen_req.ie_len, param->u.authen_req.sae_data_len);
 
@@ -658,12 +659,12 @@ int wpa_send_auth_req(struct prism2_hostapd_param *param, int len)
 	auth_param->ie_len = param->u.authen_req.ie_len;
 	//auth_param->ie_buf = (uint8_t *)(auth_param + 1);
 	if (auth_param->ie_len)
-		os_memcpy((UINT8 *)auth_param->ie_buf, (UINT8 *)param->u.authen_req.ie, param->u.authen_req.ie_len);
+		os_memcpy((uint8_t *)auth_param->ie_buf, (uint8_t *)param->u.authen_req.ie, param->u.authen_req.ie_len);
 
 	auth_param->sae_data_len = param->u.authen_req.sae_data_len;
 	//auth_param->sae_data = auth_param->ie_buf + param->u.authen_req.sae_data_len;
 	if (auth_param->sae_data_len)
-		os_memcpy((UINT8 *)auth_param->sae_data, (UINT8 *)param->u.authen_req.sae_data, param->u.authen_req.sae_data_len);
+		os_memcpy((uint8_t *)auth_param->sae_data, (uint8_t *)param->u.authen_req.sae_data, param->u.authen_req.sae_data_len);
 
 #if 0//CFG_WPA_CTRL_IFACE
 	auth_param->chan.freq = param->u.authen_req.freq;	//5G??
@@ -698,7 +699,7 @@ int wpa_send_assoc_req(struct prism2_hostapd_param *param, int len)
 		return -1;
 	}
 
-    os_memcpy((UINT8 *)&assoc_param->bssid, param->u.assoc_req.bssid, ETH_ALEN);
+    os_memcpy((uint8_t *)&assoc_param->bssid, param->u.assoc_req.bssid, ETH_ALEN);
     assoc_param->flags = CONTROL_PORT_HOST;
 	/* if group cipher is not wep, assume wpa2 in use */
 	if (!(param->u.assoc_req.group_suite & (WPA_CIPHER_WEP40 | WPA_CIPHER_WEP104)))
@@ -711,7 +712,7 @@ int wpa_send_assoc_req(struct prism2_hostapd_param *param, int len)
     assoc_param->ssid.length = param->u.assoc_req.ssid_len;
     os_memcpy(assoc_param->ssid.array, param->u.assoc_req.ssid, assoc_param->ssid.length);
     assoc_param->ie_len = param->u.assoc_req.ie_len;
-    os_memcpy((UINT8 *)assoc_param->ie_buf, (UINT8 *)param->u.assoc_req.ie_buf, assoc_param->ie_len);
+    os_memcpy((uint8_t *)assoc_param->ie_buf, (uint8_t *)param->u.assoc_req.ie_buf, assoc_param->ie_len);
 #if 0//CFG_WPA_CTRL_IFACE
 	assoc_param.chan.freq = param->u.assoc_req.freq;	//5G??
 #endif
@@ -750,7 +751,7 @@ int wpa_send_assoc_req(struct prism2_hostapd_param *param, int len)
 	if (!connect_param)
 		return -1;
 
-	os_memcpy((UINT8 *)&connect_param->bssid, param->u.assoc_req.bssid, ETH_ALEN);
+	os_memcpy((uint8_t *)&connect_param->bssid, param->u.assoc_req.bssid, ETH_ALEN);
 	connect_param->flags = CONTROL_PORT_HOST;
 	if (param->u.assoc_req.proto & (WPA_PROTO_WPA | WPA_PROTO_RSN))
 		connect_param->flags |= WPA_WPA2_IN_USE;
@@ -762,10 +763,10 @@ int wpa_send_assoc_req(struct prism2_hostapd_param *param, int len)
 	connect_param->ssid.length = param->u.assoc_req.ssid_len;
 	os_memcpy(connect_param->ssid.array, param->u.assoc_req.ssid, connect_param->ssid.length);
 	connect_param->ie_len = param->u.assoc_req.ie_len;
-	os_memcpy((UINT8 *)connect_param->ie_buf, (UINT8 *)param->u.assoc_req.ie_buf, connect_param->ie_len);
+	os_memcpy((uint8_t *)connect_param->ie_buf, (uint8_t *)param->u.assoc_req.ie_buf, connect_param->ie_len);
 	connect_param->bcn_len = param->u.assoc_req.bcn_len;
 	if (connect_param->bcn_len)
-		os_memcpy((UINT8 *)connect_param->bcn_buf, (UINT8 *)param->u.assoc_req.bcn_buf, connect_param->bcn_len);
+		os_memcpy((uint8_t *)connect_param->bcn_buf, (uint8_t *)param->u.assoc_req.bcn_buf, connect_param->bcn_len);
 
 	connect_param->auth_type = param->u.assoc_req.auth_alg;
 	ret = sa_station_send_associate_cmd(connect_param);
@@ -787,7 +788,7 @@ assoc_exit:
 int wpa_send_disconnect_req(struct prism2_hostapd_param *param, int len)
 {
     FUNC_1PARAM_PTR fn;
-    u32 val;
+    uint32_t val;
     DISCONNECT_PARAM_T disconnect_param = {0};
     disconnect_param.vif_idx = param->vif_idx;
     disconnect_param.reason_code = param->u.disconnect_req.reason;
@@ -851,7 +852,7 @@ int wpa_get_bss_info(struct prism2_hostapd_param *param, int len)
 
 	return 0;
 }
-extern UINT8 rwm_mgmt_sta_mac2port(void *mac);
+extern uint8_t rwm_mgmt_sta_mac2port(void *mac);
 extern uint32_t vif_mgmt_get_first_ap_index(void);
 
 uint32_t wpa_hostapd_no_password_connected(struct mac_addr *addr)
@@ -887,11 +888,11 @@ is_connected_exit:
 
 int wpa_hostapd_set_sta_flag(struct prism2_hostapd_param *param, int len)
 {
-	u32 set_flag = param->u.set_flags_sta.flags_or;
-	u32 mask = param->u.set_flags_sta.flags_and;
-	u32 flag = 0;
+	uint32_t set_flag = param->u.set_flags_sta.flags_or;
+	uint32_t mask = param->u.set_flags_sta.flags_and;
+	uint32_t flag = 0;
 	bool opened = 0;
-	UINT8 sta_idx;
+	uint8_t sta_idx;
 
 	flag |= set_flag;
 	flag &= mask;
@@ -910,7 +911,7 @@ int wpa_hostapd_set_sta_flag(struct prism2_hostapd_param *param, int len)
 
 		{
 			FUNC_1PARAM_PTR fn = bk_wlan_get_status_cb();
-			uint32 val;
+			uint32_t val;
 
 			if (fn) {
 				val = RW_EVT_AP_CONNECTED;
@@ -967,7 +968,7 @@ void hapd_poll_callback(void *env, uint32_t status)
 
 int hapd_poll_null_frame(struct prism2_hostapd_param *param, int len)
 {
-	uint32 sta_id;
+	uint32_t sta_id;
 
 	sta_id = sta_mgmt_get_sta_id(param->u.poll_null_data.sta_addr);
 	if(INVALID_STA_IDX == sta_id)
@@ -982,7 +983,7 @@ int hapd_poll_null_frame(struct prism2_hostapd_param *param, int len)
 
 int hapd_intf_ioctl(unsigned long arg)
 {
-    u32 cmd;
+    uint32_t cmd;
     int len, ret = 0;
     struct iwreq *iwr_ptr;
     struct prism2_hostapd_param *param;
@@ -1033,7 +1034,7 @@ int hapd_intf_ioctl(unsigned long arg)
         {
             ret = hapd_intf_del_key(param, len);
             mcu_prevent_clear(MCU_PS_ADD_KEY);
-            UINT32 reg = RF_HOLD_BY_KEY_BIT;
+            uint32_t reg = RF_HOLD_BY_KEY_BIT;
             sddev_control(SCTRL_DEV_NAME, CMD_RF_HOLD_BIT_CLR, &reg);
         }
         else
@@ -1140,7 +1141,7 @@ ioctl_exit:
     return ret;
 }
 
-void hapd_intf_ke_rx_handle(int dummy)
+void hapd_intf_ke_rx_handle(int32_t dummy)
 {
     int payload_size;
     unsigned char *buf;
@@ -1179,8 +1180,8 @@ void hapd_intf_ke_rx_handle(int dummy)
         kmsg_dst->param_len = param_len;
 
         mgmt_tx_ptr = (struct me_mgmt_tx_req *)kmsg_dst->param;
-        mgmt_tx_ptr->addr = (UINT32)buf;
-        mgmt_tx_ptr->hostid = (UINT32)buf;
+        mgmt_tx_ptr->addr = (uint32_t)buf;
+        mgmt_tx_ptr->hostid = (uint32_t)buf;
         mgmt_tx_ptr->len = payload_size;
 #if NX_MFP
 		mgmt_tx_ptr->robust = !!(type_ptr->type == HOSTAPD_MGMT_ROBUST);
@@ -1192,10 +1193,10 @@ void hapd_intf_ke_rx_handle(int dummy)
     }
     else if(type_ptr->type == HOSTAPD_DATA)
     {
-        UINT8 *pd_ptr;
+        uint8_t *pd_ptr;
 
         payload_size = ke_data_peek_rxed_next_payload_size(type_ptr->vif_index);
-        pd_ptr = (UINT8 *)os_malloc(payload_size);
+        pd_ptr = (uint8_t *)os_malloc(payload_size);
         if(NULL == pd_ptr)
         {
             os_printf("hapd_intf_tx_error\r\n");

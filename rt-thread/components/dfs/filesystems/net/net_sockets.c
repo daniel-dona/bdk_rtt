@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : lwip_sockets.c
  * This file is part of RT-Thread RTOS

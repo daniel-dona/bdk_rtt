@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 
@@ -51,7 +52,7 @@
 
 #define TVIDEO_RXBUF_LEN            (TVIDEO_RXNODE_SIZE_UDP * 4)
 
-UINT8 tvideo_rxbuf[TVIDEO_RXBUF_LEN];
+uint8_t tvideo_rxbuf[TVIDEO_RXBUF_LEN];
 extern TVIDEO_DESC_ST tvideo_st;
 
 camera_sensor_t* camera_sensor = NULLPTR;
@@ -60,31 +61,31 @@ typedef struct tvideo_elem_st
 {
     struct co_list_hdr hdr;
     void *buf_start;
-    UINT32 buf_len;
+    uint32_t buf_len;
 } TVIDEO_ELEM_ST, *TVIDEO_ELEM_PTR;
 
 typedef struct tvideo_pool_st
 {
-    //UINT8*  pool[TVIDEO_POOL_LEN];
-    UINT8 *pool;
+    //uint8_t*  pool[TVIDEO_POOL_LEN];
+    uint8_t *pool;
     TVIDEO_ELEM_ST elem[TVIDEO_POOL_LEN / TVIDEO_RXNODE_SIZE];
     struct co_list free;
     struct co_list ready;
 
     #if TVIDEO_DROP_DATA_NONODE
     struct co_list receiving;
-    UINT32 drop_pkt_flag;
+    uint32_t drop_pkt_flag;
     #endif
 
-    UINT16 open_type;
-    UINT16 send_type;
+    uint16_t open_type;
+    uint16_t send_type;
     video_transfer_send_func send_func;
     video_transfer_start_cb start_cb;
     video_transfer_end_cb end_cb;
 
     #if(TVIDEO_USE_HDR && CFG_USE_CAMERA_INTF)
-    UINT16 frame_id;
-    UINT16 pkt_header_size;
+    uint16_t frame_id;
+    uint16_t pkt_header_size;
     tvideo_add_pkt_header add_pkt_header;
     #endif
 } TVIDEO_POOL_ST, *TVIDEO_POOL_PTR;
@@ -99,14 +100,14 @@ enum
 
 typedef struct tvideo_message
 {
-    UINT32 data;
+    uint32_t data;
 } TV_MSG_T;
 
 #define TV_QITEM_COUNT      (60)
 beken_thread_t  tvideo_thread_hdl = NULL;
 beken_queue_t tvideo_msg_que = NULL;
 
-void tvideo_intfer_send_msg(UINT32 new_msg)
+void tvideo_intfer_send_msg(uint32_t new_msg)
 {
     OSStatus ret;
     TV_MSG_T msg;
@@ -125,12 +126,12 @@ void tvideo_intfer_send_msg(UINT32 new_msg)
 
 static void tvideo_pool_init(void *data)
 {
-    UINT32 i = 0;
+    uint32_t i = 0;
     TVIDEO_SETUP_DESC_PTR setup = (TVIDEO_SETUP_DESC_PTR)((int)data);
 
     if (tvideo_pool.pool == NULL)
     {
-        tvideo_pool.pool = os_malloc(sizeof(UINT8) * TVIDEO_POOL_LEN);
+        tvideo_pool.pool = os_malloc(sizeof(uint8_t) * TVIDEO_POOL_LEN);
         if (tvideo_pool.pool == NULL)
         {
             TVIDEO_FATAL("tvideo_pool alloc failed\r\n");
@@ -138,7 +139,7 @@ static void tvideo_pool_init(void *data)
         }
     }
 
-    os_memset(&tvideo_pool.pool[0], 0, sizeof(UINT8)*TVIDEO_POOL_LEN);
+    os_memset(&tvideo_pool.pool[0], 0, sizeof(uint8_t)*TVIDEO_POOL_LEN);
 
     co_list_init(&tvideo_pool.free);
     co_list_init(&tvideo_pool.ready);
@@ -181,7 +182,7 @@ static void tvideo_pool_init(void *data)
     #endif
 }
 
-static void tvideo_rx_handler(void *curptr, UINT32 newlen, UINT32 is_eof, UINT32 frame_len)
+static void tvideo_rx_handler(void *curptr, uint32_t newlen, uint32_t is_eof, uint32_t frame_len)
 {
     TVIDEO_ELEM_PTR elem = NULL;
     do
@@ -211,7 +212,7 @@ static void tvideo_rx_handler(void *curptr, UINT32 newlen, UINT32 is_eof, UINT32
             // sccb with camera interface on chip, or default
             if (tvideo_pool.open_type != TVIDEO_OPEN_SPIDMA)
             {
-                UINT32 pkt_cnt = 0;
+                uint32_t pkt_cnt = 0;
                 TV_HDR_PARAM_ST param;
 
                 if (is_eof)
@@ -223,7 +224,7 @@ static void tvideo_rx_handler(void *curptr, UINT32 newlen, UINT32 is_eof, UINT32
                     }
                 }
 
-                param.ptk_ptr = (UINT8 *)elem->buf_start;
+                param.ptk_ptr = (uint8_t *)elem->buf_start;
                 param.ptklen = newlen;
                 param.frame_id = tvideo_pool.frame_id;
                 param.is_eof = is_eof;
@@ -237,7 +238,7 @@ static void tvideo_rx_handler(void *curptr, UINT32 newlen, UINT32 is_eof, UINT32
                 gdma_memcpy(param.ptk_ptr + tvideo_pool.pkt_header_size, curptr, newlen);
                 if (tvideo_st.node_len > newlen)
                 {
-                    //UINT32 left = tvideo_st.node_len - newlen;
+                    //uint32_t left = tvideo_st.node_len - newlen;
                     //os_memset((elem_tvhdr + 1 + newlen), 0, left);
                 }
                 //elem->buf_len = tvideo_st.node_len + sizeof(TV_HDR_ST);
@@ -250,8 +251,8 @@ static void tvideo_rx_handler(void *curptr, UINT32 newlen, UINT32 is_eof, UINT32
                 gdma_memcpy(elem->buf_start, curptr, newlen);
                 if (tvideo_st.node_len > newlen)
                 {
-                    //UINT32 left = tvideo_st.node_len - newlen;
-                    //os_memset(((UINT8*)elem->buf_start + newlen), 0, left);
+                    //uint32_t left = tvideo_st.node_len - newlen;
+                    //os_memset(((uint8_t*)elem->buf_start + newlen), 0, left);
                 }
                 //elem->buf_len = tvideo_st.node_len;
                 elem->buf_len = newlen;
@@ -269,7 +270,7 @@ static void tvideo_rx_handler(void *curptr, UINT32 newlen, UINT32 is_eof, UINT32
             #if TVIDEO_DROP_DATA_NONODE
             // not node for receive pkt, drop aready received, and also drop
             // the new come.
-            UINT32 cnt_rdy = co_list_cnt(&tvideo_pool.receiving);
+            uint32_t cnt_rdy = co_list_cnt(&tvideo_pool.receiving);
 
             tvideo_pool.drop_pkt_flag |= TVIDEO_DROP_DATA_FLAG;
             if (cnt_rdy)
@@ -309,7 +310,7 @@ static void tvideo_end_frame_handler(void)
 
 static void tvideo_config_desc(void)
 {
-    UINT32 node_len = TVIDEO_RXNODE_SIZE_TCP;
+    uint32_t node_len = TVIDEO_RXNODE_SIZE_TCP;
 
     if (tvideo_pool.send_type == TVIDEO_SND_UDP)
     {
@@ -362,7 +363,7 @@ static void tvideo_config_desc(void)
 
 static void tvideo_poll_handler(void)
 {
-    UINT32 send_len;
+    uint32_t send_len;
     TVIDEO_ELEM_PTR elem = NULL;
 
     do
@@ -537,7 +538,7 @@ int video_transfer_deinit(void)
     return kNoErr;
 }
 
-UINT32 video_transfer_set_video_param(UINT32 ppi, UINT32 fps)
+uint32_t video_transfer_set_video_param(uint32_t ppi, uint32_t fps)
 {
     #if CFG_USE_CAMERA_INTF
     //return camera_intfer_set_video_param(ppi, fps);

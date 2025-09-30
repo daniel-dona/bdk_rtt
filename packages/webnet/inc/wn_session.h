@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : wn_session.h
  * This file is part of RT-Thread RTOS
@@ -73,16 +74,16 @@ struct webnet_session
     struct webnet_request* request;
 
     /* session buffer */
-    rt_uint16_t buffer_length;
-    rt_uint16_t buffer_offset;
-    rt_uint8_t  buffer[WEBNET_SESSION_BUFSZ];
+    uint16_t buffer_length;
+    uint16_t buffer_offset;
+    uint8_t  buffer[WEBNET_SESSION_BUFSZ];
 
 	/* session phase */
-	rt_uint32_t  session_phase;
+	uint32_t  session_phase;
 
-	rt_uint32_t  session_event_mask;
+	uint32_t  session_event_mask;
     const struct webnet_session_ops* session_ops;
-    rt_uint32_t user_data;
+    uint32_t user_data;
 };
 
 struct webnet_session* webnet_session_create(int listenfd);
@@ -91,7 +92,7 @@ int  webnet_session_read(struct webnet_session *session, char *buffer, int lengt
 void webnet_session_close(struct webnet_session *session);
 
 void webnet_session_printf(struct webnet_session *session, const char* fmt, ...);
-int  webnet_session_write(struct webnet_session *session, const rt_uint8_t* data, rt_size_t size);
+int  webnet_session_write(struct webnet_session *session, const uint8_t* data, rt_size_t size);
 int  webnet_session_redirect(struct webnet_session *session, const char* url);
 int  webnet_session_get_physical_path(struct webnet_session *session, const char* virtual_path, char* full_path);
 void webnet_session_set_header(struct webnet_session *session, const char* mimetype, int code, const char* status, int length);

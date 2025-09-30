@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : rt_ota_flash_temp.c
  * COPYRIGHT (C) 2012-2018, Shanghai Real-Thread Technology Co., Ltd

@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _IRDA_PUB_H_
 #define _IRDA_PUB_H_
 
@@ -48,7 +49,7 @@ void irda_init(void);
 void irda_exit(void);
 void irda_isr(void);
 void Irda_init_app(void);
-void set_irda_usrcode(UINT16 ir_usercode);
-long IR_get_key(void *buffer, unsigned long  size, INT32 timeout);
+void set_irda_usrcode(uint16_t ir_usercode);
+long IR_get_key(void *buffer, unsigned long  size, int32_t timeout);
 #endif //_IRDA_PUB_H_
 

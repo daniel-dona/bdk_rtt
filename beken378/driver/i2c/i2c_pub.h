@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef __I2C1_PUB_H__
 #define __I2C1_PUB_H__
 
@@ -58,32 +59,32 @@ enum
 };
 
 typedef struct i2c_op_st {
-	UINT8 addr_width;
-    UINT8 salve_id;
-    UINT16 op_addr;
-	UINT8 slave_addr;
-	UINT8 mode;
+	uint8_t addr_width;
+    uint8_t salve_id;
+    uint16_t op_addr;
+	uint8_t slave_addr;
+	uint8_t mode;
 } I2C_OP_ST, *I2C_OP_PTR;
 
 
 typedef struct i2c2_msg {
-	UINT8 TxMode;		//0: Read;  1: Write
-	UINT8 WkMode;       // work mode
+	uint8_t TxMode;		//0: Read;  1: Write
+	uint8_t WkMode;       // work mode
                         //RW(bit 0):  0:write,  1:read
                        // MS(bit 1):  0:master, 1:slave
                        // AL(bit 2):  0:7bit address, 1:10bit address
                        // IA(bit 3):  0:without inner address, 1: with inner address
                        // reserved(bit [4:7]):  reserved
-	UINT8  InnerAddr;
-	UINT8  SendAddr;   //only master send address
-	UINT32 CurrentNum;
-	UINT32 AllDataNum;
-	UINT8 *pData;
-	UINT8  Slave_addr;	  //slave address
-	UINT8  AddrFlag;
-	UINT8  TransDone;
-	UINT8  ack_check;	//0: don't care ACK; 1: care ACK
-	UINT8  ErrorNO;
+	uint8_t  InnerAddr;
+	uint8_t  SendAddr;   //only master send address
+	uint32_t CurrentNum;
+	uint32_t AllDataNum;
+	uint8_t *pData;
+	uint8_t  Slave_addr;	  //slave address
+	uint8_t  AddrFlag;
+	uint8_t  TransDone;
+	uint8_t  ack_check;	//0: don't care ACK; 1: care ACK
+	uint8_t  ErrorNO;
 } I2C2_MSG_ST, *I2C2_MSG_PTR;
 
 #define NUM_ROUND_UP(a,b)   ((a) / (b) + (((a) % (b)) ? 1 : 0))

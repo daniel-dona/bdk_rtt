@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef __RTT_DIRENT_H__
 #define __RTT_DIRENT_H__
 
@@ -32,9 +33,9 @@ typedef struct
 #ifndef HAVE_DIRENT_STRUCTURE
 struct dirent
 {
-	rt_uint8_t  d_type;				/* The type of the file */
-	rt_uint8_t  d_namlen;			/* The length of the not including the terminating null file name */
-	rt_uint16_t d_reclen;			/* length of this record */
+	uint8_t  d_type;				/* The type of the file */
+	uint8_t  d_namlen;			/* The length of the not including the terminating null file name */
+	uint16_t d_reclen;			/* length of this record */
 	char d_name[256];				/* The null-terminated file name */
 };
 #endif

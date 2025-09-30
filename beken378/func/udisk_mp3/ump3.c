@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "ump3.h"
 #include "ump3_pub.h"
@@ -21,9 +22,9 @@ extern void test_fatfs(DISK_NUMBER number);
 
 void um_init(void)
 {
-    UINT32 ret;
-    UINT32 status;
-	UINT32 op_flag;
+    uint32_t ret;
+    uint32_t status;
+	uint32_t op_flag;
     void *parameter;
     DD_HANDLE usb_handler;
 	

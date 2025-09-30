@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : idle.c
  * This file is part of RT-Thread RTOS
@@ -47,7 +48,7 @@
 
 static struct rt_thread idle;
 ALIGN(RT_ALIGN_SIZE)
-static rt_uint8_t rt_thread_stack[IDLE_THREAD_STACK_SIZE];
+static uint8_t rt_thread_stack[IDLE_THREAD_STACK_SIZE];
 
 extern rt_list_t rt_thread_defunct;
 

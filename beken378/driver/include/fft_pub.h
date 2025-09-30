@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _FFT_PUB_H_
 #define _FFT_PUB_H_
 
@@ -23,19 +24,19 @@ enum
 typedef struct
 {
     int mode;
-    INT16 *inbuf;
-    INT16 *outbuf;
-    UINT16 size;
+    int16_t *inbuf;
+    int16_t *outbuf;
+    uint16_t size;
 } input_fft_t;
 
 typedef struct
 {
-    UINT8 fir_len;
-    UINT8 fir_cwidth;
-    UINT8 fir_dwidth;
-    INT16 *coef;
-    INT16 *input;
-    INT32 *mac;
+    uint8_t fir_len;
+    uint8_t fir_cwidth;
+    uint8_t fir_dwidth;
+    int16_t *coef;
+    int16_t *input;
+    int32_t *mac;
 } input_fir_t;
 
 /*******************************************************************************

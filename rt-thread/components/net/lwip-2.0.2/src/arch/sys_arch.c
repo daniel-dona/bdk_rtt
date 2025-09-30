@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  * File      : sys_arch.c
  * This file is part of RT-Thread RTOS
@@ -443,7 +445,7 @@ void sys_mbox_post(sys_mbox_t *mbox, void *msg)
 {
     RT_DEBUG_NOT_IN_INTERRUPT;
 
-    rt_mb_send_wait(*mbox, (rt_uint32_t)msg, RT_WAITING_FOREVER);
+    rt_mb_send_wait(*mbox, (uint32_t)msg, RT_WAITING_FOREVER);
 
     return;
 }
@@ -455,7 +457,7 @@ void sys_mbox_post(sys_mbox_t *mbox, void *msg)
  */
 err_t sys_mbox_trypost(sys_mbox_t *mbox, void *msg)
 {
-    if (rt_mb_send(*mbox, (rt_uint32_t)msg) == RT_EOK)
+    if (rt_mb_send(*mbox, (uint32_t)msg) == RT_EOK)
         return ERR_OK;
 
     return ERR_MEM;
@@ -503,7 +505,7 @@ u32_t sys_arch_mbox_fetch(sys_mbox_t *mbox, void **msg, u32_t timeout)
             t = timeout / (1000/RT_TICK_PER_SECOND);
     }
 
-    ret = rt_mb_recv(*mbox, (rt_uint32_t *)msg, t);
+    ret = rt_mb_recv(*mbox, (uint32_t *)msg, t);
 
     if(ret != RT_EOK)
     {
@@ -532,7 +534,7 @@ u32_t sys_arch_mbox_tryfetch(sys_mbox_t *mbox, void **msg)
 {
     int ret;
 
-    ret = rt_mb_recv(*mbox, (rt_uint32_t *)msg, 0);
+    ret = rt_mb_recv(*mbox, (uint32_t *)msg, 0);
 
     if(ret == -RT_ETIMEOUT)
         return SYS_ARCH_TIMEOUT;

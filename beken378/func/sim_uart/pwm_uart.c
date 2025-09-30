@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 #include "include.h"
 #include "arm_arch.h"
@@ -16,7 +18,7 @@
 uint8_t uart_io_start ;
 
 #ifdef INCLUDE_RX_MODE
-volatile BOOL uart_io_sim_rx_done = false;
+volatile bool uart_io_sim_rx_done = false;
 unsigned char uart_io_sim_rx_buf[UART_IO_SIM_RX_FIFO_MAX_COUNT];
 volatile unsigned char uart_io_sim_rx_buf_current_cnt;
 #ifdef INTERRUPT_METHOD
@@ -47,37 +49,37 @@ LOCAL unsigned long uart_io_sim_tx_buf_current_cnt;
 
 #if defined GPIO_7231_STYLE
 extern UART_S uart[2];
-extern void (*p_PWM_Int_Handler[])(UINT8);
+extern void (*p_PWM_Int_Handler[])(uint8_t);
 
 void GPIO_UART_io_sim_tx_function_enable(void)
 {
-    *((volatile UINT32 *)(GPIO_BASE_ADDR + GPIO_UART_IO_SIM_TX_PIN * 4)) = 0x0;
+    *((volatile uint32_t *)(GPIO_BASE_ADDR + GPIO_UART_IO_SIM_TX_PIN * 4)) = 0x0;
 }
 
 void UARTCALL uart_io_sim_set_tx(unsigned long ulValue)
 {
     if(ulValue)
     {
-        *((volatile UINT32 *)(GPIO_BASE_ADDR + GPIO_UART_IO_SIM_TX_PIN * 4)) = \
-                *((volatile UINT32 *)(GPIO_BASE_ADDR + GPIO_UART_IO_SIM_TX_PIN * 4))\
+        *((volatile uint32_t *)(GPIO_BASE_ADDR + GPIO_UART_IO_SIM_TX_PIN * 4)) = \
+                *((volatile uint32_t *)(GPIO_BASE_ADDR + GPIO_UART_IO_SIM_TX_PIN * 4))\
                 | (0x01 << GCFG_OUTPUT_POS);
     }
     else
     {
-        *((volatile UINT32 *)(GPIO_BASE_ADDR + GPIO_UART_IO_SIM_TX_PIN * 4)) = \
-                *((volatile UINT32 *)(GPIO_BASE_ADDR + GPIO_UART_IO_SIM_TX_PIN * 4))\
+        *((volatile uint32_t *)(GPIO_BASE_ADDR + GPIO_UART_IO_SIM_TX_PIN * 4)) = \
+                *((volatile uint32_t *)(GPIO_BASE_ADDR + GPIO_UART_IO_SIM_TX_PIN * 4))\
                 & ~(0x01 << GCFG_OUTPUT_POS);
     }
 }
 
 void GPIO_UART_io_sim_rx_function_enable(void)
 {
-    *((volatile UINT32 *)(GPIO_BASE_ADDR + GPIO_UART_IO_SIM_RX_PIN * 4)) = 0x3C;
+    *((volatile uint32_t *)(GPIO_BASE_ADDR + GPIO_UART_IO_SIM_RX_PIN * 4)) = 0x3C;
 }
 
 unsigned long uart_io_sim_get_rx(void)
 {
-    return *((volatile UINT32 *)(GPIO_BASE_ADDR + GPIO_UART_IO_SIM_RX_PIN * 4))& GCFG_INPUT_BIT;
+    return *((volatile uint32_t *)(GPIO_BASE_ADDR + GPIO_UART_IO_SIM_RX_PIN * 4))& GCFG_INPUT_BIT;
 }
 #endif
 
@@ -141,7 +143,7 @@ void UARTCALL uart_io_sim_timer_int_handle_tx_data(unsigned char ucChannel)
     if (p_uart_io_sim_tx_buf == NULL)
     {
         uart_io_sim_set_tx(0x01UL);
-        *((volatile UINT32 *)(PWM_CTL)) = (*(volatile UINT32 *)(PWM_CTL))& ~(2 << (UART_IO_SIM_PWM_TIMER_TX_CHN * 4));
+        *((volatile uint32_t *)(PWM_CTL)) = (*(volatile uint32_t *)(PWM_CTL))& ~(2 << (UART_IO_SIM_PWM_TIMER_TX_CHN * 4));
         return;
     }
 
@@ -175,7 +177,7 @@ void UARTCALL uart_io_sim_timer_int_handle_tx_data(unsigned char ucChannel)
 
 void uart_io_sim_pwm_timer_init_for_tx(void)
 {
-    UINT32 ret;
+    uint32_t ret;
     pwm_param_t param;
 
     /*init pwm*/
@@ -200,22 +202,22 @@ void uart_io_sim_pwm_timer_init_for_tx(void)
 #endif
 
 #ifdef INCLUDE_RX_MODE
-extern void uart_io_sim_pwm_timer_init_for_rx(UINT16 end);
+extern void uart_io_sim_pwm_timer_init_for_rx(uint16_t end);
 
 static void UARTCALL init_pwm_param_2(pwm_param_t *pwm_param)
 {
-    UINT32 value;
+    uint32_t value;
 
-    *((volatile UINT32 *)(GPIO_BASE_ADDR + PWM2_GPIO_PIN * 4)) = 0x40;
-    *((volatile UINT32 *)(REG_GPIO_FUNC_CFG)) = *((volatile UINT32 *)(REG_GPIO_FUNC_CFG)) | BIT(PWM2_GPIO_PIN);
+    *((volatile uint32_t *)(GPIO_BASE_ADDR + PWM2_GPIO_PIN * 4)) = 0x40;
+    *((volatile uint32_t *)(REG_GPIO_FUNC_CFG)) = *((volatile uint32_t *)(REG_GPIO_FUNC_CFG)) | BIT(PWM2_GPIO_PIN);
 
     value = REG_READ(PWM_CTL);
     value = (value & ~(0x0F << (0x04 *  pwm_param->channel)))
             | ((pwm_param->cfg.val & 0x0F) << (0x04 * pwm_param->channel));
     REG_WRITE(PWM_CTL, value);
 
-    value = (((UINT32)pwm_param->duty_cycle & 0x0000FFFF) << 16)
-            + ((UINT32)pwm_param->end_value & 0x0000FFFF);
+    value = (((uint32_t)pwm_param->duty_cycle & 0x0000FFFF) << 16)
+            + ((uint32_t)pwm_param->end_value & 0x0000FFFF);
 
 	#if (CFG_SOC_NAME == SOC_BK7231)
     REG_WRITE(REG_APB_BK_PWMn_CNT_ADDR(pwm_param->channel), value);
@@ -225,25 +227,25 @@ static void UARTCALL init_pwm_param_2(pwm_param_t *pwm_param)
 
     p_PWM_Int_Handler[pwm_param->channel] = pwm_param->p_Int_Handler;
 
-    *((volatile UINT32 *)(ICU_PERI_CLK_PWD)) = *((volatile UINT32 *)(ICU_PERI_CLK_PWD))& ~(PWD_PWM2_CLK_BIT);
-    *((volatile UINT32 *)(ICU_PWM_CLK_MUX)) = *((volatile UINT32 *)(ICU_PWM_CLK_MUX))& ~(1 << (pwm_param->channel));
-    *((volatile UINT32 *)(ICU_INTERRUPT_ENABLE)) = *((volatile UINT32 *)(ICU_INTERRUPT_ENABLE)) | (IRQ_PWM_BIT);
+    *((volatile uint32_t *)(ICU_PERI_CLK_PWD)) = *((volatile uint32_t *)(ICU_PERI_CLK_PWD))& ~(PWD_PWM2_CLK_BIT);
+    *((volatile uint32_t *)(ICU_PWM_CLK_MUX)) = *((volatile uint32_t *)(ICU_PWM_CLK_MUX))& ~(1 << (pwm_param->channel));
+    *((volatile uint32_t *)(ICU_INTERRUPT_ENABLE)) = *((volatile uint32_t *)(ICU_INTERRUPT_ENABLE)) | (IRQ_PWM_BIT);
 }
 
 static void UARTCALL init_pwm_param_5(pwm_param_t *pwm_param)
 {
-    UINT32 value;
+    uint32_t value;
 
-    *((volatile UINT32 *)(GPIO_BASE_ADDR + PWM5_GPIO_PIN * 4)) = 0x40;
-    *((volatile UINT32 *)(REG_GPIO_FUNC_CFG)) = *((volatile UINT32 *)(REG_GPIO_FUNC_CFG)) | BIT(PWM5_GPIO_PIN);
+    *((volatile uint32_t *)(GPIO_BASE_ADDR + PWM5_GPIO_PIN * 4)) = 0x40;
+    *((volatile uint32_t *)(REG_GPIO_FUNC_CFG)) = *((volatile uint32_t *)(REG_GPIO_FUNC_CFG)) | BIT(PWM5_GPIO_PIN);
 
     value = REG_READ(PWM_CTL);
     value = (value & ~(0x0F << (0x04 *  pwm_param->channel)))
             | ((pwm_param->cfg.val & 0x0F) << (0x04 * pwm_param->channel));
     REG_WRITE(PWM_CTL, value);
 
-    value = (((UINT32)pwm_param->duty_cycle & 0x0000FFFF) << 16)
-            + ((UINT32)pwm_param->end_value & 0x0000FFFF);
+    value = (((uint32_t)pwm_param->duty_cycle & 0x0000FFFF) << 16)
+            + ((uint32_t)pwm_param->end_value & 0x0000FFFF);
 	#if (CFG_SOC_NAME == SOC_BK7231)
     REG_WRITE(REG_APB_BK_PWMn_CNT_ADDR(pwm_param->channel), value);
 	#else
@@ -252,15 +254,15 @@ static void UARTCALL init_pwm_param_5(pwm_param_t *pwm_param)
 
     p_PWM_Int_Handler[pwm_param->channel] = pwm_param->p_Int_Handler;
 
-    *((volatile UINT32 *)(ICU_PERI_CLK_PWD)) = *((volatile UINT32 *)(ICU_PERI_CLK_PWD))& ~(PWD_PWM5_CLK_BIT);
-    *((volatile UINT32 *)(ICU_PWM_CLK_MUX)) = *((volatile UINT32 *)(ICU_PWM_CLK_MUX))& ~(1 << (pwm_param->channel));
-    *((volatile UINT32 *)(ICU_INTERRUPT_ENABLE)) = *((volatile UINT32 *)(ICU_INTERRUPT_ENABLE)) | (IRQ_PWM_BIT);
+    *((volatile uint32_t *)(ICU_PERI_CLK_PWD)) = *((volatile uint32_t *)(ICU_PERI_CLK_PWD))& ~(PWD_PWM5_CLK_BIT);
+    *((volatile uint32_t *)(ICU_PWM_CLK_MUX)) = *((volatile uint32_t *)(ICU_PWM_CLK_MUX))& ~(1 << (pwm_param->channel));
+    *((volatile uint32_t *)(ICU_INTERRUPT_ENABLE)) = *((volatile uint32_t *)(ICU_INTERRUPT_ENABLE)) | (IRQ_PWM_BIT);
 }
 
 void UARTCALL uart_io_sim_timer_int_handle_rx_data(unsigned char ucChannel)
 {
-    volatile UINT8 val = 0 ;
-    val = *((volatile UINT32 *)(GPIO_BASE_ADDR + GPIO_UART_IO_SIM_RX_PIN * 4))& GCFG_INPUT_BIT;
+    volatile uint8_t val = 0 ;
+    val = *((volatile uint32_t *)(GPIO_BASE_ADDR + GPIO_UART_IO_SIM_RX_PIN * 4))& GCFG_INPUT_BIT;
 
     ++uart_io_sim_rx_int_count;
     if( uart_io_sim_rx_int_count % 5 != 2 || uart_io_sim_rx_int_count == 2)
@@ -274,11 +276,11 @@ void UARTCALL uart_io_sim_timer_int_handle_rx_data(unsigned char ucChannel)
         {
             uart_io_sim_rx_buf_current_bit = 0;
             uart_io_sim_rx_int_count = 0;
-            *((volatile UINT32 *)(PWM_CTL)) = *((volatile UINT32 *)(PWM_CTL))& ~(2 << (ucChannel * 4));
-            *((volatile UINT32 *)(GPIO_BASE_ADDR + GPIO_UART_IO_SIM_RX_PIN * 4)) = 0x40;
-            *((volatile UINT32 *)(PWM_CTL)) = (*(volatile UINT32 *)(PWM_CTL)) | (2 << (UART_IO_SIM_PWM_CAP_NEG_RX_CHN * 4));
+            *((volatile uint32_t *)(PWM_CTL)) = *((volatile uint32_t *)(PWM_CTL))& ~(2 << (ucChannel * 4));
+            *((volatile uint32_t *)(GPIO_BASE_ADDR + GPIO_UART_IO_SIM_RX_PIN * 4)) = 0x40;
+            *((volatile uint32_t *)(PWM_CTL)) = (*(volatile uint32_t *)(PWM_CTL)) | (2 << (UART_IO_SIM_PWM_CAP_NEG_RX_CHN * 4));
 
-            kfifo_put(uart[1].rx, (UINT8 *) & (uart_io_sim_rx_buf[uart_io_sim_rx_buf_current_cnt]), 1); //get char c
+            kfifo_put(uart[1].rx, (uint8_t *) & (uart_io_sim_rx_buf[uart_io_sim_rx_buf_current_cnt]), 1); //get char c
             uart_io_sim_rx_buf_current_cnt ++;
             if(uart_io_sim_rx_buf_current_cnt == UART_IO_SIM_RX_FIFO_MAX_COUNT)
             {
@@ -289,7 +291,7 @@ void UARTCALL uart_io_sim_timer_int_handle_rx_data(unsigned char ucChannel)
     }
 }
 
-void UARTCALL uart_io_sim_pwm_timer_init_for_rx(UINT16 end)
+void UARTCALL uart_io_sim_pwm_timer_init_for_rx(uint16_t end)
 {
     pwm_param_t param;
 
@@ -314,16 +316,16 @@ void UARTCALL uart_io_sim_pwm_timer_init_for_rx(UINT16 end)
 void UARTCALL uart_io_sim_int_handle_rx_cap_neg(unsigned char ucChannel)
 {
     // capture START bit, prepare to receive data bits
-    *((volatile UINT32 *)(GPIO_BASE_ADDR + GPIO_UART_IO_SIM_RX_PIN * 4)) = 0x3C;
+    *((volatile uint32_t *)(GPIO_BASE_ADDR + GPIO_UART_IO_SIM_RX_PIN * 4)) = 0x3C;
 
 #if defined INTERRUPT_METHOD
-    *((volatile UINT32 *)(PWM_CTL)) = (*(volatile UINT32 *)(PWM_CTL))&~(2 << (ucChannel * 4));
+    *((volatile uint32_t *)(PWM_CTL)) = (*(volatile uint32_t *)(PWM_CTL))&~(2 << (ucChannel * 4));
 
     uart_io_sim_rx_int_count = 0;
     uart_io_sim_rx_firt_start_bit = 0;
     uart_io_sim_rx_buf_current_bit = 0;
 
-    *((volatile UINT32 *)(PWM_CTL)) = *((volatile UINT32 *)(PWM_CTL)) | (2 << (UART_IO_SIM_PWM_TIMER_RX_CHN * 4));
+    *((volatile uint32_t *)(PWM_CTL)) = *((volatile uint32_t *)(PWM_CTL)) | (2 << (UART_IO_SIM_PWM_TIMER_RX_CHN * 4));
 #elif defined POLLING_METHOD
     uart_io_sim_receive();
 #endif
@@ -368,7 +370,7 @@ void uart_io_sim_init(void)
     uart_io_sim_rx_buf_init();
     uart_io_sim_pwm_timer_init_for_rx(UART_IO_SIM_CLK_DIVID_SET);
     uart_io_sim_pwm_cap_neg_init_for_rx();
-    *((volatile UINT32 *)(PWM_CTL)) = *((volatile UINT32 *)(PWM_CTL)) | (2 << (UART_IO_SIM_PWM_CAP_NEG_RX_CHN * 4));
+    *((volatile uint32_t *)(PWM_CTL)) = *((volatile uint32_t *)(PWM_CTL)) | (2 << (UART_IO_SIM_PWM_CAP_NEG_RX_CHN * 4));
 
 #endif
 
@@ -380,8 +382,8 @@ void uart_io_sim_init(void)
 void uart_io_sim_disable(void)
 {
 #if defined INTERRUPT_METHOD
-    UINT32 param;
-    UINT32 ret;
+    uint32_t param;
+    uint32_t ret;
 
     param = UART_IO_SIM_PWM_CAP_NEG_RX_CHN;
     ret = sddev_control(PWM_DEV_NAME, CMD_PWM_UNIT_DISABLE, &param);
@@ -407,7 +409,7 @@ void uart_io_sim_disable(void)
 // UART_IO_SIM Tx/Rx character driver
 //----------------------------------------------
 #ifdef INCLUDE_TX_MODE
-void UARTCALL uart_io_sim_send_byte(u8 data)
+void UARTCALL uart_io_sim_send_byte(uint8_t data)
 {
 #if defined INTERRUPT_METHOD
     if(!uart_io_start)
@@ -432,7 +434,7 @@ void UARTCALL uart_io_sim_send_byte(u8 data)
         if(uart_io_sim_tx_buf_size == UART_IO_SIM_TX_FIFO_MAX_COUNT)
             uart_io_sim_tx_buf_size = 0;
 
-        *((volatile UINT32 *)(PWM_CTL)) = (*(volatile UINT32 *)(PWM_CTL)) | (2 << (UART_IO_SIM_PWM_TIMER_TX_CHN * 4));
+        *((volatile uint32_t *)(PWM_CTL)) = (*(volatile uint32_t *)(PWM_CTL)) | (2 << (UART_IO_SIM_PWM_TIMER_TX_CHN * 4));
     }
 
 #elif defined POLLING_METHOD
@@ -455,7 +457,7 @@ void uart_io_sim_send_string(char *buff)
         uart_io_sim_send_byte(*buff++);
 }
 
-void uart_io_sim_send(u8 *buff, int len)
+void uart_io_sim_send(uint8_t *buff, int len)
 {
     if (buff == NULL)
     {
@@ -473,7 +475,7 @@ void uart_io_sim_send(u8 *buff, int len)
     uart_io_sim_tx_buf_current_cnt = 0;
     uart_io_sim_tx_buf_current_bit = 0;
 
-    *((volatile UINT32 *)(PWM_CTL)) = (*(volatile UINT32 *)(PWM_CTL)) | (2 << (UART_IO_SIM_PWM_TIMER_TX_CHN * 4));
+    *((volatile uint32_t *)(PWM_CTL)) = (*(volatile uint32_t *)(PWM_CTL)) | (2 << (UART_IO_SIM_PWM_TIMER_TX_CHN * 4));
 
 #elif defined POLLING_METHOD
     REG_ICU_INT_GLOBAL_ENABLE = 0;

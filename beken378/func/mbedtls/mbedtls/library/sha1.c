@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  *  FIPS-180-1 compliant SHA-1 implementation
  *

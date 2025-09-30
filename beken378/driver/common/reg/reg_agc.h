@@ -1,3 +1,4 @@
+#include <stdint.h>
 /**
  * @file reg_agc.h
  * @brief Definitions of the AGC HW block registers and register access functions.

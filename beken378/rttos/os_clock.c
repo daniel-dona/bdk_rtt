@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "fake_clock_pub.h"
 #include "pwm_pub.h"
@@ -14,19 +15,19 @@
 #include "mcu_ps_pub.h"
 #endif
 
-static volatile UINT32 current_clock = 0;
-static volatile UINT32 current_seconds = 0;
-static UINT32 second_countdown = FCLK_SECOND;
+static volatile uint32_t current_clock = 0;
+static volatile uint32_t current_seconds = 0;
+static uint32_t second_countdown = FCLK_SECOND;
 static BK_HW_TIMER_INDEX fclk_id = BK_PWM_TIMER_ID0;
 
 extern void mcu_ps_increase_clr(void);
 #if (CFG_SOC_NAME != SOC_BK7231) && (CFG_SOC_NAME != SOC_BK7271)
 static CAL_TICK_T cal_tick_save;
 #endif
-UINT32 use_cal_net = 0;
-__maybe_unused static UINT32 fclk_freertos_update_tick(UINT32 tick);
+uint32_t use_cal_net = 0;
+__maybe_unused static uint32_t fclk_freertos_update_tick(uint32_t tick);
 
-static void fclk_hdl(UINT8 param)
+static void fclk_hdl(uint8_t param)
 {
 	GLOBAL_INT_DECLARATION();
 	GLOBAL_INT_DISABLE();
@@ -47,7 +48,7 @@ static void fclk_hdl(UINT8 param)
 	}
 }
 
-static UINT32 fclk_freertos_update_tick(UINT32 tick)
+static uint32_t fclk_freertos_update_tick(uint32_t tick)
 {
     current_clock += tick;
 
@@ -71,7 +72,7 @@ static UINT32 fclk_freertos_update_tick(UINT32 tick)
 }
 
 #if (CFG_SUPPORT_RTT)
-UINT32 rtt_update_tick(UINT32 tick)
+uint32_t rtt_update_tick(uint32_t tick)
 {
     if (tick)
     {
@@ -87,30 +88,30 @@ UINT32 rtt_update_tick(UINT32 tick)
 }
 #endif
 
-UINT32 fclk_update_tick(UINT32 tick)
+uint32_t fclk_update_tick(uint32_t tick)
 {
     rtt_update_tick(tick);
     return 0;
 }
 
-UINT32 fclk_freertos_get_tick(void)
+uint32_t fclk_freertos_get_tick(void)
 {
     return current_clock;
 }
 
-UINT64 fclk_get_tick(void)
+uint64_t fclk_get_tick(void)
 {
-    UINT64 fclk;
-    fclk = (UINT64)rt_tick_get();
+    uint64_t fclk;
+    fclk = (uint64_t)rt_tick_get();
     return fclk;
 }
 
-UINT32 fclk_get_second(void)
+uint32_t fclk_get_second(void)
 {
     return (rt_tick_get()/FCLK_SECOND);
 }
 
-UINT32 fclk_from_sec_to_tick(UINT32 sec)
+uint32_t fclk_from_sec_to_tick(uint32_t sec)
 {
     return sec * FCLK_SECOND;
 }
@@ -122,9 +123,9 @@ void fclk_reset_count(void)
 }
 
 #if (CFG_SOC_NAME != SOC_BK7231)
-UINT32 timer_cal_init(void)
+uint32_t timer_cal_init(void)
 {
-    UINT32 fclk;
+    uint32_t fclk;
 
     fclk = BK_TICKS_TO_MS(fclk_get_tick());
 
@@ -134,11 +135,11 @@ UINT32 timer_cal_init(void)
 }
 
 extern int increase_tick;
-UINT32 timer_cal_tick(void)
+uint32_t timer_cal_tick(void)
 {
-    UINT32 fclk, tmp2;
-    UINT32 machw = 0;
-    INT32 lost;
+    uint32_t fclk, tmp2;
+    uint32_t machw = 0;
+    int32_t lost;
     GLOBAL_INT_DECLARATION();
 
     GLOBAL_INT_DISABLE();
@@ -147,7 +148,7 @@ UINT32 timer_cal_tick(void)
 
     tmp2 = fclk;
 
-    lost = (INT32)(cal_tick_save.tmp1  - (UINT32)tmp2);
+    lost = (int32_t)(cal_tick_save.tmp1  - (uint32_t)tmp2);
 
     if((lost >= (2*FCLK_DURATION_MS)))
     {
@@ -183,7 +184,7 @@ UINT32 timer_cal_tick(void)
 }
 
 
-void cal_timer_hdl(UINT8 param)
+void cal_timer_hdl(uint8_t param)
 {
 #if CFG_USE_MCU_PS
     timer_cal_tick();
@@ -193,8 +194,8 @@ void cal_timer_hdl(UINT8 param)
 void cal_timer_set(void)
 {
     timer_param_t param;
-    UINT32 ret;
-    UINT32 timer_channel;
+    uint32_t ret;
+    uint32_t timer_channel;
 
     timer_cal_init();
 
@@ -215,8 +216,8 @@ void cal_timer_set(void)
 
 void cal_timer_deset(void)
 {
-    UINT32 ret;
-    UINT32 timer_channel;
+    uint32_t ret;
+    uint32_t timer_channel;
 
     #if (CFG_SOC_NAME == SOC_BK7231)
     #else
@@ -227,7 +228,7 @@ void cal_timer_deset(void)
     timer_cal_init();
 }
 
-UINT32 bk_cal_init(UINT32 setting)
+uint32_t bk_cal_init(uint32_t setting)
 {
     GLOBAL_INT_DECLARATION();
     GLOBAL_INT_DISABLE();
@@ -258,9 +259,9 @@ UINT32 bk_cal_init(UINT32 setting)
 	return 0;
 }
 #endif
-UINT32 fclk_cal_endvalue(UINT32 mode)
+uint32_t fclk_cal_endvalue(uint32_t mode)
 {
-    UINT32 value = 1;
+    uint32_t value = 1;
 
     if(PWM_CLK_32K == mode)
     {
@@ -284,7 +285,7 @@ BK_HW_TIMER_INDEX fclk_get_tick_id(void)
 /*timer_id:BK_PWM_TIMER_ID0 or BK_TIMER_ID3*/
 void fclk_timer_hw_init(BK_HW_TIMER_INDEX timer_id)
 {
-    UINT32 ret;
+    uint32_t ret;
 
 #if (CFG_SOC_NAME == SOC_BK7231)
     ASSERT(timer_id>= BK_PWM_TIMER_ID0);
@@ -314,7 +315,7 @@ void fclk_timer_hw_init(BK_HW_TIMER_INDEX timer_id)
 #else
         param.duty_cycle      = 0;
 #endif
-        param.end_value       = fclk_cal_endvalue((UINT32)param.cfg.bits.clk);
+        param.end_value       = fclk_cal_endvalue((uint32_t)param.cfg.bits.clk);
 
         ret = sddev_control(PWM_DEV_NAME, CMD_PWM_INIT_PARAM, &param);
         ASSERT(PWM_SUCCESS == ret);
@@ -329,7 +330,7 @@ void fclk_timer_hw_init(BK_HW_TIMER_INDEX timer_id)
 
         ret = sddev_control(TIMER_DEV_NAME, CMD_TIMER_INIT_PARAM, &param);
         ASSERT(BK_TIMER_SUCCESS == ret);
-        UINT32 timer_channel;
+        uint32_t timer_channel;
         timer_channel = param.channel;
         ret = sddev_control(TIMER_DEV_NAME, CMD_TIMER_UNIT_ENABLE, &timer_channel);
         ASSERT(BK_TIMER_SUCCESS == ret);

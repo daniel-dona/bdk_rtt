@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * Wi-Fi Protected Setup - External Registrar
  * Copyright (c) 2009, Jouni Malinen <j@w1.fi>
@@ -14,11 +15,11 @@
 struct wps_er_sta {
 	struct dl_list list;
 	struct wps_er_ap *ap;
-	u8 addr[ETH_ALEN];
-	u16 config_methods;
-	u8 uuid[WPS_UUID_LEN];
-	u8 pri_dev_type[8];
-	u16 dev_passwd_id;
+	uint8_t addr[ETH_ALEN];
+	uint16_t config_methods;
+	uint8_t uuid[WPS_UUID_LEN];
+	uint8_t pri_dev_type[8];
+	uint16_t dev_passwd_id;
 	int m1_received;
 	char *manufacturer;
 	char *model_name;
@@ -39,10 +40,10 @@ struct wps_er_ap {
 	struct http_client *http;
 	struct wps_data *wps;
 
-	u8 uuid[WPS_UUID_LEN];
-	u8 pri_dev_type[8];
-	u8 wps_state;
-	u8 mac_addr[ETH_ALEN];
+	uint8_t uuid[WPS_UUID_LEN];
+	uint8_t pri_dev_type[8];
+	uint8_t wps_state;
+	uint8_t mac_addr[ETH_ALEN];
 	char *friendly_name;
 	char *manufacturer;
 	char *manufacturer_url;
@@ -59,7 +60,7 @@ struct wps_er_ap {
 	char *event_sub_url;
 
 	int subscribed;
-	u8 sid[WPS_UUID_LEN];
+	uint8_t sid[WPS_UUID_LEN];
 	unsigned int id;
 
 	struct wps_credential *ap_settings;
@@ -69,7 +70,7 @@ struct wps_er_ap {
 
 struct wps_er_ap_settings {
 	struct dl_list list;
-	u8 uuid[WPS_UUID_LEN];
+	uint8_t uuid[WPS_UUID_LEN];
 	struct wps_credential ap_settings;
 };
 
@@ -77,7 +78,7 @@ struct wps_er {
 	struct wps_context *wps;
 	char ifname[17];
 	int forced_ifname;
-	u8 mac_addr[ETH_ALEN]; /* mac addr of network i.f. we use */
+	uint8_t mac_addr[ETH_ALEN]; /* mac addr of network i.f. we use */
 	char *ip_addr_text; /* IP address of network i.f. we use */
 	unsigned ip_addr; /* IP address of network i.f. we use (host order) */
 	int multicast_sd;
@@ -94,12 +95,12 @@ struct wps_er {
 	void *deinit_done_ctx;
 	struct in_addr filter_addr;
 	int skip_set_sel_reg;
-	const u8 *set_sel_reg_uuid_filter;
+	const uint8_t *set_sel_reg_uuid_filter;
 };
 
 
 /* wps_er.c */
-void wps_er_ap_add(struct wps_er *er, const u8 *uuid, struct in_addr *addr,
+void wps_er_ap_add(struct wps_er *er, const uint8_t *uuid, struct in_addr *addr,
 		   const char *location, int max_age);
 void wps_er_ap_remove(struct wps_er *er, struct in_addr *addr);
 int wps_er_ap_cache_settings(struct wps_er *er, struct in_addr *addr);

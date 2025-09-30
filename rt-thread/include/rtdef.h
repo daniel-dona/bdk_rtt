@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  * File      : rtdef.h
  * This file is part of RT-Thread RTOS
@@ -20,7 +22,7 @@
  * Change Logs:
  * Date           Author       Notes
  * 2007-01-10     Bernard      the first version
- * 2008-07-12     Bernard      remove all rt_int8, rt_uint32_t etc typedef
+ * 2008-07-12     Bernard      remove all rt_int8, uint32_t etc typedef
  * 2010-10-26     yi.qiu       add module support
  * 2010-11-10     Bernard      add cleanup callback function in thread exit.
  * 2011-05-09     Bernard      use builtin va_arg in GCC 4.x
@@ -64,12 +66,12 @@ extern "C" {
                                          (RT_SUBVERSION * 100) + RT_REVISION)
 
 /* RT-Thread basic data type definitions */
-typedef signed   char                   rt_int8_t;      /**<  8bit integer type */
-typedef signed   short                  rt_int16_t;     /**< 16bit integer type */
-typedef signed   long                   rt_int32_t;     /**< 32bit integer type */
-typedef unsigned char                   rt_uint8_t;     /**<  8bit unsigned integer type */
-typedef unsigned short                  rt_uint16_t;    /**< 16bit unsigned integer type */
-typedef unsigned long                   rt_uint32_t;    /**< 32bit unsigned integer type */
+typedef signed   char                   int8_t;      /**<  8bit integer type */
+typedef signed   short                  int16_t;     /**< 16bit integer type */
+typedef signed   long                   int32_t;     /**< 32bit integer type */
+typedef unsigned char                   uint8_t;     /**<  8bit unsigned integer type */
+typedef unsigned short                  uint16_t;    /**< 16bit unsigned integer type */
+typedef unsigned long                   uint32_t;    /**< 32bit unsigned integer type */
 typedef int                             rt_bool_t;      /**< boolean type */
 
 /* 32bit CPU */
@@ -77,8 +79,8 @@ typedef long                            rt_base_t;      /**< Nbit CPU related da
 typedef unsigned long                   rt_ubase_t;     /**< Nbit unsigned CPU related data type */
 
 typedef rt_base_t                       rt_err_t;       /**< Type for error number */
-typedef rt_uint32_t                     rt_time_t;      /**< Type for time stamp */
-typedef rt_uint32_t                     rt_tick_t;      /**< Type for tick count */
+typedef uint32_t                     rt_time_t;      /**< Type for time stamp */
+typedef uint32_t                     rt_tick_t;      /**< Type for tick count */
 typedef rt_base_t                       rt_flag_t;      /**< Type for flags */
 typedef rt_ubase_t                      rt_size_t;      /**< Type for size number */
 typedef rt_ubase_t                      rt_dev_t;       /**< Type for device */
@@ -91,9 +93,9 @@ typedef rt_base_t                       rt_off_t;       /**< Type for offset */
 /*@}*/
 
 /* maximum value of base type */
-#define RT_UINT8_MAX                    0xff            /**< Maxium number of UINT8 */
-#define RT_UINT16_MAX                   0xffff          /**< Maxium number of UINT16 */
-#define RT_UINT32_MAX                   0xffffffff      /**< Maxium number of UINT32 */
+#define RT_UINT8_MAX                    0xff            /**< Maxium number of uint8_t */
+#define RT_UINT16_MAX                   0xffff          /**< Maxium number of uint16_t */
+#define RT_UINT32_MAX                   0xffffffff      /**< Maxium number of uint32_t */
 #define RT_TICK_MAX                     RT_UINT32_MAX   /**< Maxium number of tick */
 
 /* Compiler Related Definitions */
@@ -338,8 +340,8 @@ typedef struct rt_slist_node rt_slist_t;                /**< Type for single lis
 struct rt_object
 {
     char       name[RT_NAME_MAX];                       /**< name of kernel object */
-    rt_uint8_t type;                                    /**< type of kernel object */
-    rt_uint8_t flag;                                    /**< flag of kernel object */
+    uint8_t type;                                    /**< type of kernel object */
+    uint8_t flag;                                    /**< flag of kernel object */
 
 #ifdef RT_USING_MODULE
     void      *module_id;                               /**< id of application module */
@@ -511,8 +513,8 @@ struct rt_thread
 {
     /* rt object */
     char        name[RT_NAME_MAX];                      /**< the name of thread */
-    rt_uint8_t  type;                                   /**< type of object */
-    rt_uint8_t  flags;                                  /**< thread's flags */
+    uint8_t  type;                                   /**< type of object */
+    uint8_t  flags;                                  /**< thread's flags */
 
 #ifdef RT_USING_MODULE
     void       *module_id;                              /**< id of application module */
@@ -526,26 +528,26 @@ struct rt_thread
     void       *entry;                                  /**< entry */
     void       *parameter;                              /**< parameter */
     void       *stack_addr;                             /**< stack address */
-    rt_uint32_t stack_size;                             /**< stack size */
+    uint32_t stack_size;                             /**< stack size */
 
     /* error code */
     rt_err_t    error;                                  /**< error code */
 
-    rt_uint8_t  stat;                                   /**< thread status */
+    uint8_t  stat;                                   /**< thread status */
 
     /* priority */
-    rt_uint8_t  current_priority;                       /**< current priority */
-    rt_uint8_t  init_priority;                          /**< initialized priority */
+    uint8_t  current_priority;                       /**< current priority */
+    uint8_t  init_priority;                          /**< initialized priority */
 #if RT_THREAD_PRIORITY_MAX > 32
-    rt_uint8_t  number;
-    rt_uint8_t  high_mask;
+    uint8_t  number;
+    uint8_t  high_mask;
 #endif
-    rt_uint32_t number_mask;
+    uint32_t number_mask;
 
 #if defined(RT_USING_EVENT)
     /* thread event */
-    rt_uint32_t event_set;
-    rt_uint8_t  event_info;
+    uint32_t event_set;
+    uint8_t  event_info;
 #endif
 
 #if defined(RT_USING_SIGNALS)
@@ -564,7 +566,7 @@ struct rt_thread
 
     void (*cleanup)(struct rt_thread *tid);             /**< cleanup function when thread exit */
 
-    rt_uint32_t user_data;                              /**< private user data beyond this thread */
+    uint32_t user_data;                              /**< private user data beyond this thread */
 };
 typedef struct rt_thread *rt_thread_t;
 
@@ -606,7 +608,7 @@ struct rt_semaphore
 {
     struct rt_ipc_object parent;                        /**< inherit from ipc_object */
 
-    rt_uint16_t          value;                         /**< value of semaphore. */
+    uint16_t          value;                         /**< value of semaphore. */
 };
 typedef struct rt_semaphore *rt_sem_t;
 #endif
@@ -619,10 +621,10 @@ struct rt_mutex
 {
     struct rt_ipc_object parent;                        /**< inherit from ipc_object */
 
-    rt_uint16_t          value;                         /**< value of mutex */
+    uint16_t          value;                         /**< value of mutex */
 
-    rt_uint8_t           original_priority;             /**< priority of last thread hold the mutex */
-    rt_uint8_t           hold;                          /**< numbers of thread hold the mutex */
+    uint8_t           original_priority;             /**< priority of last thread hold the mutex */
+    uint8_t           hold;                          /**< numbers of thread hold the mutex */
 
     struct rt_thread    *owner;                         /**< current owner of mutex */
 };
@@ -644,7 +646,7 @@ struct rt_event
 {
     struct rt_ipc_object parent;                        /**< inherit from ipc_object */
 
-    rt_uint32_t          set;                           /**< event set */
+    uint32_t          set;                           /**< event set */
 };
 typedef struct rt_event *rt_event_t;
 #endif
@@ -657,13 +659,13 @@ struct rt_mailbox
 {
     struct rt_ipc_object parent;                        /**< inherit from ipc_object */
 
-    rt_uint32_t         *msg_pool;                      /**< start address of message buffer */
+    uint32_t         *msg_pool;                      /**< start address of message buffer */
 
-    rt_uint16_t          size;                          /**< size of message pool */
+    uint16_t          size;                          /**< size of message pool */
 
-    rt_uint16_t          entry;                         /**< index of messages in msg_pool */
-    rt_uint16_t          in_offset;                     /**< input offset of the message buffer */
-    rt_uint16_t          out_offset;                    /**< output offset of the message buffer */
+    uint16_t          entry;                         /**< index of messages in msg_pool */
+    uint16_t          in_offset;                     /**< input offset of the message buffer */
+    uint16_t          out_offset;                    /**< output offset of the message buffer */
 
     rt_list_t            suspend_sender_thread;         /**< sender thread suspended on this mailbox */
 };
@@ -680,10 +682,10 @@ struct rt_messagequeue
 
     void                *msg_pool;                      /**< start address of message queue */
 
-    rt_uint16_t          msg_size;                      /**< message size of each message */
-    rt_uint16_t          max_msgs;                      /**< max number of messages */
+    uint16_t          msg_size;                      /**< message size of each message */
+    uint16_t          max_msgs;                      /**< max number of messages */
 
-    rt_uint16_t          entry;                         /**< index of messages in the queue */
+    uint16_t          entry;                         /**< index of messages in the queue */
 
     void                *msg_queue_head;                /**< list head */
     void                *msg_queue_tail;                /**< list tail */
@@ -711,7 +713,7 @@ typedef struct rt_messagequeue *rt_mq_t;
  */
 struct rt_memheap_item
 {
-    rt_uint32_t             magic;                      /**< magic number for memheap */
+    uint32_t             magic;                      /**< magic number for memheap */
     struct rt_memheap      *pool_ptr;                   /**< point of pool */
 
     struct rt_memheap_item *next;                       /**< next memheap item */
@@ -721,7 +723,7 @@ struct rt_memheap_item
     struct rt_memheap_item *prev_free;                  /**< prev free memheap item */
 
 #ifdef RT_USING_MEMTRACE
-    rt_uint8_t thread[RT_NAME_MAX];                     /* thread name */
+    uint8_t thread[RT_NAME_MAX];                     /* thread name */
     rt_tick_t tick;                                     /* create tick */
 #endif 
 };
@@ -735,9 +737,9 @@ struct rt_memheap
 
     void                   *start_addr;                 /**< pool start address and size */
 
-    rt_uint32_t             pool_size;                  /**< pool size */
-    rt_uint32_t             available_size;             /**< available size */
-    rt_uint32_t             max_used_size;              /**< maximum allocated size */
+    uint32_t             pool_size;                  /**< pool size */
+    uint32_t             available_size;             /**< available size */
+    uint32_t             max_used_size;              /**< maximum allocated size */
 
     struct rt_memheap_item *block_list;                 /**< used block list */
 
@@ -760,7 +762,7 @@ struct rt_mempool
     rt_size_t        size;                              /**< size of memory pool */
 
     rt_size_t        block_size;                        /**< size of memory blocks */
-    rt_uint8_t      *block_list;                        /**< memory blocks list */
+    uint8_t      *block_list;                        /**< memory blocks list */
 
     rt_size_t        block_total_count;                 /**< numbers of memory block */
     rt_size_t        block_free_count;                  /**< numbers of free memory block */
@@ -866,7 +868,7 @@ struct rt_device_ops
 {
     /* common device interface */
     rt_err_t  (*init)   (rt_device_t dev);
-    rt_err_t  (*open)   (rt_device_t dev, rt_uint16_t oflag);
+    rt_err_t  (*open)   (rt_device_t dev, uint16_t oflag);
     rt_err_t  (*close)  (rt_device_t dev);
     rt_size_t (*read)   (rt_device_t dev, rt_off_t pos, void *buffer, rt_size_t size);
     rt_size_t (*write)  (rt_device_t dev, rt_off_t pos, const void *buffer, rt_size_t size);
@@ -881,11 +883,11 @@ struct rt_device
     struct rt_object          parent;                   /**< inherit from rt_object */
 
     enum rt_device_class_type type;                     /**< device type */
-    rt_uint16_t               flag;                     /**< device flag */
-    rt_uint16_t               open_flag;                /**< device open flag */
+    uint16_t               flag;                     /**< device flag */
+    uint16_t               open_flag;                /**< device open flag */
 
-    rt_uint8_t                ref_count;                /**< reference count */
-    rt_uint8_t                device_id;                /**< 0 - 255 */
+    uint8_t                ref_count;                /**< reference count */
+    uint8_t                device_id;                /**< 0 - 255 */
 
     /* device call back */
     rt_err_t (*rx_indicate)(rt_device_t dev, rt_size_t size);
@@ -896,7 +898,7 @@ struct rt_device
 #else
     /* common device interface */
     rt_err_t  (*init)   (rt_device_t dev);
-    rt_err_t  (*open)   (rt_device_t dev, rt_uint16_t oflag);
+    rt_err_t  (*open)   (rt_device_t dev, uint16_t oflag);
     rt_err_t  (*close)  (rt_device_t dev);
     rt_size_t (*read)   (rt_device_t dev, rt_off_t pos, void *buffer, rt_size_t size);
     rt_size_t (*write)  (rt_device_t dev, rt_off_t pos, const void *buffer, rt_size_t size);
@@ -916,9 +918,9 @@ struct rt_device
  */
 struct rt_device_blk_geometry
 {
-    rt_uint32_t sector_count;                           /**< count of sectors */
-    rt_uint32_t bytes_per_sector;                       /**< number of bytes per sector */
-    rt_uint32_t block_size;                             /**< number of bytes to erase one block */
+    uint32_t sector_count;                           /**< count of sectors */
+    uint32_t bytes_per_sector;                       /**< number of bytes per sector */
+    uint32_t block_size;                             /**< number of bytes to erase one block */
 };
 
 /**
@@ -926,8 +928,8 @@ struct rt_device_blk_geometry
  */
 struct rt_device_blk_sectors
 {
-    rt_uint32_t sector_begin;                           /**< begin sector */
-    rt_uint32_t sector_end;                             /**< end sector   */
+    uint32_t sector_begin;                           /**< begin sector */
+    uint32_t sector_end;                             /**< end sector   */
 };
 
 /**
@@ -975,14 +977,14 @@ enum
  */
 struct rt_device_graphic_info
 {
-    rt_uint8_t  pixel_format;                           /**< graphic format */
-    rt_uint8_t  bits_per_pixel;                         /**< bits per pixel */
-    rt_uint16_t reserved;                               /**< reserved field */
+    uint8_t  pixel_format;                           /**< graphic format */
+    uint8_t  bits_per_pixel;                         /**< bits per pixel */
+    uint16_t reserved;                               /**< reserved field */
 
-    rt_uint16_t width;                                  /**< width of graphic device */
-    rt_uint16_t height;                                 /**< height of graphic device */
+    uint16_t width;                                  /**< width of graphic device */
+    uint16_t height;                                 /**< height of graphic device */
 
-    rt_uint8_t *framebuffer;                            /**< frame buffer */
+    uint8_t *framebuffer;                            /**< frame buffer */
 };
 
 /**
@@ -990,10 +992,10 @@ struct rt_device_graphic_info
  */
 struct rt_device_rect_info
 {
-    rt_uint16_t x;                                      /**< x coordinate */
-    rt_uint16_t y;                                      /**< y coordinate */
-    rt_uint16_t width;                                  /**< width */
-    rt_uint16_t height;                                 /**< height */
+    uint16_t x;                                      /**< x coordinate */
+    uint16_t y;                                      /**< y coordinate */
+    uint16_t width;                                  /**< width */
+    uint16_t height;                                 /**< height */
 };
 
 /**
@@ -1035,29 +1037,29 @@ struct rt_module
 {
     struct rt_object             parent;                /**< inherit from object */
 
-    rt_uint32_t                  vstart_addr;           /**< VMA base address for the
+    uint32_t                  vstart_addr;           /**< VMA base address for the
                                                           first LOAD segment. */
-    rt_uint8_t                  *module_space;          /**< module memory space */
+    uint8_t                  *module_space;          /**< module memory space */
 
     void                        *module_entry;          /**< the entry address of module */
     rt_thread_t                  module_thread;         /**< the main thread of module */
 
-    rt_uint8_t                  *module_cmd_line;       /**< module command line */
-    rt_uint32_t                  module_cmd_size;       /**< the size of module command line */
+    uint8_t                  *module_cmd_line;       /**< module command line */
+    uint32_t                  module_cmd_size;       /**< the size of module command line */
 
 #ifdef RT_USING_SLAB
     /* module memory allocator */
     void                        *mem_list;              /**< module's free memory list */
     void                        *page_array;            /**< module's using pages */
-    rt_uint32_t                  page_cnt;              /**< module's using pages count */
+    uint32_t                  page_cnt;              /**< module's using pages count */
 #endif
 
-    rt_uint16_t                  nref;                  /**< reference count */
+    uint16_t                  nref;                  /**< reference count */
 
-    rt_uint16_t                  nsym;                  /**< number of symbol in the module */
+    uint16_t                  nsym;                  /**< number of symbol in the module */
     struct rt_module_symtab     *symtab;                /**< module symbol table */
 
-    rt_uint32_t                  user_data;             /**< arch data in the module */
+    uint32_t                  user_data;             /**< arch data in the module */
 
     void (*module_init)(void);
     void (*module_cleanup)(void);

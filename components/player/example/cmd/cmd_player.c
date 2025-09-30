@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 #include "rtthread.h"
 #include "optparse.h"
 
@@ -15,7 +17,7 @@
 
 #if defined(PLAYER_ENABLE_NET_STREAM)
 extern struct stream_pipe * netstream_get_pipe(void);
-extern rt_uint32_t rb_buffer_data_len(struct rb_buffer *rb);
+extern uint32_t rb_buffer_data_len(struct rb_buffer *rb);
 #endif 
 
 static struct optparse_long opts[] = 
@@ -61,7 +63,7 @@ int stream_buffer(int argc, char **argv)
 
 int stream_pipe_dump(void)
 {
-    rt_uint32_t total_size, used_size;
+    uint32_t total_size, used_size;
 	struct stream_pipe *pipe = netstream_get_pipe();
 
     total_size = pipe->ringbuffer.buffer_size;
@@ -124,12 +126,12 @@ int player(int argc, char **argv)
     rt_bool_t  pause   = RT_FALSE; 
     rt_bool_t  resume  = RT_FALSE; 
     rt_bool_t  seek    = RT_FALSE; 
-    rt_int32_t second  = (-1); 
-    rt_int8_t  volume  = (-1); 
+    int32_t second  = (-1); 
+    int8_t  volume  = (-1); 
     rt_bool_t  dump    = RT_FALSE; 
     rt_bool_t  version = RT_FALSE; 
 
-    rt_uint8_t action_cnt = 0; 
+    uint8_t action_cnt = 0; 
 
     char *uri = RT_NULL; 
 

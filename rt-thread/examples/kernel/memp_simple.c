@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * 程序清单：内存池例程
  *
@@ -7,8 +8,8 @@
 #include <rtthread.h>
 #include "tc_comm.h"
 
-static rt_uint8_t *ptr[48];
-static rt_uint8_t mempool[4096];
+static uint8_t *ptr[48];
+static uint8_t mempool[4096];
 static struct rt_mempool mp;
 
 /* 指向线程控制块的指针 */

@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : module_auth.c
  * This file is part of RT-Thread RTOS/WebNet Server
@@ -27,7 +28,7 @@ struct webnet_auth_item
     char *username_password;
 };
 static struct webnet_auth_item* _auth_items = RT_NULL;
-static rt_uint32_t _auth_items_count = 0;
+static uint32_t _auth_items_count = 0;
 
 /**
  * set the authorization on the path
@@ -78,7 +79,7 @@ int webnet_module_auth(struct webnet_session* session, int event)
 {
     if (event == WEBNET_EVENT_URI_PHYSICAL)
     {
-        rt_uint32_t index;
+        uint32_t index;
         struct webnet_request *request;
 
         RT_ASSERT(session != RT_NULL);

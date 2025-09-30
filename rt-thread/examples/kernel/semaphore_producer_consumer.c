@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * 程序清单：生产者消费者例子
  *
@@ -10,9 +11,9 @@
 #define MAXSEM 5
 
 /* 用于放置生产的整数数组 */
-rt_uint32_t array[MAXSEM];
+uint32_t array[MAXSEM];
 /* 指向生产者、消费者在array数组中的读写位置 */
-static rt_uint32_t set, get;
+static uint32_t set, get;
 
 /* 指向线程控制块的指针 */
 static rt_thread_t producer_tid = RT_NULL;
@@ -53,11 +54,11 @@ void producer_thread_entry(void* parameter)
 /* 消费者线程入口 */
 void consumer_thread_entry(void* parameter)
 {
-    rt_uint32_t no;
-    rt_uint32_t sum;
+    uint32_t no;
+    uint32_t sum;
 
     /* 第n个线程，由入口参数传进来 */
-    no = (rt_uint32_t)parameter;
+    no = (uint32_t)parameter;
 
     sum = 0;
     while(1)

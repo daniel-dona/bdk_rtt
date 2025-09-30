@@ -1,7 +1,8 @@
+#include <stdint.h>
 #include "gc0311.h"
 
 /*
-const UINT8 gc0311_init_talbe_old[374][2] = {
+const uint8_t gc0311_init_talbe_old[374][2] = {
     {0xFE, 0x80},
     {0xFE, 0x80},
     {0xFC, 0x16},
@@ -379,7 +380,7 @@ const UINT8 gc0311_init_talbe_old[374][2] = {
 };
 */
 
-const UINT8 gc0311_init_talbe[522][2] = {
+const uint8_t gc0311_init_talbe[522][2] = {
     {0xfe, 0xf0}, // Transaction 1
     {0xfc, 0x16}, // Transaction 4
     {0x42, 0x00}, // Transaction 6
@@ -904,7 +905,7 @@ const UINT8 gc0311_init_talbe[522][2] = {
     {0x33, 0x00}  // Transaction 532
 };
 
-const UINT8 gc0311_5pfs_talbe[9][2] = {
+const uint8_t gc0311_5pfs_talbe[9][2] = {
     // all AEC_EXP_LEVEL_X set to 0xa3c = 2620
     {0xFE, 0x01}, // page p1
 
@@ -924,7 +925,7 @@ const UINT8 gc0311_5pfs_talbe[9][2] = {
     //{0x34,0x3c},
 };
 
-const UINT8 gc0311_10pfs_talbe[9][2] = {
+const uint8_t gc0311_10pfs_talbe[9][2] = {
     // all AEC_EXP_LEVEL_X set to 0x51e = 1310
     {0xFE, 0x01}, // page p1
 
@@ -944,7 +945,7 @@ const UINT8 gc0311_10pfs_talbe[9][2] = {
     //{0x34,0x1e},
 };
 
-const UINT8 gc0311_20pfs_talbe[9][2] = {
+const uint8_t gc0311_20pfs_talbe[9][2] = {
     // all AEC_EXP_LEVEL_X set to 0x28f = 655
     {0xFE, 0x01}, // page p1
 
@@ -964,7 +965,7 @@ const UINT8 gc0311_20pfs_talbe[9][2] = {
     //{0x34,0x8f},
 };
 
-const UINT8 gc0311_QVGA_320_240_talbe[12][2] = {
+const uint8_t gc0311_QVGA_320_240_talbe[12][2] = {
     /*#if (GC_QVGA_USE_SUBSAMPLE == 0) // crop window mode
     {0xFE, 0x00},
     {0x50, 0x01},
@@ -995,7 +996,7 @@ const UINT8 gc0311_QVGA_320_240_talbe[12][2] = {
     {0x58, 0x40}
 };
 
-const UINT8 gc0311_VGA_640_480_talbe[10][2] = {
+const uint8_t gc0311_VGA_640_480_talbe[10][2] = {
 
     /*#if (GC_QVGA_USE_SUBSAMPLE == 1)
     {0xFE, 0x00},

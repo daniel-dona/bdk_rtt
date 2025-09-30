@@ -706,7 +706,7 @@ enum custom_trace_types
     UINT8_T     =   0x01,
     UINT16_T    =   0x02,
     UINT32_T    =   0x03,
-    VOID        =   0x04,
+    void        =   0x04,
 };
 #endif /*(TRC_CUSTOM)*/
 #endif /*(TRACER_PRESENT)*/

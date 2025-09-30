@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "sys_rtos.h"
 #include "role_launch.h"

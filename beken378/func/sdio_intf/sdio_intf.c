@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 
@@ -49,7 +51,7 @@
 #if CFG_SDIO
 LIST_HEADER_T inbound_list;
 
-UINT16 freq_2_4_G[WIFI_2_4_G_CHANNEL_NUM] =
+uint16_t freq_2_4_G[WIFI_2_4_G_CHANNEL_NUM] =
 {
     2412,
     2417,
@@ -67,14 +69,14 @@ UINT16 freq_2_4_G[WIFI_2_4_G_CHANNEL_NUM] =
     2484
 };
 
-UINT32 scan_start_flag = 0;
-UINT32 scan_resp_cmd_sn = 0;
+uint32_t scan_start_flag = 0;
+uint32_t scan_resp_cmd_sn = 0;
 SDIO_NODE_PTR temp_mem_node_ptr;
 
 SDIO_NODE_PTR sdio_get_rxed_node(void)
 {
-    UINT32 status;
-    UINT32 rd_sta;
+    uint32_t status;
+    uint32_t rd_sta;
     DD_HANDLE sdio_hdl;
     SDIO_NODE_PTR ret = 0;
     SDIO_NODE_PTR mem_node_ptr;
@@ -103,10 +105,10 @@ rxed_exception:
     return ret;
 }
 
-UINT32 sdio_get_free_node_count(void)
+uint32_t sdio_get_free_node_count(void)
 {
-    UINT32 status;
-    UINT32 count = 0;
+    uint32_t status;
+    uint32_t count = 0;
     DD_HANDLE sdio_hdl;
 
     sdio_hdl = ddev_open(SDIO_DEV_NAME, &status, 0);
@@ -123,12 +125,12 @@ rxed_exception:
     return count;
 }
 
-UINT32 sdio_get_free_node(UINT8 **buf_pptr, UINT32 buf_size)
+uint32_t sdio_get_free_node(uint8_t **buf_pptr, uint32_t buf_size)
 {
-    UINT32 size;
-    UINT32 status;
+    uint32_t size;
+    uint32_t status;
     DD_HANDLE sdio_hdl;
-    UINT32 ret = SDIO_INTF_SUCCESS;
+    uint32_t ret = SDIO_INTF_SUCCESS;
 
     sdio_hdl = ddev_open(SDIO_DEV_NAME, &status, 0);
     if(DD_HANDLE_UNVALID == sdio_hdl)
@@ -154,11 +156,11 @@ rxed_exception:
     return ret;
 }
 
-UINT32 sdio_release_one_node(SDIO_NODE_PTR mem_node_ptr)
+uint32_t sdio_release_one_node(SDIO_NODE_PTR mem_node_ptr)
 {
-    UINT32 status;
+    uint32_t status;
     DD_HANDLE sdio_hdl;
-    UINT32 ret = SDIO_INTF_SUCCESS;
+    uint32_t ret = SDIO_INTF_SUCCESS;
 
     sdio_hdl = ddev_open(SDIO_DEV_NAME, &status, 0);
     if(DD_HANDLE_UNVALID == sdio_hdl)
@@ -174,14 +176,14 @@ rxed_exception:
     return ret;
 }
 
-UINT32 sdio_emb_get_tx_info(UINT8 *buf, UINT8 *tid)
+uint32_t sdio_emb_get_tx_info(uint8_t *buf, uint8_t *tid)
 {
     *tid = 0xFF;
 
     return SDIO_INTF_SUCCESS;
 }
 
-UINT32 sdio_emb_get_hwqueue_id(UINT8 tid)
+uint32_t sdio_emb_get_hwqueue_id(uint8_t tid)
 {
     return AC_VI;
 }
@@ -196,11 +198,11 @@ void sdio_emb_txdesc_copy(struct txdesc *dst_local, ETHHDR_PTR eth_hdr_ptr)
     os_memcpy(&host_ptr->eth_src_addr, &eth_hdr_ptr->h_src, sizeof(host_ptr->eth_src_addr));
 }
 
-UINT32 outbound_upload_data(RW_RXIFO_PTR rx_info)
+uint32_t outbound_upload_data(RW_RXIFO_PTR rx_info)
 {
-    UINT32 status;
+    uint32_t status;
     DD_HANDLE sdio_hdl;
-    UINT32 ret = SDIO_INTF_SUCCESS;
+    uint32_t ret = SDIO_INTF_SUCCESS;
     SDIO_NODE_PTR node = temp_mem_node_ptr;
 
     ASSERT(rx_info->data == node->addr);
@@ -272,18 +274,18 @@ void inbound_cfm(void *param)
 }
 
 #if 1
-UINT32 resp_inc_seqnum(void)
+uint32_t resp_inc_seqnum(void)
 {
-    static UINT32 seq = 0;
+    static uint32_t seq = 0;
 
     seq ++;
 
     return seq;
 }
 
-UINT32 resp_conversion_generic_cfm(struct ke_msg *msg, STM32_FRAME_HDR **frm_pptr, UINT16 ret_cmd)
+uint32_t resp_conversion_generic_cfm(struct ke_msg *msg, STM32_FRAME_HDR **frm_pptr, uint16_t ret_cmd)
 {
-    UINT32 len;
+    uint32_t len;
     STM32_FRAME_HDR *frm;
     STM32_CMD_HDR_PTR hdr_ptr;
 
@@ -295,7 +297,7 @@ UINT32 resp_conversion_generic_cfm(struct ke_msg *msg, STM32_FRAME_HDR **frm_ppt
     frm->type = MVMS_CMD;
     *frm_pptr = frm;
 
-    hdr_ptr = (STM32_CMD_HDR_PTR)((UINT32)frm + sizeof(STM32_FRAME_HDR));
+    hdr_ptr = (STM32_CMD_HDR_PTR)((uint32_t)frm + sizeof(STM32_FRAME_HDR));
     hdr_ptr->command = CMD_RET(ret_cmd);
     hdr_ptr->result  = 0;
     hdr_ptr->seqnum  = resp_inc_seqnum();
@@ -306,10 +308,10 @@ UINT32 resp_conversion_generic_cfm(struct ke_msg *msg, STM32_FRAME_HDR **frm_ppt
     return len;
 }
 
-UINT32 resp_conversion_rxu_mgt_ind(struct ke_msg *msg, STM32_FRAME_HDR **frm_pptr)
+uint32_t resp_conversion_rxu_mgt_ind(struct ke_msg *msg, STM32_FRAME_HDR **frm_pptr)
 {
-    UINT32 len;
-    UINT16 cmd = 0;
+    uint32_t len;
+    uint16_t cmd = 0;
     struct rxu_mgt_ind *mgt;
     STM32_TX_MGMT_S *frm;
 
@@ -341,19 +343,19 @@ UINT32 resp_conversion_rxu_mgt_ind(struct ke_msg *msg, STM32_FRAME_HDR **frm_ppt
     return len;
 }
 
-UINT32 resp_conversion_start_apm_cfm(struct ke_msg *msg, STM32_FRAME_HDR **frm_pptr)
+uint32_t resp_conversion_start_apm_cfm(struct ke_msg *msg, STM32_FRAME_HDR **frm_pptr)
 {
     return resp_conversion_generic_cfm(msg, frm_pptr, SCMD_APM_START);
 }
 
-UINT32 resp_conversion_bcn_change_cfm(struct ke_msg *msg, STM32_FRAME_HDR **frm_pptr)
+uint32_t resp_conversion_bcn_change_cfm(struct ke_msg *msg, STM32_FRAME_HDR **frm_pptr)
 {
     return resp_conversion_generic_cfm(msg, frm_pptr, SCMD_BCN_CHANGE);
 }
 
-UINT32 resp_conversion_mgmt_tx_cfm(struct ke_msg *msg, STM32_FRAME_HDR **frm_pptr)
+uint32_t resp_conversion_mgmt_tx_cfm(struct ke_msg *msg, STM32_FRAME_HDR **frm_pptr)
 {
-    UINT32 len;
+    uint32_t len;
     STM32_FRAME_HDR *frm;
     STM32_CMD_HDR_PTR hdr_ptr;
 #if CFG_WIFI_AP_MODE
@@ -368,7 +370,7 @@ UINT32 resp_conversion_mgmt_tx_cfm(struct ke_msg *msg, STM32_FRAME_HDR **frm_ppt
     frm->type = MVMS_CMD;
     *frm_pptr = frm;
 
-    hdr_ptr = (STM32_CMD_HDR_PTR)((UINT32)frm + sizeof(STM32_FRAME_HDR));
+    hdr_ptr = (STM32_CMD_HDR_PTR)((uint32_t)frm + sizeof(STM32_FRAME_HDR));
     hdr_ptr->command = CMD_RET(SCMD_MGMT_TX_REQ);
     hdr_ptr->result  = 0;
     hdr_ptr->seqnum  = resp_inc_seqnum();
@@ -394,49 +396,49 @@ UINT32 resp_conversion_mgmt_tx_cfm(struct ke_msg *msg, STM32_FRAME_HDR **frm_ppt
 }
 
 
-UINT32 resp_conversion_add_sta_cfm(struct ke_msg *msg, STM32_FRAME_HDR **frm_pptr)
+uint32_t resp_conversion_add_sta_cfm(struct ke_msg *msg, STM32_FRAME_HDR **frm_pptr)
 {
     return resp_conversion_generic_cfm(msg, frm_pptr, SCMD_ADD_STA_REQ);
 }
 
-UINT32 resp_conversion_reset_cfm(struct ke_msg *msg, STM32_FRAME_HDR **frm_pptr)
+uint32_t resp_conversion_reset_cfm(struct ke_msg *msg, STM32_FRAME_HDR **frm_pptr)
 {
     return resp_conversion_generic_cfm(msg, frm_pptr, SCMD_RESET_REQ);
 }
 
-UINT32 resp_conversion_me_config_cfm(struct ke_msg *msg, STM32_FRAME_HDR **frm_pptr)
+uint32_t resp_conversion_me_config_cfm(struct ke_msg *msg, STM32_FRAME_HDR **frm_pptr)
 {
     return resp_conversion_generic_cfm(msg, frm_pptr, SCMD_ME_CONFIG_REQ);
 }
 
-UINT32 resp_conversion_me_chan_config_cfm(struct ke_msg *msg, STM32_FRAME_HDR **frm_pptr)
+uint32_t resp_conversion_me_chan_config_cfm(struct ke_msg *msg, STM32_FRAME_HDR **frm_pptr)
 {
     return resp_conversion_generic_cfm(msg, frm_pptr, SCMD_ME_CHAN_CONFIG_REQ);
 }
 
-UINT32 resp_conversion_start_cfm(struct ke_msg *msg, STM32_FRAME_HDR **frm_pptr)
+uint32_t resp_conversion_start_cfm(struct ke_msg *msg, STM32_FRAME_HDR **frm_pptr)
 {
     return resp_conversion_generic_cfm(msg, frm_pptr, SCMD_START_REQ);
 }
 
-UINT32 resp_conversion_add_if_cfm(struct ke_msg *msg, STM32_FRAME_HDR **frm_pptr)
+uint32_t resp_conversion_add_if_cfm(struct ke_msg *msg, STM32_FRAME_HDR **frm_pptr)
 {
     return resp_conversion_generic_cfm(msg, frm_pptr, SCMD_ADD_IF_REQ);
 }
 
-UINT32 resp_conversion_set_port_cfm(struct ke_msg *msg, STM32_FRAME_HDR **frm_pptr)
+uint32_t resp_conversion_set_port_cfm(struct ke_msg *msg, STM32_FRAME_HDR **frm_pptr)
 {
     return resp_conversion_generic_cfm(msg, frm_pptr, SCMD_SET_PORT_REQ);
 }
 
-UINT32 resp_conversion_key_add_cfm(struct ke_msg *msg, STM32_FRAME_HDR **frm_pptr)
+uint32_t resp_conversion_key_add_cfm(struct ke_msg *msg, STM32_FRAME_HDR **frm_pptr)
 {
     return resp_conversion_generic_cfm(msg, frm_pptr, SCMD_802_11_KEY_MATERIAL);
 }
 
-UINT32 resp_conversion_connect_ind(struct ke_msg *msg, STM32_FRAME_HDR **frm_pptr)
+uint32_t resp_conversion_connect_ind(struct ke_msg *msg, STM32_FRAME_HDR **frm_pptr)
 {
-    UINT32 len;
+    uint32_t len;
     STM32_FRAME_HDR *frm;
     ASSOC_RESP_PTR assoc_rsp_ptr;
     struct sm_connect_ind *conn_ind_ptr;
@@ -455,7 +457,7 @@ UINT32 resp_conversion_connect_ind(struct ke_msg *msg, STM32_FRAME_HDR **frm_ppt
     conn_ind_ptr = (struct sm_connect_ind *)msg->param;
     SDIO_INTF_PRT("connect_ind:%x\r\n", conn_ind_ptr->status_code);
 
-    assoc_rsp_ptr = (ASSOC_RESP_PTR)((UINT32)frm + sizeof(STM32_FRAME_HDR));
+    assoc_rsp_ptr = (ASSOC_RESP_PTR)((uint32_t)frm + sizeof(STM32_FRAME_HDR));
     assoc_rsp_ptr->hdr.command = CMD_RET(SCMD_802_11_ASSOCIATE);
 
 #if CFG_REAL_SDIO
@@ -466,16 +468,16 @@ UINT32 resp_conversion_connect_ind(struct ke_msg *msg, STM32_FRAME_HDR **frm_ppt
     assoc_rsp_ptr->hdr.seqnum  = resp_inc_seqnum();
     assoc_rsp_ptr->hdr.size    = len - sizeof(STM32_FRAME_HDR);
 #if CFG_REAL_SDIO
-    os_memcpy((void *)((UINT32)assoc_rsp_ptr + sizeof(STM32_CMD_HDR_S)), msg->param, msg->param_len);
+    os_memcpy((void *)((uint32_t)assoc_rsp_ptr + sizeof(STM32_CMD_HDR_S)), msg->param, msg->param_len);
 #else
     assoc_rsp_ptr->statuscode = conn_ind_ptr->status_code;
 #endif
     return len;
 }
 
-UINT32 resp_conversion_scanu_cfm(struct ke_msg *msg, STM32_FRAME_HDR **frm_pptr)
+uint32_t resp_conversion_scanu_cfm(struct ke_msg *msg, STM32_FRAME_HDR **frm_pptr)
 {
-    UINT32 len;
+    uint32_t len;
     STM32_FRAME_HDR *frm;
     STM32_SCAN_RSP_PTR stm32_scan_rsp_ptr;
 #if CFG_REAL_SDIO
@@ -491,7 +493,7 @@ UINT32 resp_conversion_scanu_cfm(struct ke_msg *msg, STM32_FRAME_HDR **frm_pptr)
     frm->type = MVMS_CMD;
     *frm_pptr = frm;
 
-    stm32_scan_rsp_ptr = (STM32_SCAN_RSP_PTR)((UINT32)frm + sizeof(STM32_FRAME_HDR));
+    stm32_scan_rsp_ptr = (STM32_SCAN_RSP_PTR)((uint32_t)frm + sizeof(STM32_FRAME_HDR));
     stm32_scan_rsp_ptr->hdr.command = CMD_RET(SCMD_802_11_SCAN);
     stm32_scan_rsp_ptr->hdr.result  = 0;
     stm32_scan_rsp_ptr->hdr.seqnum  = scan_resp_cmd_sn;
@@ -505,18 +507,18 @@ UINT32 resp_conversion_scanu_cfm(struct ke_msg *msg, STM32_FRAME_HDR **frm_pptr)
     return len;
 }
 
-UINT32 resp_conversion_scanu_ret(struct ke_msg *msg, STM32_FRAME_HDR **frm_pptr)
+uint32_t resp_conversion_scanu_ret(struct ke_msg *msg, STM32_FRAME_HDR **frm_pptr)
 {
-    UINT32 len;
+    uint32_t len;
     STM32_FRAME_HDR *frm;
     SCANU_RET_IND_PTR scanu_ret_ptr;
     STM32_SCAN_RSP_PTR stm32_scan_rsp_ptr;
     IEEE80211_PROBE_RSP_PTR probe_rsp_ieee80211_ptr;
 #if (! CFG_REAL_SDIO)
-    UINT32 vies_len;
+    uint32_t vies_len;
     BEACON_INFO_PTR beacon_ptr;
-    UINT8 *var_part_addr;
-    UINT8 *elmt_addr;
+    uint8_t *var_part_addr;
+    uint8_t *elmt_addr;
     char ssid[MAC_SSID_LEN + 1];
 #endif
 
@@ -544,10 +546,10 @@ UINT32 resp_conversion_scanu_ret(struct ke_msg *msg, STM32_FRAME_HDR **frm_pptr)
           + vies_len;
 
     var_part_addr = probe_rsp_ieee80211_ptr->rsp.variable;
-    elmt_addr = (UINT8 *)mac_ie_find((UINT32)var_part_addr, (UINT16)vies_len, MAC_ELTID_SSID);
+    elmt_addr = (uint8_t *)mac_ie_find((uint32_t)var_part_addr, (uint16_t)vies_len, MAC_ELTID_SSID);
     if (elmt_addr)
     {
-        UINT8 ssid_len = *(elmt_addr + MAC_SSID_LEN_OFT);
+        uint8_t ssid_len = *(elmt_addr + MAC_SSID_LEN_OFT);
         if (ssid_len > MAC_SSID_LEN)
             ssid_len = MAC_SSID_LEN;
 
@@ -566,13 +568,13 @@ UINT32 resp_conversion_scanu_ret(struct ke_msg *msg, STM32_FRAME_HDR **frm_pptr)
     frm->len = len;
     frm->type = MVMS_CMD;
 
-    stm32_scan_rsp_ptr = (STM32_SCAN_RSP_PTR)((UINT32)frm + sizeof(STM32_FRAME_HDR));
+    stm32_scan_rsp_ptr = (STM32_SCAN_RSP_PTR)((uint32_t)frm + sizeof(STM32_FRAME_HDR));
     stm32_scan_rsp_ptr->hdr.command = CMD_RET(SCMD_802_11_SCAN);
     stm32_scan_rsp_ptr->hdr.result  = 0;
     stm32_scan_rsp_ptr->hdr.seqnum  = scan_resp_cmd_sn;
 #if CFG_REAL_SDIO
     stm32_scan_rsp_ptr->hdr.size    = msg->param_len;
-    os_memcpy((void *)((UINT32)stm32_scan_rsp_ptr + sizeof(STM32_CMD_HDR_S)) , msg->param, msg->param_len);
+    os_memcpy((void *)((uint32_t)stm32_scan_rsp_ptr + sizeof(STM32_CMD_HDR_S)) , msg->param, msg->param_len);
 #else
     stm32_scan_rsp_ptr->hdr.size    = len - sizeof(STM32_FRAME_HDR);
     stm32_scan_rsp_ptr->bssdescriptsize = sizeof(BEACON_INFO_S) + vies_len;
@@ -592,7 +594,7 @@ UINT32 resp_conversion_scanu_ret(struct ke_msg *msg, STM32_FRAME_HDR **frm_pptr)
     return len;
 }
 
-UINT32 resp_conversion_sm_disconnect_ind(struct ke_msg *msg,
+uint32_t resp_conversion_sm_disconnect_ind(struct ke_msg *msg,
         STM32_FRAME_HDR **frm_pptr)
 {
     struct sm_disconnect_ind *disc = (struct sm_disconnect_ind *)msg->param;
@@ -609,9 +611,9 @@ UINT32 resp_conversion_sm_disconnect_ind(struct ke_msg *msg,
     return 0;
 }
 
-UINT32 sdio_resp_conversion(struct ke_msg *msg, STM32_FRAME_HDR **frm_pptr)
+uint32_t sdio_resp_conversion(struct ke_msg *msg, STM32_FRAME_HDR **frm_pptr)
 {
-    UINT32 len = 0;
+    uint32_t len = 0;
 
     switch (msg->id)
     {
@@ -715,12 +717,12 @@ UINT32 sdio_resp_conversion(struct ke_msg *msg, STM32_FRAME_HDR **frm_pptr)
     return len;
 }
 
-UINT32 sdio_emb_kmsg_fwd(struct ke_msg *msg)
+uint32_t sdio_emb_kmsg_fwd(struct ke_msg *msg)
 {
-    UINT32 ret;
-    UINT32 len;
-    UINT32 status;
-    UINT32 wr_sta;
+    uint32_t ret;
+    uint32_t len;
+    uint32_t status;
+    uint32_t wr_sta;
     DD_HANDLE sdio_hdl;
     STM32_FRAME_HDR *frm_ptr;
 
@@ -765,18 +767,18 @@ tx_exception:
 
 #if 2
 #if CFG_WIFI_AP_MODE
-UINT8 chan_connect = CFG_CHANNEL_AP;
+uint8_t chan_connect = CFG_CHANNEL_AP;
 #else
-UINT8 chan_connect = 10;
+uint8_t chan_connect = 10;
 #endif
 
-UINT32 ie_info[32] = {0x500016dd, 0x101f2, 0x2f25000, 0x50000001, 0x102f2, 0x2f25000};
+uint32_t ie_info[32] = {0x500016dd, 0x101f2, 0x2f25000, 0x50000001, 0x102f2, 0x2f25000};
 
 void cmd_conversion_add_wep_key(STM32_FRAME_HDR *frm_ptr, struct ke_msg **kmsg_pptr)
 {
-    extern int hexstr2bin(const char * hex, u8 * buf, size_t len);
+    extern int hexstr2bin(const char * hex, uint8_t * buf, size_t len);
 
-    UINT32 param_len;
+    uint32_t param_len;
     struct ke_msg *kmsg_dst;
     struct mm_key_add_req *add_wep_key_ptr;
 
@@ -799,7 +801,7 @@ void cmd_conversion_add_wep_key(STM32_FRAME_HDR *frm_ptr, struct ke_msg **kmsg_p
     add_wep_key_ptr->inst_nbr = 0;
 
     add_wep_key_ptr->key.length = os_strlen(CFG_WEP_KEY);
-    hexstr2bin(CFG_WEP_KEY, (u8 *)&add_wep_key_ptr->key.array[0], add_wep_key_ptr->key.length);
+    hexstr2bin(CFG_WEP_KEY, (uint8_t *)&add_wep_key_ptr->key.array[0], add_wep_key_ptr->key.length);
 
     add_wep_key_ptr->key_idx = 0;
     add_wep_key_ptr->spp = 0;
@@ -809,7 +811,7 @@ void cmd_conversion_add_wep_key(STM32_FRAME_HDR *frm_ptr, struct ke_msg **kmsg_p
 
 void cmd_conversion_start_apm(STM32_FRAME_HDR *frm_ptr, struct ke_msg **kmsg_pptr)
 {
-    UINT32 param_len;
+    uint32_t param_len;
     struct ke_msg *kmsg_dst;
     struct apm_start_req *start_req_ptr;
 
@@ -837,7 +839,7 @@ void cmd_conversion_start_apm(STM32_FRAME_HDR *frm_ptr, struct ke_msg **kmsg_ppt
     start_req_ptr->center_freq1 = freq_2_4_G[chan_connect - 1];
     start_req_ptr->center_freq2 = 0;
     start_req_ptr->ch_width = 0;
-    start_req_ptr->bcn_addr = (UINT32)beacon;
+    start_req_ptr->bcn_addr = (uint32_t)beacon;
     start_req_ptr->bcn_len = sizeof(beacon);
     start_req_ptr->tim_oft = 56;
     start_req_ptr->tim_len = 6;
@@ -855,7 +857,7 @@ void cmd_conversion_start_apm(STM32_FRAME_HDR *frm_ptr, struct ke_msg **kmsg_ppt
 
 void cmd_conversion_beacon_change(STM32_FRAME_HDR *frm_ptr, struct ke_msg **kmsg_pptr)
 {
-    UINT32 param_len;
+    uint32_t param_len;
     struct ke_msg *kmsg_dst;
     struct mm_bcn_change_req *bcn_change_ptr;
 
@@ -872,7 +874,7 @@ void cmd_conversion_beacon_change(STM32_FRAME_HDR *frm_ptr, struct ke_msg **kmsg
 
     *kmsg_pptr = kmsg_dst;
     bcn_change_ptr = (struct mm_bcn_change_req *)kmsg_dst->param;
-    bcn_change_ptr->bcn_ptr = (UINT32)beacon;
+    bcn_change_ptr->bcn_ptr = (uint32_t)beacon;
     bcn_change_ptr->bcn_len = sizeof(beacon);
     bcn_change_ptr->tim_len = 6;
     bcn_change_ptr->tim_oft = 56;
@@ -881,7 +883,7 @@ void cmd_conversion_beacon_change(STM32_FRAME_HDR *frm_ptr, struct ke_msg **kmsg
 }
 
 /* hard code: dest addr, src addr, ap ssid, ap mac addr*/
-UINT8 auth_rsp[] =
+uint8_t auth_rsp[] =
 {
     0xb0, 0x00, 0x40, 0x01, 0x48, 0x5a, 0xb6, 0xc1
     , 0xea, 0xe1, 0x12, 0x71, 0x11, 0x71, 0x11
@@ -889,7 +891,7 @@ UINT8 auth_rsp[] =
     , 0xe0, 0x04,
     0, 0, 2, 0, 0, 0
 };
-UINT8 assoc_rsp[] =
+uint8_t assoc_rsp[] =
 {
     0x10, 0x00, 0x40, 0x01, 0x48, 0x5a, 0xb6, 0xc1
     , 0xea, 0xe1, 0x12, 0x71, 0x11, 0x71, 0x11
@@ -912,7 +914,7 @@ UINT8 assoc_rsp[] =
 
 void cmd_conversion_mgmt_tx_req(STM32_FRAME_HDR *frm_ptr, struct ke_msg **kmsg_pptr)
 {
-    UINT32 param_len;
+    uint32_t param_len;
     struct ke_msg *kmsg_dst;
     STM32_TX_MGMT_PTR tx_mgmt_ptr;
     struct me_mgmt_tx_req *mgmt_tx_ptr;
@@ -934,14 +936,14 @@ void cmd_conversion_mgmt_tx_req(STM32_FRAME_HDR *frm_ptr, struct ke_msg **kmsg_p
     tx_mgmt_ptr = (STM32_TX_MGMT_PTR)frm_ptr;
     if(SCMD_802_11_AUTHENTICATE == tx_mgmt_ptr->private)
     {
-        mgmt_tx_ptr->addr = (UINT32)auth_rsp;
-        mgmt_tx_ptr->hostid = (UINT32)auth_rsp;
+        mgmt_tx_ptr->addr = (uint32_t)auth_rsp;
+        mgmt_tx_ptr->hostid = (uint32_t)auth_rsp;
         mgmt_tx_ptr->len = sizeof(auth_rsp);
     }
     else if(SCMD_802_11_ASSOCIATE == tx_mgmt_ptr->private)
     {
-        mgmt_tx_ptr->addr = (UINT32)assoc_rsp;
-        mgmt_tx_ptr->hostid = (UINT32)assoc_rsp;
+        mgmt_tx_ptr->addr = (uint32_t)assoc_rsp;
+        mgmt_tx_ptr->hostid = (uint32_t)assoc_rsp;
         mgmt_tx_ptr->len = sizeof(assoc_rsp);
     }
 
@@ -951,7 +953,7 @@ void cmd_conversion_mgmt_tx_req(STM32_FRAME_HDR *frm_ptr, struct ke_msg **kmsg_p
 
 void cmd_conversion_add_sta_req(STM32_FRAME_HDR *frm_ptr, struct ke_msg **kmsg_pptr)
 {
-    UINT32 param_len;
+    uint32_t param_len;
     struct ke_msg *kmsg_dst;
     struct me_sta_add_req *sta_add_ptr;
 
@@ -994,7 +996,7 @@ void cmd_conversion_add_sta_req(STM32_FRAME_HDR *frm_ptr, struct ke_msg **kmsg_p
 
 void cmd_conversion_reset_req(STM32_FRAME_HDR *frm_ptr, struct ke_msg **kmsg_pptr)
 {
-    UINT32 param_len;
+    uint32_t param_len;
     struct ke_msg *kmsg_dst;
 
     param_len = 0;
@@ -1015,7 +1017,7 @@ void cmd_conversion_reset_req(STM32_FRAME_HDR *frm_ptr, struct ke_msg **kmsg_ppt
 
 void cmd_conversion_me_config_req(STM32_FRAME_HDR *frm_ptr, struct ke_msg **kmsg_pptr)
 {
-    UINT32 param_len;
+    uint32_t param_len;
     struct ke_msg *kmsg_dst;
 
     param_len = sizeof(struct me_config_req);
@@ -1036,8 +1038,8 @@ void cmd_conversion_me_config_req(STM32_FRAME_HDR *frm_ptr, struct ke_msg **kmsg
 
 void cmd_conversion_me_chan_config_req(STM32_FRAME_HDR *frm_ptr, struct ke_msg **kmsg_pptr)
 {
-    UINT32 i;
-    UINT32 param_len;
+    uint32_t i;
+    uint32_t param_len;
     struct ke_msg *kmsg_dst;
     struct me_chan_config_req *me_chan_cfg_ptr;
 
@@ -1070,7 +1072,7 @@ void cmd_conversion_me_chan_config_req(STM32_FRAME_HDR *frm_ptr, struct ke_msg *
 }
 void cmd_conversion_set_port_req(STM32_FRAME_HDR *frm_ptr, struct ke_msg **kmsg_pptr)
 {
-    UINT32 param_len;
+    uint32_t param_len;
     struct ke_msg *kmsg_dst;
     struct me_set_control_port_req *set_port_ptr;
 
@@ -1096,7 +1098,7 @@ void cmd_conversion_set_port_req(STM32_FRAME_HDR *frm_ptr, struct ke_msg **kmsg_
 
 void cmd_conversion_start_req(STM32_FRAME_HDR *frm_ptr, struct ke_msg **kmsg_pptr)
 {
-    UINT32 param_len;
+    uint32_t param_len;
     struct ke_msg *kmsg_dst;
     struct mm_start_req *mm_start_ptr;
 
@@ -1124,7 +1126,7 @@ void cmd_conversion_start_req(STM32_FRAME_HDR *frm_ptr, struct ke_msg **kmsg_ppt
 
 void cmd_conversion_assoc_req(STM32_FRAME_HDR *frm_ptr, struct ke_msg **kmsg_pptr)
 {
-    UINT32 param_len;
+    uint32_t param_len;
     struct ke_msg *kmsg_dst;
     ASSOC_REQ_PTR asso_ptr;
     struct sm_connect_req *sm_connect_req_ptr;
@@ -1148,7 +1150,7 @@ void cmd_conversion_assoc_req(STM32_FRAME_HDR *frm_ptr, struct ke_msg **kmsg_ppt
     *kmsg_pptr = kmsg_dst;
     sm_connect_req_ptr = (struct sm_connect_req *)kmsg_dst->param;
 #if CFG_REAL_SDIO
-    temp = (char *)((UINT32)asso_ptr + sizeof(STM32_CMD_HDR_S));
+    temp = (char *)((uint32_t)asso_ptr + sizeof(STM32_CMD_HDR_S));
     os_memcpy((char *)&sm_connect_req_ptr->ssid, temp, sizeof(struct mac_ssid));
     os_memcpy((char *)&sm_connect_req_ptr->bssid,
               temp + sizeof(struct mac_ssid) + 1, sizeof(struct sm_connect_req) - sizeof(struct mac_ssid));
@@ -1187,7 +1189,7 @@ void cmd_conversion_assoc_req(STM32_FRAME_HDR *frm_ptr, struct ke_msg **kmsg_ppt
 
 void cmd_conversion_key_material_req(STM32_FRAME_HDR *frm_ptr, struct ke_msg **kmsg_pptr)
 {
-    UINT32 param_len;
+    uint32_t param_len;
     struct ke_msg *kmsg_dst;
     struct mm_key_add_req *key_add_req_ptr;
     STM32_KEY_MATERIAL_PTR key_material_ptr;
@@ -1219,7 +1221,7 @@ void cmd_conversion_key_material_req(STM32_FRAME_HDR *frm_ptr, struct ke_msg **k
 
     key_add_req_ptr->key_idx = 0;
     key_add_req_ptr->key.length = os_strlen(CFG_WEP_KEY);
-    hexstr2bin(CFG_WEP_KEY, (u8 *)&key_add_req_ptr->key.array[0], key_add_req_ptr->key.length);
+    hexstr2bin(CFG_WEP_KEY, (uint8_t *)&key_add_req_ptr->key.array[0], key_add_req_ptr->key.length);
     key_add_req_ptr->cipher_suite = 1;
     key_add_req_ptr->inst_nbr = 0;
     key_add_req_ptr->spp = 0;
@@ -1229,7 +1231,7 @@ void cmd_conversion_key_material_req(STM32_FRAME_HDR *frm_ptr, struct ke_msg **k
 
 void cmd_conversion_add_if_req(STM32_FRAME_HDR *frm_ptr, struct ke_msg **kmsg_pptr)
 {
-    UINT32 param_len;
+    uint32_t param_len;
     struct ke_msg *kmsg_dst;
     struct mm_add_if_req *mm_add_if_ptr;
 
@@ -1261,14 +1263,14 @@ void cmd_conversion_add_if_req(STM32_FRAME_HDR *frm_ptr, struct ke_msg **kmsg_pp
 
 void cmd_conversion_802_11_scan(STM32_FRAME_HDR *frm_ptr, struct ke_msg **kmsg_pptr)
 {
-    UINT32 param_len;
+    uint32_t param_len;
     struct ke_msg *kmsg_dst;
     STM32_CMD_HDR_PTR scmd_hdr_ptr;
     struct scan_start_req *scan_start_ptr;
 #if (! CFG_REAL_SDIO)
-    UINT32 ssid_id;
-    UINT32 channel_id;
-    UINT32 ie_total_len;
+    uint32_t ssid_id;
+    uint32_t channel_id;
+    uint32_t ie_total_len;
     MRVL_IE_HDR_PTR mrvl_ie_ptr;
     STM32_CMD_802_11_SCAN_PTR scan_cmd_ptr;
 #endif
@@ -1298,7 +1300,7 @@ void cmd_conversion_802_11_scan(STM32_FRAME_HDR *frm_ptr, struct ke_msg **kmsg_p
     scan_start_ptr = (struct scan_start_req *)kmsg_dst->param;
     scan_cmd_ptr = (STM32_CMD_802_11_SCAN_PTR)scmd_hdr_ptr;
     mrvl_ie_ptr  = (MRVL_IE_HDR_PTR)scan_cmd_ptr->tlvbuffer;
-    ie_total_len =  scmd_hdr_ptr->size - ((UINT32)mrvl_ie_ptr - (UINT32)scmd_hdr_ptr);
+    ie_total_len =  scmd_hdr_ptr->size - ((uint32_t)mrvl_ie_ptr - (uint32_t)scmd_hdr_ptr);
 
     while(ie_total_len)
     {
@@ -1321,7 +1323,7 @@ void cmd_conversion_802_11_scan(STM32_FRAME_HDR *frm_ptr, struct ke_msg **kmsg_p
 
         case TLV_TYPE_CHANLIST:
         {
-            UINT32 i;
+            uint32_t i;
 
             for(i = 0; i < WIFI_2_4_G_CHANNEL_NUM; i ++)
             {
@@ -1346,8 +1348,8 @@ void cmd_conversion_802_11_scan(STM32_FRAME_HDR *frm_ptr, struct ke_msg **kmsg_p
             break;
         }
 
-        mrvl_ie_ptr = (MRVL_IE_HDR_PTR)((UINT32)scan_cmd_ptr->tlvbuffer
-                                        + (UINT32)mrvl_ie_ptr->len
+        mrvl_ie_ptr = (MRVL_IE_HDR_PTR)((uint32_t)scan_cmd_ptr->tlvbuffer
+                                        + (uint32_t)mrvl_ie_ptr->len
                                         + sizeof(MRVL_IE_HDR_S));
     }
 
@@ -1373,9 +1375,9 @@ void cmd_conversion_802_11_scan(STM32_FRAME_HDR *frm_ptr, struct ke_msg **kmsg_p
     return;
 }
 
-UINT32 sdio_h2e_msg_conversion(STM32_FRAME_HDR *frm_ptr, struct ke_msg **kmsg_pptr)
+uint32_t sdio_h2e_msg_conversion(STM32_FRAME_HDR *frm_ptr, struct ke_msg **kmsg_pptr)
 {
-    UINT32 ret = SDIO_INTF_SUCCESS;
+    uint32_t ret = SDIO_INTF_SUCCESS;
     STM32_CMD_HDR_PTR scmd_hdr_ptr;
 
     scmd_hdr_ptr = (STM32_CMD_HDR_PTR)&frm_ptr[1];
@@ -1488,15 +1490,15 @@ void sdio_h2e_kmsg_hdlr(struct ke_msg *kmsg_ptr)
 
 void sdio_emb_rxed_evt(int dummy)
 {
-    UINT32 status;
-    UINT32 queue_idx;
-    UINT8 *content_ptr;
+    uint32_t status;
+    uint32_t queue_idx;
+    uint8_t *content_ptr;
     bool pushed = false;
     SDIO_NODE_PTR mem_node_ptr;
     STM32_TX_FRAME *frm_tx_ptr;
     STM32_FRAME_HDR *frm_hdr_ptr;
 #if CFG_REAL_SDIO
-    UINT8 i = 0;
+    uint8_t i = 0;
 #else
     STM32_TXPD_S *txpd;
 #endif
@@ -1511,7 +1513,7 @@ void sdio_emb_rxed_evt(int dummy)
         {
         case MVMS_DAT:
         {
-            UINT8 tid;
+            uint8_t tid;
             ETHHDR_PTR eth_hdr_ptr;
             struct txdesc *txdesc_new;
             GLOBAL_INT_DECLARATION();
@@ -1522,10 +1524,10 @@ void sdio_emb_rxed_evt(int dummy)
 
             frm_tx_ptr = (STM32_TX_FRAME *)mem_node_ptr->addr;
 #if CFG_REAL_SDIO
-            content_ptr = (UINT8 *)&frm_tx_ptr->frm + 2;
+            content_ptr = (uint8_t *)&frm_tx_ptr->frm + 2;
 #else
             txpd = &frm_tx_ptr->frm;
-            content_ptr = (UINT8 *)&txpd[1];
+            content_ptr = (uint8_t *)&txpd[1];
 #endif
 
             eth_hdr_ptr = (ETHHDR_PTR)content_ptr;
@@ -1553,15 +1555,15 @@ void sdio_emb_rxed_evt(int dummy)
             sdio_emb_txdesc_copy(txdesc_new, eth_hdr_ptr);
 
             txdesc_new->host.flags            = 0;
-            txdesc_new->host.orig_addr        = (UINT32)mem_node_ptr->orig_addr;
-            txdesc_new->host.packet_addr      = (UINT32)content_ptr + 14;
+            txdesc_new->host.orig_addr        = (uint32_t)mem_node_ptr->orig_addr;
+            txdesc_new->host.packet_addr      = (uint32_t)content_ptr + 14;
 #if CFG_REAL_SDIO
             txdesc_new->host.packet_len       = frm_hdr_ptr->len - 14 - sizeof(STM32_FRAME_HDR) - 2;
             txdesc_new->host.staid            = 0;
 #else
             txdesc_new->host.packet_len       = frm_hdr_ptr->len - 14 - sizeof(STM32_FRAME_HDR) - sizeof(STM32_TXPD_S);
 #endif
-            txdesc_new->host.status_desc_addr = (UINT32)content_ptr + 14;
+            txdesc_new->host.status_desc_addr = (uint32_t)content_ptr + 14;
             txdesc_new->host.ethertype        = eth_hdr_ptr->h_proto;
             txdesc_new->host.tid              = tid;
             txdesc_new->host.vif_idx          = 0;
@@ -1599,7 +1601,7 @@ void sdio_emb_rxed_evt(int dummy)
 
         case MVMS_CMD:
         {
-            UINT32 ret;
+            uint32_t ret;
             struct ke_msg *kmsg;
 
             ret = sdio_h2e_msg_conversion(frm_hdr_ptr, &kmsg);
@@ -1656,10 +1658,10 @@ void sdio_rxed_trigger_evt(void)
     ke_evt_set(KE_EVT_SDIO_RXED_DATA_BIT);
 }
 
-UINT32 sdio_intf_init(void)
+uint32_t sdio_intf_init(void)
 {
-    UINT32 ret;
-    UINT32 status;
+    uint32_t ret;
+    uint32_t status;
     DD_HANDLE sdio_hdl;
     RW_CONNECTOR_T intf;
 

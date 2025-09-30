@@ -8,7 +8,7 @@
 #include <module.h>
 
 
-extern void rt_memory_mem(rt_uint32_t *total,rt_uint32_t *used);
+extern void rt_memory_mem(uint32_t *total,uint32_t *used);
 
 void cgi_mem_handler(struct webnet_session* session)
 {

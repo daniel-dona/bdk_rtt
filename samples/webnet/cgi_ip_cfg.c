@@ -178,7 +178,7 @@ static void set_ip_cfg_handler(struct webnet_session *session)
         char addr_name_str[16]; /* e0_gateway_0 */
         const char *addr[4];
 
-        rt_uint32_t index;
+        uint32_t index;
 
         strncpy(netif_name, netif->name, sizeof(netif->name));
         netif_name[sizeof(netif_name) - 1] = '\0';
@@ -236,7 +236,7 @@ static void set_ip_cfg_handler(struct webnet_session *session)
     return;
 
 invalid:
-    webnet_session_write(session, (const rt_uint8_t *)header, rt_strlen(header));
+    webnet_session_write(session, (const uint8_t *)header, rt_strlen(header));
     webnet_session_printf(session, body, error_message);
     return;
 }

@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 
@@ -16,7 +17,7 @@ static DRV_DEV_S drv_dev_tbl[DD_MAX_DEV] =
     {0},
 };
 
-UINT32 drv_model_init(void)
+uint32_t drv_model_init(void)
 {
     os_memset(drv_dev_tbl, 0, sizeof(drv_dev_tbl));
     os_memset(drv_sdev_tbl, 0, sizeof(drv_sdev_tbl));
@@ -24,7 +25,7 @@ UINT32 drv_model_init(void)
     return DRV_SUCCESS;
 }
 
-UINT32 drv_model_uninit(void)
+uint32_t drv_model_uninit(void)
 {
     os_memset(drv_dev_tbl, 0, sizeof(drv_dev_tbl));
     os_memset(drv_sdev_tbl, 0, sizeof(drv_sdev_tbl));
@@ -32,10 +33,10 @@ UINT32 drv_model_uninit(void)
     return DRV_SUCCESS;
 }
 
-UINT32 ddev_check_handle(DD_HANDLE handle)
+uint32_t ddev_check_handle(DD_HANDLE handle)
 {
-    UINT32 magic;
-    UINT32 id;
+    uint32_t magic;
+    uint32_t id;
 
     magic = handle & DD_HANDLE_MAGIC_MASK;
     id    = handle & DD_HANDLE_ID_MASK;
@@ -50,9 +51,9 @@ UINT32 ddev_check_handle(DD_HANDLE handle)
     }
 }
 
-DD_HANDLE ddev_make_handle(UINT32 id)
+DD_HANDLE ddev_make_handle(uint32_t id)
 {
-    UINT32 handle = DD_HANDLE_UNVALID;
+    uint32_t handle = DD_HANDLE_UNVALID;
 
     if(id >= DD_MAX_DEV)
     {
@@ -65,10 +66,10 @@ make_exit:
     return handle;
 }
 
-UINT32 ddev_get_id_from_handle(DD_HANDLE handle)
+uint32_t ddev_get_id_from_handle(DD_HANDLE handle)
 {
-    UINT32 magic;
-    UINT32 id;
+    uint32_t magic;
+    uint32_t id;
 
     magic = handle & DD_HANDLE_MAGIC_MASK;
     id    = handle & DD_HANDLE_ID_MASK;
@@ -81,11 +82,11 @@ UINT32 ddev_get_id_from_handle(DD_HANDLE handle)
     return id;
 }
 
-DD_HANDLE ddev_open(char *dev_name, UINT32 *status, UINT32 op_flag)
+DD_HANDLE ddev_open(char *dev_name, uint32_t *status, uint32_t op_flag)
 {
-    UINT32 i;
-    UINT32 handle;
-    UINT32 name_len;
+    uint32_t i;
+    uint32_t handle;
+    uint32_t name_len;
     DRV_DEV_PTR dev_ptr;
     DD_OPERATIONS *operation;
     GLOBAL_INT_DECLARATION();
@@ -141,9 +142,9 @@ open_exit:
     return handle;
 }
 
-UINT32 ddev_close(DD_HANDLE handle)
+uint32_t ddev_close(DD_HANDLE handle)
 {
-    UINT32 id;
+    uint32_t id;
     DRV_DEV_PTR dev_ptr;
     DD_OPERATIONS *operation;
     GLOBAL_INT_DECLARATION();
@@ -178,10 +179,10 @@ UINT32 ddev_close(DD_HANDLE handle)
     return DRV_SUCCESS;
 }
 
-UINT32 ddev_read(DD_HANDLE handle, char *user_buf, UINT32 count, UINT32 op_flag)
+uint32_t ddev_read(DD_HANDLE handle, char *user_buf, uint32_t count, uint32_t op_flag)
 {
-    UINT32 id;
-    UINT32 status;
+    uint32_t id;
+    uint32_t status;
     DRV_DEV_PTR dev_ptr;
     DD_OPERATIONS *operation;
 
@@ -203,10 +204,10 @@ UINT32 ddev_read(DD_HANDLE handle, char *user_buf, UINT32 count, UINT32 op_flag)
     return status;
 }
 
-UINT32 ddev_write(DD_HANDLE handle, char *user_buf, UINT32 count, UINT32 op_flag)
+uint32_t ddev_write(DD_HANDLE handle, char *user_buf, uint32_t count, uint32_t op_flag)
 {
-    UINT32 id;
-    UINT32 status;
+    uint32_t id;
+    uint32_t status;
     DRV_DEV_PTR dev_ptr;
     DD_OPERATIONS *operation;
 
@@ -228,10 +229,10 @@ UINT32 ddev_write(DD_HANDLE handle, char *user_buf, UINT32 count, UINT32 op_flag
     return status;
 }
 
-UINT32 ddev_control(DD_HANDLE handle, UINT32 cmd, VOID *param)
+uint32_t ddev_control(DD_HANDLE handle, uint32_t cmd, void *param)
 {
-    UINT32 id;
-    UINT32 status;
+    uint32_t id;
+    uint32_t status;
     DRV_DEV_PTR dev_ptr;
     DD_OPERATIONS *operation;
 
@@ -253,11 +254,11 @@ UINT32 ddev_control(DD_HANDLE handle, UINT32 cmd, VOID *param)
     return status;
 }
 
-UINT32 sddev_control(char *dev_name, UINT32 cmd, VOID *param)
+uint32_t sddev_control(char *dev_name, uint32_t cmd, void *param)
 {
-    UINT32 i;
-    UINT32 status;
-    UINT32 name_len;
+    uint32_t i;
+    uint32_t status;
+    uint32_t name_len;
     DRV_SDEV_PTR dev_ptr;
     SDD_OPERATIONS *operation = NULLPTR;
 
@@ -285,9 +286,9 @@ UINT32 sddev_control(char *dev_name, UINT32 cmd, VOID *param)
     return status;
 }
 
-UINT32 ddev_register_dev(char *dev_name, DD_OPERATIONS *optr)
+uint32_t ddev_register_dev(char *dev_name, DD_OPERATIONS *optr)
 {
-    UINT32 i;
+    uint32_t i;
     DRV_DEV_PTR dev_ptr;
 
     if(!(dev_name && optr))
@@ -316,9 +317,9 @@ UINT32 ddev_register_dev(char *dev_name, DD_OPERATIONS *optr)
     return DRV_SUCCESS;
 }
 
-UINT32 sddev_register_dev(char *dev_name, SDD_OPERATIONS *optr)
+uint32_t sddev_register_dev(char *dev_name, SDD_OPERATIONS *optr)
 {
-    UINT32 i;
+    uint32_t i;
     DRV_SDEV_PTR dev_ptr;
 
     if(!(dev_name && optr))
@@ -347,10 +348,10 @@ UINT32 sddev_register_dev(char *dev_name, SDD_OPERATIONS *optr)
     return DRV_SUCCESS;
 }
 
-UINT32 ddev_unregister_dev(char *dev_name)
+uint32_t ddev_unregister_dev(char *dev_name)
 {
-    UINT32 i;
-    UINT32 name_len;
+    uint32_t i;
+    uint32_t name_len;
     DRV_DEV_PTR dev_ptr;
 
     if(!dev_name)
@@ -385,10 +386,10 @@ UINT32 ddev_unregister_dev(char *dev_name)
     return DRV_SUCCESS;
 }
 
-UINT32 sddev_unregister_dev(char *dev_name)
+uint32_t sddev_unregister_dev(char *dev_name)
 {
-    UINT32 i;
-    UINT32 name_len;
+    uint32_t i;
+    uint32_t name_len;
     DRV_SDEV_PTR dev_ptr;
 
     if(!dev_name)

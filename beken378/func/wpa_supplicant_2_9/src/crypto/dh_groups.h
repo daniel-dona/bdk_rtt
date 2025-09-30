@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * Diffie-Hellman groups
  * Copyright (c) 2007, Jouni Malinen <j@w1.fi>
@@ -11,11 +12,11 @@
 
 struct dh_group {
 	int id;
-	const u8 *generator;
+	const uint8_t *generator;
 	size_t generator_len;
-	const u8 *prime;
+	const uint8_t *prime;
 	size_t prime_len;
-	const u8 *order;
+	const uint8_t *order;
 	size_t order_len;
 	unsigned int safe_prime:1;
 };

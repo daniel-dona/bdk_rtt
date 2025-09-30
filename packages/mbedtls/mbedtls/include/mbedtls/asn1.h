@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /**
  * \file asn1.h
  *

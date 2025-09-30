@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /**
  ****************************************************************************************
  *
@@ -113,7 +115,7 @@ typedef struct m_lay_buf_env
         uint8_t nb_dec_attemps_va;
         /// Segmentation structure index (used by Lower Transport Layer during transmission of segments)
         uint8_t seg_idx;
-    } u16;
+    } uint16_t;
 } m_lay_buf_env_t;
 
 /// Buffer environment (from Bearer Layer to Network Layer)

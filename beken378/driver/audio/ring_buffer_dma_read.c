@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "ring_buffer_dma_read.h"
 #include "arch.h"
@@ -16,7 +17,7 @@
 #define RB_DMA_RD_INT_RESTORE()
 #define RB_DMA_RD_PRT(...)
 
-void rb_init_dma_read(RB_DMA_RD_PTR rb, UINT8 *addr, UINT32 capacity, UINT32 ch)
+void rb_init_dma_read(RB_DMA_RD_PTR rb, uint8_t *addr, uint32_t capacity, uint32_t ch)
 {
     GDMA_CFG_ST en_cfg;
     RB_DMA_RD_INT_DECLARATION();
@@ -31,7 +32,7 @@ void rb_init_dma_read(RB_DMA_RD_PTR rb, UINT8 *addr, UINT32 capacity, UINT32 ch)
 
     // set pause in order to stop dma when enable dma bit
     en_cfg.channel = rb->dma_ch;
-    en_cfg.param = (UINT32)(rb->address);
+    en_cfg.param = (uint32_t)(rb->address);
     RB_DMA_RD_PRT("init set src:%x\r\n", en_cfg.param);
     sddev_control(GDMA_DEV_NAME, CMD_GDMA_SET_SRC_PAUSE_ADDR, &en_cfg);
 
@@ -54,11 +55,11 @@ void rb_clear_dma_read(RB_DMA_RD_PTR rb)
 }
 
 
-UINT32 rb_write_dma_read(RB_DMA_RD_PTR rb, UINT8 *buffer, UINT32 size, UINT32 count)
+uint32_t rb_write_dma_read(RB_DMA_RD_PTR rb, uint8_t *buffer, uint32_t size, uint32_t count)
 {
-    UINT32 remain_bytes;
-    UINT32 write_bytes = size * count;
-    UINT32 rp;
+    uint32_t remain_bytes;
+    uint32_t write_bytes = size * count;
+    uint32_t rp;
     GDMA_CFG_ST en_cfg;
     
     RB_DMA_RD_INT_DECLARATION();
@@ -70,7 +71,7 @@ UINT32 rb_write_dma_read(RB_DMA_RD_PTR rb, UINT8 *buffer, UINT32 size, UINT32 co
     en_cfg.param = 0;
     rp = sddev_control(GDMA_DEV_NAME, CMD_GDMA_GET_SRC_READ_ADDR, &en_cfg);
     RB_DMA_RD_PRT("write get src_rd:%x\r\n", rp);
-    rp -= (UINT32)rb->address;
+    rp -= (uint32_t)rb->address;
     rb->rp = rp;
 
     if(rb->wp >= rp)
@@ -127,22 +128,22 @@ UINT32 rb_write_dma_read(RB_DMA_RD_PTR rb, UINT8 *buffer, UINT32 size, UINT32 co
     }
 
     en_cfg.channel = rb->dma_ch;
-    en_cfg.param = (UINT32)(rb->address + rb->wp);
+    en_cfg.param = (uint32_t)(rb->address + rb->wp);
     RB_DMA_RD_PRT("write set src:%x\r\n", en_cfg.param);
     sddev_control(GDMA_DEV_NAME, CMD_GDMA_SET_SRC_PAUSE_ADDR, &en_cfg);
 
     return write_bytes;
 }
 
-UINT32 rb_get_fill_size_dma_read(RB_DMA_RD_PTR rb)
+uint32_t rb_get_fill_size_dma_read(RB_DMA_RD_PTR rb)
 {
-    UINT32 fill_size, rp;
+    uint32_t fill_size, rp;
     GDMA_CFG_ST en_cfg;
 
     en_cfg.channel = rb->dma_ch;
     rp = sddev_control(GDMA_DEV_NAME, CMD_GDMA_GET_SRC_READ_ADDR, &en_cfg);
     RB_DMA_RD_PRT("fillsize get src_rd:%x\r\n", rp);
-    rp -= (UINT32)rb->address;
+    rp -= (uint32_t)rb->address;
     rb->rp = rp;
 
     fill_size = rb->wp >= rb->rp ? rb->wp - rb->rp : rb->capacity - rb->rp + rb->wp;
@@ -150,15 +151,15 @@ UINT32 rb_get_fill_size_dma_read(RB_DMA_RD_PTR rb)
     return fill_size;
 }
 
-UINT32 rb_get_free_size_dma_read(RB_DMA_RD_PTR rb)
+uint32_t rb_get_free_size_dma_read(RB_DMA_RD_PTR rb)
 {
-    UINT32 free_size, rp;
+    uint32_t free_size, rp;
     GDMA_CFG_ST en_cfg;
 
     en_cfg.channel = rb->dma_ch;
     rp = sddev_control(GDMA_DEV_NAME, CMD_GDMA_GET_SRC_READ_ADDR, &en_cfg);
     RB_DMA_RD_PRT("freesize get src_rd:%x\r\n", rp);
-    rp -= (UINT32)rb->address;
+    rp -= (uint32_t)rb->address;
     rb->rp = rp;
 
     free_size = rb->wp >= rb->rp ? rb->capacity - rb->wp + rb->rp : rb->rp - rb->wp;

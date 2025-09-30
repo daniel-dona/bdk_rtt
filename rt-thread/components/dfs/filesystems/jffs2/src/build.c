@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * JFFS2 -- Journalling Flash File System, Version 2.
  *

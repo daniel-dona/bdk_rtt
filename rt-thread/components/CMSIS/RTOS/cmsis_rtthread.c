@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "cmsis_os.h"
 
 // Kernel Control Public API

@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _CFG_INFO_PUB_H
 #define _CFG_INFO_PUB_H
 
@@ -20,14 +21,14 @@ typedef enum{
 
 typedef struct info_item_st
 {
-    UINT32 type;
-    UINT32 len;
+    uint32_t type;
+    uint32_t len;
 }INFO_ITEM_ST,TLV_HEADER_ST,*INFO_ITEM_ST_PTR;
 
 typedef struct item_common_st
 {
 	INFO_ITEM_ST head;
-	UINT32 value;
+	uint32_t value;
 }ITEM_COMM_ST,*ITEM_COMM_ST_PTR;
 
 typedef struct item_mac_addr_st
@@ -63,7 +64,7 @@ typedef struct item_ip_config_st
     char gateway_ip_addr[16];    
 }ITEM_IP_CONFIG_ST,*ITEM_IP_CONFIG_ST_PTR;
 
-UINT32 test_get_whole_tbl(UINT8 *ptr);
-UINT32 save_info_item(NET_INFO_ITEM item,UINT8 *ptr0,UINT8*ptr1,UINT8 *ptr2);
-UINT32 get_info_item(NET_INFO_ITEM item,UINT8 *ptr0,UINT8 *ptr1, UINT8 *ptr2);
+uint32_t test_get_whole_tbl(uint8_t *ptr);
+uint32_t save_info_item(NET_INFO_ITEM item,uint8_t *ptr0,uint8_t*ptr1,uint8_t *ptr2);
+uint32_t get_info_item(NET_INFO_ITEM item,uint8_t *ptr0,uint8_t *ptr1, uint8_t *ptr2);
 #endif

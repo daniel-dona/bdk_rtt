@@ -1,3 +1,4 @@
+#include <stdbool.h>
 /*
  * File      : signal.c
  * This file is part of RT-Thread RTOS
@@ -77,7 +78,7 @@ static void _signal_entry(void *parameter)
     dbg_log(DBG_LOG, "switch back to: 0x%08x\n", tid->sp);
     tid->stat &= ~RT_THREAD_STAT_SIGNAL;
 
-    rt_hw_context_switch_to((rt_uint32_t) & (tid->sp));
+    rt_hw_context_switch_to((uint32_t) & (tid->sp));
 }
 
 /*
@@ -204,7 +205,7 @@ void rt_signal_unmask(int signo)
     }
 }
 
-int rt_signal_wait(const rt_sigset_t *set, rt_siginfo_t *si, rt_int32_t timeout)
+int rt_signal_wait(const rt_sigset_t *set, rt_siginfo_t *si, int32_t timeout)
 {
     int ret = RT_EOK;
     rt_base_t   level;

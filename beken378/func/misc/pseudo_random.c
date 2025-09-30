@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "reg_mac_core.h"
 

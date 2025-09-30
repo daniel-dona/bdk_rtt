@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : pthread.c
  * This file is part of RT-Thread RTOS
@@ -78,7 +79,7 @@ int pthread_create(pthread_t            *tid,
     int result;
     void *stack;
     char name[RT_NAME_MAX];
-    static rt_uint16_t pthread_number = 0;
+    static uint16_t pthread_number = 0;
     _pthread_data_t *ptd;
 
     /* tid shall be provided */
@@ -173,7 +174,7 @@ int pthread_create(pthread_t            *tid,
 
     /* set pthread cleanup function and ptd data */
     (*tid)->cleanup = _pthread_cleanup;
-    (*tid)->user_data = (rt_uint32_t)ptd;
+    (*tid)->user_data = (uint32_t)ptd;
 
     /* start thread */
     result = rt_thread_startup(*tid);
@@ -316,7 +317,7 @@ void pthread_exit(void *value)
     if (ptd->tls != RT_NULL)
     {
         void *data;
-        rt_uint32_t index;
+        uint32_t index;
 
         for (index = 0; index < PTHREAD_KEY_MAX; index ++)
         {

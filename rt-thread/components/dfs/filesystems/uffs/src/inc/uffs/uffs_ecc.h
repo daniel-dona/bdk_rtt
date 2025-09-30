@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
   This file is part of UFFS, the Ultra-low-cost Flash File System.
   
@@ -71,7 +72,7 @@ int uffs_EccCorrect(void *data, int data_len, void *read_ecc, const void *test_e
 /**
  * generate 12 bit ecc for maximum 8 bytes data
  */
-u16 uffs_EccMake8(const void *data, int data_len);
+uint16_t uffs_EccMake8(const void *data, int data_len);
 
 /**
  * correct maximum 8 bytes data from 12 bits ECC
@@ -80,7 +81,7 @@ u16 uffs_EccMake8(const void *data, int data_len);
  *			-1 -- can not be corrected
  *			>0 -- how many bits are corrected
  */
-int uffs_EccCorrect8(void *data, u16 read_ecc, u16 test_ecc, int errtop);
+int uffs_EccCorrect8(void *data, uint16_t read_ecc, uint16_t test_ecc, int errtop);
 
 
 #ifdef __cplusplus

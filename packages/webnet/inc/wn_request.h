@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  * File      : wn_request.h
  * This file is part of RT-Thread RTOS
@@ -108,7 +110,7 @@ struct webnet_request
     char* query;
 	int query_offset;
     struct webnet_query_item* query_items;
-    rt_uint16_t query_counter;
+    uint16_t query_counter;
 
     enum webnet_connection connection;
 

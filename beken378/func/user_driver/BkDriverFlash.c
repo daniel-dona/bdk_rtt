@@ -1,3 +1,4 @@
+#include <stdint.h>
 /**
  ******************************************************************************
  * @file    BkDriverFlash.h
@@ -132,7 +133,7 @@ OSStatus bk_flash_erase(bk_partition_t inPartition, uint32_t off_set, uint32_t s
 {
     uint32_t i;
     uint32_t param;
-    UINT32 status;
+    uint32_t status;
     DD_HANDLE flash_hdl;
     uint32_t start_sector, end_sector;
     bk_logic_partition_t *partition_info;
@@ -157,7 +158,7 @@ OSStatus bk_flash_erase(bk_partition_t inPartition, uint32_t off_set, uint32_t s
 
 OSStatus bk_flash_write( bk_partition_t inPartition, volatile uint32_t off_set, uint8_t *inBuffer , uint32_t inBufferLength)
 {
-    UINT32 status;
+    uint32_t status;
     DD_HANDLE flash_hdl;
     uint32_t start_addr;
     bk_logic_partition_t *partition_info;
@@ -194,7 +195,7 @@ OSStatus bk_flash_write( bk_partition_t inPartition, volatile uint32_t off_set, 
 
 OSStatus bk_flash_read( bk_partition_t inPartition, volatile uint32_t off_set, uint8_t *outBuffer, uint32_t inBufferLength)
 {
-    UINT32 status;
+    uint32_t status;
     uint32_t start_addr;
     DD_HANDLE flash_hdl;
     bk_logic_partition_t *partition_info;
@@ -232,7 +233,7 @@ OSStatus bk_flash_read( bk_partition_t inPartition, volatile uint32_t off_set, u
 OSStatus bk_flash_enable_security(PROTECT_TYPE type )
 {
 	DD_HANDLE flash_hdl;
-    UINT32 status;
+    uint32_t status;
 	uint32_t param = type;
 
 	flash_hdl = ddev_open(FLASH_DEV_NAME, &status, 0);
@@ -249,10 +250,10 @@ OSStatus bk_flash_enable_security(PROTECT_TYPE type )
 
 OSStatus test_flash_write(volatile uint32_t start_addr, uint32_t len)
 {
- 	UINT32 status;
+ 	uint32_t status;
     DD_HANDLE flash_hdl;
     uint32_t i;
-	u8 buf[256];
+	uint8_t buf[256];
 	uint32_t addr = start_addr;
 	uint32_t length = len;
 	uint32_t tmp = addr + length;
@@ -272,7 +273,7 @@ OSStatus test_flash_write(volatile uint32_t start_addr, uint32_t len)
 }
 OSStatus test_flash_erase(volatile uint32_t start_addr, uint32_t len)
 {
- 	UINT32 status;
+ 	uint32_t status;
     DD_HANDLE flash_hdl;
    
 	uint32_t addr = start_addr;
@@ -296,10 +297,10 @@ OSStatus test_flash_erase(volatile uint32_t start_addr, uint32_t len)
 
 OSStatus test_flash_read(volatile uint32_t start_addr, uint32_t len)
 {
- 	UINT32 status;
+ 	uint32_t status;
     DD_HANDLE flash_hdl;
     uint32_t i,j,tmp;
-	u8 buf[256];
+	uint8_t buf[256];
 	uint32_t addr = start_addr;
 	uint32_t length = len;
 	tmp = addr+length;
@@ -330,10 +331,10 @@ OSStatus test_flash_read(volatile uint32_t start_addr, uint32_t len)
 
 OSStatus test_flash_read_time(volatile uint32_t start_addr, uint32_t len)
 {
- 	UINT32 status, time_start, time_end;
+ 	uint32_t status, time_start, time_end;
     DD_HANDLE flash_hdl;
     uint32_t tmp;
-	u8 buf[256];
+	uint8_t buf[256];
 	uint32_t addr = start_addr;
 	uint32_t length = len;
 	

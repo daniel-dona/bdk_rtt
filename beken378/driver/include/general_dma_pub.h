@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef __GDMA_PUB_H__
 #define __GDMA_PUB_H__
 
@@ -106,20 +107,20 @@ enum
 
 typedef struct gdmacfg_types_st
 {
-    UINT32 channel;
-    UINT32 prio;
-    UINT8 dstptr_incr;
-    UINT8 srcptr_incr;
-    UINT8 dstdat_width;
-    UINT8 srcdat_width;
+    uint32_t channel;
+    uint32_t prio;
+    uint8_t dstptr_incr;
+    uint8_t srcptr_incr;
+    uint8_t dstdat_width;
+    uint8_t srcdat_width;
 
     void *src_start_addr;
     void *dst_start_addr;
 
-    UINT8 src_module;
-    UINT8 dst_module;
-    void (*fin_handler)(UINT32);
-    void (*half_fin_handler)(UINT32);
+    uint8_t src_module;
+    uint8_t dst_module;
+    void (*fin_handler)(uint32_t);
+    void (*half_fin_handler)(uint32_t);
 
     union
     {
@@ -167,22 +168,22 @@ typedef struct gdmacfg_types_st
 
 typedef struct gdma_do_st
 {
-    UINT32 channel;
+    uint32_t channel;
     void *src_addr;
     void *dst_addr;
-    UINT32 length;
+    uint32_t length;
 } GDMA_DO_ST, *GDMA_DO_PTR;
 
 
 typedef struct generdam_cfg_st
 {
-    UINT32 param;
-    UINT32 channel;
+    uint32_t param;
+    uint32_t channel;
 } GDMA_CFG_ST, *GDMA_CFG_PTR;
 
 void gdma_init(void);
 void gdma_exit(void);
-void *gdma_memcpy(void *out, const void *in, UINT32 n);
+void *gdma_memcpy(void *out, const void *in, uint32_t n);
 
 #endif  // CFG_GENERAL_DMA
 

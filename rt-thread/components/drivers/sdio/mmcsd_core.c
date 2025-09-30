@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : mmcsd_core.c
  * This file is part of RT-Thread RTOS
@@ -41,11 +42,11 @@
 
 //static struct rt_semaphore mmcsd_sem;
 static struct rt_thread mmcsd_detect_thread;
-static rt_uint8_t mmcsd_stack[RT_MMCSD_STACK_SIZE];
+static uint8_t mmcsd_stack[RT_MMCSD_STACK_SIZE];
 static struct rt_mailbox  mmcsd_detect_mb;
-static rt_uint32_t mmcsd_detect_mb_pool[4];
+static uint32_t mmcsd_detect_mb_pool[4];
 static struct rt_mailbox mmcsd_hotpluge_mb;
-static rt_uint32_t mmcsd_hotpluge_mb_pool[4];
+static uint32_t mmcsd_hotpluge_mb_pool[4];
 
 void mmcsd_host_lock(struct rt_mmcsd_host *host)
 {
@@ -89,7 +90,7 @@ void mmcsd_send_request(struct rt_mmcsd_host *host, struct rt_mmcsd_req *req)
 
 }
 
-rt_int32_t mmcsd_send_cmd(struct rt_mmcsd_host *host,
+int32_t mmcsd_send_cmd(struct rt_mmcsd_host *host,
                           struct rt_mmcsd_cmd  *cmd,
                           int                   retries)
 {
@@ -107,9 +108,9 @@ rt_int32_t mmcsd_send_cmd(struct rt_mmcsd_host *host,
     return cmd->err;
 }
 
-rt_int32_t mmcsd_go_idle(struct rt_mmcsd_host *host)
+int32_t mmcsd_go_idle(struct rt_mmcsd_host *host)
 {
-    rt_int32_t err;
+    int32_t err;
     struct rt_mmcsd_cmd cmd;
 
     if (!controller_is_spi(host))
@@ -137,12 +138,12 @@ rt_int32_t mmcsd_go_idle(struct rt_mmcsd_host *host)
     return err;
 }
 
-rt_int32_t mmcsd_spi_read_ocr(struct rt_mmcsd_host *host,
-                              rt_int32_t            high_capacity,
-                              rt_uint32_t          *ocr)
+int32_t mmcsd_spi_read_ocr(struct rt_mmcsd_host *host,
+                              int32_t            high_capacity,
+                              uint32_t          *ocr)
 {
     struct rt_mmcsd_cmd cmd;
-    rt_int32_t err;
+    int32_t err;
 
     rt_memset(&cmd, 0, sizeof(struct rt_mmcsd_cmd));
 
@@ -157,9 +158,9 @@ rt_int32_t mmcsd_spi_read_ocr(struct rt_mmcsd_host *host,
     return err;
 }
 
-rt_int32_t mmcsd_all_get_cid(struct rt_mmcsd_host *host, rt_uint32_t *cid)
+int32_t mmcsd_all_get_cid(struct rt_mmcsd_host *host, uint32_t *cid)
 {
-    rt_int32_t err;
+    int32_t err;
     struct rt_mmcsd_cmd cmd;
 
     rt_memset(&cmd, 0, sizeof(struct rt_mmcsd_cmd));
@@ -172,18 +173,18 @@ rt_int32_t mmcsd_all_get_cid(struct rt_mmcsd_host *host, rt_uint32_t *cid)
     if (err)
         return err;
 
-    rt_memcpy(cid, cmd.resp, sizeof(rt_uint32_t) * 4);
+    rt_memcpy(cid, cmd.resp, sizeof(uint32_t) * 4);
 
     return 0;
 }
 
-rt_int32_t mmcsd_get_cid(struct rt_mmcsd_host *host, rt_uint32_t *cid)
+int32_t mmcsd_get_cid(struct rt_mmcsd_host *host, uint32_t *cid)
 {
-    rt_int32_t err, i;
+    int32_t err, i;
     struct rt_mmcsd_req req;
     struct rt_mmcsd_cmd cmd;
     struct rt_mmcsd_data data;
-    rt_uint32_t *buf = RT_NULL;
+    uint32_t *buf = RT_NULL;
 
     if (!controller_is_spi(host)) 
     {
@@ -198,12 +199,12 @@ rt_int32_t mmcsd_get_cid(struct rt_mmcsd_host *host, rt_uint32_t *cid)
         if (err)
             return err;
 
-        rt_memcpy(cid, cmd.resp, sizeof(rt_uint32_t) * 4);
+        rt_memcpy(cid, cmd.resp, sizeof(uint32_t) * 4);
 
         return 0;
     }
 
-    buf = (rt_uint32_t *)rt_malloc(16);
+    buf = (uint32_t *)rt_malloc(16);
     if (!buf) 
     {
         rt_kprintf("allocate memory failed\n");
@@ -255,13 +256,13 @@ rt_int32_t mmcsd_get_cid(struct rt_mmcsd_host *host, rt_uint32_t *cid)
     return 0;
 }
 
-rt_int32_t mmcsd_get_csd(struct rt_mmcsd_card *card, rt_uint32_t *csd)
+int32_t mmcsd_get_csd(struct rt_mmcsd_card *card, uint32_t *csd)
 {
-    rt_int32_t err, i;
+    int32_t err, i;
     struct rt_mmcsd_req req;
     struct rt_mmcsd_cmd cmd;
     struct rt_mmcsd_data data;
-    rt_uint32_t *buf = RT_NULL;
+    uint32_t *buf = RT_NULL;
 
     if (!controller_is_spi(card->host))
     {
@@ -274,12 +275,12 @@ rt_int32_t mmcsd_get_csd(struct rt_mmcsd_card *card, rt_uint32_t *csd)
         if (err)
             return err;
 
-        rt_memcpy(csd, cmd.resp, sizeof(rt_uint32_t) * 4);
+        rt_memcpy(csd, cmd.resp, sizeof(uint32_t) * 4);
 
         return 0;
     }
 
-    buf = (rt_uint32_t*)rt_malloc(16);
+    buf = (uint32_t*)rt_malloc(16);
     if (!buf) 
     {
         rt_kprintf("allocate memory failed\n");
@@ -332,10 +333,10 @@ rt_int32_t mmcsd_get_csd(struct rt_mmcsd_card *card, rt_uint32_t *csd)
     return 0;
 }
 
-static rt_int32_t _mmcsd_select_card(struct rt_mmcsd_host *host,
+static int32_t _mmcsd_select_card(struct rt_mmcsd_host *host,
                                      struct rt_mmcsd_card *card)
 {
-    rt_int32_t err;
+    int32_t err;
     struct rt_mmcsd_cmd cmd;
 
     rt_memset(&cmd, 0, sizeof(struct rt_mmcsd_cmd));
@@ -360,20 +361,20 @@ static rt_int32_t _mmcsd_select_card(struct rt_mmcsd_host *host,
     return 0;
 }
 
-rt_int32_t mmcsd_select_card(struct rt_mmcsd_card *card)
+int32_t mmcsd_select_card(struct rt_mmcsd_card *card)
 {
     return _mmcsd_select_card(card->host, card);
 }
 
-rt_int32_t mmcsd_deselect_cards(struct rt_mmcsd_card *card)
+int32_t mmcsd_deselect_cards(struct rt_mmcsd_card *card)
 {
     return _mmcsd_select_card(card->host, RT_NULL);
 }
 
-rt_int32_t mmcsd_spi_use_crc(struct rt_mmcsd_host *host, rt_int32_t use_crc)
+int32_t mmcsd_spi_use_crc(struct rt_mmcsd_host *host, int32_t use_crc)
 {
     struct rt_mmcsd_cmd cmd;
-    rt_int32_t err;
+    int32_t err;
 
     rt_memset(&cmd, 0, sizeof(struct rt_mmcsd_cmd));
 
@@ -404,7 +405,7 @@ rt_inline void mmcsd_set_iocfg(struct rt_mmcsd_host *host)
 /*
  * Control chip select pin on a host.
  */
-void mmcsd_set_chip_select(struct rt_mmcsd_host *host, rt_int32_t mode)
+void mmcsd_set_chip_select(struct rt_mmcsd_host *host, int32_t mode)
 {
     host->io_cfg.chip_select = mode;
     mmcsd_set_iocfg(host);
@@ -414,7 +415,7 @@ void mmcsd_set_chip_select(struct rt_mmcsd_host *host, rt_int32_t mode)
  * Sets the host clock to the highest possible frequency that
  * is below "hz".
  */
-void mmcsd_set_clock(struct rt_mmcsd_host *host, rt_uint32_t clk)
+void mmcsd_set_clock(struct rt_mmcsd_host *host, uint32_t clk)
 {
     if (clk < host->freq_min)
     {
@@ -428,7 +429,7 @@ void mmcsd_set_clock(struct rt_mmcsd_host *host, rt_uint32_t clk)
 /*
  * Change the bus mode (open drain/push-pull) of a host.
  */
-void mmcsd_set_bus_mode(struct rt_mmcsd_host *host, rt_uint32_t mode)
+void mmcsd_set_bus_mode(struct rt_mmcsd_host *host, uint32_t mode)
 {
     host->io_cfg.bus_mode = mode;
     mmcsd_set_iocfg(host);
@@ -437,7 +438,7 @@ void mmcsd_set_bus_mode(struct rt_mmcsd_host *host, rt_uint32_t mode)
 /*
  * Change data bus width of a host.
  */
-void mmcsd_set_bus_width(struct rt_mmcsd_host *host, rt_uint32_t width)
+void mmcsd_set_bus_width(struct rt_mmcsd_host *host, uint32_t width)
 {
     host->io_cfg.bus_width = width;
     mmcsd_set_iocfg(host);
@@ -446,7 +447,7 @@ void mmcsd_set_bus_width(struct rt_mmcsd_host *host, rt_uint32_t width)
 void mmcsd_set_data_timeout(struct rt_mmcsd_data       *data,
                             const struct rt_mmcsd_card *card)
 {
-    rt_uint32_t mult;
+    uint32_t mult;
 
     if (card->card_type == CARD_TYPE_SDIO) 
     {
@@ -476,7 +477,7 @@ void mmcsd_set_data_timeout(struct rt_mmcsd_data       *data,
      */
     if (card->card_type == CARD_TYPE_SD) 
     {
-        rt_uint32_t timeout_us, limit_us;
+        uint32_t timeout_us, limit_us;
 
         timeout_us = data->timeout_ns / 1000;
         timeout_us += data->timeout_clks * 1000 /
@@ -520,7 +521,7 @@ void mmcsd_set_data_timeout(struct rt_mmcsd_data       *data,
  * Mask off any voltages we don't support and select
  * the lowest voltage
  */
-rt_uint32_t mmcsd_select_voltage(struct rt_mmcsd_host *host, rt_uint32_t ocr)
+uint32_t mmcsd_select_voltage(struct rt_mmcsd_host *host, uint32_t ocr)
 {
     int bit;
     extern int __rt_ffs(int value);
@@ -596,10 +597,10 @@ static void mmcsd_power_off(struct rt_mmcsd_host *host)
     mmcsd_set_iocfg(host);
 }
 
-int mmcsd_wait_cd_changed(rt_int32_t timeout)
+int mmcsd_wait_cd_changed(int32_t timeout)
 {
     struct rt_mmcsd_host *host;
-    if (rt_mb_recv(&mmcsd_hotpluge_mb, (rt_uint32_t*)&host, timeout) == RT_EOK)
+    if (rt_mb_recv(&mmcsd_hotpluge_mb, (uint32_t*)&host, timeout) == RT_EOK)
     {
         if(host->card == RT_NULL)
         {
@@ -616,18 +617,18 @@ RTM_EXPORT(mmcsd_wait_cd_changed);
 
 void mmcsd_change(struct rt_mmcsd_host *host)
 {
-    rt_mb_send(&mmcsd_detect_mb, (rt_uint32_t)host);
+    rt_mb_send(&mmcsd_detect_mb, (uint32_t)host);
 }
 
 void mmcsd_detect(void *param)
 {
     struct rt_mmcsd_host *host;
-    rt_uint32_t  ocr;
-    rt_int32_t  err;
+    uint32_t  ocr;
+    int32_t  err;
 
     while (1) 
     {
-        if (rt_mb_recv(&mmcsd_detect_mb, (rt_uint32_t*)&host, RT_WAITING_FOREVER) == RT_EOK)
+        if (rt_mb_recv(&mmcsd_detect_mb, (uint32_t*)&host, RT_WAITING_FOREVER) == RT_EOK)
         {
             if (host->card == RT_NULL)
             {
@@ -655,7 +656,7 @@ void mmcsd_detect(void *param)
                     if (init_sd(host, ocr))
                         mmcsd_power_off(host);
                     mmcsd_host_unlock(host);
-                    rt_mb_send(&mmcsd_hotpluge_mb, (rt_uint32_t)host);
+                    rt_mb_send(&mmcsd_hotpluge_mb, (uint32_t)host);
                     continue;
                 }
                 
@@ -668,7 +669,7 @@ void mmcsd_detect(void *param)
                     if (init_mmc(host, ocr))
                         mmcsd_power_off(host);
                     mmcsd_host_unlock(host);
-                    rt_mb_send(&mmcsd_hotpluge_mb, (rt_uint32_t)host);
+                    rt_mb_send(&mmcsd_hotpluge_mb, (uint32_t)host);
                     continue;
                 }
                 mmcsd_host_unlock(host);
@@ -689,7 +690,7 @@ void mmcsd_detect(void *param)
             		host->card = RT_NULL;
             	}
             	mmcsd_host_unlock(host);
-            	rt_mb_send(&mmcsd_hotpluge_mb, (rt_uint32_t)host);
+            	rt_mb_send(&mmcsd_hotpluge_mb, (uint32_t)host);
             }
         }
     }

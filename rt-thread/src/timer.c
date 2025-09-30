@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : timer.c
  * This file is part of RT-Thread RTOS
@@ -52,7 +53,7 @@ static rt_list_t rt_timer_list[RT_TIMER_SKIP_LIST_LEVEL];
 static rt_list_t rt_soft_timer_list[RT_TIMER_SKIP_LIST_LEVEL];
 static struct rt_thread timer_thread;
 ALIGN(RT_ALIGN_SIZE)
-static rt_uint8_t timer_thread_stack[RT_TIMER_THREAD_STACK_SIZE];
+static uint8_t timer_thread_stack[RT_TIMER_THREAD_STACK_SIZE];
 #endif
 
 #ifdef RT_USING_HOOK
@@ -84,7 +85,7 @@ static void _rt_timer_init(rt_timer_t timer,
                            void (*timeout)(void *parameter),
                            void      *parameter,
                            rt_tick_t  time,
-                           rt_uint8_t flag)
+                           uint8_t flag)
 {
     int i;
 
@@ -183,7 +184,7 @@ void rt_timer_init(rt_timer_t  timer,
                    void (*timeout)(void *parameter),
                    void       *parameter,
                    rt_tick_t   time,
-                   rt_uint8_t  flag)
+                   uint8_t  flag)
 {
     /* timer check */
     RT_ASSERT(timer != RT_NULL);
@@ -239,7 +240,7 @@ rt_timer_t rt_timer_create(const char *name,
                            void (*timeout)(void *parameter),
                            void       *parameter,
                            rt_tick_t   time,
-                           rt_uint8_t  flag)
+                           uint8_t  flag)
 {
     struct rt_timer *timer;
 

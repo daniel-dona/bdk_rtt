@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _PWM_H_
 #define _PWM_H_
 
@@ -238,6 +239,6 @@
 /*******************************************************************************
 * Function Declarations
 *******************************************************************************/
-UINT32 pwm_ctrl(UINT32 cmd, void *param);
+uint32_t pwm_ctrl(uint32_t cmd, void *param);
 
 #endif //_PWM_H_

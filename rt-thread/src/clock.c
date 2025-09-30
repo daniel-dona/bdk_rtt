@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : clock.c
  * This file is part of RT-Thread RTOS
@@ -120,7 +121,7 @@ void rt_tick_increase(void)
  *
  * @return the calculated tick
  */
-int rt_tick_from_millisecond(rt_int32_t ms)
+int rt_tick_from_millisecond(int32_t ms)
 {
     int tick;
 

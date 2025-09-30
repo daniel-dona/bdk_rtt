@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
   This file is part of UFFS, the Ultra-low-cost Flash File System.
   
@@ -68,7 +69,7 @@
 #define PAGE_DATA_SIZE		508
 #define PAGE_SPARE_SIZE		20
 #define PAGE_FULL_SIZE		(PAGE_DATA_SIZE + PAGE_SPARE_SIZE)
-static u8 g_sdata_buf[PAGE_FULL_SIZE];	// emulating LPC32x0's 528-bytes serial data buffer
+static uint8_t g_sdata_buf[PAGE_FULL_SIZE];	// emulating LPC32x0's 528-bytes serial data buffer
 
 static int g_sdata_buf_pointer = 0;
 
@@ -77,7 +78,7 @@ static void start_sdata_access()
 	g_sdata_buf_pointer = 0;
 }
 
-static void feed_sdata(const u8 *data, int len)
+static void feed_sdata(const uint8_t *data, int len)
 {
 	if (!uffs_Assert(g_sdata_buf_pointer + len <= sizeof(g_sdata_buf), "BUG: Serial Data Buffer overflow !!"))
 		return;
@@ -87,7 +88,7 @@ static void feed_sdata(const u8 *data, int len)
 	g_sdata_buf_pointer += len;
 }
 
-static void feed_sdata_constant(u8 val, int num)
+static void feed_sdata_constant(uint8_t val, int num)
 {
 	if (!uffs_Assert(g_sdata_buf_pointer + num <= sizeof(g_sdata_buf), "BUG: Serial Data Buffer overflow !!"))
 		return;
@@ -96,7 +97,7 @@ static void feed_sdata_constant(u8 val, int num)
 	g_sdata_buf_pointer += num;
 }
 
-static void drain_sdata(u8 *data, int len)
+static void drain_sdata(uint8_t *data, int len)
 {
 	if (!uffs_Assert( (int)sizeof(g_sdata_buf) - g_sdata_buf_pointer >= len, "BUG: Serial Data Buffer overdrain !!"))
 		return;
@@ -113,8 +114,8 @@ static int load_sdata(uffs_Device *dev, int block, int page)
 	struct uffs_StorageAttrSt *attr = dev->attr;
 	int nread;
 	int ret;
-	u8 ecc_buf[RS_ECC_SIZE];
-	u8 *ecc_store;
+	uint8_t ecc_buf[RS_ECC_SIZE];
+	uint8_t *ecc_store;
 
 	abs_page = attr->pages_per_block * block + page;
 
@@ -148,7 +149,7 @@ static int program_sdata(uffs_Device *dev, int block, int page)
 	uffs_FileEmu *emu = (uffs_FileEmu *)(dev->attr->_private);
 	int abs_page;
 	struct uffs_StorageAttrSt *attr = dev->attr;
-	u8 ecc_buf[RS_ECC_SIZE];
+	uint8_t ecc_buf[RS_ECC_SIZE];
 	int writtern = 0;
 
 	// In the real world, MLC controller will generate RS-ECC code in serial data buffer
@@ -192,13 +193,13 @@ static int femu_hw_auto_InitFlash(uffs_Device *dev)
 }
 
 
-static int femu_hw_auto_WritePageWithLayout(uffs_Device *dev, u32 block, u32 page,
-							const u8 *data, int data_len, const u8 *ecc, const uffs_TagStore *ts)
+static int femu_hw_auto_WritePageWithLayout(uffs_Device *dev, uint32_t block, uint32_t page,
+							const uint8_t *data, int data_len, const uint8_t *ecc, const uffs_TagStore *ts)
 {
 	int abs_page;
 	uffs_FileEmu *emu;
 	struct uffs_StorageAttrSt *attr = dev->attr;
-	u8 spare[PAGE_SPARE_SIZE];
+	uint8_t spare[PAGE_SPARE_SIZE];
 	int ret = UFFS_FLASH_IO_ERR;
 
 	emu = (uffs_FileEmu *)(dev->attr->_private);
@@ -282,14 +283,14 @@ err:
 }
 
 
-static URET femu_hw_auto_ReadPageWithLayout(uffs_Device *dev, u32 block, u32 page, u8* data, int data_len, u8 *ecc,
-									uffs_TagStore *ts, u8 *ecc_store)
+static URET femu_hw_auto_ReadPageWithLayout(uffs_Device *dev, uint32_t block, uint32_t page, uint8_t* data, int data_len, uint8_t *ecc,
+									uffs_TagStore *ts, uint8_t *ecc_store)
 {
 	uffs_FileEmu *emu;
 	int abs_page;
 	struct uffs_StorageAttrSt *attr = dev->attr;
 	unsigned char status;
-	u8 spare[PAGE_SPARE_SIZE];
+	uint8_t spare[PAGE_SPARE_SIZE];
 	int ret = UFFS_FLASH_IO_ERR;
 
 	emu = (uffs_FileEmu *)(dev->attr->_private);

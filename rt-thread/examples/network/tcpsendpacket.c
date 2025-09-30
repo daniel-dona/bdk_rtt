@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <rtthread.h>
 
 #include <netdb.h>   /* 为了解析主机名，需要包含netdb.h头文件 */
@@ -8,7 +9,7 @@ void tcp_senddata(const char *url, int port, int length)
     struct hostent *host;
     int sock, err, result, timeout, index;
     struct sockaddr_in server_addr;
-    rt_uint8_t *buffer_ptr;
+    uint8_t *buffer_ptr;
 
     /* 通过函数入口参数url获得host地址（如果是域名，会做域名解析） */
     host = gethostbyname(url);

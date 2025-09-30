@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  *   Copyright (c) 2014 - 2017 Kulykov Oleh <info@resident.name>
  *

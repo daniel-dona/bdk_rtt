@@ -1,3 +1,4 @@
+#include <stdint.h>
 /**
  * @file reg_mdm_cfg.h
  * @brief Definitions of the MDM HW block registers and register access functions.

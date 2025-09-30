@@ -1,3 +1,4 @@
+#include <stdint.h>
 #define HI704_DEV              (0xFFF01)
 #define HI704_DEV_ID           (0x30)
 #define HI704_DEV_CHIPID       (0x96)

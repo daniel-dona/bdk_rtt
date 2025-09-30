@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "atsvr_port.h"
 #include "atsvr_core.h"
 #include "at_server.h"
@@ -69,11 +70,11 @@ int IN atsvr_input_char(unsigned char *buf)
     }
 }
 
-#define REG_READ(addr)          (*((volatile UINT32 *)(addr)))
-#define REG_WRITE(addr, _data)  (*((volatile UINT32 *)(addr)) = (_data))
-static void atsvr_send_byte(UINT8 data)
+#define REG_READ(addr)          (*((volatile uint32_t *)(addr)))
+#define REG_WRITE(addr, _data)  (*((volatile uint32_t *)(addr)) = (_data))
+static void atsvr_send_byte(uint8_t data)
 {
-	UINT8 uport = UART1_PORT;
+	uint8_t uport = UART1_PORT;
 #if AT_UART_SEND_DATA_INTTRRUPT_PROTECT
 	GLOBAL_INT_DECLARATION();
 #endif
@@ -220,7 +221,7 @@ void atsvr_event_handler(int event)
 
 int get_atsvr_cmd_message_state(unsigned int timeout)
 {
-    int32 sta = -1;
+    int32_t sta = -1;
 
     if(atsvr_port.at_rx_sema){
 		sta = rtos_get_semaphore(&atsvr_port.at_rx_sema, timeout);
@@ -231,7 +232,7 @@ int get_atsvr_cmd_message_state(unsigned int timeout)
 }
 
 
-static void atsvr_msg_main( UINT32 data )
+static void atsvr_msg_main( uint32_t data )
 {
 	unsigned int timeout = BEKEN_NEVER_TIMEOUT;
 	int state;
@@ -278,7 +279,7 @@ static void atsvr_msg_main( UINT32 data )
 	rtos_delete_thread(NULL);
 }
 
-static void atsvr_handler_main( UINT32 data )
+static void atsvr_handler_main( uint32_t data )
 {
 	unsigned int timeout = BEKEN_NEVER_TIMEOUT;
 	atsvr_msg_t atsvrmsg;

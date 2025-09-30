@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
   This file is part of UFFS, the Ultra-low-cost Flash File System.
   
@@ -54,7 +55,7 @@
 /*                                                              */
 /****************************************************************/
 
-static u8 g_page_buf[UFFS_MAX_PAGE_SIZE + UFFS_MAX_SPARE_SIZE];
+static uint8_t g_page_buf[UFFS_MAX_PAGE_SIZE + UFFS_MAX_SPARE_SIZE];
 
 /*
  * Create emulator disk, initialise monitors, inject manufacture bad blocks, etc.
@@ -65,7 +66,7 @@ int femu_InitFlash(uffs_Device *dev)
 	int i;
 	int fSize;
 	int written;
-	u8 * p = g_page_buf;
+	uint8_t * p = g_page_buf;
 	uffs_FileEmu *emu;
 
 	struct uffs_StorageAttrSt *attr = dev->attr;
@@ -85,14 +86,14 @@ int femu_InitFlash(uffs_Device *dev)
 
 	uffs_Perror(UFFS_MSG_NORMAL,  "femu device init.");
 
-	emu->em_monitor_page = (u8 *) malloc(sizeof(emu->em_monitor_page[0]) * total_pages);
+	emu->em_monitor_page = (uint8_t *) malloc(sizeof(emu->em_monitor_page[0]) * total_pages);
 	if (!emu->em_monitor_page)
 		return -1;
-	emu->em_monitor_spare = (u8 *) malloc(sizeof(emu->em_monitor_spare[0]) * total_pages);
+	emu->em_monitor_spare = (uint8_t *) malloc(sizeof(emu->em_monitor_spare[0]) * total_pages);
 	if (!emu->em_monitor_spare)
 		return -1;
 
-	emu->em_monitor_block = (u32 *) malloc(sizeof(emu->em_monitor_block[0]) * attr->total_blocks);
+	emu->em_monitor_block = (uint32_t *) malloc(sizeof(emu->em_monitor_block[0]) * attr->total_blocks);
 	if (!emu->em_monitor_block)
 		return -1;
 
@@ -176,11 +177,11 @@ int femu_ReleaseFlash(uffs_Device *dev)
 	return 0;
 }
 
-int femu_EraseBlock(uffs_Device *dev, u32 blockNumber)
+int femu_EraseBlock(uffs_Device *dev, uint32_t blockNumber)
 {
 
 	int i;
-	u8 * pg = g_page_buf;
+	uint8_t * pg = g_page_buf;
 	int pg_size, pgd_size, sp_size, blks, blk_pgs, blk_size;
 	uffs_FileEmu *emu;
 	emu = (uffs_FileEmu *)(dev->attr->_private);
@@ -205,10 +206,10 @@ int femu_EraseBlock(uffs_Device *dev, u32 blockNumber)
 		//clear this block monitors
 		memset(emu->em_monitor_page + (blockNumber * blk_pgs), 
 			0, 
-			blk_pgs * sizeof(u8));
+			blk_pgs * sizeof(uint8_t));
 		memset(emu->em_monitor_spare + (blockNumber * blk_pgs),
 			0,
-			blk_pgs * sizeof(u8));
+			blk_pgs * sizeof(uint8_t));
 
 		emu->em_monitor_block[blockNumber]++;
 		

@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : hid.c
  * This file is part of RT-Thread RTOS
@@ -63,8 +64,8 @@ rt_err_t rt_usbh_hid_set_idle(struct uintf* intf, int duration, int report_id)
  * 
  * @return the error code, RT_EOK on successfully.
 */
-rt_err_t rt_usbh_hid_get_report(struct uintf* intf, rt_uint8_t type, 
-    rt_uint8_t id, rt_uint8_t *buffer, rt_size_t size)
+rt_err_t rt_usbh_hid_get_report(struct uintf* intf, uint8_t type, 
+    uint8_t id, uint8_t *buffer, rt_size_t size)
 {
     struct urequest setup;
     struct uinstance* device;
@@ -97,7 +98,7 @@ rt_err_t rt_usbh_hid_get_report(struct uintf* intf, rt_uint8_t type,
  * 
  * @return the error code, RT_EOK on successfully.
 */
-rt_err_t rt_usbh_hid_set_report(struct uintf* intf, rt_uint8_t *buffer, rt_size_t size)
+rt_err_t rt_usbh_hid_set_report(struct uintf* intf, uint8_t *buffer, rt_size_t size)
 {
     struct urequest setup;
     struct uinstance* device;        
@@ -164,7 +165,7 @@ rt_err_t rt_usbh_hid_set_protocal(struct uintf* intf, int protocol)
  * @return the error code, RT_EOK on successfully.
  */
 rt_err_t rt_usbh_hid_get_report_descriptor(struct uintf* intf, 
-    rt_uint8_t *buffer, rt_size_t size)
+    uint8_t *buffer, rt_size_t size)
 {
     struct urequest setup;
     struct uinstance* device;    

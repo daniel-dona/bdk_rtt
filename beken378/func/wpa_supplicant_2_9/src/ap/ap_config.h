@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * hostapd / Configuration definitions and helpers functions
  * Copyright (c) 2003-2015, Jouni Malinen <j@w1.fi>
@@ -24,19 +25,19 @@
  * mesh_conf - local MBSS state and settings
  */
 struct mesh_conf {
-	u8 meshid[32];
-	u8 meshid_len;
+	uint8_t meshid[32];
+	uint8_t meshid_len;
 	/* Active Path Selection Protocol Identifier */
-	u8 mesh_pp_id;
+	uint8_t mesh_pp_id;
 	/* Active Path Selection Metric Identifier */
-	u8 mesh_pm_id;
+	uint8_t mesh_pm_id;
 	/* Congestion Control Mode Identifier */
-	u8 mesh_cc_id;
+	uint8_t mesh_cc_id;
 	/* Synchronization Protocol Identifier */
-	u8 mesh_sp_id;
+	uint8_t mesh_sp_id;
 	/* Authentication Protocol Identifier */
-	u8 mesh_auth_id;
-	u8 *rsn_ie;
+	uint8_t mesh_auth_id;
+	uint8_t *rsn_ie;
 	int rsn_ie_len;
 #define MESH_CONF_SEC_NONE BIT(0)
 #define MESH_CONF_SEC_AUTH BIT(1)
@@ -56,7 +57,7 @@ struct mesh_conf {
 #define MAX_STA_COUNT CFG_SUPPORTED_MAX_STA_NUM /* 2007 */
 #define MAX_VLAN_ID 4094
 
-typedef u8 macaddr[ETH_ALEN];
+typedef uint8_t macaddr[ETH_ALEN];
 
 struct mac_acl_entry {
 	macaddr addr;
@@ -69,8 +70,8 @@ struct ft_remote_r1kh;
 
 #define NUM_WEP_KEYS 4
 struct hostapd_wep_keys {
-	u8 idx;
-	u8 *key[NUM_WEP_KEYS];
+	uint8_t idx;
+	uint8_t *key[NUM_WEP_KEYS];
 	size_t len[NUM_WEP_KEYS];
 	int keys_set;
 	size_t default_len; /* key length used for dynamic key generation */
@@ -86,7 +87,7 @@ typedef enum hostap_security_policy {
 } secpolicy;
 
 struct hostapd_ssid {
-	u8 ssid[SSID_MAX_LEN];
+	uint8_t ssid[SSID_MAX_LEN];
 	size_t ssid_len;
 	unsigned int ssid_set:1;
 	unsigned int utf8_ssid:1;
@@ -142,7 +143,7 @@ struct hostapd_vlan {
 struct hostapd_sta_wpa_psk_short {
 	struct hostapd_sta_wpa_psk_short *next;
 	unsigned int is_passphrase:1;
-	u8 psk[PMK_LEN];
+	uint8_t psk[PMK_LEN];
 	char passphrase[MAX_PASSPHRASE_LEN + 1];
 	int ref; /* (number of references held) - 1 */
 };
@@ -151,23 +152,23 @@ struct hostapd_wpa_psk {
 	struct hostapd_wpa_psk *next;
 	int group;
 	char keyid[KEYID_LEN];
-	u8 psk[PMK_LEN];
-	u8 addr[ETH_ALEN];
-	u8 p2p_dev_addr[ETH_ALEN];
+	uint8_t psk[PMK_LEN];
+	uint8_t addr[ETH_ALEN];
+	uint8_t p2p_dev_addr[ETH_ALEN];
 	int vlan_id;
 };
 
 struct hostapd_eap_user {
 	struct hostapd_eap_user *next;
-	u8 *identity;
+	uint8_t *identity;
 	size_t identity_len;
 	struct {
 		int vendor;
-		u32 method;
+		uint32_t method;
 	} methods[EAP_MAX_METHODS];
-	u8 *password;
+	uint8_t *password;
 	size_t password_len;
-	u8 *salt;
+	uint8_t *salt;
 	size_t salt_len; /* non-zero when password is salted */
 	int phase2;
 	int force_version;
@@ -178,11 +179,11 @@ struct hostapd_eap_user {
 	unsigned int macacl:1;
 	int ttls_auth; /* EAP_TTLS_AUTH_* bitfield */
 	struct hostapd_radius_attr *accept_attr;
-	u32 t_c_timestamp;
+	uint32_t t_c_timestamp;
 };
 
 struct hostapd_radius_attr {
-	u8 type;
+	uint8_t type;
 	struct wpabuf *val;
 	struct hostapd_radius_attr *next;
 };
@@ -201,20 +202,20 @@ struct hostapd_tx_queue_params {
 #define MAX_ROAMING_CONSORTIUM_LEN 15
 
 struct hostapd_roaming_consortium {
-	u8 len;
-	u8 oi[MAX_ROAMING_CONSORTIUM_LEN];
+	uint8_t len;
+	uint8_t oi[MAX_ROAMING_CONSORTIUM_LEN];
 };
 
 struct hostapd_lang_string {
-	u8 lang[3];
-	u8 name_len;
-	u8 name[252];
+	uint8_t lang[3];
+	uint8_t name_len;
+	uint8_t name[252];
 };
 
 struct hostapd_venue_url {
-	u8 venue_number;
-	u8 url_len;
-	u8 url[254];
+	uint8_t venue_number;
+	uint8_t url_len;
+	uint8_t url[254];
 };
 
 #define MAX_NAI_REALMS 10
@@ -222,21 +223,21 @@ struct hostapd_venue_url {
 #define MAX_NAI_EAP_METHODS 5
 #define MAX_NAI_AUTH_TYPES 4
 struct hostapd_nai_realm_data {
-	u8 encoding;
+	uint8_t encoding;
 	char realm_buf[MAX_NAI_REALMLEN + 1];
 	char *realm[MAX_NAI_REALMS];
-	u8 eap_method_count;
+	uint8_t eap_method_count;
 	struct hostapd_nai_realm_eap {
-		u8 eap_method;
-		u8 num_auths;
-		u8 auth_id[MAX_NAI_AUTH_TYPES];
-		u8 auth_val[MAX_NAI_AUTH_TYPES];
+		uint8_t eap_method;
+		uint8_t num_auths;
+		uint8_t auth_id[MAX_NAI_AUTH_TYPES];
+		uint8_t auth_val[MAX_NAI_AUTH_TYPES];
 	} eap_method[MAX_NAI_EAP_METHODS];
 };
 
 struct anqp_element {
 	struct dl_list list;
-	u16 infoid;
+	uint16_t infoid;
 	struct wpabuf *payload;
 };
 
@@ -244,13 +245,13 @@ struct sae_password_entry {
 	struct sae_password_entry *next;
 	char *password;
 	char *identifier;
-	u8 peer_addr[ETH_ALEN];
+	uint8_t peer_addr[ETH_ALEN];
 	int vlan_id;
 };
 
 struct dpp_controller_conf {
 	struct dpp_controller_conf *next;
-	u8 pkhash[SHA256_MAC_LEN];
+	uint8_t pkhash[SHA256_MAC_LEN];
 	struct hostapd_ip_addr ipaddr;
 };
 
@@ -297,7 +298,7 @@ struct hostapd_bss_config {
 	int radius_das_require_event_timestamp;
 	int radius_das_require_message_authenticator;
 	struct hostapd_ip_addr radius_das_client_addr;
-	u8 *radius_das_shared_secret;
+	uint8_t *radius_das_shared_secret;
 	size_t radius_das_shared_secret_len;
 #endif
 
@@ -365,8 +366,8 @@ struct hostapd_bss_config {
 	int wpa_strict_rekey;
 	int wpa_gmk_rekey;
 	int wpa_ptk_rekey;
-	u32 wpa_group_update_count;
-	u32 wpa_pairwise_update_count;
+	uint32_t wpa_group_update_count;
+	uint32_t wpa_pairwise_update_count;
 	int wpa_disable_eapol_key_retries;
 	int rsn_pairwise;
 	int rsn_preauth;
@@ -374,14 +375,14 @@ struct hostapd_bss_config {
 
 #ifdef CONFIG_IEEE80211R_AP
 	/* IEEE 802.11r - Fast BSS Transition */
-	u8 mobility_domain[MOBILITY_DOMAIN_ID_LEN];
-	u8 r1_key_holder[FT_R1KH_ID_LEN];
-	u32 r0_key_lifetime; /* PMK-R0 lifetime seconds */
+	uint8_t mobility_domain[MOBILITY_DOMAIN_ID_LEN];
+	uint8_t r1_key_holder[FT_R1KH_ID_LEN];
+	uint32_t r0_key_lifetime; /* PMK-R0 lifetime seconds */
 	int rkh_pos_timeout;
 	int rkh_neg_timeout;
 	int rkh_pull_timeout; /* ms */
 	int rkh_pull_retries;
-	u32 reassociation_deadline;
+	uint32_t reassociation_deadline;
 	struct ft_remote_r0kh *r0kh_list;
 	struct ft_remote_r1kh *r1kh_list;
 	int pmk_r1_push;
@@ -419,7 +420,7 @@ struct hostapd_bss_config {
 	 * BSS. If a STA tries to use larger value, the association will be
 	 * denied with status code 51.
 	 */
-	u16 max_listen_interval;
+	uint16_t max_listen_interval;
 
 	int disable_pmksa_caching;
 	int okc; /* Opportunistic Key Caching */
@@ -435,10 +436,10 @@ struct hostapd_bss_config {
 #define P2P_ALLOW_CROSS_CONNECTION BIT(4)
 	int p2p;
 #ifdef CONFIG_P2P
-	u8 ip_addr_go[4];
-	u8 ip_addr_mask[4];
-	u8 ip_addr_start[4];
-	u8 ip_addr_end[4];
+	uint8_t ip_addr_go[4];
+	uint8_t ip_addr_mask[4];
+	uint8_t ip_addr_start[4];
+	uint8_t ip_addr_end[4];
 #endif /* CONFIG_P2P */
 
 	int disassoc_low_ack;
@@ -463,12 +464,12 @@ struct hostapd_bss_config {
 #endif
 
 #ifdef CONFIG_GAS
-	u16 gas_comeback_delay;
+	uint16_t gas_comeback_delay;
 	size_t gas_frag_limit;
 	int gas_address3;
 #endif
 
-	u8 qos_map_set[16 + 2 * 21];
+	uint8_t qos_map_set[16 + 2 * 21];
 	unsigned int qos_map_set_len;
 
 	int osen;
@@ -476,7 +477,7 @@ struct hostapd_bss_config {
 	int na_mcast_to_ucast;
 
 #ifdef CONFIG_WPS
-	u8 wps_rf_bands; /* RF bands for WPS (WPS_RF_*) */
+	uint8_t wps_rf_bands; /* RF bands for WPS (WPS_RF_*) */
 #endif
 
 #ifdef CONFIG_RADIUS_TEST
@@ -502,7 +503,7 @@ struct hostapd_bss_config {
 	int mesh;
 
 #ifdef CONFIG_FULL_HOSTAPD
-	u8 radio_measurements[RRM_CAPABILITIES_IE_LEN];
+	uint8_t radio_measurements[RRM_CAPABILITIES_IE_LEN];
 #endif
 #ifdef CONFIG_IEEE80211AC
 	int vendor_vht;
@@ -546,13 +547,13 @@ struct hostapd_bss_config {
 
 #ifdef CONFIG_OWE
 	macaddr owe_transition_bssid;
-	u8 owe_transition_ssid[SSID_MAX_LEN];
+	uint8_t owe_transition_ssid[SSID_MAX_LEN];
 	size_t owe_transition_ssid_len;
 	char owe_transition_ifname[IFNAMSIZ + 1];
 	int *owe_groups;
 #endif /* CONFIG_OWE */
 
-	u8 send_probe_response;
+	uint8_t send_probe_response;
 
 	int coloc_intf_reporting;
 
@@ -576,23 +577,23 @@ struct he_phy_capabilities_info {
  * struct he_operation - HE operation
  */
 struct he_operation {
-	u8 he_bss_color;
-	u8 he_default_pe_duration;
-	u8 he_twt_required;
-	u16 he_rts_threshold;
-	u16 he_basic_mcs_nss_set;
+	uint8_t he_bss_color;
+	uint8_t he_default_pe_duration;
+	uint8_t he_twt_required;
+	uint16_t he_rts_threshold;
+	uint16_t he_basic_mcs_nss_set;
 };
 
 /**
  * struct spatial_reuse - Spatial reuse
  */
 struct spatial_reuse {
-	u8 sr_control;
-	u8 non_srg_obss_pd_max_offset;
-	u8 srg_obss_pd_min_offset;
-	u8 srg_obss_pd_max_offset;
-	u8 srg_obss_color_bitmap;
-	u8 srg_obss_color_partial_bitmap;
+	uint8_t sr_control;
+	uint8_t non_srg_obss_pd_max_offset;
+	uint8_t srg_obss_pd_min_offset;
+	uint8_t srg_obss_pd_max_offset;
+	uint8_t srg_obss_color_bitmap;
+	uint8_t srg_obss_color_partial_bitmap;
 };
 
 /**
@@ -602,11 +603,11 @@ struct hostapd_config {
 	struct hostapd_bss_config **bss, *last_bss;
 	size_t num_bss;
 
-	u16 beacon_int;
+	uint16_t beacon_int;
 	int rts_threshold;
 	int fragm_threshold;
-	u8 channel;
-	u8 acs;
+	uint8_t channel;
+	uint8_t acs;
 	struct wpa_freq_range_list acs_ch_list;
 	int acs_exclude_dfs;
 	enum hostapd_hw_mode hw_mode; /* HOSTAPD_MODE_IEEE80211A, .. */
@@ -665,29 +666,29 @@ struct hostapd_config {
 	struct hostapd_wmm_ac_params wmm_ac_params[4];
 
 	int ht_op_mode_fixed;
-	u16 ht_capab;
+	uint16_t ht_capab;
 	int ieee80211n;
 	int secondary_channel;
 	int no_pri_sec_switch;
 	int require_ht;
 	int obss_interval;
-	u32 vht_capab;
+	uint32_t vht_capab;
 	int ieee80211ac;
 	int require_vht;
-	u8 vht_oper_chwidth;
-	u8 vht_oper_centr_freq_seg0_idx;
-	u8 vht_oper_centr_freq_seg1_idx;
-	u8 ht40_plus_minus_allowed;
+	uint8_t vht_oper_chwidth;
+	uint8_t vht_oper_centr_freq_seg0_idx;
+	uint8_t vht_oper_centr_freq_seg1_idx;
+	uint8_t ht40_plus_minus_allowed;
 
 	/* Use driver-generated interface addresses when adding multiple BSSs */
-	u8 use_driver_iface_addr;
+	uint8_t use_driver_iface_addr;
 
 #ifdef CONFIG_FST
 	struct fst_iface_cfg fst_cfg;
 #endif /* CONFIG_FST */
 
 #ifdef CONFIG_P2P
-	u8 p2p_go_ctwindow;
+	uint8_t p2p_go_ctwindow;
 #endif /* CONFIG_P2P */
 
 #ifdef CONFIG_TESTING_OPTIONS
@@ -720,9 +721,9 @@ struct hostapd_config {
 	struct he_operation he_op;
 	struct ieee80211_he_mu_edca_parameter_set he_mu_edca;
 	struct spatial_reuse spr;
-	u8 he_oper_chwidth;
-	u8 he_oper_centr_freq_seg0_idx;
-	u8 he_oper_centr_freq_seg1_idx;
+	uint8_t he_oper_chwidth;
+	uint8_t he_oper_centr_freq_seg0_idx;
+	uint8_t he_oper_centr_freq_seg1_idx;
 #endif /* CONFIG_IEEE80211AX */
 
 	/* VHT enable/disable config from CHAN_SWITCH */
@@ -735,7 +736,7 @@ struct hostapd_config {
 };
 
 
-static inline u8 hostapd_get_oper_chwidth(struct hostapd_config *conf)
+static inline uint8_t hostapd_get_oper_chwidth(struct hostapd_config *conf)
 {
 #ifdef CONFIG_IEEE80211AX
 	if (conf->ieee80211ax)
@@ -745,7 +746,7 @@ static inline u8 hostapd_get_oper_chwidth(struct hostapd_config *conf)
 }
 
 static inline void
-hostapd_set_oper_chwidth(struct hostapd_config *conf, u8 oper_chwidth)
+hostapd_set_oper_chwidth(struct hostapd_config *conf, uint8_t oper_chwidth)
 {
 #ifdef CONFIG_IEEE80211AX
 	if (conf->ieee80211ax)
@@ -754,7 +755,7 @@ hostapd_set_oper_chwidth(struct hostapd_config *conf, u8 oper_chwidth)
 	conf->vht_oper_chwidth = oper_chwidth;
 }
 
-static inline u8
+static inline uint8_t
 hostapd_get_oper_centr_freq_seg0_idx(struct hostapd_config *conf)
 {
 #ifdef CONFIG_IEEE80211AX
@@ -766,7 +767,7 @@ hostapd_get_oper_centr_freq_seg0_idx(struct hostapd_config *conf)
 
 static inline void
 hostapd_set_oper_centr_freq_seg0_idx(struct hostapd_config *conf,
-				     u8 oper_centr_freq_seg0_idx)
+				     uint8_t oper_centr_freq_seg0_idx)
 {
 #ifdef CONFIG_IEEE80211AX
 	if (conf->ieee80211ax)
@@ -775,7 +776,7 @@ hostapd_set_oper_centr_freq_seg0_idx(struct hostapd_config *conf,
 	conf->vht_oper_centr_freq_seg0_idx = oper_centr_freq_seg0_idx;
 }
 
-static inline u8
+static inline uint8_t
 hostapd_get_oper_centr_freq_seg1_idx(struct hostapd_config *conf)
 {
 #ifdef CONFIG_IEEE80211AX
@@ -787,7 +788,7 @@ hostapd_get_oper_centr_freq_seg1_idx(struct hostapd_config *conf)
 
 static inline void
 hostapd_set_oper_centr_freq_seg1_idx(struct hostapd_config *conf,
-				     u8 oper_centr_freq_seg1_idx)
+				     uint8_t oper_centr_freq_seg1_idx)
 {
 #ifdef CONFIG_IEEE80211AX
 	if (conf->ieee80211ax)
@@ -807,18 +808,18 @@ void hostapd_config_clear_wpa_psk(struct hostapd_wpa_psk **p);
 void hostapd_config_free_bss(struct hostapd_bss_config *conf);
 void hostapd_config_free(struct hostapd_config *conf);
 int hostapd_maclist_found(struct mac_acl_entry *list, int num_entries,
-			  const u8 *addr, struct vlan_description *vlan_id);
+			  const uint8_t *addr, struct vlan_description *vlan_id);
 int hostapd_rate_found(int *list, int rate);
-const u8 * hostapd_get_psk(const struct hostapd_bss_config *conf,
-			   const u8 *addr, const u8 *p2p_dev_addr,
-			   const u8 *prev_psk, int *vlan_id);
+const uint8_t * hostapd_get_psk(const struct hostapd_bss_config *conf,
+			   const uint8_t *addr, const uint8_t *p2p_dev_addr,
+			   const uint8_t *prev_psk, int *vlan_id);
 int hostapd_setup_wpa_psk(struct hostapd_bss_config *conf);
 int hostapd_vlan_valid(struct hostapd_vlan *vlan,
 		       struct vlan_description *vlan_desc);
 const char * hostapd_get_vlan_id_ifname(struct hostapd_vlan *vlan,
 					int vlan_id);
 struct hostapd_radius_attr *
-hostapd_config_get_radius_attr(struct hostapd_radius_attr *attr, u8 type);
+hostapd_config_get_radius_attr(struct hostapd_radius_attr *attr, uint8_t type);
 int hostapd_config_check(struct hostapd_config *conf, int full_config);
 void hostapd_set_security_params(struct hostapd_bss_config *bss,
 				 int full_config);

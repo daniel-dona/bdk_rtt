@@ -139,7 +139,7 @@ static rt_err_t sst25vfxx_flash_init(rt_device_t dev)
     return RT_EOK;
 }
 
-static rt_err_t sst25vfxx_flash_open(rt_device_t dev, rt_uint16_t oflag)
+static rt_err_t sst25vfxx_flash_open(rt_device_t dev, uint16_t oflag)
 {
     rt_err_t result;
     uint8_t send_buffer[2];
@@ -290,8 +290,8 @@ rt_err_t sst25vfxx_init(const char * flash_device_name, const char * spi_device_
 
     /* init flash */
     {
-        rt_uint8_t cmd;
-        rt_uint8_t id_recv[3];
+        uint8_t cmd;
+        uint8_t id_recv[3];
 
         cmd = CMD_WRDI;
         rt_spi_send(spi_flash->rt_spi_device, &cmd, 1);

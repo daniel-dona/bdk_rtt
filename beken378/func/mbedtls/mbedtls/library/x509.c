@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  *  X.509 common functions for parsing and verification
  *
@@ -721,7 +723,7 @@ int mbedtls_x509_get_ext( unsigned char **p, const unsigned char *end,
      *
      * Extension  ::=  SEQUENCE  {
      *      extnID      OBJECT IDENTIFIER,
-     *      critical    BOOLEAN DEFAULT FALSE,
+     *      critical    bool DEFAULT FALSE,
      *      extnValue   OCTET STRING  }
      */
     if( ( ret = mbedtls_asn1_get_tag( p, end, &len,

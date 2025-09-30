@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 
@@ -22,7 +23,7 @@ static int fft_busy(void)
 static void fft_enable(input_fft_t *fft_conf)
 {
     int i;
-    UINT32 value = 0;
+    uint32_t value = 0;
 
     REG_WRITE(FIR_CONF, 0);
     REG_WRITE(FFT_CONF, 0);
@@ -44,7 +45,7 @@ static void fft_enable(input_fft_t *fft_conf)
 
     for(i = 0; i < fft_conf->size; i++)
     {
-        value = (UINT16)(fft_conf->inbuf[i]) << 16 | (UINT16)(fft_conf->outbuf[i]);
+        value = (uint16_t)(fft_conf->inbuf[i]) << 16 | (uint16_t)(fft_conf->outbuf[i]);
         Fft_Write_Data(value);
     }
 
@@ -54,7 +55,7 @@ static void fft_enable(input_fft_t *fft_conf)
 static void fir_single_enable(input_fir_t *fir_conf)
 {
     int i;
-    UINT32 value = 0;
+    uint32_t value = 0;
 
     if(fir_conf->fir_len > 64)
         return;
@@ -83,7 +84,7 @@ static void fir_single_enable(input_fir_t *fir_conf)
     return;
 }
 
-static __inline INT16 f_sat(int din)
+static __inline int16_t f_sat(int din)
 {
     if (din > 32767)
         return 32767;
@@ -105,7 +106,7 @@ void fft_exit(void)
     sddev_unregister_dev(FFT_DEV_NAME);
 }
 
-UINT32 fft_ctrl(UINT32 cmd, void *param)
+uint32_t fft_ctrl(uint32_t cmd, void *param)
 {
     int ret = FFT_SUCCESS;
 
@@ -130,8 +131,8 @@ UINT32 fft_ctrl(UINT32 cmd, void *param)
 
 void fft_isr(void)
 {
-    UINT32 int_status;
-    UINT8 FFT_int, FIR_int;
+    uint32_t int_status;
+    uint8_t FFT_int, FIR_int;
 
     int_status = REG_READ(FFT_STATUS);
     FFT_int = int_status & FFT_STATUS_DONE;
@@ -141,7 +142,7 @@ void fft_isr(void)
     {
         int i;
         int bit_ext;
-        INT32 temp, temp_out;
+        int32_t temp, temp_out;
 
         bit_ext = (int_status & 0x00001fff) >> 7;
 

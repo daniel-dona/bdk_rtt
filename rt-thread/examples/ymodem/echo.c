@@ -1,10 +1,11 @@
+#include <stdint.h>
 #include <ymodem.h>
 
 static rt_device_t _odev;
 
 static enum rym_code _rym_echo_data(
         struct rym_ctx *ctx,
-        rt_uint8_t *buf,
+        uint8_t *buf,
         rt_size_t len)
 {
     rt_device_write(_odev, 0, buf, len);

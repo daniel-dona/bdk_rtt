@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : fal_flash_stm32f2_port.c
  * COPYRIGHT (C) 2012-2018, Shanghai Real-Thread Technology Co., Ltd

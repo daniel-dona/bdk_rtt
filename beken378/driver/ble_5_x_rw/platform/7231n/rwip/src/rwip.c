@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /**
 ****************************************************************************************
 *
@@ -250,7 +252,7 @@ struct rwip_param_api      rwip_param;
 uint8_t rwip_prog_delay;
 #endif //(BLE_EMB_PRESENT || BT_EMB_PRESENT)
 
-/// Heap definitions - use uint32 to ensure that memory blocks are 32bits aligned.
+/// Heap definitions - use uint32_t to ensure that memory blocks are 32bits aligned.
 /// Memory allocated for environment variables
 uint32_t  rwip_heap_env[RWIP_CALC_HEAP_LEN(RWIP_HEAP_ENV_SIZE)];
 #if (BLE_HOST_PRESENT)

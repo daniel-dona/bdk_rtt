@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : mtd_nor.h
  * This file is part of RT-Thread RTOS
@@ -34,9 +35,9 @@ struct rt_mtd_nor_device
 {
 	struct rt_device parent;
 
-	rt_uint32_t block_size;			/* The Block size in the flash */
-	rt_uint32_t block_start;		/* The start of available block*/
-	rt_uint32_t block_end;			/* The end of available block */
+	uint32_t block_size;			/* The Block size in the flash */
+	uint32_t block_start;		/* The start of available block*/
+	uint32_t block_end;			/* The end of available block */
 
 	/* operations interface */
 	const struct rt_mtd_nor_driver_ops* ops;
@@ -46,29 +47,29 @@ struct rt_mtd_nor_driver_ops
 {
 	rt_err_t (*read_id) (struct rt_mtd_nor_device* device);
 
-	rt_size_t (*read)    (struct rt_mtd_nor_device* device, rt_off_t offset, rt_uint8_t* data, rt_uint32_t length);
-	rt_size_t (*write)   (struct rt_mtd_nor_device* device, rt_off_t offset, const rt_uint8_t* data, rt_uint32_t length);
+	rt_size_t (*read)    (struct rt_mtd_nor_device* device, rt_off_t offset, uint8_t* data, uint32_t length);
+	rt_size_t (*write)   (struct rt_mtd_nor_device* device, rt_off_t offset, const uint8_t* data, uint32_t length);
 
-	rt_err_t (*erase_block)(struct rt_mtd_nor_device* device, rt_off_t offset, rt_uint32_t length);
+	rt_err_t (*erase_block)(struct rt_mtd_nor_device* device, rt_off_t offset, uint32_t length);
 };
 
 rt_err_t rt_mtd_nor_register_device(const char* name, struct rt_mtd_nor_device* device);
 
-rt_inline rt_uint32_t rt_mtd_nor_read_id(struct rt_mtd_nor_device* device)
+rt_inline uint32_t rt_mtd_nor_read_id(struct rt_mtd_nor_device* device)
 {
 	return device->ops->read_id(device);
 }
 
 rt_inline rt_size_t rt_mtd_nor_read(
 	struct rt_mtd_nor_device* device,
-	rt_off_t offset, rt_uint8_t* data, rt_uint32_t length)
+	rt_off_t offset, uint8_t* data, uint32_t length)
 {
 	return device->ops->read(device, offset, data, length);
 }
 
 rt_inline rt_size_t rt_mtd_nor_write(
 	struct rt_mtd_nor_device* device,
-	rt_off_t offset, const rt_uint8_t* data, rt_uint32_t length)
+	rt_off_t offset, const uint8_t* data, uint32_t length)
 {
 	return device->ops->write(device, offset, data, length);
 }

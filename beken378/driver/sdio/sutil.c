@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 
@@ -11,7 +12,7 @@
 #if CFG_SDIO || CFG_SDIO_TRANS
 void su_init(SDIO_PTR sdio_ptr)
 {
-    UINT32 i;
+    uint32_t i;
     SDIO_NODE_PTR node_ptr;
 
     INIT_LIST_HEAD(&sdio_ptr->free_nodes);
@@ -64,9 +65,9 @@ SDIO_NODE_PTR su_pop_node(LIST_HEADER_T *head)
     return node;
 }
 
-UINT32 su_get_node_count(LIST_HEADER_T *head)
+uint32_t su_get_node_count(LIST_HEADER_T *head)
 {
-    UINT32 count = 0;
+    uint32_t count = 0;
     LIST_HEADER_T *tmp;
     LIST_HEADER_T *pos;
 
@@ -83,9 +84,9 @@ UINT32 su_get_node_count(LIST_HEADER_T *head)
     return count;
 }
 
-UINT32 su_align_power2(UINT32 size)
+uint32_t su_align_power2(uint32_t size)
 {
-    UINT32 i = 1;
+    uint32_t i = 1;
 
     while(i < size)
     {

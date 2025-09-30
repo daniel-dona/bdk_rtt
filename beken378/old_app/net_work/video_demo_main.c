@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "video_demo_config.h"
 
@@ -40,7 +41,7 @@ static int video_transfer(int argc, char **argv)
 {
     char *oob_ssid = NULL;
     char *connect_key = NULL;
-    static UINT32 video_transfer_mode = 0;
+    static uint32_t video_transfer_mode = 0;
 
     if (argc == 1)
     {

@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /* iowin32.c -- IO base function header for compress/uncompress .zip
      Version 1.1, February 14h, 2010
      part of the MiniZip project - ( http://www.winimage.com/zLibDll/minizip.html )
@@ -238,14 +240,14 @@ uLong ZCALLBACK win32_write_file_func (voidpf opaque,voidpf stream,const void* b
     return ret;
 }
 
-static BOOL MySetFilePointerEx(HANDLE hFile, LARGE_INTEGER pos, LARGE_INTEGER *newPos,  DWORD dwMoveMethod)
+static bool MySetFilePointerEx(HANDLE hFile, LARGE_INTEGER pos, LARGE_INTEGER *newPos,  DWORD dwMoveMethod)
 {
 #ifdef IOWIN32_USING_WINRT_API
     return SetFilePointerEx(hFile, pos, newPos, dwMoveMethod);
 #else
     LONG lHigh = pos.HighPart;
     DWORD dwNewPos = SetFilePointer(hFile, pos.LowPart, &lHigh, dwMoveMethod);
-    BOOL fOk = TRUE;
+    bool fOk = TRUE;
     if (dwNewPos == 0xFFFFFFFF)
         if (GetLastError() != NO_ERROR)
             fOk = FALSE;

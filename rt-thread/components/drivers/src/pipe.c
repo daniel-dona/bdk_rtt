@@ -320,7 +320,7 @@ static const struct dfs_file_ops pipe_fops =
 };
 #endif /* end of RT_USING_POSIX */
 
-rt_err_t  rt_pipe_open (rt_device_t device, rt_uint16_t oflag)
+rt_err_t  rt_pipe_open (rt_device_t device, uint16_t oflag)
 {
     rt_pipe_t *pipe = (rt_pipe_t *)device;
 

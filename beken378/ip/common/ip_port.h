@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _IP_PORT_H_
 #define _IP_PORT_H_
 
@@ -24,8 +25,8 @@ extern int wifi_notice_ble_status(int evt,unsigned int param,unsigned int param2
 extern int wn_txl_hd_pending_is_allow(uint8_t flag,void *first_thd,
 	                          void *last_thd,
 	                          uint8_t access_category);
-extern UINT32 sddev_control(char *dev_name, UINT32 cmd, VOID *param);
-extern void delay05us(INT32 num);
+extern uint32_t sddev_control(char *dev_name, uint32_t cmd, void *param);
+extern void delay05us(int32_t num);
 extern int bmsg_ps_handler_rf_ps_mode_real_wakeup(void);
 
 #endif

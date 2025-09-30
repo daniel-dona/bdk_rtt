@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  * upap.c - User/Password Authentication Protocol.
  *

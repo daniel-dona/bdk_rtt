@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "icu_pub.h"
 #include "pwm_pub.h"
@@ -6,9 +7,9 @@
 #include "drv_model_pub.h"
 
 
-UINT32 tuya_pwm_init(uint8 channel_num, uint32 end_value, uint32 duty_cycle)
+uint32_t tuya_pwm_init(uint8_t channel_num, uint32_t end_value, uint32_t duty_cycle)
 {
-    UINT32 ret;
+    uint32_t ret;
     pwm_param_t param;
 
     TPWM_PRT("tuya_pwm_init: %d %ld %ld\r\n", channel_num, end_value, duty_cycle);
@@ -29,9 +30,9 @@ UINT32 tuya_pwm_init(uint8 channel_num, uint32 end_value, uint32 duty_cycle)
     return ret;
 }
 
-void tuya_pwm_set_duty_cycle(uint8 channel_num, uint32 duty_cycle)
+void tuya_pwm_set_duty_cycle(uint8_t channel_num, uint32_t duty_cycle)
 {
-    UINT32 ret;
+    uint32_t ret;
     pwm_param_t param;
 
     TPWM_PRT("tuya_pwm_set_duty_cycle: %d %ld\r\n", channel_num, duty_cycle);
@@ -46,9 +47,9 @@ void tuya_pwm_set_duty_cycle(uint8 channel_num, uint32 duty_cycle)
     ASSERT(PWM_SUCCESS == ret);
 }
 
-void tuya_pwm_set_end_value(uint8 channel_num, uint32 end_value)
+void tuya_pwm_set_end_value(uint8_t channel_num, uint32_t end_value)
 {
-    UINT32 ret;
+    uint32_t ret;
     pwm_param_t param;
 
     TPWM_PRT("tuya_pwm_set_end_value: %d %ld\r\n", channel_num, end_value);
@@ -63,10 +64,10 @@ void tuya_pwm_set_end_value(uint8 channel_num, uint32 end_value)
     ASSERT(PWM_SUCCESS == ret);
 }
 
-void tuya_pwm_stop(uint8 channel_num_1, uint8 channel_num_2)
+void tuya_pwm_stop(uint8_t channel_num_1, uint8_t channel_num_2)
 {
-    UINT32 ret;
-    UINT32 PWM_channel;
+    uint32_t ret;
+    uint32_t PWM_channel;
 
     TPWM_PRT("tuya_pwm_stop: %d %d\r\n", channel_num_1, channel_num_2);
 
@@ -80,12 +81,12 @@ void tuya_pwm_stop(uint8 channel_num_1, uint8 channel_num_2)
 }
 
 // dead_band_2 = end_value - duty_cycle_1 - duty_cycle_2 - dead_band_1 > 0
-void tuya_pwm_reset_duty_cycle(uint8 channel_num_1, uint8 channel_num_2,
-                                           uint32 duty_cycle_1, uint32 duty_cycle_2,
-                                           uint32 end_value, uint32 dead_band_1)
+void tuya_pwm_reset_duty_cycle(uint8_t channel_num_1, uint8_t channel_num_2,
+                                           uint32_t duty_cycle_1, uint32_t duty_cycle_2,
+                                           uint32_t end_value, uint32_t dead_band_1)
 {
-    UINT32 ret;
-    UINT32 i_time_out1, i_time_out2;
+    uint32_t ret;
+    uint32_t i_time_out1, i_time_out2;
 
     TPWM_PRT("tuya_pwm_reset_duty_cycle: %d %d %ld %ld %ld %ld\r\n", 
              channel_num_1, channel_num_2, duty_cycle_1, duty_cycle_2, end_value, dead_band_1);
@@ -132,8 +133,8 @@ void tuya_pwm_reset_duty_cycle(uint8 channel_num_1, uint8 channel_num_2,
 
     // delay
     {
-        uint32 slot1, t;
-        volatile uint32 slot2;
+        uint32_t slot1, t;
+        volatile uint32_t slot2;
 
         *(volatile unsigned long *) (0x00802A10) = (1 << 2) | (1 << 0);
         i_time_out1 = 0;
@@ -180,8 +181,8 @@ void tuya_pwm_reset_duty_cycle(uint8 channel_num_1, uint8 channel_num_2,
 
     // delay
     {
-        uint32 slot1, t;
-        volatile uint32 slot2;
+        uint32_t slot1, t;
+        volatile uint32_t slot2;
 
         *(volatile unsigned long *) (0x00802A10) = (1 << 2) | (1 << 0);
         i_time_out1 = 0;

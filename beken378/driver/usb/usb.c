@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "typedef.h"
 #include "arm_arch.h"
@@ -129,7 +130,7 @@ void usb_thread_background(void *arg)
     }
 }
 
-UINT32 usb_sw_open(void)
+uint32_t usb_sw_open(void)
 {
     OSStatus ret = USB_SUCCESS;
 
@@ -165,11 +166,11 @@ sw_open_exit:
 }
 
 /* op_flag: USB_HOST_MODE or USB_DEVICE_MODE*/
-UINT32 usb_open (UINT32 op_flag)
+uint32_t usb_open (uint32_t op_flag)
 {
-    UINT8 reg;
-    UINT32 param;
-    UINT32 usb_mode = op_flag;
+    uint8_t reg;
+    uint32_t param;
+    uint32_t usb_mode = op_flag;
 
     USB_PRT("usb_open\r\n");
 
@@ -280,7 +281,7 @@ UINT32 usb_open (UINT32 op_flag)
     return USB_SUCCESS;
 }
 
-UINT32 usb_close (void)
+uint32_t usb_close (void)
 {
     USB_PRT("usb_close\r\n");
 
@@ -297,22 +298,22 @@ UINT32 usb_close (void)
     return USB_SUCCESS;
 }
 
-UINT32 usb_read (char *user_buf, UINT32 count, UINT32 op_flag)
+uint32_t usb_read (char *user_buf, uint32_t count, uint32_t op_flag)
 {
     USB_PRT("usb_read\r\n");
     return USB_SUCCESS;
 }
 
-UINT32 usb_write (char *user_buf, UINT32 count, UINT32 op_flag)
+uint32_t usb_write (char *user_buf, uint32_t count, uint32_t op_flag)
 {
     USB_PRT("usb_write\r\n");
     return USB_SUCCESS;
 }
 
 #if CFG_SUPPORT_UVC
-UINT32 usb_uvc_ctrl(UINT32 cmd, void *param)
+uint32_t usb_uvc_ctrl(uint32_t cmd, void *param)
 {
-    UINT32 ret;
+    uint32_t ret;
 
     ret = USB_SUCCESS;
 
@@ -320,16 +321,16 @@ UINT32 usb_uvc_ctrl(UINT32 cmd, void *param)
     {
     case UCMD_UVC_SET_PARAM:
     {
-        UINT32 resolution_id;
-        UINT32 fps;
+        uint32_t resolution_id;
+        uint32_t fps;
 
         if(0 == param)
         {
             return USB_FAILURE;
         }
 
-        fps = UVC_DEMUX_FPS(*((UINT32 *)param));
-        resolution_id = UVC_DEMUX_ID(*((UINT32 *)param));
+        fps = UVC_DEMUX_FPS(*((uint32_t *)param));
+        resolution_id = UVC_DEMUX_ID(*((uint32_t *)param));
         MGC_UvcSetParameter(resolution_id, fps);
     }
     break;
@@ -386,9 +387,9 @@ UINT32 usb_uvc_ctrl(UINT32 cmd, void *param)
 }
 #endif // CFG_SUPPORT_UVC
 
-UINT32 usb_ctrl(UINT32 cmd, void *param)
+uint32_t usb_ctrl(uint32_t cmd, void *param)
 {
-    UINT32 ret;
+    uint32_t ret;
 
     ret = USB_SUCCESS;
 
@@ -440,8 +441,8 @@ void usb_check_int_handler(void)
 
 
 #if (CFG_SOC_NAME == SOC_BK7221U)
-UINT32 usb_plug_inout_open(UINT32 op_flag);
-UINT32 usb_plug_inout_close(void);
+uint32_t usb_plug_inout_open(uint32_t op_flag);
+uint32_t usb_plug_inout_close(void);
 
 USB_PLUG_INOUT_ST usb_plug;
 static DD_OPERATIONS usb_plug_op =
@@ -455,21 +456,21 @@ static DD_OPERATIONS usb_plug_op =
 
 static void usb_plug_inout_icu_int_open(void)
 {
-    UINT32 param;
+    uint32_t param;
     param = (FIQ_USB_PLUG_INOUT_BIT);
     sddev_control(ICU_DEV_NAME, CMD_ICU_INT_ENABLE, &param);
 }
 
 static void usb_plug_inout_icu_int_close(void)
 {
-    UINT32 param;
+    uint32_t param;
     param = (FIQ_USB_PLUG_INOUT_BIT);
     sddev_control(ICU_DEV_NAME, CMD_ICU_INT_DISABLE, &param);
 }
 
-UINT32 usb_plug_inout_open(UINT32 op_flag)
+uint32_t usb_plug_inout_open(uint32_t op_flag)
 {
-    UINT32 param;
+    uint32_t param;
     USB_PLUG_INOUT_ST *cfg;
 
     cfg = (USB_PLUG_INOUT_ST*)op_flag;
@@ -498,9 +499,9 @@ UINT32 usb_plug_inout_open(UINT32 op_flag)
     return USB_PLUG_SUCCESS;
 }
 
-UINT32 usb_plug_inout_close(void)
+uint32_t usb_plug_inout_close(void)
 {
-    UINT32 param;
+    uint32_t param;
     param = 0;
     sddev_control(GPIO_DEV_NAME, CMD_GPIO_EN_USB_PLUG_IN_INT, &param);
 

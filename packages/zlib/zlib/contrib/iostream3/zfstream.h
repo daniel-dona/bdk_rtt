@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  * A C++ I/O streams interface to the zlib gz* functions
  *

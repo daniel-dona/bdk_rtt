@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  *  SSLv3/TLSv1 shared functions
  *
@@ -2832,7 +2833,7 @@ int mbedtls_ssl_write_record( mbedtls_ssl_context *ssl )
         /*
          * DTLS has additional fields in the Handshake layer,
          * between the length field and the actual payload:
-         *      uint16 message_seq;
+         *      uint16_t message_seq;
          *      uint24 fragment_offset;
          *      uint24 fragment_length;
          */
@@ -3433,13 +3434,13 @@ static int ssl_check_dtls_clihlo_cookie(
      *
      *  0-0  ContentType type;                  copied, must be handshake
      *  1-2  ProtocolVersion version;           copied
-     *  3-4  uint16 epoch;                      copied, must be 0
+     *  3-4  uint16_t epoch;                      copied, must be 0
      *  5-10 uint48 sequence_number;            copied
-     * 11-12 uint16 length;                     (ignored)
+     * 11-12 uint16_t length;                     (ignored)
      *
      * 13-13 HandshakeType msg_type;            (ignored)
      * 14-16 uint24 length;                     (ignored)
-     * 17-18 uint16 message_seq;                copied
+     * 17-18 uint16_t message_seq;                copied
      * 19-21 uint24 fragment_offset;            copied, must be 0
      * 22-24 uint24 fragment_length;            (ignored)
      *
@@ -3479,13 +3480,13 @@ static int ssl_check_dtls_clihlo_cookie(
      *
      *  0-0  ContentType type;                  copied
      *  1-2  ProtocolVersion version;           copied
-     *  3-4  uint16 epoch;                      copied
+     *  3-4  uint16_t epoch;                      copied
      *  5-10 uint48 sequence_number;            copied
-     * 11-12 uint16 length;                     olen - 13
+     * 11-12 uint16_t length;                     olen - 13
      *
      * 13-13 HandshakeType msg_type;            hello_verify_request
      * 14-16 uint24 length;                     olen - 25
-     * 17-18 uint16 message_seq;                copied
+     * 17-18 uint16_t message_seq;                copied
      * 19-21 uint24 fragment_offset;            copied
      * 22-24 uint24 fragment_length;            olen - 25
      *
@@ -3599,9 +3600,9 @@ static int ssl_handle_possible_reconnect( mbedtls_ssl_context *ssl )
 /*
  * ContentType type;
  * ProtocolVersion version;
- * uint16 epoch;            // DTLS only
+ * uint16_t epoch;            // DTLS only
  * uint48 sequence_number;  // DTLS only
- * uint16 length;
+ * uint16_t length;
  *
  * Return 0 if header looks sane (and, for DTLS, the record is expected)
  * MBEDTLS_ERR_SSL_INVALID_RECORD if the header looks bad,

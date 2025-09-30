@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <rtthread.h>
 #include <board.h>
 #include "drv_psram.h"

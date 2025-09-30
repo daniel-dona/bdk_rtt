@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 #include "include.h"
@@ -10,14 +11,14 @@
 extern uint8_t MUSB_GetConnect_Flag(void);
 extern uint8_t MGC_MsdGetMediumstatus(void);
 
-uint8 udisk_is_attached(void)
+uint8_t udisk_is_attached(void)
 {
     return MUSB_GetConnect_Flag();
 }
 
-uint8 udisk_init(void)
+uint8_t udisk_init(void)
 {
-	uint32 ret = USB_RET_ERROR;
+	uint32_t ret = USB_RET_ERROR;
 
 	os_printf("udisk_init_wzl\r\n");
 
@@ -39,7 +40,7 @@ uint8 udisk_init(void)
 
 
 
-int udisk_rd_blk_sync(uint32 first_block, uint32 block_num, uint8 *dest )
+int udisk_rd_blk_sync(uint32_t first_block, uint32_t block_num, uint8_t *dest )
 {
     int ret = USB_RET_ERROR;
 
@@ -57,7 +58,7 @@ int udisk_rd_blk_sync(uint32 first_block, uint32 block_num, uint8 *dest )
     return ret;
 }
 
-int udisk_wr_blk_sync(uint32 first_block, uint32 block_num, uint8 *dest)
+int udisk_wr_blk_sync(uint32_t first_block, uint32_t block_num, uint8_t *dest)
 {
     int ret = USB_RET_ERROR;
 	
@@ -75,7 +76,7 @@ int udisk_wr_blk_sync(uint32 first_block, uint32 block_num, uint8 *dest)
     return ret;
 }
 
-uint32 udisk_get_size(void)
+uint32_t udisk_get_size(void)
 {
     return 0;//driver_udisk.total_block;
 }

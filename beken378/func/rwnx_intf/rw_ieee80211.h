@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _RW_IEEE80211_H_
 #define _RW_IEEE80211_H_
 
@@ -234,11 +235,11 @@ enum ieee80211_band
 struct ieee80211_channel
 {
     enum ieee80211_band band;
-    UINT16 center_freq;
-    UINT16 hw_value;
-    UINT32 flags;
-    INT32 max_antenna_gain;
-    INT32 max_power;
+    uint16_t center_freq;
+    uint16_t hw_value;
+    uint32_t flags;
+    int32_t max_antenna_gain;
+    int32_t max_power;
 };
 
 #define IEEE80211_HT_MCS_MASK_LEN		10
@@ -341,10 +342,10 @@ enum ieee80211_vht_mcs_support
  */
 struct ieee80211_mcs_info
 {
-    UINT8 rx_mask[IEEE80211_HT_MCS_MASK_LEN];
-    UINT16 rx_highest;
-    UINT8 tx_params;
-    UINT8 reserved[3];
+    uint8_t rx_mask[IEEE80211_HT_MCS_MASK_LEN];
+    uint16_t rx_highest;
+    uint8_t tx_params;
+    uint8_t reserved[3];
 } __attribute__ ((packed));
 
 /**
@@ -361,10 +362,10 @@ struct ieee80211_mcs_info
  */
 struct ieee80211_sta_ht_cap
 {
-    UINT16 cap; /* use IEEE80211_HT_CAP_ */
-    UINT8 ht_supported;
-    UINT8 ampdu_factor;
-    UINT8 ampdu_density;
+    uint16_t cap; /* use IEEE80211_HT_CAP_ */
+    uint8_t ht_supported;
+    uint8_t ampdu_factor;
+    uint8_t ampdu_density;
     struct ieee80211_mcs_info mcs;
 };
 
@@ -385,10 +386,10 @@ struct ieee80211_sta_ht_cap
  */
 struct ieee80211_vht_mcs_info
 {
-    UINT16 rx_mcs_map;
-    UINT16 rx_highest;
-    UINT16 tx_mcs_map;
-    UINT16 tx_highest;
+    uint16_t rx_mcs_map;
+    uint16_t rx_highest;
+    uint16_t tx_mcs_map;
+    uint16_t tx_highest;
 } __attribute__ ((packed));
 
 /**
@@ -403,15 +404,15 @@ struct ieee80211_vht_mcs_info
  */
 struct ieee80211_sta_vht_cap
 {
-    UINT8 vht_supported;
-    UINT32 cap; /* use IEEE80211_VHT_CAP_ */
+    uint8_t vht_supported;
+    uint32_t cap; /* use IEEE80211_VHT_CAP_ */
     struct ieee80211_vht_mcs_info vht_mcs;
 };
 
 struct ieee80211_supported_band
 {
     struct ieee80211_channel *channels;
-    INT32 num_channels;
+    int32_t num_channels;
     struct ieee80211_sta_ht_cap ht_cap;
     struct ieee80211_sta_vht_cap vht_cap;
 };

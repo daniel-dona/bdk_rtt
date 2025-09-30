@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 
 // led show spi data state for tianzhiheng
@@ -194,7 +195,7 @@ app_led_exit:
 
 }
 
-UINT32 app_led_init(void)
+uint32_t app_led_init(void)
 {
     int ret;
 

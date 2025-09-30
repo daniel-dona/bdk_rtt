@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  *  script parser for finsh shell.
  *

@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <rtdevice.h>
 #include <rtthread.h>
 
@@ -873,8 +874,8 @@ static int _dfs_lfs_getdents(struct dfs_fd* file, struct dirent* dirp, uint32_t 
             break;
         }
 
-        d->d_namlen = (rt_uint8_t)rt_strlen(info.name);
-        d->d_reclen = (rt_uint16_t)sizeof(struct dirent);
+        d->d_namlen = (uint8_t)rt_strlen(info.name);
+        d->d_reclen = (uint16_t)sizeof(struct dirent);
         rt_strncpy(d->d_name, info.name, rt_strlen(info.name) + 1);
 
         index++;

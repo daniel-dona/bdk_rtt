@@ -1,3 +1,4 @@
+#include <stdbool.h>
 /*
  * File      : spi_wifi_rw009.h
  * This file is part of RT-Thread RTOS

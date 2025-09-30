@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : serial.c
  * This file is part of RT-Thread RTOS
@@ -75,7 +76,7 @@ static rt_err_t serial_fops_rx_ind(rt_device_t dev, rt_size_t size)
 static int serial_fops_open(struct dfs_fd *fd)
 {
     rt_err_t ret = 0;
-    rt_uint16_t flags = 0;
+    uint16_t flags = 0;
     rt_device_t device;
 
     device = (rt_device_t)fd->data;
@@ -218,7 +219,7 @@ const static struct dfs_file_ops _serial_fops =
 /*
  * Serial poll routines
  */
-rt_inline int _serial_poll_rx(struct rt_serial_device *serial, rt_uint8_t *data, int length)
+rt_inline int _serial_poll_rx(struct rt_serial_device *serial, uint8_t *data, int length)
 {
     int ch;
     int size;
@@ -240,7 +241,7 @@ rt_inline int _serial_poll_rx(struct rt_serial_device *serial, rt_uint8_t *data,
     return size - length;
 }
 
-rt_inline int _serial_poll_tx(struct rt_serial_device *serial, const rt_uint8_t *data, int length)
+rt_inline int _serial_poll_tx(struct rt_serial_device *serial, const uint8_t *data, int length)
 {
     int size;
     RT_ASSERT(serial != RT_NULL);
@@ -269,7 +270,7 @@ rt_inline int _serial_poll_tx(struct rt_serial_device *serial, const rt_uint8_t 
 /*
  * Serial interrupt routines
  */
-rt_inline int _serial_int_rx(struct rt_serial_device *serial, rt_uint8_t *data, int length)
+rt_inline int _serial_int_rx(struct rt_serial_device *serial, uint8_t *data, int length)
 {
     int size;
     struct rt_serial_rx_fifo* rx_fifo;
@@ -317,7 +318,7 @@ rt_inline int _serial_int_rx(struct rt_serial_device *serial, rt_uint8_t *data, 
     return size - length;
 }
 
-rt_inline int _serial_int_tx(struct rt_serial_device *serial, const rt_uint8_t *data, int length)
+rt_inline int _serial_int_tx(struct rt_serial_device *serial, const uint8_t *data, int length)
 {
     int size;
     struct rt_serial_tx_fifo *tx;
@@ -451,7 +452,7 @@ static void rt_dma_recv_update_put_index(struct rt_serial_device *serial, rt_siz
 /*
  * Serial DMA routines
  */
-rt_inline int _serial_dma_rx(struct rt_serial_device *serial, rt_uint8_t *data, int length)
+rt_inline int _serial_dma_rx(struct rt_serial_device *serial, uint8_t *data, int length)
 {
     rt_base_t level;
 
@@ -508,7 +509,7 @@ rt_inline int _serial_dma_rx(struct rt_serial_device *serial, rt_uint8_t *data, 
     }
 }
 
-rt_inline int _serial_dma_tx(struct rt_serial_device *serial, const rt_uint8_t *data, int length)
+rt_inline int _serial_dma_tx(struct rt_serial_device *serial, const uint8_t *data, int length)
 {
     rt_base_t level;
     rt_err_t result;
@@ -526,7 +527,7 @@ rt_inline int _serial_dma_tx(struct rt_serial_device *serial, const rt_uint8_t *
             rt_hw_interrupt_enable(level);
 
             /* make a DMA transfer */
-            serial->ops->dma_transmit(serial, (rt_uint8_t *)data, length, RT_SERIAL_DMA_TX);
+            serial->ops->dma_transmit(serial, (uint8_t *)data, length, RT_SERIAL_DMA_TX);
         }
         else
         {
@@ -565,9 +566,9 @@ static rt_err_t rt_serial_init(struct rt_device *dev)
     return result;
 }
 
-static rt_err_t rt_serial_open(struct rt_device *dev, rt_uint16_t oflag)
+static rt_err_t rt_serial_open(struct rt_device *dev, uint16_t oflag)
 {
-    rt_uint16_t stream_flag = 0;
+    uint16_t stream_flag = 0;
     struct rt_serial_device *serial;
 
     RT_ASSERT(dev != RT_NULL);
@@ -611,7 +612,7 @@ static rt_err_t rt_serial_open(struct rt_device *dev, rt_uint16_t oflag)
                 rx_fifo = (struct rt_serial_rx_fifo*) rt_malloc (sizeof(struct rt_serial_rx_fifo) +
                     serial->config.bufsz);
                 RT_ASSERT(rx_fifo != RT_NULL);
-                rx_fifo->buffer = (rt_uint8_t*) (rx_fifo + 1);
+                rx_fifo->buffer = (uint8_t*) (rx_fifo + 1);
                 rt_memset(rx_fifo->buffer, 0, serial->config.bufsz);
                 rx_fifo->put_index = 0;
                 rx_fifo->get_index = 0;
@@ -629,7 +630,7 @@ static rt_err_t rt_serial_open(struct rt_device *dev, rt_uint16_t oflag)
             rx_fifo = (struct rt_serial_rx_fifo*) rt_malloc (sizeof(struct rt_serial_rx_fifo) +
                 serial->config.bufsz);
             RT_ASSERT(rx_fifo != RT_NULL);
-            rx_fifo->buffer = (rt_uint8_t*) (rx_fifo + 1);
+            rx_fifo->buffer = (uint8_t*) (rx_fifo + 1);
             rt_memset(rx_fifo->buffer, 0, serial->config.bufsz);
             rx_fifo->put_index = 0;
             rx_fifo->get_index = 0;
@@ -1095,7 +1096,7 @@ const static struct rt_device_ops serial_ops =
  */
 rt_err_t rt_hw_serial_register(struct rt_serial_device *serial,
                                const char              *name,
-                               rt_uint32_t              flag,
+                               uint32_t              flag,
                                void                    *data)
 {
     rt_err_t ret;
@@ -1208,7 +1209,7 @@ void rt_hw_serial_isr(struct rt_serial_device *serial, int event)
             {
                 /* transmit next data node */
                 tx_dma->activated = RT_TRUE;
-                serial->ops->dma_transmit(serial, (rt_uint8_t *)data_ptr, data_size, RT_SERIAL_DMA_TX);
+                serial->ops->dma_transmit(serial, (uint8_t *)data_ptr, data_size, RT_SERIAL_DMA_TX);
             }
             else
             {

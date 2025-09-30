@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : irq.c
  * This file is part of RT-Thread RTOS
@@ -62,7 +63,7 @@ void rt_interrupt_leave_sethook(void (*hook)(void))
 
 /**@{*/
 
-volatile rt_uint8_t rt_interrupt_nest;
+volatile uint8_t rt_interrupt_nest;
 
 /**
  * This function will be invoked by BSP, when enter interrupt service routine
@@ -114,7 +115,7 @@ RTM_EXPORT(rt_interrupt_leave);
  *
  * @return the number of nested interrupts.
  */
-rt_uint8_t rt_interrupt_get_nest(void)
+uint8_t rt_interrupt_get_nest(void)
 {
     return rt_interrupt_nest;
 }

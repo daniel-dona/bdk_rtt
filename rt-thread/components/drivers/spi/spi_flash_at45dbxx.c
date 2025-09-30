@@ -106,7 +106,7 @@ static rt_err_t AT45DB_flash_init(rt_device_t dev)
     return RT_EOK;
 }
 
-static rt_err_t AT45DB_flash_open(rt_device_t dev, rt_uint16_t oflag)
+static rt_err_t AT45DB_flash_open(rt_device_t dev, uint16_t oflag)
 {
 
     return RT_EOK;
@@ -228,7 +228,7 @@ static rt_size_t AT45DB_flash_read_page_1024(rt_device_t dev, rt_off_t pos, void
 
 static rt_size_t AT45DB_flash_write_page_256(rt_device_t dev, rt_off_t pos, const void* buffer, rt_size_t size)
 {
-    rt_uint32_t index, nr;
+    uint32_t index, nr;
     const uint8_t * write_buffer = buffer;
     uint32_t  page = pos;
 
@@ -256,7 +256,7 @@ static rt_size_t AT45DB_flash_write_page_256(rt_device_t dev, rt_off_t pos, cons
 
 static rt_size_t AT45DB_flash_write_page_512(rt_device_t dev, rt_off_t pos, const void* buffer, rt_size_t size)
 {
-    rt_uint32_t index, nr;
+    uint32_t index, nr;
     const uint8_t * write_buffer = buffer;
     uint32_t  page = pos;
 
@@ -284,7 +284,7 @@ static rt_size_t AT45DB_flash_write_page_512(rt_device_t dev, rt_off_t pos, cons
 
 static rt_size_t AT45DB_flash_write_page_1024(rt_device_t dev, rt_off_t pos, const void* buffer, rt_size_t size)
 {
-    rt_uint32_t index, nr;
+    uint32_t index, nr;
     const uint8_t * write_buffer = buffer;
     uint32_t  page = pos;
 

@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
   This file is part of UFFS, the Ultra-low-cost Flash File System.
   
@@ -98,10 +99,10 @@ int main()
 #else
 
 
-static int nand_read_page(uffs_Device *dev, u32 block, u32 page, u8 *data, int data_len, u8 *ecc,
-						u8 *spare, int spare_len)
+static int nand_read_page(uffs_Device *dev, uint32_t block, uint32_t page, uint8_t *data, int data_len, uint8_t *ecc,
+						uint8_t *spare, int spare_len)
 {
-	u8 val = 0;
+	uint8_t val = 0;
 	int ret = UFFS_FLASH_NO_ERR;
 	struct my_nand_chip *chip = (struct my_nand_chip *) dev->attr->_private;
 
@@ -152,10 +153,10 @@ static int nand_read_page(uffs_Device *dev, u32 block, u32 page, u8 *data, int d
 	return ret;
 }
 
-static int nand_write_page(uffs_Device *dev, u32 block, u32 page,
-							const u8 *data, int data_len, const u8 *spare, int spare_len)
+static int nand_write_page(uffs_Device *dev, uint32_t block, uint32_t page,
+							const uint8_t *data, int data_len, const uint8_t *spare, int spare_len)
 {
-	u8 val = 0;
+	uint8_t val = 0;
 	int ret = UFFS_FLASH_NO_ERR;
 	UBOOL fall_through = FALSE;
 	struct my_nand_chip *chip = (struct my_nand_chip *) dev->attr->_private;
@@ -236,9 +237,9 @@ ext:
 	return ret;
 }
 
-static int nand_erase_block(uffs_Device *dev, u32 block)
+static int nand_erase_block(uffs_Device *dev, uint32_t block)
 {
-	u8 val = 0;
+	uint8_t val = 0;
 	struct my_nand_chip *chip = (struct my_nand_chip *) dev->attr->_private;
 
 	CHIP_CLR_NCS(chip);

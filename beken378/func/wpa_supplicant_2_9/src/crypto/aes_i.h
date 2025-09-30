@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * AES (Rijndael) cipher
  * Copyright (c) 2003-2012, Jouni Malinen <j@w1.fi>
@@ -14,19 +15,19 @@
 /* #define FULL_UNROLL */
 #define AES_SMALL_TABLES
 
-extern const u32 Te0[256];
-extern const u32 Te1[256];
-extern const u32 Te2[256];
-extern const u32 Te3[256];
-extern const u32 Te4[256];
-extern const u32 Td0[256];
-extern const u32 Td1[256];
-extern const u32 Td2[256];
-extern const u32 Td3[256];
-extern const u32 Td4[256];
-extern const u32 rcon[10];
-extern const u8 Td4s[256];
-extern const u8 rcons[10];
+extern const uint32_t Te0[256];
+extern const uint32_t Te1[256];
+extern const uint32_t Te2[256];
+extern const uint32_t Te3[256];
+extern const uint32_t Te4[256];
+extern const uint32_t Td0[256];
+extern const uint32_t Td1[256];
+extern const uint32_t Td2[256];
+extern const uint32_t Td3[256];
+extern const uint32_t Td4[256];
+extern const uint32_t rcon[10];
+extern const uint8_t Td4s[256];
+extern const uint8_t rcons[10];
 
 #ifndef AES_SMALL_TABLES
 
@@ -67,7 +68,7 @@ extern const u8 rcons[10];
 
 #define RCON(i) (rcons[(i)] << 24)
 
-static inline u32 rotr(u32 val, int bits)
+static inline uint32_t rotr(uint32_t val, int bits)
 {
 	return (val >> bits) | (val << (32 - bits));
 }
@@ -107,19 +108,19 @@ static inline u32 rotr(u32 val, int bits)
 
 #ifdef _MSC_VER
 #define SWAP(x) (_lrotl(x, 8) & 0x00ff00ff | _lrotr(x, 8) & 0xff00ff00)
-#define GETU32(p) SWAP(*((u32 *)(p)))
-#define PUTU32(ct, st) { *((u32 *)(ct)) = SWAP((st)); }
+#define GETU32(p) SWAP(*((uint32_t *)(p)))
+#define PUTU32(ct, st) { *((uint32_t *)(ct)) = SWAP((st)); }
 #else
-#define GETU32(pt) (((u32)(pt)[0] << 24) ^ ((u32)(pt)[1] << 16) ^ \
-((u32)(pt)[2] <<  8) ^ ((u32)(pt)[3]))
+#define GETU32(pt) (((uint32_t)(pt)[0] << 24) ^ ((uint32_t)(pt)[1] << 16) ^ \
+((uint32_t)(pt)[2] <<  8) ^ ((uint32_t)(pt)[3]))
 #define PUTU32(ct, st) { \
-(ct)[0] = (u8)((st) >> 24); (ct)[1] = (u8)((st) >> 16); \
-(ct)[2] = (u8)((st) >>  8); (ct)[3] = (u8)(st); }
+(ct)[0] = (uint8_t)((st) >> 24); (ct)[1] = (uint8_t)((st) >> 16); \
+(ct)[2] = (uint8_t)((st) >>  8); (ct)[3] = (uint8_t)(st); }
 #endif
 
 #define AES_PRIV_SIZE (4 * 4 * 15 + 4)
 #define AES_PRIV_NR_POS (4 * 15)
 
-int rijndaelKeySetupEnc(u32 rk[], const u8 cipherKey[], int keyBits);
+int rijndaelKeySetupEnc(uint32_t rk[], const uint8_t cipherKey[], int keyBits);
 
 #endif /* AES_I_H */

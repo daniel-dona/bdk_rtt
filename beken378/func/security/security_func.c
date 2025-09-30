@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "sys_rtos.h"
 #include "rtos_pub.h"
 #include "error.h"
@@ -136,11 +137,11 @@ void sec_Command(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv
         ctx = hal_sha1_init( );
 
         hal_sha1_update( ctx, argv[2], os_strlen(argv[2]));
-        hal_sha1_finish( ctx, (UINT8 *)sha_digst );
+        hal_sha1_finish( ctx, (uint8_t *)sha_digst );
 
         os_printf("RESULT:");
         for(i = 0; i < 16 * 4; i++)
-            os_printf("%x ", ((UINT8 *)sha_digst)[i]);
+            os_printf("%x ", ((uint8_t *)sha_digst)[i]);
         os_printf("\r\n");
 
     }
@@ -160,11 +161,11 @@ void sec_Command(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv
         ctx = hal_sha256_init( );
 
         hal_sha256_update( ctx, argv[2], os_strlen(argv[2]));
-        hal_sha256_finish( ctx, (UINT8 *)sha_digst );
+        hal_sha256_finish( ctx, (uint8_t *)sha_digst );
 
         os_printf("RESULT:");
         for(i = 0; i < 16 * 4; i++)
-            os_printf("%x ", ((UINT8 *)sha_digst)[i]);
+            os_printf("%x ", ((uint8_t *)sha_digst)[i]);
         os_printf("\r\n");
 
 

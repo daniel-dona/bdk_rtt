@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : tftp_port.c
  * This file is part of RT-Thread RTOS

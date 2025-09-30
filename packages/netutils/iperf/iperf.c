@@ -39,10 +39,10 @@ static IPERF_PARAM param = {IPERF_MODE_STOP, NULL, IPERF_PORT};
 static void iperf_udp_client(void *thread_param)
 {
     int sock;
-    rt_uint32_t *buffer;
+    uint32_t *buffer;
     struct sockaddr_in server;
-    rt_uint32_t packet_count = 0;
-    rt_uint32_t tick;
+    uint32_t packet_count = 0;
+    uint32_t tick;
     int send_size;
 
     send_size = IPERF_BUFSZ > 1470 ? 1470 : IPERF_BUFSZ;
@@ -78,13 +78,13 @@ static void iperf_udp_client(void *thread_param)
 static void iperf_udp_server(void *thread_param)
 {
     int sock;
-    rt_uint32_t *buffer;
+    uint32_t *buffer;
     struct sockaddr_in server;
     struct sockaddr_in sender;
     int sender_len, r_size;
     uint64_t sentlen;
-    rt_uint32_t pcount = 0, last_pcount = 0;
-    rt_uint32_t lost, total;
+    uint32_t pcount = 0, last_pcount = 0;
+    uint32_t lost, total;
     rt_tick_t tick1, tick2;
     float f;
     char speed[64] = { 0 };

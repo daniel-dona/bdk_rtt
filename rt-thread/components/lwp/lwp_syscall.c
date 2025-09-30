@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : lwp_syscall.c
  * This file is part of RT-Thread RTOS
@@ -228,7 +229,7 @@ const static void* func_table[] =
     (void *)sys_fstat,           // 0x10
 };
 
-const void *lwp_get_sys_api(rt_uint32_t number)
+const void *lwp_get_sys_api(uint32_t number)
 {
     const void *func = RT_NULL;
 

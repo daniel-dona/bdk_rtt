@@ -1,3 +1,4 @@
+#include <stdint.h>
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: RCSL 1.0/RPSL 1.0 
  *  
@@ -49,9 +50,9 @@
 #if (CONFIG_APP_MP3PLAYER == 1)
 #define MP3HEADERMASK           0x0F0CFFFF
 
-int16  MP3FixDiv(int32 num,int32 denum)
+int16_t  MP3FixDiv(int32_t num,int32_t denum)
 {
-    int16 div = 0;
+    int16_t div = 0;
     if(denum <= 0)
         return 0;
     if(num < denum)
@@ -376,7 +377,7 @@ static int  file_seek(int pos)
 	if (newFatfs == NULL)
         return FR_NO_FILE;
 
-	ret = f_lseek(newFatfs, (uint32)pos);
+	ret = f_lseek(newFatfs, (uint32_t)pos);
 	if(ret != FR_OK)
 		return ret;
 	
@@ -428,7 +429,7 @@ int  MP3FileGetData(MP3DecInfo *mp3DecInfo, unsigned char flag,
 	}
 	else 
 	{
-		uint8 *prt = (uint8 *)mp3DecInfo->HuffmanInfoPS;
+		uint8_t *prt = (uint8_t *)mp3DecInfo->HuffmanInfoPS;
 		
 		memmove(buf, *inbuf, mp3DecInfo->mainBuf_len);
 		mp3DecInfo->mainBuf_ptr = mp3DecInfo->mainBuf+BIT_RESVOR_SIZE; 

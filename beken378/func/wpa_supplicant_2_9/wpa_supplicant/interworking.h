@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * Interworking (IEEE 802.11u)
  * Copyright (c) 2011-2012, Qualcomm Atheros
@@ -11,14 +12,14 @@
 
 enum gas_query_result;
 
-int anqp_send_req(struct wpa_supplicant *wpa_s, const u8 *dst,
-		  u16 info_ids[], size_t num_ids, u32 subtypes,
-		  u32 mbo_subtypes);
-void anqp_resp_cb(void *ctx, const u8 *dst, u8 dialog_token,
+int anqp_send_req(struct wpa_supplicant *wpa_s, const uint8_t *dst,
+		  uint16_t info_ids[], size_t num_ids, uint32_t subtypes,
+		  uint32_t mbo_subtypes);
+void anqp_resp_cb(void *ctx, const uint8_t *dst, uint8_t dialog_token,
 		  enum gas_query_result result,
 		  const struct wpabuf *adv_proto,
-		  const struct wpabuf *resp, u16 status_code);
-int gas_send_request(struct wpa_supplicant *wpa_s, const u8 *dst,
+		  const struct wpabuf *resp, uint16_t status_code);
+int gas_send_request(struct wpa_supplicant *wpa_s, const uint8_t *dst,
 		     const struct wpabuf *adv_proto,
 		     const struct wpabuf *query);
 int interworking_fetch_anqp(struct wpa_supplicant *wpa_s);

@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "func_pub.h"
 #include "intc.h"
@@ -48,7 +49,7 @@
 
 extern void rwnx_cal_initial_calibration(void);
 
-UINT32 func_init_extended(void)
+uint32_t func_init_extended(void)
 {
     char temp_mac[6];
 
@@ -75,7 +76,7 @@ UINT32 func_init_extended(void)
 #endif
 
 #if CFG_SUPPORT_CALIBRATION
-	UINT32 is_tab_inflash = 0;
+	uint32_t is_tab_inflash = 0;
     FUNC_PRT("[FUNC]calibration_main\r\n");
     calibration_main();
     #if CFG_SUPPORT_MANUAL_CALI
@@ -155,12 +156,12 @@ UINT32 func_init_extended(void)
 
     FUNC_PRT("[FUNC]func_init_extended OVER!!!\r\n\r\n");
     os_printf("start_type:%d\r\n",bk_misc_get_start_type());
-    UINT32 reg = 0;
+    uint32_t reg = 0;
     sddev_control(SCTRL_DEV_NAME, CMD_RF_HOLD_BIT_CLR, &reg);
     return 0;
 }
 
-UINT32 func_init_basic(void)
+uint32_t func_init_basic(void)
 {
 #if (!CFG_SUPPORT_RTT)
     intc_init();

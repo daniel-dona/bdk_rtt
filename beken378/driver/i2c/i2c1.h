@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _I2C1_H_
 #define _I2C1_H_
 
@@ -32,11 +33,11 @@
 #define REG_I2C1_DAT                         (I2C1_BASE_ADDR + 4 * 1)
 #define I2C1_DAT_MASK                          (0xFF)
 
-static UINT32 i2c1_open(UINT32 op_flag);
-static UINT32 i2c1_close(void);
-static UINT32 i2c1_read(char *user_buf, UINT32 count, UINT32 op_flag);
-static UINT32 i2c1_write(char *user_buf, UINT32 count, UINT32 op_flag);
-static UINT32 i2c1_ctrl(UINT32 cmd, void *param);
+static uint32_t i2c1_open(uint32_t op_flag);
+static uint32_t i2c1_close(void);
+static uint32_t i2c1_read(char *user_buf, uint32_t count, uint32_t op_flag);
+static uint32_t i2c1_write(char *user_buf, uint32_t count, uint32_t op_flag);
+static uint32_t i2c1_ctrl(uint32_t cmd, void *param);
 
 #endif  // _I2C1_H_
 

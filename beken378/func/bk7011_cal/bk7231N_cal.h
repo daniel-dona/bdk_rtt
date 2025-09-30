@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _BK7231U_CAL_H_
 #define _BK7231U_CAL_H_
 
@@ -12,7 +13,7 @@
 
 //#define _11MBPS_MAX_POWER
 
-void delay05us(INT32 num);
+void delay05us(int32_t num);
 
 
 
@@ -1388,63 +1389,63 @@ typedef unsigned int PWR_REGS_TPC;
 
 typedef struct
 {
-    INT32 gtx_dc_n;//the times of first dc cal. (64 * BK_TX_DAC_COEF)=2^8
-    UINT32 gst_rx_adc;
-    UINT32 gst_sar_adc;
+    int32_t gtx_dc_n;//the times of first dc cal. (64 * BK_TX_DAC_COEF)=2^8
+    uint32_t gst_rx_adc;
+    uint32_t gst_sar_adc;
 
-    UINT32 cali_mode;
-    INT32 gtx_tssi_thred_b;
-    INT32 gtx_tssi_thred_g;
-    INT32 power_cali_shift_b;
-    INT32 power_cali_shift_g;
+    uint32_t cali_mode;
+    int32_t gtx_tssi_thred_b;
+    int32_t gtx_tssi_thred_g;
+    int32_t power_cali_shift_b;
+    int32_t power_cali_shift_g;
 
-    UINT32 is_tpc_used;
+    uint32_t is_tpc_used;
 
 } BK7011_CALI_CONTEXT;
 
 typedef struct
 {
-    INT32 gbias_after_cal;
-    INT32 gav_tssi;
+    int32_t gbias_after_cal;
+    int32_t gav_tssi;
 
-    INT32 gtx_i_dc_comp;
-    INT32 gtx_q_dc_comp;
-    INT32 gtx_i_dc_comp_loopback;
-    INT32 gtx_q_dc_comp_loopback;
+    int32_t gtx_i_dc_comp;
+    int32_t gtx_q_dc_comp;
+    int32_t gtx_i_dc_comp_loopback;
+    int32_t gtx_q_dc_comp_loopback;
 
-    INT32 gtx_i_gain_comp;
-    INT32 gtx_q_gain_comp;
-    INT32 gtx_i_gain_comp_loopback;
-    INT32 gtx_q_gain_comp_loopback;
+    int32_t gtx_i_gain_comp;
+    int32_t gtx_q_gain_comp;
+    int32_t gtx_i_gain_comp_loopback;
+    int32_t gtx_q_gain_comp_loopback;
 
-    INT32 gtx_phase_comp;
-    INT32 gtx_phase_ty2;
-    INT32 gtx_phase_comp_loopback;
-    INT32 gtx_phase_ty2_loopback;
+    int32_t gtx_phase_comp;
+    int32_t gtx_phase_ty2;
+    int32_t gtx_phase_comp_loopback;
+    int32_t gtx_phase_ty2_loopback;
 
-    INT32 gtx_ifilter_corner;
-    INT32 gtx_qfilter_corner;
+    int32_t gtx_ifilter_corner;
+    int32_t gtx_qfilter_corner;
 
-    INT32 const_iqcal_p;
+    int32_t const_iqcal_p;
 
-    INT32 grx_amp_err_wr;
-    INT32 grx_phase_err_wr;
+    int32_t grx_amp_err_wr;
+    int32_t grx_phase_err_wr;
 
 #ifdef SCAN_IQ_FILTER_CORNER
-    UINT32 g_sctrl_bias_reg;
-    INT32  grx_avg_i_14M;
-    INT32  grx_avg_i_14M2;
-    INT32  grx_avg_q_14M;
-    INT32  grx_avg_q_14M2;
-    INT32  index_test[5];
+    uint32_t g_sctrl_bias_reg;
+    int32_t  grx_avg_i_14M;
+    int32_t  grx_avg_i_14M2;
+    int32_t  grx_avg_q_14M;
+    int32_t  grx_avg_q_14M2;
+    int32_t  index_test[5];
     float  float2_test[5];
 #endif
 
-    INT32  rx_amp_err_rd;
-    INT32  rx_phase_err_rd;
-    INT32  rx_ty2_rd;
+    int32_t  rx_amp_err_rd;
+    int32_t  rx_phase_err_rd;
+    int32_t  rx_ty2_rd;
 
-    INT32 g_rx_dc_gain_tab[8];
+    int32_t g_rx_dc_gain_tab[8];
 } BK7011_CALI_RESULT;
 
 /*******************************************************************************

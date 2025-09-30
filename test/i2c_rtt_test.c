@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <rtthread.h>
 #include <rtdevice.h>
 #include "finsh.h"
@@ -17,10 +18,10 @@ static int i2c_test_rtt(int argc, char *argv)
     struct rt_i2c_bus_device *i2c_device;
     struct rt_i2c_msg msgs[2];
     
-    rt_uint8_t buffer1[2];
-    rt_uint8_t buffer2[3];
+    uint8_t buffer1[2];
+    uint8_t buffer2[3];
     rt_size_t i, ret;
-    rt_uint8_t ret1;
+    uint8_t ret1;
     
     ret1 = iic_bus_attach( );				/*gpio init and add bus*/   
     rt_kprintf("iic_bus_attach  ret:%d\n", ret1);    

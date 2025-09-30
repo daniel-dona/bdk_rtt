@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  * File      : module.c
  * This file is part of RT-Thread RTOS
@@ -42,8 +44,8 @@
 #include "module.h"
 
 #define elf_module        ((Elf32_Ehdr *)module_ptr)
-#define shdr              ((Elf32_Shdr *)((rt_uint8_t *)module_ptr + elf_module->e_shoff))
-#define phdr              ((Elf32_Phdr *)((rt_uint8_t *)module_ptr + elf_module->e_phoff))
+#define shdr              ((Elf32_Shdr *)((uint8_t *)module_ptr + elf_module->e_shoff))
+#define phdr              ((Elf32_Phdr *)((uint8_t *)module_ptr + elf_module->e_phoff))
 
 #define IS_PROG(s)        (s.sh_type == SHT_PROGBITS)
 #define IS_NOPROG(s)      (s.sh_type == SHT_NOBITS)
@@ -119,7 +121,7 @@ FINSH_FUNCTION_EXPORT(list_symbol, list symbol for module);
 MSH_CMD_EXPORT(list_symbol, list symbol for module);
 #endif
 
-static rt_uint32_t rt_module_symbol_find(const char *sym_str)
+static uint32_t rt_module_symbol_find(const char *sym_str)
 {
     /* find in kernel symbol table */
     struct rt_module_symtab *index;
@@ -129,7 +131,7 @@ static rt_uint32_t rt_module_symbol_find(const char *sym_str)
          index ++)
     {
         if (rt_strcmp(index->name, sym_str) == 0)
-            return (rt_uint32_t)index->addr;
+            return (uint32_t)index->addr;
     }
 
     return 0;
@@ -159,9 +161,9 @@ static int rt_module_arm_relocate(struct rt_module *module,
 {
     Elf32_Addr *where, tmp;
     Elf32_Sword addend, offset;
-    rt_uint32_t upper, lower, sign, j1, j2;
+    uint32_t upper, lower, sign, j1, j2;
 
-    where = (Elf32_Addr *)((rt_uint8_t *)module->module_space
+    where = (Elf32_Addr *)((uint8_t *)module->module_space
                            + rel->r_offset
                            - module->vstart_addr);
     switch (ELF32_R_TYPE(rel->r_info))
@@ -224,8 +226,8 @@ static int rt_module_arm_relocate(struct rt_module *module,
         break;
     case R_ARM_THM_CALL:
     case R_ARM_THM_JUMP24:
-        upper  = *(rt_uint16_t *)where;
-        lower  = *(rt_uint16_t *)((Elf32_Addr)where + 2);
+        upper  = *(uint16_t *)where;
+        lower  = *(uint16_t *)((Elf32_Addr)where + 2);
 
         sign   = (upper >> 10) & 1;
         j1     = (lower >> 13) & 1;
@@ -240,8 +242,8 @@ static int rt_module_arm_relocate(struct rt_module *module,
         offset += sym_val - (Elf32_Addr)where;
 
         if (!(offset & 1) ||
-            offset <= (rt_int32_t)0xff000000 ||
-            offset >= (rt_int32_t)0x01000000)
+            offset <= (int32_t)0xff000000 ||
+            offset >= (int32_t)0x01000000)
         {
             rt_kprintf("Module: Only Thumb addresses allowed\n");
 
@@ -251,14 +253,14 @@ static int rt_module_arm_relocate(struct rt_module *module,
         sign = (offset >> 24) & 1;
         j1   = sign ^ (~(offset >> 23) & 1);
         j2   = sign ^ (~(offset >> 22) & 1);
-        *(rt_uint16_t *)where = (rt_uint16_t)((upper & 0xf800) |
+        *(uint16_t *)where = (uint16_t)((upper & 0xf800) |
                                               (sign << 10) |
                                               ((offset >> 12) & 0x03ff));
-        *(rt_uint16_t *)(where + 2) = (rt_uint16_t)((lower & 0xd000) |
+        *(uint16_t *)(where + 2) = (uint16_t)((lower & 0xd000) |
                                                     (j1 << 13) | (j2 << 11) |
                                                     ((offset >> 1) & 0x07ff));
-        upper = *(rt_uint16_t *)where;
-        lower = *(rt_uint16_t *)((Elf32_Addr)where + 2);
+        upper = *(uint16_t *)where;
+        lower = *(uint16_t *)((Elf32_Addr)where + 2);
         break;
     default:
         return -1;
@@ -307,7 +309,7 @@ static struct rt_module *_load_shared_object(const char *name,
 {
     rt_module_t module = RT_NULL;
     rt_bool_t linked   = RT_FALSE;
-    rt_uint32_t index, module_size = 0;
+    uint32_t index, module_size = 0;
     Elf32_Addr vstart_addr, vend_addr;
     rt_bool_t has_vstart;
 
@@ -411,7 +413,7 @@ static struct rt_module *_load_shared_object(const char *name,
         if (phdr[index].p_type == PT_LOAD)
         {
             rt_memcpy(module->module_space + phdr[index].p_vaddr - vstart_addr,
-                      (rt_uint8_t *)elf_module + phdr[index].p_offset,
+                      (uint8_t *)elf_module + phdr[index].p_offset,
                       phdr[index].p_filesz);
         }
     }
@@ -423,24 +425,24 @@ static struct rt_module *_load_shared_object(const char *name,
     /* handle relocation section */
     for (index = 0; index < elf_module->e_shnum; index ++)
     {
-        rt_uint32_t i, nr_reloc;
+        uint32_t i, nr_reloc;
         Elf32_Sym *symtab;
         Elf32_Rel *rel;
-        rt_uint8_t *strtab;
+        uint8_t *strtab;
         static rt_bool_t unsolved = RT_FALSE;
 
         if (!IS_REL(shdr[index]))
             continue;
 
         /* get relocate item */
-        rel = (Elf32_Rel *)((rt_uint8_t *)module_ptr + shdr[index].sh_offset);
+        rel = (Elf32_Rel *)((uint8_t *)module_ptr + shdr[index].sh_offset);
 
         /* locate .rel.plt and .rel.dyn section */
-        symtab = (Elf32_Sym *)((rt_uint8_t *)module_ptr +
+        symtab = (Elf32_Sym *)((uint8_t *)module_ptr +
                                shdr[shdr[index].sh_link].sh_offset);
-        strtab = (rt_uint8_t *)module_ptr +
+        strtab = (uint8_t *)module_ptr +
                  shdr[shdr[shdr[index].sh_link].sh_link].sh_offset;
-        nr_reloc = (rt_uint32_t)(shdr[index].sh_size / sizeof(Elf32_Rel));
+        nr_reloc = (uint32_t)(shdr[index].sh_size / sizeof(Elf32_Rel));
 
         /* relocate every items */
         for (i = 0; i < nr_reloc; i ++)
@@ -496,8 +498,8 @@ static struct rt_module *_load_shared_object(const char *name,
     for (index = 0; index < elf_module->e_shnum; index ++)
     {
         /* find .dynsym section */
-        rt_uint8_t *shstrab;
-        shstrab = (rt_uint8_t *)module_ptr +
+        uint8_t *shstrab;
+        shstrab = (uint8_t *)module_ptr +
                   shdr[elf_module->e_shstrndx].sh_offset;
         if (rt_strcmp((const char *)(shstrab + shdr[index].sh_name), ELF_DYNSYM) == 0)
             break;
@@ -508,10 +510,10 @@ static struct rt_module *_load_shared_object(const char *name,
     {
         int i, count = 0;
         Elf32_Sym  *symtab = RT_NULL;
-        rt_uint8_t *strtab = RT_NULL;
+        uint8_t *strtab = RT_NULL;
 
-        symtab = (Elf32_Sym *)((rt_uint8_t *)module_ptr + shdr[index].sh_offset);
-        strtab = (rt_uint8_t *)module_ptr + shdr[shdr[index].sh_link].sh_offset;
+        symtab = (Elf32_Sym *)((uint8_t *)module_ptr + shdr[index].sh_offset);
+        strtab = (uint8_t *)module_ptr + shdr[shdr[index].sh_link].sh_offset;
 
         for (i = 0; i < shdr[index].sh_size / sizeof(Elf32_Sym); i++)
         {
@@ -550,10 +552,10 @@ static struct rt_module *_load_shared_object(const char *name,
 static struct rt_module* _load_relocated_object(const char *name,
                                                 void       *module_ptr)
 {
-    rt_uint32_t index, rodata_addr = 0, bss_addr = 0, data_addr = 0;
-    rt_uint32_t module_addr = 0, module_size = 0;
+    uint32_t index, rodata_addr = 0, bss_addr = 0, data_addr = 0;
+    uint32_t module_addr = 0, module_size = 0;
     struct rt_module *module = RT_NULL;
-    rt_uint8_t *ptr, *strtab, *shstrab;
+    uint8_t *ptr, *strtab, *shstrab;
 
     /* get the ELF image size */
     for (index = 0; index < elf_module->e_shnum; index ++)
@@ -614,7 +616,7 @@ static struct rt_module* _load_relocated_object(const char *name,
         if (IS_PROG(shdr[index]) && IS_AX(shdr[index]))
         {
             rt_memcpy(ptr,
-                      (rt_uint8_t *)elf_module + shdr[index].sh_offset,
+                      (uint8_t *)elf_module + shdr[index].sh_offset,
                       shdr[index].sh_size);
             RT_DEBUG_LOG(RT_DEBUG_MODULE, ("load text 0x%x, size %d\n",
                                            ptr, shdr[index].sh_size));
@@ -625,12 +627,12 @@ static struct rt_module* _load_relocated_object(const char *name,
         if (IS_PROG(shdr[index]) && IS_ALLOC(shdr[index]))
         {
             rt_memcpy(ptr,
-                      (rt_uint8_t *)elf_module + shdr[index].sh_offset,
+                      (uint8_t *)elf_module + shdr[index].sh_offset,
                       shdr[index].sh_size);
-            rodata_addr = (rt_uint32_t)ptr;
+            rodata_addr = (uint32_t)ptr;
             RT_DEBUG_LOG(RT_DEBUG_MODULE,
                          ("load rodata 0x%x, size %d, rodata 0x%x\n",
-                          ptr, shdr[index].sh_size, *(rt_uint32_t *)data_addr));
+                          ptr, shdr[index].sh_size, *(uint32_t *)data_addr));
             ptr += shdr[index].sh_size;
         }
 
@@ -638,12 +640,12 @@ static struct rt_module* _load_relocated_object(const char *name,
         if (IS_PROG(shdr[index]) && IS_AW(shdr[index]))
         {
             rt_memcpy(ptr,
-                      (rt_uint8_t *)elf_module + shdr[index].sh_offset,
+                      (uint8_t *)elf_module + shdr[index].sh_offset,
                       shdr[index].sh_size);
-            data_addr = (rt_uint32_t)ptr;
+            data_addr = (uint32_t)ptr;
             RT_DEBUG_LOG(RT_DEBUG_MODULE,
                          ("load data 0x%x, size %d, data 0x%x\n",
-                          ptr, shdr[index].sh_size, *(rt_uint32_t *)data_addr));
+                          ptr, shdr[index].sh_size, *(uint32_t *)data_addr));
             ptr += shdr[index].sh_size;
         }
 
@@ -651,7 +653,7 @@ static struct rt_module* _load_relocated_object(const char *name,
         if (IS_NOPROG(shdr[index]) && IS_AW(shdr[index]))
         {
             rt_memset(ptr, 0, shdr[index].sh_size);
-            bss_addr = (rt_uint32_t)ptr;
+            bss_addr = (uint32_t)ptr;
             RT_DEBUG_LOG(RT_DEBUG_MODULE, ("load bss 0x%x, size %d,\n",
                                            ptr, shdr[index].sh_size));
         }
@@ -659,12 +661,12 @@ static struct rt_module* _load_relocated_object(const char *name,
 
     /* set module entry */
     module->module_entry =
-        (rt_uint8_t *)module->module_space + elf_module->e_entry - module_addr;
+        (uint8_t *)module->module_space + elf_module->e_entry - module_addr;
 
     /* handle relocation section */
     for (index = 0; index < elf_module->e_shnum; index ++)
     {
-        rt_uint32_t i, nr_reloc;
+        uint32_t i, nr_reloc;
         Elf32_Sym *symtab;
         Elf32_Rel *rel;
 
@@ -672,16 +674,16 @@ static struct rt_module* _load_relocated_object(const char *name,
             continue;
 
         /* get relocate item */
-        rel = (Elf32_Rel *)((rt_uint8_t *)module_ptr + shdr[index].sh_offset);
+        rel = (Elf32_Rel *)((uint8_t *)module_ptr + shdr[index].sh_offset);
 
         /* locate .dynsym and .dynstr */
-        symtab   = (Elf32_Sym *)((rt_uint8_t *)module_ptr +
+        symtab   = (Elf32_Sym *)((uint8_t *)module_ptr +
                                  shdr[shdr[index].sh_link].sh_offset);
-        strtab   = (rt_uint8_t *)module_ptr +
+        strtab   = (uint8_t *)module_ptr +
                    shdr[shdr[shdr[index].sh_link].sh_link].sh_offset;
-        shstrab  = (rt_uint8_t *)module_ptr +
+        shstrab  = (uint8_t *)module_ptr +
                    shdr[elf_module->e_shstrndx].sh_offset;
-        nr_reloc = (rt_uint32_t)(shdr[index].sh_size / sizeof(Elf32_Rel));
+        nr_reloc = (uint32_t)(shdr[index].sh_size / sizeof(Elf32_Rel));
 
         /* relocate every items */
         for (i = 0; i < nr_reloc; i ++)
@@ -725,7 +727,7 @@ static struct rt_module* _load_relocated_object(const char *name,
                 {
                     /* relocate function */
                     rt_module_arm_relocate(module, rel,
-                                           (Elf32_Addr)((rt_uint8_t *)
+                                           (Elf32_Addr)((uint8_t *)
                                                         module->module_space
                                                         - module_addr
                                                         + sym->st_value));
@@ -735,7 +737,7 @@ static struct rt_module* _load_relocated_object(const char *name,
             {
                 /* relocate function */
                 rt_module_arm_relocate(module, rel,
-                                       (Elf32_Addr)((rt_uint8_t *)
+                                       (Elf32_Addr)((uint8_t *)
                                                     module->module_space
                                                     - module_addr
                                                     + sym->st_value));
@@ -764,7 +766,7 @@ static struct rt_module* _load_relocated_object(const char *name,
                 else
                 {
                     rt_module_arm_relocate(module, rel,
-                                           (Elf32_Addr)((rt_uint8_t *)
+                                           (Elf32_Addr)((uint8_t *)
                                                         module->module_space
                                                         - module_addr
                                                         + sym->st_value));
@@ -917,7 +919,7 @@ rt_module_t rt_module_do_main(const char *name,
     if (line_size && cmd_line)
     {
         /* set module argument */
-        module->module_cmd_line = (rt_uint8_t *)rt_malloc(line_size + 1);
+        module->module_cmd_line = (uint8_t *)rt_malloc(line_size + 1);
         if (module->module_cmd_line)
         {
             rt_memcpy(module->module_cmd_line, cmd_line, line_size);
@@ -1069,7 +1071,7 @@ rt_module_t rt_module_open(const char *path)
     /* close fd */
     close(fd);
 
-    if ((rt_uint32_t)offset_ptr - (rt_uint32_t)buffer != s.st_size)
+    if ((uint32_t)offset_ptr - (uint32_t)buffer != s.st_size)
     {
         rt_kprintf("Module: read file failed\n");
         rt_free(buffer);
@@ -1141,7 +1143,7 @@ rt_module_t rt_module_exec_cmd(const char *path, const char *cmd_line, int size)
     /* close fd */
     close(fd);
 
-    if ((rt_uint32_t)offset_ptr - (rt_uint32_t)buffer != s.st_size)
+    if ((uint32_t)offset_ptr - (uint32_t)buffer != s.st_size)
     {
         rt_kprintf("Module: read file failed\n");
         goto __exit;

@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * 程序清单：线程脱离
  *
@@ -9,16 +10,16 @@
 /* 线程1控制块 */
 static struct rt_thread thread1;
 /* 线程1栈 */
-static rt_uint8_t thread1_stack[THREAD_STACK_SIZE];
+static uint8_t thread1_stack[THREAD_STACK_SIZE];
 /* 线程2控制块 */
 static struct rt_thread thread2;
 /* 线程2栈 */
-static rt_uint8_t thread2_stack[THREAD_STACK_SIZE];
+static uint8_t thread2_stack[THREAD_STACK_SIZE];
 
 /* 线程1入口 */
 static void thread1_entry(void* parameter)
 {
-    rt_uint32_t count = 0;
+    uint32_t count = 0;
 
     while (1)
     {

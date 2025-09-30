@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _SDIO_PUB_H_
 #define _SDIO_PUB_H_
 
@@ -8,7 +9,7 @@
 
 #define SDIO_DEV_NAME       "sdio"
 
-#define SDIO_FAILURE        ((UINT32)-1)
+#define SDIO_FAILURE        ((uint32_t)-1)
 #define SDIO_SUCCESS        (0)
 
 #define BLOCK_LEN           (512 * 8)
@@ -39,10 +40,10 @@ typedef struct _sdio_mem_node_
 {
     LIST_HEADER_T node_list;
 
-    UINT8 *orig_addr;
+    uint8_t *orig_addr;
     
-    UINT8 *addr;
-    UINT32 length;
+    uint8_t *addr;
+    uint32_t length;
 
     SDIO_FUNC callback;
     void *Lparam;

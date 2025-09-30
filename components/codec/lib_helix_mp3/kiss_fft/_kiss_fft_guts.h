@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
 Copyright (c) 2003-2010, Mark Borgerding
 

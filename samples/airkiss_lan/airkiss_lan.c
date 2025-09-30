@@ -49,7 +49,7 @@ static void airkiss_lan_thread(void *parameter)
 {
     int sock = -1;
     struct sockaddr_in bind_addr, client_addr;
-    rt_uint32_t addr_len;
+    uint32_t addr_len;
     char *lan_buf = 0;
     int bytes_read;
 
@@ -177,7 +177,7 @@ _exit:
 int airkiss_lan_init(void)
 {
     rt_thread_t tid;
-    rt_uint32_t stack_size;
+    uint32_t stack_size;
 
     stack_size = 1024 * 3;
     tid = rt_thread_create("air_lan",

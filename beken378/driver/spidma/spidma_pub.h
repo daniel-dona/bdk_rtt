@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef __SPI_DMA_PUB_H__
 #define __SPI_DMA_PUB_H__
 
@@ -48,11 +49,11 @@ enum
 #if (CFG_SOC_NAME == SOC_BK7231)
 typedef struct spidma_desc
 {
-    UINT8 *rxbuf;
-    UINT8 *txbuf;
-    UINT16 rxbuf_len;
-    UINT16 txbuf_len;
-    void (*rx_handler)(void *curptr, UINT32 newlen);
+    uint8_t *rxbuf;
+    uint8_t *txbuf;
+    uint16_t rxbuf_len;
+    uint16_t txbuf_len;
+    void (*rx_handler)(void *curptr, uint32_t newlen);
     void (*rx_timeout)(void);
     void (*tx_handler)(void);
     /* mode:     SPIDMA mode
@@ -67,24 +68,24 @@ typedef struct spidma_desc
      *          1:  3-wire mode
      * bit[3:19]: 16bit SPIDMA rxbuf threshold val
      */
-    UINT32 mode;
-    UINT32 timeout_val;
-    UINT32 node_len;
+    uint32_t mode;
+    uint32_t timeout_val;
+    uint32_t node_len;
 } SPIDMA_DESC_ST, *SPIDMA_DESC_PTR;
 #else
 typedef struct spidma_desc
 {
-    UINT8 *rxbuf;
+    uint8_t *rxbuf;
     
-    void (*node_full_handler)(void *curptr, UINT32 newlen, UINT32 is_eof, UINT32 frame_len);
+    void (*node_full_handler)(void *curptr, uint32_t newlen, uint32_t is_eof, uint32_t frame_len);
     void (*data_end_handler)(void);   
 
-    UINT16 rxbuf_len;
-    UINT16 rx_read_len;
-    UINT32 node_len;
+    uint16_t rxbuf_len;
+    uint16_t rx_read_len;
+    uint32_t node_len;
     
 
-    UINT8 *txbuf;
+    uint8_t *txbuf;
     void (*tx_handler)(void);
    
     /* mode:     SPIDMA mode
@@ -99,22 +100,22 @@ typedef struct spidma_desc
      *          1:  3-wire mode
      * bit[3:19]: 16bit SPIDMA rxbuf threshold val
      */
-    UINT32 mode;
-    UINT32 timeout_val;
-    UINT32 txbuf_len;
+    uint32_t mode;
+    uint32_t timeout_val;
+    uint32_t txbuf_len;
     void (*end_frame_handler)(void);
 #if CFG_GENERAL_DMA
-    void (*dma_rx_handler)(UINT32);
-    UINT32 dma_rx_channel;
-    void (*dma_tx_handler)(UINT32);
-    UINT32 dma_tx_channel;
+    void (*dma_rx_handler)(uint32_t);
+    uint32_t dma_rx_channel;
+    void (*dma_tx_handler)(uint32_t);
+    uint32_t dma_tx_channel;
     
 #endif
 } SPIDMA_DESC_ST, *SPIDMA_DESC_PTR;
 
 typedef struct spidma_tx_ {
-    UINT8 *txbuf;
-    UINT32 tx_len;
+    uint8_t *txbuf;
+    uint32_t tx_len;
 } SPIDMA_TXDMA_ST, *SPI_TXDMA_PTR;
 #endif
 

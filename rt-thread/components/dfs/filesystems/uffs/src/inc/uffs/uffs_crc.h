@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
   This file is part of UFFS, the Ultra-low-cost Flash File System.
   
@@ -40,7 +41,7 @@
 
 #include "uffs/uffs_types.h"
 
-u16 uffs_crc16update(const void *data, int length, u16 crc);
-u16 uffs_crc16sum(const void *data, int length);
+uint16_t uffs_crc16update(const void *data, int length, uint16_t crc);
+uint16_t uffs_crc16sum(const void *data, int length);
 
 #endif

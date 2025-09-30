@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : dfs_file.c
  * This file is part of Device File System in RT-Thread RTOS
@@ -615,8 +616,8 @@ FINSH_FUNCTION_EXPORT(cat, print file);
 static void copyfile(const char *src, const char *dst)
 {
     struct dfs_fd src_fd;
-    rt_uint8_t *block_ptr;
-    rt_int32_t read_bytes;
+    uint8_t *block_ptr;
+    int32_t read_bytes;
 
     block_ptr = rt_malloc(BUF_SZ);
     if (block_ptr == NULL)

@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * Shared Dragonfly functionality
  * Copyright (c) 2012-2016, Jouni Malinen <j@w1.fi>
@@ -21,7 +22,7 @@ int dragonfly_get_random_qr_qnr(const struct crypto_bignum *prime,
 				struct crypto_bignum **qr,
 				struct crypto_bignum **qnr);
 int dragonfly_is_quadratic_residue_blind(struct crypto_ec *ec,
-					 const u8 *qr, const u8 *qnr,
+					 const uint8_t *qr, const uint8_t *qnr,
 					 const struct crypto_bignum *val);
 int dragonfly_generate_scalar(const struct crypto_bignum *order,
 			      struct crypto_bignum *_rand,

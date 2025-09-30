@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 
@@ -15,35 +16,35 @@
 #if ((CFG_USE_AUDIO) && (CFG_SOC_NAME == SOC_BK7221U))
 void audio_power_up(void)
 {
-    UINT32 param;
+    uint32_t param;
     param = PWD_AUDIO_CLK_BIT;
     sddev_control(ICU_DEV_NAME, CMD_CLK_PWR_UP, &param);
 }
 
 void audio_power_down(void)
 {
-    UINT32 param;
+    uint32_t param;
     param = PWD_AUDIO_CLK_BIT;
     sddev_control(ICU_DEV_NAME, CMD_CLK_PWR_DOWN, &param);
 }
 
 void audio_enable_interrupt(void)
 {
-    UINT32 param;
+    uint32_t param;
     param = (IRQ_AUDIO_BIT);
     sddev_control(ICU_DEV_NAME, CMD_ICU_INT_ENABLE, &param);
 }
 
 void audio_disable_interrupt(void)
 {
-    UINT32 param;
+    uint32_t param;
     param = (IRQ_AUDIO_BIT);
     sddev_control(ICU_DEV_NAME, CMD_ICU_INT_DISABLE, &param);
 }
 
 static void audio_isr(void)
 {
-    UINT32 status = REG_READ(AUD_AD_FIFO_STATUS);
+    uint32_t status = REG_READ(AUD_AD_FIFO_STATUS);
     //AUD_PRT("%x\r\n", status);
     if (status & (DAC_R_INT_FLAG | DAC_L_INT_FLAG))
     {
@@ -80,7 +81,7 @@ static void audio_isr(void)
 
 void audio_hardware_init(void)
 {
-    UINT32 val;
+    uint32_t val;
 
     /* register interrupt */
     intc_service_register(IRQ_AUDIO, PRI_IRQ_AUDIO, audio_isr);
@@ -132,7 +133,7 @@ void audio_init(void)
 
 void audio_exit(void)
 {
-    UINT32 val;
+    uint32_t val;
 
     REG_WRITE(AUDIO_CONFIG, 0);
 

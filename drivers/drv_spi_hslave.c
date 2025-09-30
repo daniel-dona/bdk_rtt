@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <rtthread.h>
 #include <rthw.h>
 #include <rtdevice.h>
@@ -53,16 +54,16 @@
 struct rt_data_node
 {
     char *data_ptr;
-    rt_uint32_t data_size;
+    uint32_t data_size;
 };
 struct rt_data_node_list;
 
 struct rt_data_node_list
 {
     struct rt_data_node *node;
-    rt_uint32_t size;
-    rt_uint32_t read_index, write_index;
-    rt_uint32_t data_offset;
+    uint32_t size;
+    uint32_t read_index, write_index;
+    uint32_t data_offset;
     void (*read_complete)(struct rt_data_node *node, void *user_data);
     void *user_data;
 };
@@ -75,7 +76,7 @@ typedef struct spi_high_slave_device
     DD_HANDLE dd_hdl;
     SPIDMA_DESC_ST desc;
 
-    rt_uint8_t *rx_fifo;
+    uint8_t *rx_fifo;
     struct rt_audio_pipe rx_pipe;
 
     struct rt_semaphore tx_sem;
@@ -84,8 +85,8 @@ typedef struct spi_high_slave_device
 
 SPI_HS_DEV _spi_hs;
 
-static void spi_hslave_rx_handler(void *curptr, UINT32 newlen, 
-    UINT32 is_eof, UINT32 frame_len)
+static void spi_hslave_rx_handler(void *curptr, uint32_t newlen, 
+    uint32_t is_eof, uint32_t frame_len)
 {
     SPI_HS_DEV *spi_hs = &_spi_hs;
 
@@ -105,13 +106,13 @@ static void spi_hslave_end_frame_handler(void)
 }
 
 #if CFG_GENERAL_DMA
-static void spi_hslave_node_rx_handler(UINT32 dma)
+static void spi_hslave_node_rx_handler(uint32_t dma)
 {   
     SPI_HS_DEV *spi_hs = &_spi_hs;
     SPIDMA_DESC_PTR desc = &(spi_hs->desc);
     
-    UINT16 already_len = desc->rx_read_len;
-    UINT16 copy_len = desc->node_len - (already_len % desc->node_len);
+    uint16_t already_len = desc->rx_read_len;
+    uint16_t copy_len = desc->node_len - (already_len % desc->node_len);
     
     GLOBAL_INT_DECLARATION();
     
@@ -143,8 +144,8 @@ static void spi_hslave_data_end_handler(void)
     SPI_HS_DEV *spi_hs = &_spi_hs;
     SPIDMA_DESC_PTR desc = &(spi_hs->desc);
     
-    UINT16 already_len = desc->rx_read_len;
-    UINT32 channel = desc->dma_rx_channel;
+    uint16_t already_len = desc->rx_read_len;
+    uint32_t channel = desc->dma_rx_channel;
     int left_len = sddev_control(GDMA_DEV_NAME, CMD_GDMA_GET_LEFT_LEN, (void*)channel);
     int rec_len = desc->node_len - left_len - (already_len % desc->node_len);
     
@@ -171,7 +172,7 @@ static void spi_hslave_config_desc(void)
 {
     SPI_HS_DEV *spi_hs = &_spi_hs;
     SPIDMA_DESC_PTR desc = &(spi_hs->desc);
-    rt_uint8_t *rx_buf = spi_hs->rx_fifo;
+    uint8_t *rx_buf = spi_hs->rx_fifo;
     
     os_memset(desc, 0, sizeof(SPIDMA_DESC_ST));
 
@@ -213,16 +214,16 @@ static rt_err_t spi_hsalve_init(rt_device_t dev)
     return RT_EOK;
 }
 
-static rt_err_t spi_hsalve_open(rt_device_t dev, rt_uint16_t oflag)
+static rt_err_t spi_hsalve_open(rt_device_t dev, uint16_t oflag)
 {
-    UINT32 status;
+    uint32_t status;
     SPI_HS_DEV *spi_hs = &_spi_hs;
     
     spi_hslave_config_desc();
 
     rt_device_open(&(spi_hs->rx_pipe.parent), RT_DEVICE_OFLAG_RDONLY);
     
-    spi_hs->dd_hdl = ddev_open(SPIDMA_DEV_NAME, &status, (UINT32)&spi_hs->desc);
+    spi_hs->dd_hdl = ddev_open(SPIDMA_DEV_NAME, &status, (uint32_t)&spi_hs->desc);
     SPI_HSLAVE_FATAL("spi_hslave_init, %p\r\n", spi_hs->dd_hdl);
 
 	// clear all rx semp for this time
@@ -259,7 +260,7 @@ static rt_size_t spi_hsalve_write(rt_device_t dev, rt_off_t pos,
 	// clear all rx semp for this time
     while(rt_sem_trytake(&(spi_hs->tx_sem)) != -RT_ETIMEOUT);
 
-    cfg.txbuf = (UINT8*)buffer;
+    cfg.txbuf = (uint8_t*)buffer;
     cfg.tx_len = size;
     ddev_control(dd_hdl, SPIDMA_CMD_START_TX_DMA, &cfg);
 

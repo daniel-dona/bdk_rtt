@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  *  script parser for finsh shell.
  *
@@ -264,7 +265,7 @@ static struct finsh_node* proc_variable_decl(struct finsh_parser* self)
 /*
 type -> type_prefix type_basic | type_basic
 type_prefix -> UNSIGNED
-type_basic -> VOID
+type_basic -> void
     | CHAR
     | SHORT
     | INT

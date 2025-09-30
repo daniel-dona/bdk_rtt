@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <rthw.h>
 #include <rtthread.h>
 #include <rtdevice.h>
@@ -19,7 +20,7 @@
 
 static struct rt_mutex flash_mutex;
 
-void beken_flash_read(rt_uint32_t address, void *data, rt_uint32_t size)
+void beken_flash_read(uint32_t address, void *data, uint32_t size)
 {
     if (size == 0)
     {
@@ -31,7 +32,7 @@ void beken_flash_read(rt_uint32_t address, void *data, rt_uint32_t size)
     rt_mutex_release(&flash_mutex);
 }
 
-void beken_flash_write(rt_uint32_t address, const void *data, rt_uint32_t size)
+void beken_flash_write(uint32_t address, const void *data, uint32_t size)
 {
     if (size == 0)
     {
@@ -44,7 +45,7 @@ void beken_flash_write(rt_uint32_t address, const void *data, rt_uint32_t size)
     rt_mutex_release(&flash_mutex);
 }
 
-void beken_flash_erase(rt_uint32_t address)
+void beken_flash_erase(uint32_t address)
 {
     rt_mutex_take(&flash_mutex, RT_WAITING_FOREVER);
     address &= (0xFFF000);

@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "ring_buffer_dma_write.h"
 #include "arch.h"
@@ -15,7 +16,7 @@
 #define RB_DMA_WR_INT_RESTORE()
 #define RB_DMA_WR_PRT(...)                 //os_printf
 
-void rb_init_dma_write(RB_DMA_WR_PTR rb, UINT8 *addr, UINT32 capacity, UINT32 ch)
+void rb_init_dma_write(RB_DMA_WR_PTR rb, uint8_t *addr, uint32_t capacity, uint32_t ch)
 {
     GDMA_CFG_ST en_cfg;
     RB_DMA_WR_INT_DECLARATION();
@@ -29,7 +30,7 @@ void rb_init_dma_write(RB_DMA_WR_PTR rb, UINT8 *addr, UINT32 capacity, UINT32 ch
     RB_DMA_WR_INT_RESTORE();
 
     en_cfg.channel = rb->dma_ch;
-    en_cfg.param = (UINT32)(rb->address + rb->capacity - RWP_SAFE_INTERVAL);
+    en_cfg.param = (uint32_t)(rb->address + rb->capacity - RWP_SAFE_INTERVAL);
     RB_DMA_WR_PRT("init set dst:%x\r\n", en_cfg.param);
     sddev_control(GDMA_DEV_NAME, CMD_GDMA_SET_DST_PAUSE_ADDR, &en_cfg);
 }
@@ -45,17 +46,17 @@ void rb_clear_dma_write(RB_DMA_WR_PTR rb)
     RB_DMA_WR_INT_RESTORE();
 
     en_cfg.channel = rb->dma_ch;
-    en_cfg.param = (UINT32)(rb->address + rb->capacity - RWP_SAFE_INTERVAL);
+    en_cfg.param = (uint32_t)(rb->address + rb->capacity - RWP_SAFE_INTERVAL);
     RB_DMA_WR_PRT("clear set dst:%x\r\n", en_cfg.param);
     sddev_control(GDMA_DEV_NAME, CMD_GDMA_SET_DST_PAUSE_ADDR, &en_cfg);
 }
 
-UINT32 rb_read_dma_write(RB_DMA_WR_PTR rb, UINT8 *buffer, UINT32 size, UINT32 count)
+uint32_t rb_read_dma_write(RB_DMA_WR_PTR rb, uint8_t *buffer, uint32_t size, uint32_t count)
 {
-    UINT32 required_bytes = size * count;
-    UINT32 read_bytes;
-    UINT32 remain_bytes;
-    UINT32 wp;
+    uint32_t required_bytes = size * count;
+    uint32_t read_bytes;
+    uint32_t remain_bytes;
+    uint32_t wp;
     GDMA_CFG_ST en_cfg;
     
     RB_DMA_WR_INT_DECLARATION();
@@ -66,7 +67,7 @@ UINT32 rb_read_dma_write(RB_DMA_WR_PTR rb, UINT8 *buffer, UINT32 size, UINT32 co
     en_cfg.channel = rb->dma_ch;
     wp = sddev_control(GDMA_DEV_NAME, CMD_GDMA_GET_DST_WRITE_ADDR, &en_cfg);
     RB_DMA_WR_PRT("rb read get dst_wr:%x\r\n", wp);
-    wp -= (UINT32)rb->address;
+    wp -= (uint32_t)rb->address;
     rb->wp = wp;
 
     if(wp >= rb->rp)
@@ -127,9 +128,9 @@ UINT32 rb_read_dma_write(RB_DMA_WR_PTR rb, UINT8 *buffer, UINT32 size, UINT32 co
 
     en_cfg.channel = rb->dma_ch;
     if(rb->rp >= RWP_SAFE_INTERVAL)
-        en_cfg.param = (UINT32)(rb->address + rb->rp - RWP_SAFE_INTERVAL);
+        en_cfg.param = (uint32_t)(rb->address + rb->rp - RWP_SAFE_INTERVAL);
     else
-        en_cfg.param = (UINT32)(rb->address + rb->capacity + rb->rp - RWP_SAFE_INTERVAL);
+        en_cfg.param = (uint32_t)(rb->address + rb->capacity + rb->rp - RWP_SAFE_INTERVAL);
     
     RB_DMA_WR_PRT("read set dst:%x\r\n", en_cfg.param);
     sddev_control(GDMA_DEV_NAME, CMD_GDMA_SET_DST_PAUSE_ADDR, &en_cfg);
@@ -137,15 +138,15 @@ UINT32 rb_read_dma_write(RB_DMA_WR_PTR rb, UINT8 *buffer, UINT32 size, UINT32 co
     return read_bytes;
 }
 
-UINT32 rb_get_fill_size_dma_write(RB_DMA_WR_PTR rb)
+uint32_t rb_get_fill_size_dma_write(RB_DMA_WR_PTR rb)
 {
-    UINT32 fill_size, wp;
+    uint32_t fill_size, wp;
     GDMA_CFG_ST en_cfg;
 
     en_cfg.channel = rb->dma_ch;
     wp = sddev_control(GDMA_DEV_NAME, CMD_GDMA_GET_DST_WRITE_ADDR, &en_cfg);
     RB_DMA_WR_PRT("fillsize get dst_wr:%x\r\n", wp);
-    wp -= (UINT32)rb->address;
+    wp -= (uint32_t)rb->address;
     rb->wp = wp;
 
     fill_size = rb->wp >= rb->rp ? rb->wp - rb->rp : rb->capacity - rb->rp + rb->wp;
@@ -153,15 +154,15 @@ UINT32 rb_get_fill_size_dma_write(RB_DMA_WR_PTR rb)
     return fill_size;
 }
 
-UINT32 rb_get_free_size_dma_write(RB_DMA_WR_PTR rb)
+uint32_t rb_get_free_size_dma_write(RB_DMA_WR_PTR rb)
 {
-    UINT32 free_size, wp;
+    uint32_t free_size, wp;
     GDMA_CFG_ST en_cfg;
 
     en_cfg.channel = rb->dma_ch;
     wp = sddev_control(GDMA_DEV_NAME, CMD_GDMA_GET_DST_WRITE_ADDR, &en_cfg);
     RB_DMA_WR_PRT("free size get dst_wr:%x\r\n", wp);
-    wp -= (UINT32)rb->address;
+    wp -= (uint32_t)rb->address;
     rb->wp = wp;
 
     free_size = rb->wp >= rb->rp ? rb->capacity - rb->wp + rb->rp : rb->rp - rb->wp;

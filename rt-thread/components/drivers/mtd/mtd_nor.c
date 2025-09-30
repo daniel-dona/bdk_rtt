@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : mtd_nor.c
  * This file is part of RT-Thread RTOS
@@ -34,7 +35,7 @@ static rt_err_t _mtd_init(rt_device_t dev)
     return RT_EOK;
 }
 
-static rt_err_t _mtd_open(rt_device_t dev, rt_uint16_t oflag)
+static rt_err_t _mtd_open(rt_device_t dev, uint16_t oflag)
 {
     return RT_EOK;
 }

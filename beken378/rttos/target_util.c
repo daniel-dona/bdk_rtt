@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 
@@ -11,9 +12,9 @@
 				delay(10):about 125us
 				delay(100):about 850us
  */
-void delay(INT32 num)
+void delay(int32_t num)
 {
-    volatile INT32 i,j;
+    volatile int32_t i,j;
 	
     for(i = 0; i < num; i ++)
     {
@@ -25,7 +26,7 @@ void delay(INT32 num)
 /*
 	when parameter is 1, the return result is approximately 1 ms;
  */
-void delay_ms(UINT32 ms_count)
+void delay_ms(uint32_t ms_count)
 {
     rt_thread_delay(rt_tick_from_millisecond(ms_count));
 }
@@ -33,7 +34,7 @@ void delay_ms(UINT32 ms_count)
 /*
 	[delay offset]worst case: delay about 1 second;
  */
-void delay_sec(UINT32 ms_count)
+void delay_sec(uint32_t ms_count)
 {
     rt_thread_delay(rt_tick_from_millisecond(ms_count * 1000));
 }
@@ -41,7 +42,7 @@ void delay_sec(UINT32 ms_count)
 /*
 	[delay offset]worst case: delay about 1 tick;
  */
-void delay_tick(UINT32 tick_count)
+void delay_tick(uint32_t tick_count)
 {
     rt_thread_delay(tick_count);	
 }

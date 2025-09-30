@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : i2c-bit-ops.h
  * This file is part of RT-Thread RTOS
@@ -32,15 +33,15 @@ extern "C" {
 struct rt_i2c_bit_ops
 {
     void *data;            /* private data for lowlevel routines */
-    void (*set_sda)(void *data, rt_int32_t state);
-    void (*set_scl)(void *data, rt_int32_t state);
-    rt_int32_t (*get_sda)(void *data);
-    rt_int32_t (*get_scl)(void *data);
+    void (*set_sda)(void *data, int32_t state);
+    void (*set_scl)(void *data, int32_t state);
+    int32_t (*get_sda)(void *data);
+    int32_t (*get_scl)(void *data);
 
-    void (*udelay)(rt_uint32_t us);
+    void (*udelay)(uint32_t us);
 
-    rt_uint32_t delay_us;  /* scl and sda line delay */
-    rt_uint32_t timeout;   /* in tick */
+    uint32_t delay_us;  /* scl and sda line delay */
+    uint32_t timeout;   /* in tick */
 };
 
 rt_err_t rt_i2c_bit_add_bus(struct rt_i2c_bus_device *bus,

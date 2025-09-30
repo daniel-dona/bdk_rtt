@@ -1,3 +1,4 @@
+#include <stdint.h>
 /**
  ****************************************************************************************
  *
@@ -1293,7 +1294,7 @@ static int app_gattc_event_ind_handler(kernel_msg_id_t const msgid,
 	}
 	bk_printf("\r\n");
 #endif
-	app_sdp_charac_callback_handler(CHARAC_NOTIFY,BLE_APP_INITING_GET_INDEX(conidx),param->handle,param->length,(uint8*)param->value);
+	app_sdp_charac_callback_handler(CHARAC_NOTIFY,BLE_APP_INITING_GET_INDEX(conidx),param->handle,param->length,(uint8_t*)param->value);
 
 	return (KERNEL_MSG_CONSUMED);  
 }
@@ -1316,7 +1317,7 @@ static int app_gattc_event_req_ind_handler(kernel_msg_id_t const msgid,
 	}
 	bk_printf("\r\n");
 #endif
-	app_sdp_charac_callback_handler(CHARAC_INDICATE,BLE_APP_INITING_GET_INDEX(conidx),param->handle,param->length,(uint8*)param->value);
+	app_sdp_charac_callback_handler(CHARAC_INDICATE,BLE_APP_INITING_GET_INDEX(conidx),param->handle,param->length,(uint8_t*)param->value);
 
 	return (KERNEL_MSG_CONSUMED);
 }

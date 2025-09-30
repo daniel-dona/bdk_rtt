@@ -1,8 +1,9 @@
+#include <stdint.h>
 #ifndef _BK7231U_CAL_H_
 #define _BK7231U_CAL_H_
 
 #if (CFG_SOC_NAME == SOC_BK7221U)
-void delay05us(INT32 num);
+void delay05us(int32_t num);
 
 #define trx_reg_is_write(st_trxreg)     while(BK7011RCBEKEN.REG0x1->value & st_trxreg) 	{cpu_delay(1);}
 

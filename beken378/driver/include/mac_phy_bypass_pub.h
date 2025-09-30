@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _MAC_PHY_BYPASS_PUB_H_
 #define _MAC_PHY_BYPASS_PUB_H_
 
@@ -40,8 +41,8 @@ enum
 #define PPDU_LEG_RATE_54MBPS                     (0x0C)
 
 typedef struct mbps_txs_mfr_st {
-    UINT32 mod_format;
-    UINT32 rate;
+    uint32_t mod_format;
+    uint32_t rate;
 }MBPS_TXS_MFR_ST, *MBPS_TXS_MFR_PTR;
 
 extern void mpb_init(void);

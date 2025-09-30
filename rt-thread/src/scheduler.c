@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  * File      : scheduler.c
  * This file is part of RT-Thread RTOS
@@ -40,21 +42,21 @@
 #include <rtthread.h>
 #include <rthw.h>
 
-static rt_int16_t rt_scheduler_lock_nest;
-extern volatile rt_uint8_t rt_interrupt_nest;
+static int16_t rt_scheduler_lock_nest;
+extern volatile uint8_t rt_interrupt_nest;
 
 rt_list_t rt_thread_priority_table[RT_THREAD_PRIORITY_MAX];
 struct rt_thread *rt_current_thread;
 
-rt_uint8_t rt_current_priority;
+uint8_t rt_current_priority;
 
 #if RT_THREAD_PRIORITY_MAX > 32
 /* Maximum priority level, 256 */
-rt_uint32_t rt_thread_ready_priority_group;
-rt_uint8_t rt_thread_ready_table[32];
+uint32_t rt_thread_ready_priority_group;
+uint8_t rt_thread_ready_table[32];
 #else
 /* Maximum priority level, 32 */
-rt_uint32_t rt_thread_ready_priority_group;
+uint32_t rt_thread_ready_priority_group;
 #endif
 
 rt_list_t rt_thread_defunct;
@@ -88,12 +90,12 @@ static void _rt_scheduler_stack_check(struct rt_thread *thread)
 {
     RT_ASSERT(thread != RT_NULL);
 
-    if (*((rt_uint8_t *)thread->stack_addr) != '#' ||
-        (rt_uint32_t)thread->sp <= (rt_uint32_t)thread->stack_addr ||
-        (rt_uint32_t)thread->sp >
-        (rt_uint32_t)thread->stack_addr + (rt_uint32_t)thread->stack_size)
+    if (*((uint8_t *)thread->stack_addr) != '#' ||
+        (uint32_t)thread->sp <= (uint32_t)thread->stack_addr ||
+        (uint32_t)thread->sp >
+        (uint32_t)thread->stack_addr + (uint32_t)thread->stack_size)
     {
-        rt_uint32_t level;
+        uint32_t level;
 
         rt_kprintf("thread:%s stack overflow\n", thread->name);
 #ifdef RT_USING_FINSH
@@ -107,7 +109,7 @@ static void _rt_scheduler_stack_check(struct rt_thread *thread)
         level = rt_hw_interrupt_disable();
         while (level);
     }
-    else if ((rt_uint32_t)thread->sp <= ((rt_uint32_t)thread->stack_addr + 32))
+    else if ((uint32_t)thread->sp <= ((uint32_t)thread->stack_addr + 32))
     {
         rt_kprintf("warning: %s stack is close to end of stack address.\n",
                    thread->name);
@@ -175,7 +177,7 @@ void rt_system_scheduler_start(void)
     rt_current_thread = to_thread;
 
     /* switch to new thread */
-    rt_hw_context_switch_to((rt_uint32_t)&to_thread->sp);
+    rt_hw_context_switch_to((uint32_t)&to_thread->sp);
 
     /* never come back */
 }
@@ -221,7 +223,7 @@ void rt_schedule(void)
         /* if the destination thread is not the same as current thread */
         if (to_thread != rt_current_thread)
         {
-            rt_current_priority = (rt_uint8_t)highest_ready_priority;
+            rt_current_priority = (uint8_t)highest_ready_priority;
             from_thread         = rt_current_thread;
             rt_current_thread   = to_thread;
 
@@ -244,8 +246,8 @@ void rt_schedule(void)
             {
                 extern void rt_thread_handle_sig(rt_bool_t clean_state);
 
-                rt_hw_context_switch((rt_uint32_t)&from_thread->sp,
-                                     (rt_uint32_t)&to_thread->sp);
+                rt_hw_context_switch((uint32_t)&from_thread->sp,
+                                     (uint32_t)&to_thread->sp);
 
                 /* enable interrupt */
                 rt_hw_interrupt_enable(level);
@@ -259,8 +261,8 @@ void rt_schedule(void)
             {
                 RT_DEBUG_LOG(RT_DEBUG_SCHEDULER, ("switch in interrupt\n"));
 
-                rt_hw_context_switch_interrupt((rt_uint32_t)&from_thread->sp,
-                                               (rt_uint32_t)&to_thread->sp);
+                rt_hw_context_switch_interrupt((uint32_t)&from_thread->sp,
+                                               (uint32_t)&to_thread->sp);
                 /* enable interrupt */
                 rt_hw_interrupt_enable(level);
             }
@@ -427,7 +429,7 @@ RTM_EXPORT(rt_exit_critical);
  *
  * @return the level of the scheduler lock. 0 means unlocked.
  */
-rt_uint16_t rt_critical_level(void)
+uint16_t rt_critical_level(void)
 {
     return rt_scheduler_lock_nest;
 }

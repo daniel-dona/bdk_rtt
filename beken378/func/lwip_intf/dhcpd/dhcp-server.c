@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /** dhcp-server.c: The DHCP Server
  */
 #include <string.h>

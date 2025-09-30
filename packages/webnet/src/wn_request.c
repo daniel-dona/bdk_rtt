@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  * File      : wn_request.c
  * This file is part of RT-Thread RTOS
@@ -53,7 +55,7 @@
 static void _webnet_request_parse_query(struct webnet_request* request)
 {
     char *ptr, *end_ptr;
-    rt_uint32_t index;
+    uint32_t index;
 
     if ((request->query == RT_NULL) || (*request->query == '\0')) return; /* no query */
 
@@ -159,7 +161,7 @@ static void _webnet_request_copy_str(struct webnet_request* request)
  */
 rt_bool_t webnet_request_has_query(struct webnet_request* request, char* name)
 {
-    rt_uint32_t index;
+    uint32_t index;
 
     for (index = 0; index < request->query_counter; index ++)
     {
@@ -176,7 +178,7 @@ RTM_EXPORT(webnet_request_has_query);
  */
 const char* webnet_request_get_query(struct webnet_request* request, char* name)
 {
-    rt_uint32_t index;
+    uint32_t index;
 
     for (index = 0; index < request->query_counter; index ++)
     {
@@ -685,8 +687,8 @@ void webnet_request_parse(struct webnet_request* request, char* buffer, int leng
                 {
                     /* end of http request */
                     request->result_code = 200;
-                    session->buffer_offset = (rt_uint16_t)(length -
-                                                      ((rt_uint32_t)request->query - (rt_uint32_t)buffer));
+                    session->buffer_offset = (uint16_t)(length -
+                                                      ((uint32_t)request->query - (uint32_t)buffer));
                     /* move the buffer to the session */
                     if (session->buffer_offset > 0)
                     {
@@ -718,7 +720,7 @@ void webnet_request_parse(struct webnet_request* request, char* buffer, int leng
                 }
 
                 /* get the length of already read bytes */
-                read_length = (int)(length - ((rt_uint32_t)request->query - (rt_uint32_t)buffer));
+                read_length = (int)(length - ((uint32_t)request->query - (uint32_t)buffer));
                 if (read_length > 0)
                 {
                     if (read_length > request->content_length) read_length = request->content_length;

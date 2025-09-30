@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  * ipcp.c - PPP IP Control Protocol.
  *

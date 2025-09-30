@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : mqueue.h
  * This file is part of RT-Thread RTOS
@@ -30,8 +31,8 @@
 struct mqdes
 {
     /* reference count and unlinked */
-    rt_uint16_t refcount;
-    rt_uint16_t unlinked;
+    uint16_t refcount;
+    uint16_t unlinked;
 
     /* RT-Thread message queue */
     rt_mq_t mq;

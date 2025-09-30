@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /**
  * @file
  * SNMP core API for implementing MIBs
@@ -142,8 +144,8 @@ union snmp_variant_value
 {
   void* ptr;
   const void* const_ptr;
-  u32_t u32;
-  s32_t s32;
+  u32_t uint32_t;
+  s32_t int32_t;
 };
 
 

@@ -42,7 +42,7 @@ char ZLIB_INTERNAL *gz_strwinerror (error)
         NULL,
         error,
         0, /* Default language */
-        (LPVOID)&msgbuf,
+        (void *)&msgbuf,
         0,
         NULL);
     if (chars != 0) {

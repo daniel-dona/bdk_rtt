@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : module_alias.c
  * This file is part of RT-Thread RTOS/WebNet Server
@@ -20,7 +21,7 @@ struct webnet_alias_item
     char* new_path;
 };
 static struct webnet_alias_item *_alias_items = RT_NULL;
-static rt_uint32_t _alias_item_count = 0;
+static uint32_t _alias_item_count = 0;
 
 void webnet_alias_set(char* old_path, char* new_path)
 {

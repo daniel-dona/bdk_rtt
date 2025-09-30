@@ -141,7 +141,7 @@ typedef void (*subscribe_cb)(mqtt_client *client, message_data *data);
 /*********************************************************************************************************
 ** 外部函数声明
 *********************************************************************************************************/
-extern int paho_mqtt_start(mqtt_client *client, rt_uint32_t stack_size, rt_uint8_t  priority);
+extern int paho_mqtt_start(mqtt_client *client, uint32_t stack_size, uint8_t  priority);
 extern int paho_mqtt_stop(mqtt_client *client);
 extern int paho_mqtt_subscribe(mqtt_client *client, enum QoS qos, const char *topic, subscribe_cb callback);
 extern int paho_mqtt_unsubscribe(mqtt_client *client, const char *topic);

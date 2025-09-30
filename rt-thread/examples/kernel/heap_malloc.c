@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 #include <rtthread.h>
 #include "tc_comm.h"
 
@@ -5,7 +7,7 @@
  * This is an example for heap malloc
  */
 
-static rt_bool_t mem_check(rt_uint8_t *ptr, rt_uint8_t value, rt_uint32_t len)
+static rt_bool_t mem_check(uint8_t *ptr, uint8_t value, uint32_t len)
 {
     while (len)
     {
@@ -20,8 +22,8 @@ static rt_bool_t mem_check(rt_uint8_t *ptr, rt_uint8_t value, rt_uint32_t len)
 
 static void heap_malloc_init()
 {
-    rt_uint8_t res = TC_STAT_PASSED;
-    rt_uint8_t *ptr1, *ptr2, *ptr3, *ptr4, *ptr5;
+    uint8_t res = TC_STAT_PASSED;
+    uint8_t *ptr1, *ptr2, *ptr3, *ptr4, *ptr5;
 
     ptr1 = rt_malloc(1);
     ptr2 = rt_malloc(13);

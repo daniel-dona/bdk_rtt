@@ -1,3 +1,4 @@
+#include <stdint.h>
 /**
  ******************************************************************************
  * @file    BkDriverUart.h
@@ -33,7 +34,7 @@
 
 typedef struct
 {
-    UINT8 user_buffer_flag;
+    uint8_t user_buffer_flag;
     ring_buffer_t *rx_buffer;
 } UART_UI_ST;
 
@@ -83,8 +84,8 @@ OSStatus bk_uart_initialize_test( bk_uart_t uart, uint8_t config, ring_buffer_t 
 
 OSStatus bk_uart_initialize( bk_uart_t uart, const bk_uart_config_t *config, ring_buffer_t *optional_rx_buffer )
 {
-    UINT32 ret;
-    UINT32 status;
+    uint32_t ret;
+    uint32_t status;
     DD_HANDLE uart_hdl;
 
     if(BK_UART_1 == uart)
@@ -123,8 +124,8 @@ OSStatus bk_uart_send( bk_uart_t uart, const void *data, uint32_t size )
 
 OSStatus bk_uart_recv( bk_uart_t uart, void *data, uint32_t size, uint32_t timeout )
 {
-    UINT32 ret;
-    UINT32 status;
+    uint32_t ret;
+    uint32_t status;
     DD_HANDLE uart_hdl;
 
     if(BK_UART_1 == uart)
@@ -147,8 +148,8 @@ OSStatus bk_uart_recv( bk_uart_t uart, void *data, uint32_t size, uint32_t timeo
 
 OSStatus bk_uart_recv_prefetch( bk_uart_t uart, void *data, uint32_t size, uint32_t timeout )
 {
-    UINT32 ret;
-    UINT32 status;
+    uint32_t ret;
+    uint32_t status;
     DD_HANDLE uart_hdl;
     UART_PEEK_RX_T peek;
 
@@ -171,7 +172,7 @@ OSStatus bk_uart_recv_prefetch( bk_uart_t uart, void *data, uint32_t size, uint3
 uint32_t bk_uart_get_length_in_buffer( bk_uart_t uart )
 {
     uint32_t length;
-    UINT32 status;
+    uint32_t status;
     DD_HANDLE uart_hdl;
 
     if(BK_UART_1 == uart)
@@ -187,8 +188,8 @@ uint32_t bk_uart_get_length_in_buffer( bk_uart_t uart )
 
 OSStatus bk_uart_set_rx_callback(bk_uart_t uart, uart_callback callback, void *param)
 {
-    UINT32 ret;
-    UINT32 status;
+    uint32_t ret;
+    uint32_t status;
     DD_HANDLE uart_hdl;
     UART_CALLBACK_RX_T uart_callback_rx;
 

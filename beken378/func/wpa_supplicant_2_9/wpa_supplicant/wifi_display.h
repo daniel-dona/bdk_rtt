@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * wpa_supplicant - Wi-Fi Display
  * Copyright (c) 2011, Atheros Communications, Inc.
@@ -19,6 +20,6 @@ int wifi_display_subelem_set_from_ies(struct wpa_global *global,
 				      struct wpabuf *ie);
 int wifi_display_subelem_get(struct wpa_global *global, char *cmd,
 			     char *buf, size_t buflen);
-char * wifi_display_subelem_hex(const struct wpabuf *wfd_subelems, u8 id);
+char * wifi_display_subelem_hex(const struct wpabuf *wfd_subelems, uint8_t id);
 
 #endif /* WIFI_DISPLAY_H */

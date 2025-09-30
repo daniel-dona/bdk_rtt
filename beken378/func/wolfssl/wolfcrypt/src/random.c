@@ -1,3 +1,4 @@
+#include <stdint.h>
 /* random.c
  *
  * Copyright (C) 2006-2019 wolfSSL Inc.
@@ -2258,7 +2259,7 @@ int wc_GenerateSeed(OS_Seed* os, byte* output, word32 sz)
 		#include "stdlib.h"
         static long get_timestamp(void) {
             long myTime = 0;
-            INT32 fd = m2mb_rtc_open("/dev/rtc0", 0);
+            int32_t fd = m2mb_rtc_open("/dev/rtc0", 0);
             if (fd >= 0) {
                 M2MB_RTC_TIMEVAL_T timeval;
                 m2mb_rtc_ioctl(fd, M2MB_RTC_IOCTL_GET_TIMEVAL, &timeval);

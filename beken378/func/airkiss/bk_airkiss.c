@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "bk_airkiss.h"
 #include "airkiss.h"
@@ -165,7 +166,7 @@ static void bk_airkiss_wifi_connect(airkiss_result_t *airkiss_result)
     demo_sta_app_init(airkiss_result->ssid, airkiss_result->pwd);
 }
 
-void bk_airkiss_start_udp_boardcast(u8 random_data)
+void bk_airkiss_start_udp_boardcast(uint8_t random_data)
 {
     int err, i;
     int udp_broadcast_fd = -1; 

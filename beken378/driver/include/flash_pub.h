@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _FLASH_PUB_H
 #define _FLASH_PUB_H
 
@@ -50,8 +51,8 @@ typedef enum
 
 typedef struct
 {
-    UINT8 byte;
-    UINT16 value;
+    uint8_t byte;
+    uint16_t value;
 } flash_sr_t;
 
 /*******************************************************************************
@@ -59,9 +60,9 @@ typedef struct
 *******************************************************************************/
 extern void flash_init(void);
 extern void flash_exit(void);
-extern UINT8 flash_get_line_mode(void);
-extern void flash_set_line_mode(UINT8);
-extern UINT32 flash_read(char *user_buf, UINT32 count, UINT32 address);
-extern UINT32 flash_write(char *user_buf, UINT32 count, UINT32 address);
+extern uint8_t flash_get_line_mode(void);
+extern void flash_set_line_mode(uint8_t);
+extern uint32_t flash_read(char *user_buf, uint32_t count, uint32_t address);
+extern uint32_t flash_write(char *user_buf, uint32_t count, uint32_t address);
 #endif //_FLASH_PUB_H
 

@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : cdc.h
  * This file is part of RT-Thread RTOS
@@ -107,39 +108,39 @@
 
 struct ucdc_header_descriptor
 {
-    rt_uint8_t length;
-    rt_uint8_t type;
-    rt_uint8_t subtype;
-    rt_uint16_t bcd;        
+    uint8_t length;
+    uint8_t type;
+    uint8_t subtype;
+    uint16_t bcd;        
 };
 typedef struct ucdc_header_descriptor* ucdc_hdr_desc_t;
 
 struct ucdc_acm_descriptor
 {
-    rt_uint8_t length;
-    rt_uint8_t type;
-    rt_uint8_t subtype;
-    rt_uint8_t capabilties;
+    uint8_t length;
+    uint8_t type;
+    uint8_t subtype;
+    uint8_t capabilties;
 };
 typedef struct ucdc_acm_descriptor* ucdc_acm_desc_t;
 
 struct ucdc_call_mgmt_descriptor
 {
-    rt_uint8_t length;
-    rt_uint8_t type;
-    rt_uint8_t subtype;
-    rt_uint8_t capabilties;    
-    rt_uint8_t data_interface;
+    uint8_t length;
+    uint8_t type;
+    uint8_t subtype;
+    uint8_t capabilties;    
+    uint8_t data_interface;
 };
 typedef struct ucdc_call_mgmt_descriptor* ucdc_call_mgmt_desc_t;
 
 struct ucdc_union_descriptor
 {
-    rt_uint8_t length;
-    rt_uint8_t type;
-    rt_uint8_t subtype;
-    rt_uint8_t master_interface;
-    rt_uint8_t slave_interface0;
+    uint8_t length;
+    uint8_t type;
+    uint8_t subtype;
+    uint8_t master_interface;
+    uint8_t slave_interface0;
 };
 typedef struct ucdc_union_descriptor* ucdc_union_desc_t;
 
@@ -159,14 +160,14 @@ typedef struct ucdc_comm_descriptor* ucdc_comm_desc_t;
 
 struct ucdc_enet_descriptor
 {
-  rt_uint8_t    bFunctionLength;
-  rt_uint8_t    bDescriptorType;
-  rt_uint8_t    bDescriptorSubtype;
-  rt_uint8_t    iMACAddress;
-  rt_uint8_t    bmEthernetStatistics[4];
-  rt_uint16_t   wMaxSegmentSize;
-  rt_uint16_t   wMCFilters;
-  rt_uint8_t    bNumberPowerFilters;
+  uint8_t    bFunctionLength;
+  uint8_t    bDescriptorType;
+  uint8_t    bDescriptorSubtype;
+  uint8_t    iMACAddress;
+  uint8_t    bmEthernetStatistics[4];
+  uint16_t   wMaxSegmentSize;
+  uint16_t   wMCFilters;
+  uint8_t    bNumberPowerFilters;
 };
 struct ucdc_eth_descriptor
 {
@@ -191,10 +192,10 @@ typedef struct ucdc_data_descriptor* ucdc_data_desc_t;
 
 struct ucdc_line_coding
 {
-    rt_uint32_t dwDTERate;
-    rt_uint8_t bCharFormat;
-    rt_uint8_t bParityType;
-    rt_uint8_t bDataBits;
+    uint32_t dwDTERate;
+    uint8_t bCharFormat;
+    uint8_t bParityType;
+    uint8_t bDataBits;
 };
 typedef struct ucdc_line_coding* ucdc_line_coding_t;
 
@@ -210,18 +211,18 @@ typedef struct cdc_eps* cdc_eps_t;
 
 struct ucdc_management_element_notifications
 {
-    rt_uint8_t bmRequestType;
-    rt_uint8_t bNotificatinCode;
-    rt_uint16_t wValue;
-    rt_uint16_t wIndex;
-    rt_uint16_t wLength;
+    uint8_t bmRequestType;
+    uint8_t bNotificatinCode;
+    uint16_t wValue;
+    uint16_t wIndex;
+    uint16_t wLength;
 };
 typedef struct ucdc_management_element_notifications * ucdc_mg_notifications_t;
 
 struct ucdc_connection_speed_change_data
 {
-    rt_uint32_t down_bit_rate;
-    rt_uint32_t up_bit_rate;
+    uint32_t down_bit_rate;
+    uint32_t up_bit_rate;
 };
 typedef struct connection_speed_change_data * connect_speed_data_t;
 

@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  *
  * (C) 2014 David Lettier.

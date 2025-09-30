@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef PIPE_H__
 #define PIPE_H__
 
@@ -19,10 +20,10 @@ struct rt_pipe_device
 
     /* ring buffer in pipe device */
     struct rt_ringbuffer *fifo;
-    rt_uint16_t bufsz;
+    uint16_t bufsz;
 
-    rt_uint8_t readers;
-    rt_uint8_t writers;
+    uint8_t readers;
+    uint8_t writers;
 
     rt_wqueue_t reader_queue;
     rt_wqueue_t writer_queue;

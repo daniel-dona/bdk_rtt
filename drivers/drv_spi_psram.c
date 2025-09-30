@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <rtthread.h>
 #include <rthw.h>
 #include <rtdevice.h>
@@ -28,7 +29,7 @@ static rt_err_t rt_spi_psram_init(rt_device_t dev)
     return RT_EOK;
 }
 
-static rt_err_t rt_spi_psram_open(rt_device_t dev, rt_uint16_t oflag)
+static rt_err_t rt_spi_psram_open(rt_device_t dev, uint16_t oflag)
 {
     return RT_EOK;
 }

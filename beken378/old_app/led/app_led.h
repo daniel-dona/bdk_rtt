@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef __APP_LED_H__
 #define __APP_LED_H__
 
@@ -13,7 +14,7 @@ typedef enum
 } DEV_STATE;
 
 
-UINT32 app_led_init(void);
+uint32_t app_led_init(void);
 void app_led_send_msg(DEV_STATE new_msg);
 
 #endif

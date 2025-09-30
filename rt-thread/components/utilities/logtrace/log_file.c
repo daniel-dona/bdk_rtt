@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : log_file.c
  * This file is part of RT-Thread RTOS
@@ -41,7 +42,7 @@ struct file_device
 static struct file_device _file_device;
 
 /* common device interface */
-static rt_err_t fdevice_open(rt_device_t dev, rt_uint16_t oflag)
+static rt_err_t fdevice_open(rt_device_t dev, uint16_t oflag)
 {
     int fd;
     struct file_device *fdev = (struct file_device *)dev;

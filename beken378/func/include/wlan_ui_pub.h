@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _WLAN_UI_PUB_
 #define _WLAN_UI_PUB_
 
@@ -238,8 +239,8 @@ typedef struct vif_addcfg_st {
     char *ssid;
     char *key;
     char *name;
-    u8 wlan_role;
-    u8 adv;
+    uint8_t wlan_role;
+    uint8_t adv;
 } VIF_ADDCFG_ST, *VIF_ADDCFG_PTR;
 
 #define MONITOR_FILTER_MUL_BRD_CAST     (1U << 0)
@@ -416,14 +417,14 @@ extern int is_apm_bss_config_empty(void);
  *              0:rising,1:falling.
  */
 #if CFG_USE_DEEP_PS
-void bk_enter_deep_sleep(UINT32 gpio_index_map,
-								UINT32 gpio_edge_map,
-								UINT32 gpio_last_index_map,
-								UINT32 gpio_last_edge_map,
-								UINT32 sleep_time,
-								UINT32 wake_up_way,
-								UINT32 gpio_stay_lo_map,
-								UINT32 gpio_stay_hi_map);
+void bk_enter_deep_sleep(uint32_t gpio_index_map,
+								uint32_t gpio_edge_map,
+								uint32_t gpio_last_index_map,
+								uint32_t gpio_last_edge_map,
+								uint32_t sleep_time,
+								uint32_t wake_up_way,
+								uint32_t gpio_stay_lo_map,
+								uint32_t gpio_stay_hi_map);
 #endif
 /** @brief  Enable dtim power save,close rf,and wakeup by ieee dtim dynamical
  *
@@ -451,10 +452,10 @@ extern int bk_wlan_dtim_with_normal_close(void);
  */
 extern int bk_wlan_dtim_rf_ps_mode_do_wakeup();
 extern int bk_wlan_dtim_rf_ps_disable_send_msg(void);
-//extern int bk_wlan_dtim_rf_ps_set_linger_time(UINT32 );
-extern UINT32 bk_wlan_dtim_rf_ps_get_sleep_time(void);
-extern int bk_wlan_mcu_suppress_and_sleep(UINT32);
-extern void bk_wlan_set_max_txpwr(FP32 max_tx_pwr);
+//extern int bk_wlan_dtim_rf_ps_set_linger_time(uint32_t );
+extern uint32_t bk_wlan_dtim_rf_ps_get_sleep_time(void);
+extern int bk_wlan_mcu_suppress_and_sleep(uint32_t);
+extern void bk_wlan_set_max_txpwr(float max_tx_pwr);
 extern void user_callback_register(void);
 
 /** @brief  Enable mcu power save,close mcu ,and wakeup by irq
@@ -473,10 +474,10 @@ enum
 #define     PS_RF_SLEEP_BIT         CO_BIT(RF_SLEEP)
 #define     PS_MCU_SLEEP_BIT        CO_BIT(MCU_SLEEP)
 #define     PS_DEEP_SLEEP_BIT       CO_BIT(DEEP_PS)
-typedef     UINT32      BK_PS_LEVEL;
+typedef     uint32_t      BK_PS_LEVEL;
 
 void bk_wlan_connection_loss(void);
-void bk_wlan_start_assign_scan(UINT8 **ssid_ary, UINT8 ssid_num);
+void bk_wlan_start_assign_scan(uint8_t **ssid_ary, uint8_t ssid_num);
 
 void bk_wlan_scan_ap_reg_cb(FUNC_2PARAM_PTR ind_cb);
 unsigned char bk_wlan_get_scan_ap_result_numbers(void);
@@ -510,7 +511,7 @@ extern void wlan_ui_bcn_callback(uint8_t *data, int len, wifi_link_info_t *info)
 extern void power_save_bcn_callback(uint8_t *data, int len, wifi_link_info_t *info);
 extern void bk_wlan_register_bcn_cb(monitor_cb_t fn);
 extern void mcu_ps_bcn_callback(uint8_t *data, int len, wifi_link_info_t *info);
-extern void rwnx_cal_set_max_twper(FP32 max_tx_pwr);
+extern void rwnx_cal_set_max_twper(float max_tx_pwr);
 extern void bk_wlan_ap_csa_coexist_mode(void *arg, uint8_t dummy);
 
 #if CFG_WPA_CTRL_IFACE

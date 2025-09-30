@@ -1,3 +1,4 @@
+#include <stdint.h>
 /* speexdsp_types.h taken from libogg */
 /********************************************************************
  *                                                                  *

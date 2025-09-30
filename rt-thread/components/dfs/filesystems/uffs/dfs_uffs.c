@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : dfs_uffs.c
  * This file is part of Device File System in RT-Thread RTOS
@@ -223,7 +224,7 @@ static int dfs_uffs_unmount(struct dfs_filesystem* fs)
 static int dfs_uffs_mkfs(rt_device_t dev_id)
 {
     rt_base_t index;
-    rt_uint32_t block;
+    uint32_t block;
     struct rt_mtd_nand_device * mtd;
 
     /*1. find the device index */
@@ -481,9 +482,9 @@ static int dfs_uffs_seek(struct dfs_fd* file,
 static int dfs_uffs_getdents(
     struct dfs_fd* file,
     struct dirent* dirp,
-    rt_uint32_t count)
+    uint32_t count)
 {
-    rt_uint32_t index;
+    uint32_t index;
     char * file_path;
     struct dirent* d;
     uffs_DIR* dir;
@@ -540,7 +541,7 @@ static int dfs_uffs_getdents(
 
         /* write the rest args of struct dirent* dirp  */
         d->d_namlen = rt_strlen(uffs_d->d_name);
-        d->d_reclen = (rt_uint16_t)sizeof(struct dirent);
+        d->d_reclen = (uint16_t)sizeof(struct dirent);
         rt_strncpy(d->d_name, uffs_d->d_name, rt_strlen(uffs_d->d_name) + 1);
 
         index ++;

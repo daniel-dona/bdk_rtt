@@ -1,3 +1,4 @@
+#include <stdint.h>
 
 #ifndef __BLE_H_
 #define __BLE_H_
@@ -33,8 +34,8 @@ typedef struct ble_message {
 } BLE_MSG_T;
 
 uint8_t ble_get_sys_mode(void);
-void ble_send_msg(UINT32 data);
-UINT32 ble_ctrl( UINT32 cmd, void *param );
+void ble_send_msg(uint32_t data);
+uint32_t ble_ctrl( uint32_t cmd, void *param );
 void ble_switch_rf_to_wifi(void);
 
 #endif

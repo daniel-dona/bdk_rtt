@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "pwm_mutex.h"
 #include "include.h"
 #include "icu_pub.h"
@@ -7,12 +8,12 @@
 
 
 #if (CFG_SOC_NAME == SOC_BK7221U)
-int bk_cw_pwm_reset_duty_cycle(uint8 channel_num_1, uint8 channel_num_2,
-										uint32 duty_cycle_1, uint32 duty_cycle_2,
-										uint32 end_value, uint32 dead_band_1)
+int bk_cw_pwm_reset_duty_cycle(uint8_t channel_num_1, uint8_t channel_num_2,
+										uint32_t duty_cycle_1, uint32_t duty_cycle_2,
+										uint32_t end_value, uint32_t dead_band_1)
 {
 	GLOBAL_INT_DECLARATION();
-	UINT32 status;
+	uint32_t status;
 
 	TPWM_PRT("bk_cw_pwm_reset_duty_cycle: %d %d %ld %ld %ld %ld\r\n",
 	channel_num_1, channel_num_2, duty_cycle_1, duty_cycle_2, end_value, dead_band_1);
@@ -90,9 +91,9 @@ int bk_cw_pwm_reset_duty_cycle(uint8 channel_num_1, uint8 channel_num_2,
 	return 0;
 }
 #else
-int  bk_cw_pwm_reset_duty_cycle(uint8 channel_num_1, uint8 channel_num_2,
-									uint32 duty_cycle_1, uint32 duty_cycle_2,
-									uint32 end_value, uint32 dead_band_1)
+int  bk_cw_pwm_reset_duty_cycle(uint8_t channel_num_1, uint8_t channel_num_2,
+									uint32_t duty_cycle_1, uint32_t duty_cycle_2,
+									uint32_t end_value, uint32_t dead_band_1)
 {
 	return -1;
 }

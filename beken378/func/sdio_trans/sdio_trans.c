@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 #include "sdio_pub.h"
@@ -43,8 +44,8 @@ static DD_HANDLE sdio_hdl;
 
 SDIO_NODE_PTR sdio_trans_get_node(void)
 {
-    UINT32 status;
-    UINT32 rd_sta;
+    uint32_t status;
+    uint32_t rd_sta;
     DD_HANDLE sdio_hdl;
     SDIO_NODE_PTR ret = 0;
     SDIO_NODE_PTR mem_node_ptr;
@@ -72,11 +73,11 @@ rxed_exception:
     return ret;
 }
 
-UINT32 sdio_trans_release_node(SDIO_NODE_PTR mem_node_ptr)
+uint32_t sdio_trans_release_node(SDIO_NODE_PTR mem_node_ptr)
 {
-    UINT32 status;
+    uint32_t status;
     DD_HANDLE sdio_hdl;
-    UINT32 ret = SDIO_INTF_SUCCESS;
+    uint32_t ret = SDIO_INTF_SUCCESS;
 
     sdio_hdl = ddev_open(SDIO_DEV_NAME, &status, 0);
     if(DD_HANDLE_UNVALID == sdio_hdl)
@@ -128,8 +129,8 @@ void sdio_trans_close(void)
 }
  int sdio_trans_init(void)
 {	
-	UINT32 ret;
-	UINT32 status;
+	uint32_t ret;
+	uint32_t status;
 
 	ret = SDIO_TRANS_FAILURE;
 

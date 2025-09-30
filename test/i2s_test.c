@@ -27,7 +27,7 @@
 
 #ifdef I2S_TEST
 
-extern UINT32 i2s_configure(UINT32 fifo_level, UINT32 sample_rate, UINT32 bits_per_sample, UINT32 mode);
+extern uint32_t i2s_configure(uint32_t fifo_level, uint32_t sample_rate, uint32_t bits_per_sample, uint32_t mode);
 
 volatile i2s_trans_t i2s_trans;
 i2s_level_t  i2s_fifo_level;
@@ -36,8 +36,8 @@ i2s_level_t  i2s_fifo_level;
 {
 	struct rt_device *i2s_device;
 	struct i2s_message msg;	
-	uint32 i,rate,bit_length ;
-	uint32 i2s_mode = 0;
+	uint32_t i,rate,bit_length ;
+	uint32_t i2s_mode = 0;
 	if(argc != 4)
 	{
 		rt_kprintf("---cmd error--\r\n");

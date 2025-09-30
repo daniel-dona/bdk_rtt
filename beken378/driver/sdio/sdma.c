@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 
@@ -13,13 +14,13 @@ TX_FUNC intr_tx_func = 0;
 RX_FUNC intr_rx_func = 0;
 CMD_FUNC intr_cmd_func = 0;
 
-UINT8 *cmd_buf = 0;
+uint8_t *cmd_buf = 0;
 
-volatile UINT32 cmd_data_dir = SDMA_DIR_IDLE;
+volatile uint32_t cmd_data_dir = SDMA_DIR_IDLE;
 
 void sdma_init(void)
 {
-    UINT32 reg;
+    uint32_t reg;
 
 #if CFG_REAL_SDIO
     intc_service_register(FIQ_SDIO_DMA, PRI_FIQ_SDIO_DMA, sdma_isr);
@@ -32,7 +33,7 @@ void sdma_init(void)
 
 void sdma_open(void)
 {
-    UINT32 reg;
+    uint32_t reg;
 
     reg = SDMA_CONFIG_INTR_EN_TX
           | SDMA_CONFIG_INTR_EN_RX
@@ -46,7 +47,7 @@ void sdma_uninit(void)
 
 void sdma_close(void)
 {
-    UINT32 reg;
+    uint32_t reg;
 
     reg = REG_READ(REG_SDMA_CONFIG);
     reg &= ~(SDMA_CONFIG_INTR_EN_TX
@@ -56,11 +57,11 @@ void sdma_close(void)
 }
 
 #ifdef SDMA_INTERACT_WITH_HOST
-UINT32 sdma_get_blk_len(void)
+uint32_t sdma_get_blk_len(void)
 {
-    UINT32 reg;
-    UINT32 power;
-    UINT32 blk_len;
+    uint32_t reg;
+    uint32_t power;
+    uint32_t blk_len;
 
     reg = REG_READ(REG_SDMA_INTERACTIVE_HOST);
     power = (reg >> INTERACTIVE_BLK_LEN_POSI) & INTERACTIVE_BLK_LEN_MASK;
@@ -72,7 +73,7 @@ UINT32 sdma_get_blk_len(void)
 
 void sdma_set_tx_valid(void)
 {
-    UINT32 reg;
+    uint32_t reg;
 
     reg = REG_READ(REG_SDMA_INTERACTIVE_HOST);
     reg |= INTERACTIVE_RX_VALID_BIT;
@@ -81,16 +82,16 @@ void sdma_set_tx_valid(void)
 
 void sdma_clr_tx_valid(void)
 {
-    UINT32 reg;
+    uint32_t reg;
 
     reg = REG_READ(REG_SDMA_INTERACTIVE_HOST);
     reg &= ~INTERACTIVE_RX_VALID_BIT;
     REG_WRITE(REG_SDMA_INTERACTIVE_HOST, reg);
 }
 
-void sdma_set_tx_dat_count(UINT32 val)
+void sdma_set_tx_dat_count(uint32_t val)
 {
-    UINT32 reg;
+    uint32_t reg;
 
     reg = REG_READ(REG_SDMA_INTERACTIVE_HOST);
     reg &= ~(INTERACTIVE_RX_COUNT_MASK << INTERACTIVE_RX_COUNT_POSI);
@@ -121,15 +122,15 @@ void sdma_register_handler(TX_FUNC tx_callback,
     return;
 }
 
-UINT32 sdma_dma_start(UINT8 *buf, UINT32 len)
+uint32_t sdma_dma_start(uint8_t *buf, uint32_t len)
 {
-    UINT32 reg;
-    UINT32 addr;
+    uint32_t reg;
+    uint32_t addr;
 
     ASSERT(len);
     ASSERT(buf);
 
-    addr  = (UINT32)buf;
+    addr  = (uint32_t)buf;
 
     REG_WRITE(REG_SDMA_ADDR, addr);
 
@@ -141,14 +142,14 @@ UINT32 sdma_dma_start(UINT8 *buf, UINT32 len)
     return 0;
 }
 
-UINT32 sdma_start_tx(UINT8 *buf, UINT32 len)
+uint32_t sdma_start_tx(uint8_t *buf, uint32_t len)
 {
     cmd_data_dir = SDMA_DIR_TX;
 
     return sdma_dma_start(buf, len);
 }
 
-UINT32 sdma_start_rx(UINT8 *buf, UINT32 len)
+uint32_t sdma_start_rx(uint8_t *buf, uint32_t len)
 {
     cmd_data_dir = SDMA_DIR_RX;
 
@@ -160,9 +161,9 @@ void sdma_fake_stop_dma(void)
     cmd_data_dir = SDMA_DIR_IDLE;
 }
 
-UINT32 sdma_start_cmd(UINT8 *cmd, UINT32 len)
+uint32_t sdma_start_cmd(uint8_t *cmd, uint32_t len)
 {
-    UINT32 reg;
+    uint32_t reg;
 
     if(len != CMD_BUF_MAX_LEN)
     {
@@ -184,9 +185,9 @@ UINT32 sdma_start_cmd(UINT8 *cmd, UINT32 len)
     return 0;
 }
 
-void sdma_rd_cmd_content(void *buf, UINT32 len)
+void sdma_rd_cmd_content(void *buf, uint32_t len)
 {
-    UINT8 *src;
+    uint8_t *src;
 
     if(len > CMD_BUF_MAX_LEN)
     {
@@ -194,13 +195,13 @@ void sdma_rd_cmd_content(void *buf, UINT32 len)
         len = CMD_BUF_MAX_LEN;
     }
 
-    src = (UINT8 *)REG_SDMA_CMD_BA;
+    src = (uint8_t *)REG_SDMA_CMD_BA;
     os_memcpy(buf, src, len);
 
     return;
 }
 
-void sdma_tx_isr_handler(UINT32 irq_status)
+void sdma_tx_isr_handler(uint32_t irq_status)
 {
     if(irq_status & SDMA_INTR_TX_DATA_BIT)
     {
@@ -214,9 +215,9 @@ void sdma_tx_isr_handler(UINT32 irq_status)
     }
 }
 
-void sdma_rx_isr_handler(UINT32 irq_status)
+void sdma_rx_isr_handler(uint32_t irq_status)
 {
-    UINT32 rx_count;
+    uint32_t rx_count;
 
     if(irq_status & SDMA_INTR_RX_DATA_BIT)
     {
@@ -233,9 +234,9 @@ void sdma_rx_isr_handler(UINT32 irq_status)
     }
 }
 
-void sdma_cmd_isr_handler(UINT32 irq_status)
+void sdma_cmd_isr_handler(uint32_t irq_status)
 {
-    UINT32 rx_count;
+    uint32_t rx_count;
 
     if(irq_status & SDMA_INTR_CMD_BIT)
     {
@@ -255,7 +256,7 @@ void sdma_cmd_isr_handler(UINT32 irq_status)
 
 void sdma_isr(void)
 {
-    UINT32 irq_sta;
+    uint32_t irq_sta;
 
     /*0, get isr status*/
     irq_sta = REG_READ(REG_SDMA_INTR_STATUS);

@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : hwtimer.c
  * This file is part of RT-Thread RTOS
@@ -25,11 +26,11 @@
 #include <rtthread.h>
 #include <rtdevice.h>
 
-rt_inline rt_uint32_t timeout_calc(rt_hwtimer_t *timer, rt_hwtimerval_t *tv)
+rt_inline uint32_t timeout_calc(rt_hwtimer_t *timer, rt_hwtimerval_t *tv)
 {
     float overflow;
     float timeout;
-    rt_uint32_t counter;
+    uint32_t counter;
     int i, index;
     float tv_sec;
     float devi_min = 1;
@@ -114,7 +115,7 @@ static rt_err_t rt_hwtimer_init(struct rt_device *dev)
     return result;
 }
 
-static rt_err_t rt_hwtimer_open(struct rt_device *dev, rt_uint16_t oflag)
+static rt_err_t rt_hwtimer_open(struct rt_device *dev, uint16_t oflag)
 {
     rt_err_t result = RT_EOK;
     rt_hwtimer_t *timer;
@@ -157,7 +158,7 @@ static rt_size_t rt_hwtimer_read(struct rt_device *dev, rt_off_t pos, void *buff
 {
     rt_hwtimer_t *timer;
     rt_hwtimerval_t tv;
-    rt_uint32_t cnt;
+    uint32_t cnt;
     float t;
 
     timer = (rt_hwtimer_t *)dev;
@@ -181,7 +182,7 @@ static rt_size_t rt_hwtimer_read(struct rt_device *dev, rt_off_t pos, void *buff
 
 static rt_size_t rt_hwtimer_write(struct rt_device *dev, rt_off_t pos, const void *buffer, rt_size_t size)
 {
-    rt_uint32_t t;
+    uint32_t t;
     rt_hwtimer_mode_t opm = HWTIMER_MODE_PERIOD;
     rt_hwtimer_t *timer;
 
@@ -230,7 +231,7 @@ static rt_err_t rt_hwtimer_control(struct rt_device *dev, int cmd, void *args)
     break;
     case HWTIMER_CTRL_FREQ_SET:
     {
-        rt_uint32_t *f;
+        uint32_t *f;
 
         if (args == RT_NULL)
         {
@@ -238,7 +239,7 @@ static rt_err_t rt_hwtimer_control(struct rt_device *dev, int cmd, void *args)
             break;
         }
 
-        f = (rt_uint32_t*)args;
+        f = (uint32_t*)args;
         if ((*f > timer->info->maxfreq) || (*f < timer->info->minfreq))
         {
             result = -RT_ERROR;

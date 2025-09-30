@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : device_test.c
  * This file is part of RT-Thread RTOS
@@ -17,9 +18,9 @@
 #include <rtthread.h>
 
 /* calculate speed */
-static void calculate_speed_print(rt_uint32_t speed)
+static void calculate_speed_print(uint32_t speed)
 {
-    rt_uint32_t k,m;
+    uint32_t k,m;
 
     k = speed/1024UL;
     if( k )
@@ -44,8 +45,8 @@ static rt_err_t _block_device_test(rt_device_t device)
 {
     rt_err_t result;
     struct rt_device_blk_geometry geometry;
-    rt_uint8_t * read_buffer  = RT_NULL;
-    rt_uint8_t * write_buffer = RT_NULL;
+    uint8_t * read_buffer  = RT_NULL;
+    uint8_t * write_buffer = RT_NULL;
 
     rt_kprintf("\r\n");
 
@@ -90,8 +91,8 @@ static rt_err_t _block_device_test(rt_device_t device)
 
         /* step 3:  R/W test */
         {
-            rt_uint32_t i, err_count, sector_no;
-            rt_uint8_t * data_point;
+            uint32_t i, err_count, sector_no;
+            uint8_t * data_point;
 
             i = rt_device_read(device, 0, read_buffer, 1);
             if(i != 1)
@@ -104,13 +105,13 @@ static rt_err_t _block_device_test(rt_device_t device)
             data_point = write_buffer;
             for(i=0; i<geometry.bytes_per_sector; i++)
             {
-                *data_point++ = (rt_uint8_t)i;
+                *data_point++ = (uint8_t)i;
             }
 
             /* write first sector */
             sector_no = 0;
             data_point = write_buffer;
-            *data_point++ = (rt_uint8_t)sector_no;
+            *data_point++ = (uint8_t)sector_no;
             i = rt_device_write(device, sector_no, write_buffer,1);
             if( i != 1 )
             {
@@ -124,7 +125,7 @@ static rt_err_t _block_device_test(rt_device_t device)
             /* write the second sector */
             sector_no = 1;
             data_point = write_buffer;
-            *data_point++ = (rt_uint8_t)sector_no;
+            *data_point++ = (uint8_t)sector_no;
             i = rt_device_write(device,sector_no,write_buffer,1);
             if( i != 1 )
             {
@@ -136,7 +137,7 @@ static rt_err_t _block_device_test(rt_device_t device)
             /* write the end sector */
             sector_no = geometry.sector_count-1;
             data_point = write_buffer;
-            *data_point++ = (rt_uint8_t)sector_no;
+            *data_point++ = (uint8_t)sector_no;
             i = rt_device_write(device,sector_no,write_buffer,1);
             if( i != 1 )
             {
@@ -156,13 +157,13 @@ static rt_err_t _block_device_test(rt_device_t device)
             }
             err_count = 0;
             data_point = read_buffer;
-            if( (*data_point++) != (rt_uint8_t)sector_no)
+            if( (*data_point++) != (uint8_t)sector_no)
             {
                 err_count++;
             }
             for(i=1; i<geometry.bytes_per_sector; i++)
             {
-                if( (*data_point++) != (rt_uint8_t)i )
+                if( (*data_point++) != (uint8_t)i )
                 {
                     err_count++;
                 }
@@ -185,13 +186,13 @@ static rt_err_t _block_device_test(rt_device_t device)
             }
             err_count = 0;
             data_point = read_buffer;
-            if( (*data_point++) != (rt_uint8_t)sector_no)
+            if( (*data_point++) != (uint8_t)sector_no)
             {
                 err_count++;
             }
             for(i=1; i<geometry.bytes_per_sector; i++)
             {
-                if( (*data_point++) != (rt_uint8_t)i )
+                if( (*data_point++) != (uint8_t)i )
                 {
                     err_count++;
                 }
@@ -214,13 +215,13 @@ static rt_err_t _block_device_test(rt_device_t device)
             }
             err_count = 0;
             data_point = read_buffer;
-            if( (*data_point++) != (rt_uint8_t)sector_no)
+            if( (*data_point++) != (uint8_t)sector_no)
             {
                 err_count++;
             }
             for(i=1; i<geometry.bytes_per_sector; i++)
             {
-                if( (*data_point++) != (rt_uint8_t)i )
+                if( (*data_point++) != (uint8_t)i )
                 {
                     err_count++;
                 }
@@ -239,8 +240,8 @@ static rt_err_t _block_device_test(rt_device_t device)
 
         // step 4: continuous single sector speed test
         {
-            rt_uint32_t tick_start,tick_end;
-            rt_uint32_t i;
+            uint32_t tick_start,tick_end;
+            uint32_t i;
 
             rt_kprintf("\r\ncontinuous single sector speed test:\r\n");
 
@@ -306,8 +307,8 @@ static rt_err_t _block_device_test(rt_device_t device)
 
         // step 5: random single sector speed test
         {
-            rt_uint32_t tick_start,tick_end;
-            rt_uint32_t i;
+            uint32_t tick_start,tick_end;
+            uint32_t i;
 
             rt_kprintf("\r\nrandom single sector speed test:\r\n");
 
@@ -373,10 +374,10 @@ static rt_err_t _block_device_test(rt_device_t device)
 
         /* step 6: multiple sector speed test */
         {
-            rt_uint8_t * multiple_buffer;
-            rt_uint8_t * ptr;
-            rt_uint32_t tick_start,tick_end;
-            rt_uint32_t sector,i;
+            uint8_t * multiple_buffer;
+            uint8_t * ptr;
+            uint32_t tick_start,tick_end;
+            uint32_t sector,i;
 
             rt_kprintf("\r\nmultiple sector speed test\r\n");
 

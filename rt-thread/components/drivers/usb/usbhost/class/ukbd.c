@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : ukbd.c
  * This file is part of RT-Thread RTOS
@@ -27,8 +28,8 @@ static rt_err_t rt_usbh_hid_kbd_callback(void* arg)
     
     hid = (struct uhid*)arg;
 
-    int1 = *(rt_uint32_t*)hid->buffer;
-    int2 = *(rt_uint32_t*)(&hid->buffer[4]);
+    int1 = *(uint32_t*)hid->buffer;
+    int2 = *(uint32_t*)(&hid->buffer[4]);
 
     if(int1 != 0 || int2 != 0)
     {

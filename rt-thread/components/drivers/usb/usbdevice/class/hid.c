@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : hid.c
  * COPYRIGHT (C) 2008 - 2016, RT-Thread Development Team
@@ -27,13 +28,13 @@ struct hid_s
     uep_t ep_in;
     uep_t ep_out;
     int status;
-    rt_uint16_t protocol;
-    rt_uint8_t report_buf[MAX_REPORT_SIZE];
+    uint16_t protocol;
+    uint8_t report_buf[MAX_REPORT_SIZE];
     struct rt_messagequeue hid_mq;
 };
 
 /* CustomHID_ConfigDescriptor */
-const rt_uint8_t _report_desc[]=
+const uint8_t _report_desc[]=
 {
 #ifdef RT_USB_DEVICE_HID_KEYBOARD
     USAGE_PAGE(1),      0x01,
@@ -546,7 +547,7 @@ static struct ufunction_ops ops =
  *
  * @return RT_EOK on successful.
  */
-static rt_err_t _hid_descriptor_config(uhid_comm_desc_t hid, rt_uint8_t cintf_nr)
+static rt_err_t _hid_descriptor_config(uhid_comm_desc_t hid, uint8_t cintf_nr)
 {
 #ifdef RT_USB_DEVICE_COMPOSITE
     hid->iad_desc.bFirstInterface = cintf_nr;
@@ -577,7 +578,7 @@ RT_WEAK void HID_Report_Received(hid_report_t report)
     dump_report(report);
 }
 ALIGN(RT_ALIGN_SIZE)
-static rt_uint8_t hid_thread_stack[512];
+static uint8_t hid_thread_stack[512];
 static struct rt_thread hid_thread;
 
 static void hid_thread_entry(void* parameter)
@@ -605,7 +606,7 @@ const static struct rt_device_ops hid_device_ops =
 };
 #endif
 
-static rt_uint8_t hid_mq_pool[(sizeof(struct hid_report)+sizeof(void*))*8];
+static uint8_t hid_mq_pool[(sizeof(struct hid_report)+sizeof(void*))*8];
 static void rt_usb_hid_init(struct ufunction *func)
 {
     struct hid_s *hiddev;

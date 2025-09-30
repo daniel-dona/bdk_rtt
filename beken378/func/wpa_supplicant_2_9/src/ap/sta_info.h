@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * hostapd / Station table
  * Copyright (c) 2002-2011, Jouni Malinen <j@w1.fi>
@@ -54,11 +55,11 @@ struct hostapd_data;
 
 struct mbo_non_pref_chan_info {
 	struct mbo_non_pref_chan_info *next;
-	u8 op_class;
-	u8 pref;
-	u8 reason_code;
-	u8 num_channels;
-	u8 channels[];
+	uint8_t op_class;
+	uint8_t pref;
+	uint8_t reason_code;
+	uint8_t num_channels;
+	uint8_t channels[];
 };
 
 struct pending_eapol_rx {
@@ -69,41 +70,41 @@ struct pending_eapol_rx {
 struct sta_info {
 	struct sta_info *next; /* next entry in sta list */
 	struct sta_info *hnext; /* next entry in hash table list */
-	u8 addr[6];
+	uint8_t addr[6];
 	be32 ipaddr;
 	struct dl_list ip6addr; /* list head for struct ip6addr */
-	u16 aid; /* STA's unique AID (1 .. 2007) or 0 if not yet assigned */
-	u16 disconnect_reason_code; /* RADIUS server override */
-	u32 flags; /* Bitfield of WLAN_STA_* */
-	u16 capability;
-	u16 listen_interval; /* or beacon_int for APs */
-	u8 supported_rates[WLAN_SUPP_RATES_MAX];
+	uint16_t aid; /* STA's unique AID (1 .. 2007) or 0 if not yet assigned */
+	uint16_t disconnect_reason_code; /* RADIUS server override */
+	uint32_t flags; /* Bitfield of WLAN_STA_* */
+	uint16_t capability;
+	uint16_t listen_interval; /* or beacon_int for APs */
+	uint8_t supported_rates[WLAN_SUPP_RATES_MAX];
 	int supported_rates_len;
-	u8 qosinfo; /* Valid when WLAN_STA_WMM is set */
+	uint8_t qosinfo; /* Valid when WLAN_STA_WMM is set */
 
 #ifdef CONFIG_MESH
 	enum mesh_plink_state plink_state;
-	u16 peer_lid;
-	u16 my_lid;
-	u16 peer_aid;
-	u16 mpm_close_reason;
+	uint16_t peer_lid;
+	uint16_t my_lid;
+	uint16_t peer_aid;
+	uint16_t mpm_close_reason;
 	int mpm_retries;
-	u8 my_nonce[WPA_NONCE_LEN];
-	u8 peer_nonce[WPA_NONCE_LEN];
-	u8 aek[32];	/* SHA256 digest length */
-	u8 mtk[WPA_TK_MAX_LEN];
+	uint8_t my_nonce[WPA_NONCE_LEN];
+	uint8_t peer_nonce[WPA_NONCE_LEN];
+	uint8_t aek[32];	/* SHA256 digest length */
+	uint8_t mtk[WPA_TK_MAX_LEN];
 	size_t mtk_len;
-	u8 mgtk_rsc[6];
-	u8 mgtk_key_id;		/* FIXME: Where to get Key ID? */
-	u8 mgtk[WPA_TK_MAX_LEN];
+	uint8_t mgtk_rsc[6];
+	uint8_t mgtk_key_id;		/* FIXME: Where to get Key ID? */
+	uint8_t mgtk[WPA_TK_MAX_LEN];
 	size_t mgtk_len;
-	u8 igtk_rsc[6];
-	u8 igtk[WPA_TK_MAX_LEN];
+	uint8_t igtk_rsc[6];
+	uint8_t igtk[WPA_TK_MAX_LEN];
 	size_t igtk_len;
-	u16 igtk_key_id;
-	u8 sae_auth_retry;
+	uint16_t igtk_key_id;
+	uint8_t sae_auth_retry;
 
-	u8 sta_idx;	/* FIXME: no here */
+	uint8_t sta_idx;	/* FIXME: no here */
 #endif /* CONFIG_MESH */
 
 	unsigned int nonerp_set:1;
@@ -128,19 +129,19 @@ struct sta_info {
 	unsigned int ft_over_ds:1;
 	unsigned int external_dh_updated:1;
 
-	u16 auth_alg;
+	uint16_t auth_alg;
 
 	enum {
 		STA_NULLFUNC = 0, STA_DISASSOC, STA_DEAUTH, STA_REMOVE,
 		STA_DISASSOC_FROM_CLI
 	} timeout_next;
 
-	u16 deauth_reason;
-	u16 disassoc_reason;
+	uint16_t deauth_reason;
+	uint16_t disassoc_reason;
 
 	/* IEEE 802.1X related data */
 	struct eapol_state_machine *eapol_sm;
-	u8 *challenge; /* IEEE 802.11 Shared Key Authentication Challenge */
+	uint8_t *challenge; /* IEEE 802.11 Shared Key Authentication Challenge */
 
 	struct wpa_state_machine *wpa_sm;
 
@@ -153,7 +154,7 @@ struct sta_info {
 	struct ieee80211_ht_capabilities *ht_capabilities;
 	struct ieee80211_vht_capabilities *vht_capabilities;
 	struct ieee80211_vht_operation *vht_operation;
-	u8 vht_opmode;
+	uint8_t vht_opmode;
 	struct ieee80211_he_capabilities *he_capab;
 	size_t he_capab_len;
 
@@ -161,7 +162,7 @@ struct sta_info {
 	int sa_query_count; /* number of pending SA Query requests;
 			     * 0 = no SA Query in progress */
 	int sa_query_timed_out;
-	u8 *sa_query_trans_id; /* buffer of WLAN_SA_QUERY_TR_ID_LEN *
+	uint8_t *sa_query_trans_id; /* buffer of WLAN_SA_QUERY_TR_ID_LEN *
 				* sa_query_count octets of pending SA Query
 				* transaction identifiers */
 	struct os_reltime sa_query_start;
@@ -182,26 +183,26 @@ struct sta_info {
 
 	/* Last Authentication/(Re)Association Request/Action frame sequence
 	 * control */
-	u16 last_seq_ctrl;
+	uint16_t last_seq_ctrl;
 	/* Last Authentication/(Re)Association Request/Action frame subtype */
-	u8 last_subtype;
+	uint8_t last_subtype;
 
-	u8 *supp_op_classes; /* Supported Operating Classes element, if
+	uint8_t *supp_op_classes; /* Supported Operating Classes element, if
 			      * received, starting from the Length field */
 
-	u8 rrm_enabled_capa[5];
+	uint8_t rrm_enabled_capa[5];
 
-	s8 min_tx_power;
-	s8 max_tx_power;
+	int8_t min_tx_power;
+	int8_t max_tx_power;
 
 #ifdef CONFIG_OWE
-	u8 *owe_pmk;
+	uint8_t *owe_pmk;
 	size_t owe_pmk_len;
 	struct crypto_ecdh *owe_ecdh;
-	u16 owe_group;
+	uint16_t owe_group;
 #endif /* CONFIG_OWE */
 
-	u8 *ext_capability;
+	uint8_t *ext_capability;
 	char *ifname_wds; /* WDS ifname, if in use */
 
 #ifdef CONFIG_DPP2
@@ -230,26 +231,26 @@ int ap_for_each_sta(struct hostapd_data *hapd,
 		    int (*cb)(struct hostapd_data *hapd, struct sta_info *sta,
 			      void *ctx),
 		    void *ctx);
-struct sta_info * ap_get_sta(struct hostapd_data *hapd, const u8 *sta);
-struct sta_info * ap_get_sta_p2p(struct hostapd_data *hapd, const u8 *addr);
+struct sta_info * ap_get_sta(struct hostapd_data *hapd, const uint8_t *sta);
+struct sta_info * ap_get_sta_p2p(struct hostapd_data *hapd, const uint8_t *addr);
 void ap_sta_hash_add(struct hostapd_data *hapd, struct sta_info *sta);
 void ap_free_sta(struct hostapd_data *hapd, struct sta_info *sta);
 void ap_sta_ip6addr_del(struct hostapd_data *hapd, struct sta_info *sta);
 void hostapd_free_stas(struct hostapd_data *hapd);
 void ap_handle_timer(void *eloop_ctx, void *timeout_ctx);
 void ap_sta_replenish_timeout(struct hostapd_data *hapd, struct sta_info *sta,
-			      u32 session_timeout);
+			      uint32_t session_timeout);
 void ap_sta_session_timeout(struct hostapd_data *hapd, struct sta_info *sta,
-			    u32 session_timeout);
+			    uint32_t session_timeout);
 void ap_sta_no_session_timeout(struct hostapd_data *hapd,
 			       struct sta_info *sta);
 void ap_sta_session_warning_timeout(struct hostapd_data *hapd,
 				    struct sta_info *sta, int warning_time);
-struct sta_info * ap_sta_add(struct hostapd_data *hapd, const u8 *addr);
+struct sta_info * ap_sta_add(struct hostapd_data *hapd, const uint8_t *addr);
 void ap_sta_disassociate(struct hostapd_data *hapd, struct sta_info *sta,
-			 u16 reason);
+			 uint16_t reason);
 void ap_sta_deauthenticate(struct hostapd_data *hapd, struct sta_info *sta,
-			   u16 reason);
+			   uint16_t reason);
 #ifdef CONFIG_WPS
 int ap_sta_wps_cancel(struct hostapd_data *hapd,
 		      struct sta_info *sta, void *ctx);
@@ -263,7 +264,7 @@ int ap_check_sa_query_timeout(struct hostapd_data *hapd, struct sta_info *sta);
 const char * ap_sta_wpa_get_keyid(struct hostapd_data *hapd,
 				  struct sta_info *sta);
 void ap_sta_disconnect(struct hostapd_data *hapd, struct sta_info *sta,
-		       const u8 *addr, u16 reason);
+		       const uint8_t *addr, uint16_t reason);
 
 void ap_sta_set_authorized(struct hostapd_data *hapd,
 			   struct sta_info *sta, int authorized);
@@ -277,7 +278,7 @@ void ap_sta_disassoc_cb(struct hostapd_data *hapd, struct sta_info *sta);
 void ap_sta_clear_disconnect_timeouts(struct hostapd_data *hapd,
 				      struct sta_info *sta);
 
-int ap_sta_flags_txt(u32 flags, char *buf, size_t buflen);
+int ap_sta_flags_txt(uint32_t flags, char *buf, size_t buflen);
 void ap_sta_delayed_1x_auth_fail_disconnect(struct hostapd_data *hapd,
 					    struct sta_info *sta);
 int ap_sta_pending_delayed_1x_auth_fail_disconnect(struct hostapd_data *hapd,

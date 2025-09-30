@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <rtthread.h>
 #include "tc_comm.h"
 
@@ -5,7 +6,7 @@ struct rt_thread thread1;
 struct rt_thread thread2;
 static char thread1_stack[THREAD_STACK_SIZE];
 static char thread2_stack[THREAD_STACK_SIZE];
-static rt_uint32_t count = 0;
+static uint32_t count = 0;
 
 /*
  * the priority of thread1 > the priority of thread2

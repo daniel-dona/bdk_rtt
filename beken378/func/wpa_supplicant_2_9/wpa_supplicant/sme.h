@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * wpa_supplicant - SME
  * Copyright (c) 2009-2010, Jouni Malinen <j@w1.fi>
@@ -10,15 +11,15 @@
 #define SME_H
 
 #ifdef CONFIG_IEEE80211W
-void sme_event_unprot_disconnect(struct wpa_supplicant *wpa_s, const u8 *sa,
-				 const u8 *da, u16 reason_code);
+void sme_event_unprot_disconnect(struct wpa_supplicant *wpa_s, const uint8_t *sa,
+				 const uint8_t *da, uint16_t reason_code);
 void sme_event_ch_switch(struct wpa_supplicant *wpa_s);
-void sme_sa_query_rx(struct wpa_supplicant *wpa_s, const u8 *sa,
-		     const u8 *data, size_t len);
+void sme_sa_query_rx(struct wpa_supplicant *wpa_s, const uint8_t *sa,
+		     const uint8_t *data, size_t len);
 #else
 static inline void sme_event_unprot_disconnect(struct wpa_supplicant *wpa_s,
-					       const u8 *sa, const u8 *da,
-					       u16 reason_code)
+					       const uint8_t *sa, const uint8_t *da,
+					       uint16_t reason_code)
 {
 }
 
@@ -32,10 +33,10 @@ static inline void sme_event_ch_switch(struct wpa_supplicant *wpa_s)
 void sme_authenticate(struct wpa_supplicant *wpa_s,
 		      struct wpa_bss *bss, struct wpa_ssid *ssid);
 void sme_associate(struct wpa_supplicant *wpa_s, enum wpas_mode mode,
-		   const u8 *bssid, u16 auth_type);
+		   const uint8_t *bssid, uint16_t auth_type);
 void sme_event_auth(struct wpa_supplicant *wpa_s, union wpa_event_data *data);
-int sme_update_ft_ies(struct wpa_supplicant *wpa_s, const u8 *md,
-		      const u8 *ies, size_t ies_len);
+int sme_update_ft_ies(struct wpa_supplicant *wpa_s, const uint8_t *md,
+		      const uint8_t *ies, size_t ies_len);
 void sme_event_assoc_reject(struct wpa_supplicant *wpa_s,
 			    union wpa_event_data *data);
 void sme_event_auth_timed_out(struct wpa_supplicant *wpa_s,
@@ -46,7 +47,7 @@ void sme_event_disassoc(struct wpa_supplicant *wpa_s,
 			struct disassoc_info *info);
 void sme_state_changed(struct wpa_supplicant *wpa_s);
 void sme_disassoc_while_authenticating(struct wpa_supplicant *wpa_s,
-				       const u8 *prev_pending_bssid);
+				       const uint8_t *prev_pending_bssid);
 void sme_clear_on_disassoc(struct wpa_supplicant *wpa_s);
 void sme_deinit(struct wpa_supplicant *wpa_s);
 
@@ -66,8 +67,8 @@ static inline void sme_event_auth(struct wpa_supplicant *wpa_s,
 {
 }
 
-static inline int sme_update_ft_ies(struct wpa_supplicant *wpa_s, const u8 *md,
-				    const u8 *ies, size_t ies_len)
+static inline int sme_update_ft_ies(struct wpa_supplicant *wpa_s, const uint8_t *md,
+				    const uint8_t *ies, size_t ies_len)
 {
 	return -1;
 }
@@ -100,7 +101,7 @@ static inline void sme_state_changed(struct wpa_supplicant *wpa_s)
 
 static inline void
 sme_disassoc_while_authenticating(struct wpa_supplicant *wpa_s,
-				  const u8 *prev_pending_bssid)
+				  const uint8_t *prev_pending_bssid)
 {
 }
 
@@ -128,7 +129,7 @@ static inline void sme_sched_obss_scan(struct wpa_supplicant *wpa_s,
 void sme_external_auth_trigger(struct wpa_supplicant *wpa_s,
 			       union wpa_event_data *data);
 void sme_external_auth_mgmt_rx(struct wpa_supplicant *wpa_s,
-			       const u8 *auth_frame, size_t len);
+			       const uint8_t *auth_frame, size_t len);
 #else
 static inline void sme_external_auth_trigger(struct wpa_supplicant *wpa_s,
 					     union wpa_event_data *data)
@@ -136,7 +137,7 @@ static inline void sme_external_auth_trigger(struct wpa_supplicant *wpa_s,
 }
 
 static inline void sme_external_auth_mgmt_rx(struct wpa_supplicant *wpa_s,
-					     const u8 *auth_frame, size_t len)
+					     const uint8_t *auth_frame, size_t len)
 {
 }
 

@@ -1,3 +1,4 @@
+#include <stdint.h>
 /**
  * @file
  * SNMP server MIB API to implement thread synchronization
@@ -58,7 +59,7 @@ struct threadsync_data
 {
   union {
     snmp_err_t err;
-    s16_t s16;
+    s16_t int16_t;
   } retval;
   union {
     const u32_t *root_oid;

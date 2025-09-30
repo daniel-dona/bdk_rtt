@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 #ifndef _RW_PUB_H_
 #define _RW_PUB_H_
 
@@ -25,7 +27,7 @@
 #endif
 
 #define RW_SUCCESS                 (0)
-#define RW_FAILURE                 ((UINT32)-1)
+#define RW_FAILURE                 ((uint32_t)-1)
 
 typedef struct cfg80211_connect_params
 {
@@ -161,11 +163,11 @@ struct rw_evt_payload
 };
 
 struct add_sta_st {
-	u16 aid;
-	u16 capability;
+	uint16_t aid;
+	uint16_t capability;
     void *sta_addr;
-	u8 tx_supp_rates;
-    u8 ap_vif_idx;
+	uint8_t tx_supp_rates;
+    uint8_t ap_vif_idx;
 } ;
 
 typedef struct cfg80211_key_params
@@ -188,15 +190,15 @@ typedef struct msg_send_node
 }MSG_SND_NODE_ST, *MSG_SND_NODE_PTR;
 
 typedef struct bcn_param_st {
-    u32 *bcn_ptr;
-    u16 bcn_len;
-    u16 tim_oft;
+    uint32_t *bcn_ptr;
+    uint16_t bcn_len;
+    uint16_t tim_oft;
 
-    u8 tim_len;
-    u8 vif_idx;
-    u16 flag;
+    uint8_t tim_len;
+    uint8_t vif_idx;
+    uint16_t flag;
 
-    u8* csa_oft;
+    uint8_t* csa_oft;
 } BCN_PARAM_ST, *BCN_PARAM_PTR;
 
 typedef struct vif_info_tag VIF_INF_ST;
@@ -207,24 +209,24 @@ typedef struct sta_info_tag* STA_INF_PTR;
 extern struct co_list rw_msg_tx_head;
 extern struct co_list rw_msg_rx_head;
 
-extern void mt_msg_dispatch(UINT16 cmd, void *param);
+extern void mt_msg_dispatch(uint16_t cmd, void *param);
 extern void mr_kmsg_flush(void);
-extern UINT32 mr_kmsg_fwd(struct ke_msg *msg);
-extern UINT32 mr_kmsg_fuzzy_handle(void);
-extern UINT32 mr_kmsg_exact_handle(UINT16 rsp);
+extern uint32_t mr_kmsg_fwd(struct ke_msg *msg);
+extern uint32_t mr_kmsg_fuzzy_handle(void);
+extern uint32_t mr_kmsg_exact_handle(uint16_t rsp);
 extern void mhdr_assoc_cfm_cb(FUNC_2PARAM_PTR ind_cb, void *ctxt);
 extern void mhdr_auth_cfm_cb(FUNC_2PARAM_PTR ind_cb, void *ctxt);
 extern void mhdr_scanu_reg_cb(FUNC_2PARAM_PTR ind_cb, void *ctxt);
 extern void mhdr_connect_user_cb(FUNC_2PARAM_PTR ind_cb, void *ctxt);
-extern UINT32 rw_ieee80211_init(void);
-extern UINT32 rw_ieee80211_get_centre_frequency(UINT32 chan_id);
-extern UINT8 rw_ieee80211_get_chan_id(UINT32 freq);
+extern uint32_t rw_ieee80211_init(void);
+extern uint32_t rw_ieee80211_get_centre_frequency(uint32_t chan_id);
+extern uint8_t rw_ieee80211_get_chan_id(uint32_t freq);
 extern void *sr_get_scan_results(void);
 extern void sr_release_scan_results(SCAN_RST_UPLOAD_PTR ptr);
-extern UINT32 rwm_transfer(UINT8 vif_idx, UINT8 *buf, UINT32 len, int sync, void *arg);
-extern void* rwm_transfer_pre(UINT8 vif_idx, UINT8 *buf, UINT32 len);
-extern UINT32 rwm_uploaded_data_handle(UINT8 *upper_buf, UINT32 len);
-extern UINT32 rwm_get_rx_valid_node_len(void);
+extern uint32_t rwm_transfer(uint8_t vif_idx, uint8_t *buf, uint32_t len, int sync, void *arg);
+extern void* rwm_transfer_pre(uint8_t vif_idx, uint8_t *buf, uint32_t len);
+extern uint32_t rwm_uploaded_data_handle(uint8_t *upper_buf, uint32_t len);
+extern uint32_t rwm_get_rx_valid_node_len(void);
 
 
 extern int rw_msg_send(const void *msg_params, uint16_t reqid, void *cfm);
@@ -234,19 +236,19 @@ extern int rw_msg_send_me_config_req(void);
 extern int rw_msg_send_me_chan_config_req(void);
 extern int rw_msg_send_add_if(const unsigned char *mac,
                      enum nl80211_iftype iftype, bool p2p, struct mm_add_if_cfm *cfm);
-extern int rw_msg_send_remove_if(u8 vif_index);
-extern int rw_msg_send_apm_start_req(u8 vif_index, u8 channel,
+extern int rw_msg_send_remove_if(uint8_t vif_index);
+extern int rw_msg_send_apm_start_req(uint8_t vif_index, uint8_t channel,
                      struct apm_start_cfm *cfm);
 extern int rw_msg_send_bcn_change(void *bcn_param);
 extern int rw_msg_send_me_sta_add(struct add_sta_st *param,
                      struct me_sta_add_cfm *cfm);
-extern int rw_msg_send_me_sta_del(u8 sta_idx, bool tdls_sta);
-extern int rw_msg_me_set_control_port_req(bool opened, u8 sta_idx);
+extern int rw_msg_send_me_sta_del(uint8_t sta_idx, bool tdls_sta);
+extern int rw_msg_me_set_control_port_req(bool opened, uint8_t sta_idx);
 extern int rw_msg_send_key_add(KEY_PARAM_T *param, struct mm_key_add_cfm *cfm);
-extern int rw_msg_send_key_del(u8 hw_key_idx);
+extern int rw_msg_send_key_del(uint8_t hw_key_idx);
 extern int rw_msg_send_scanu_req(SCAN_PARAM_T *scan_param);
-extern int rw_msg_send_connection_loss_ind(u8 vif_index);
-extern int rw_msg_get_bss_info(u8 vif_idx, void *cfm);
+extern int rw_msg_send_connection_loss_ind(uint8_t vif_index);
+extern int rw_msg_get_bss_info(uint8_t vif_idx, void *cfm);
 extern int rw_msg_get_channel(void *cfm);
 extern int rw_msg_set_filter(uint32_t filter);
 extern int rw_msg_set_channel(uint32_t channel, uint32_t band_width, void *cfm);
@@ -254,9 +256,9 @@ extern int rw_msg_send_scan_cancel_req(void *cfm);
 extern int rw_msg_send_sm_disconnect_req(DISCONNECT_PARAM_T *param);
 extern int rw_msg_send_sm_connect_req( CONNECT_PARAM_T *sme, void *cfm);
 extern int rw_msg_send_sm_assoc_req( ASSOC_PARAM_T *sme, void *cfm);
-extern int rw_msg_send_tim_update(u8 vif_idx, u16 aid, u8 tx_status);
-extern int rw_msg_send_apm_stop_req(u8 vif_index);
-extern int rw_msg_set_power(u8 vif_idx, u8 power);
+extern int rw_msg_send_tim_update(uint8_t vif_idx, uint16_t aid, uint8_t tx_status);
+extern int rw_msg_send_apm_stop_req(uint8_t vif_index);
+extern int rw_msg_set_power(uint8_t vif_idx, uint8_t power);
 extern int rw_msg_send_sm_auth_req(AUTH_PARAM_T *auth_param);
 extern int rw_msg_send_sm_external_auth_status(EXTERNAL_AUTH_PARAM_T *auth_param);
 extern int rw_msg_send_sm_set_operstate_req(SET_OPERATE_PARAM_T *param);
@@ -264,31 +266,31 @@ extern int rw_msg_send_sm_set_operstate_req(SET_OPERATE_PARAM_T *param);
 
 
 
-VIF_INF_PTR rwm_mgmt_vif_idx2ptr(UINT8 vif_idx);
-VIF_INF_PTR rwm_mgmt_vif_type2ptr(UINT8 vif_type);
-STA_INF_PTR rwm_mgmt_sta_idx2ptr(UINT8 staid);
+VIF_INF_PTR rwm_mgmt_vif_idx2ptr(uint8_t vif_idx);
+VIF_INF_PTR rwm_mgmt_vif_type2ptr(uint8_t vif_type);
+STA_INF_PTR rwm_mgmt_sta_idx2ptr(uint8_t staid);
 STA_INF_PTR rwm_mgmt_sta_mac2ptr(void *mac);
-UINT8 rwm_mgmt_sta_mac2idx(void *mac);
-UINT8 rwm_mgmt_vif_mac2idx(void *mac);
-UINT8 rwm_mgmt_vif_name2idx(char *name);
-UINT8 rwm_mgmt_get_hwkeyidx(UINT8 vif_idx, UINT8 staid);
+uint8_t rwm_mgmt_sta_mac2idx(void *mac);
+uint8_t rwm_mgmt_vif_mac2idx(void *mac);
+uint8_t rwm_mgmt_vif_name2idx(char *name);
+uint8_t rwm_mgmt_get_hwkeyidx(uint8_t vif_idx, uint8_t staid);
 void rwm_mgmt_set_vif_netif(struct netif *net_if);
-struct netif *rwm_mgmt_get_vif2netif(UINT8 vif_idx);
-UINT8 rwm_mgmt_get_netif2vif(struct netif *netif);
-UINT8 rwm_mgmt_tx_get_staidx(UINT8 vif_idx, void *dstmac);
-u8 rwn_mgmt_is_only_sta_role_add(void);
+struct netif *rwm_mgmt_get_vif2netif(uint8_t vif_idx);
+uint8_t rwm_mgmt_get_netif2vif(struct netif *netif);
+uint8_t rwm_mgmt_tx_get_staidx(uint8_t vif_idx, void *dstmac);
+uint8_t rwn_mgmt_is_only_sta_role_add(void);
 
 void rwm_msdu_init(void);
-void rwm_flush_txing_list(UINT8 sta_idx);
+void rwm_flush_txing_list(uint8_t sta_idx);
 void rwm_msdu_ps_change_ind_handler(void *msg) ;
-void rwm_msdu_send_txing_node(UINT8 sta_idx);
+void rwm_msdu_send_txing_node(uint8_t sta_idx);
 
-__INLINE u8 rwm_mgmt_is_ap_inface(u8 vif_idx)
+__INLINE uint8_t rwm_mgmt_is_ap_inface(uint8_t vif_idx)
 {
     return (vif_info_tab[vif_idx].type == VIF_AP);
 }
 
-__INLINE u8 rwm_mgmt_is_sta_inface(u8 vif_idx)
+__INLINE uint8_t rwm_mgmt_is_sta_inface(uint8_t vif_idx)
 {
     return (vif_info_tab[vif_idx].type == VIF_STA);
 }
@@ -303,23 +305,23 @@ __INLINE void *rwm_mgmt_next(VIF_INF_PTR vif_entry)
     return((void *)co_list_next(&vif_entry->list_hdr));
 }
 
-__INLINE u8 rwm_mgmt_get_type(u8 vif_idx)
+__INLINE uint8_t rwm_mgmt_get_type(uint8_t vif_idx)
 {
     return (vif_info_tab[vif_idx].type);
 }
 
-__INLINE void *rwm_mgmt_get_addr(u8 vif_idx)
+__INLINE void *rwm_mgmt_get_addr(uint8_t vif_idx)
 {
     return (&vif_info_tab[vif_idx].mac_addr);
 }
 
 
-extern UINT8 beacon[149];
+extern uint8_t beacon[149];
 
-UINT8 rw_ieee80211_init_scan_chan(struct scanu_start_req *req);
-UINT8 rw_ieee80211_is_scan_rst_in_countrycode(UINT8 freq);
+uint8_t rw_ieee80211_init_scan_chan(struct scanu_start_req *req);
+uint8_t rw_ieee80211_is_scan_rst_in_countrycode(uint8_t freq);
 #if CFG_IEEE80211N
-void rw_ieee80211_set_ht_cap(UINT8 ht_supp);
+void rw_ieee80211_set_ht_cap(uint8_t ht_supp);
 #endif
 #endif //_RW_PUB_H_
 // eof

@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "sys_config.h"
 #if (CFG_SOC_NAME == SOC_BK7221U)
 #include "rtos_pub.h"
@@ -16,7 +17,7 @@ static struct sec_done_des aes_done_callback = {NULL, NULL};
 
 int security_aes_start(unsigned int mode)
 {
-    UINT32 reg;
+    uint32_t reg;
 
     reg = REG_READ(SECURITY_AES_CONFIG);
     if(mode == ENCODE)
@@ -37,7 +38,7 @@ int security_aes_start(unsigned int mode)
 
 int security_aes_init(sec_done_callback callback, void *param)
 {
-    UINT32 reg;
+    uint32_t reg;
     GLOBAL_INT_DECLARATION();
 
     reg = REG_READ(SECURITY_AES_CTRL);
@@ -57,7 +58,7 @@ int security_aes_init(sec_done_callback callback, void *param)
 
 int security_aes_set_key(const unsigned char *key, unsigned int keybits)
 {
-    UINT32 mode, reg;
+    uint32_t mode, reg;
     int end_reg_pos = 0;
 
     if(keybits == 128) 
@@ -89,7 +90,7 @@ int security_aes_set_key(const unsigned char *key, unsigned int keybits)
         {
             // in SECURITY_AES_KEYx, MSB first.
             // key's addr may no 4byte align, so copy like this
-            UINT8 *data = (UINT8 *)&reg;
+            uint8_t *data = (uint8_t *)&reg;
 
             data[0] = key[4*j + 3];
             data[1] = key[4*j + 2];
@@ -117,11 +118,11 @@ int security_aes_set_key(const unsigned char *key, unsigned int keybits)
 
 int security_aes_set_block_data(const unsigned char *block_data)
 {
-    UINT32 tmp_data;
+    uint32_t tmp_data;
 
     for (int i=0; i<4; i++)
     {
-        UINT8 *data = (UINT8 *)&tmp_data;
+        uint8_t *data = (uint8_t *)&tmp_data;
 
         data[0] = block_data[4*i + 3];
         data[1] = block_data[4*i + 2];
@@ -136,11 +137,11 @@ int security_aes_set_block_data(const unsigned char *block_data)
 
 int security_aes_get_result_data(unsigned char *pul_data)
 {
-    UINT32 tmp_data;
+    uint32_t tmp_data;
 
     for (int i=0; i<4; i++)
     {
-        UINT8 *data = (UINT8 *)&tmp_data;
+        uint8_t *data = (uint8_t *)&tmp_data;
 
         tmp_data = REG_READ(SECURITY_AES_RESULT_X(i));
 

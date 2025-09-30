@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 #include "drv_model_pub.h"
@@ -29,8 +30,8 @@ void gc0328c_sensor_init(DD_HANDLE i2c_hdl, DD_HANDLE ejpeg_hdl, camera_sensor_t
 
     os_printf("Intializing GC0238C sensor.\r\n");
 
-    UINT32 i, size;
-    UINT8 addr, data;
+    uint32_t i, size;
+    uint8_t addr, data;
     //I2C_OP_ST i2c_operater;
     //DJPEG_DESC_ST ejpeg_cfg;
 
@@ -53,10 +54,10 @@ void gc0328c_sensor_init(DD_HANDLE i2c_hdl, DD_HANDLE ejpeg_hdl, camera_sensor_t
 
 }
 
-void gc0328c_camera_inf_cfg_ppi(UINT32 ppi_type){
+void gc0328c_camera_inf_cfg_ppi(uint32_t ppi_type){
 
-    UINT32 i, size;
-    UINT8 addr, data;
+    uint32_t i, size;
+    uint8_t addr, data;
 
     os_printf("Setting PPI: %d\r\n", ppi_type);
 
@@ -88,10 +89,10 @@ void gc0328c_camera_inf_cfg_ppi(UINT32 ppi_type){
     }
 }
 
-void gc0328c_camera_inf_cfg_fps(UINT32 fps_type){
+void gc0328c_camera_inf_cfg_fps(uint32_t fps_type){
 
-    UINT32 i, size;
-    UINT8 addr, data;
+    uint32_t i, size;
+    uint8_t addr, data;
 
     os_printf("Setting FPS: %d\r\n", fps_type);
 

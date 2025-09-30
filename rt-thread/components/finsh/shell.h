@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  *  shell implementation for finsh shell.
  *
@@ -83,12 +84,12 @@ struct finsh_shell
 
     enum input_stat stat;
 
-    rt_uint8_t echo_mode:1;
-    rt_uint8_t prompt_mode: 1;
+    uint8_t echo_mode:1;
+    uint8_t prompt_mode: 1;
 
 #ifdef FINSH_USING_HISTORY
-    rt_uint16_t current_history;
-    rt_uint16_t history_count;
+    uint16_t current_history;
+    uint16_t history_count;
 
     char cmd_history[FINSH_HISTORY_LINES][FINSH_CMD_SIZE];
 #endif
@@ -98,8 +99,8 @@ struct finsh_shell
 #endif
 
     char line[FINSH_CMD_SIZE];
-    rt_uint8_t line_position;
-    rt_uint8_t line_curpos;
+    uint8_t line_position;
+    uint8_t line_curpos;
 
 #ifndef RT_USING_POSIX
     rt_device_t device;
@@ -110,15 +111,15 @@ struct finsh_shell
 #endif
 };
 
-void finsh_set_echo(rt_uint32_t echo);
-rt_uint32_t finsh_get_echo(void);
+void finsh_set_echo(uint32_t echo);
+uint32_t finsh_get_echo(void);
 
 int finsh_system_init(void);
 void finsh_set_device(const char* device_name);
 const char* finsh_get_device(void);
 
-rt_uint32_t finsh_get_prompt_mode(void);
-void finsh_set_prompt_mode(rt_uint32_t prompt_mode);
+uint32_t finsh_get_prompt_mode(void);
+void finsh_set_prompt_mode(uint32_t prompt_mode);
 
 #ifdef FINSH_USING_AUTH
 rt_err_t finsh_set_password(const char *password);

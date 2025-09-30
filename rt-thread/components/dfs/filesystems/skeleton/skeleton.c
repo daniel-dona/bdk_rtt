@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : skeleton.c
  * This file is part of Device File System in RT-Thread RTOS
@@ -68,7 +69,7 @@ int dfs_skt_stat(struct dfs_filesystem* fs, const char *path, struct stat *st)
     return RT_EOK;
 }
 
-int dfs_skt_getdents(struct dfs_fd* file, struct dirent* dirp, rt_uint32_t count)
+int dfs_skt_getdents(struct dfs_fd* file, struct dirent* dirp, uint32_t count)
 {
     return count * sizeof(struct dirent);
 }

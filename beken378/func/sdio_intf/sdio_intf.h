@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _SDIO_INTF_H_
 #define _SDIO_INTF_H_
 
@@ -31,12 +32,12 @@ struct h2e_msg
 /// Message structure for MSGs from Emb to App
 typedef struct e2a_msg
 {
-    UINT16 id;                          ///< Message id.
-    UINT16 dummy_dest_id;               ///<
-    UINT16 dummy_src_id;                ///<
-    UINT16 param_len;                   ///< Parameter embedded struct length.
-    UINT16 param[E2A_MSG_PARAM_SIZE];  ///< Parameter embedded struct. Must be word-aligned.
-    UINT16 pattern;                     ///< Used to stamp a valid MSG buffer
+    uint16_t id;                          ///< Message id.
+    uint16_t dummy_dest_id;               ///<
+    uint16_t dummy_src_id;                ///<
+    uint16_t param_len;                   ///< Parameter embedded struct length.
+    uint16_t param[E2A_MSG_PARAM_SIZE];  ///< Parameter embedded struct. Must be word-aligned.
+    uint16_t pattern;                     ///< Used to stamp a valid MSG buffer
 } E2A_MSG_S, *E2A_MSG_PTR;
 
 #define SCANU_RET_PAYLOAD_LEN      128
@@ -44,43 +45,43 @@ typedef struct e2a_msg
 typedef struct scanu_result_ind
 {
     /// Length of the frame
-    UINT16 length;
+    uint16_t length;
     /// Frame control field of the frame.
-    UINT16 framectrl;
+    uint16_t framectrl;
     /// Center frequency on which we received the packet
-    UINT16 center_freq;
+    uint16_t center_freq;
     /// PHY band
-    UINT8 band;
+    uint8_t band;
     /// Index of the station that sent the frame. 0xFF if unknown.
-    UINT8 sta_idx;
+    uint8_t sta_idx;
     /// Index of the VIF that received the frame. 0xFF if unknown.
-    UINT8 inst_nbr;
+    uint8_t inst_nbr;
     /// RSSI of the received frame.
-    INT8 rssi;
+    int8_t rssi;
     /// Frame payload.
-    UINT32 payload[SCANU_RET_PAYLOAD_LEN];
+    uint32_t payload[SCANU_RET_PAYLOAD_LEN];
 } SCANU_RET_IND_S, *SCANU_RET_IND_PTR;
 
 
 typedef struct probe_resp
 {
-    UINT8 timestamp[8];
-    UINT16 beacon_int;
-    UINT16 capab_info;
+    uint8_t timestamp[8];
+    uint16_t beacon_int;
+    uint16_t capab_info;
 
     /* followed by some of SSID, Supported rates,
      * FH Params, DS Params, CF Params, IBSS Params */
-    UINT8 variable[1];
+    uint8_t variable[1];
 } __attribute__ ((packed)) probe_resp_s;
 
 typedef struct ieee80211_probe_rsp
 {
-    UINT16 frame_control;
-    UINT16 duration;
-    UINT8 da[6];
-    UINT8 sa[6];
-    UINT8 bssid[6];
-    UINT16 seq_ctrl;
+    uint16_t frame_control;
+    uint16_t duration;
+    uint8_t da[6];
+    uint8_t sa[6];
+    uint8_t bssid[6];
+    uint16_t seq_ctrl;
     struct probe_resp rsp;
 } __attribute__ ((packed)) IEEE80211_PROBE_RSP_S, *IEEE80211_PROBE_RSP_PTR;
 
@@ -279,39 +280,39 @@ typedef struct ieee80211_probe_rsp
 
 typedef struct mrvl_ie_header
 {
-    UINT16 type;
-    UINT16 len;
+    uint16_t type;
+    uint16_t len;
 } __attribute__((packed)) MRVL_IE_HDR_S, *MRVL_IE_HDR_PTR;
 
 
 typedef struct mrvl_ie_ssid_param_set
 {
     struct mrvl_ie_header header;
-    UINT8 ssid[1];
+    uint8_t ssid[1];
 } __attribute__((packed)) MRVL_IE_SSID_PARAM_S, *MRVL_IE_SSID_PARAM_PTR;
 
 typedef struct chanscanmode
 {
-    UINT8 passivescan: 1;
-    UINT8 disablechanfilt: 1;
-    UINT8 reserved_2_7: 6;
+    uint8_t passivescan: 1;
+    uint8_t disablechanfilt: 1;
+    uint8_t reserved_2_7: 6;
 } __attribute__((packed))CHAN_SCAN_MODE_S, *CHAN_SCAN_MODE_PTR;
 
 typedef struct chanscanparamset
 {
-    UINT8 radiotype;
-    UINT8 channumber;
+    uint8_t radiotype;
+    uint8_t channumber;
     CHAN_SCAN_MODE_S chanscanmode;
-    UINT16 minscantime;
-    UINT16 maxscantime;
+    uint16_t minscantime;
+    uint16_t maxscantime;
 } __attribute__((packed)) CHAN_SCAN_PARAM_S, *CHAN_SCAN_PARAM_PTR;
 
 typedef struct stm32_cmd_hdr
 {
-    UINT16 command;
-    UINT16 size;
-    UINT16 seqnum;
-    UINT16 result;
+    uint16_t command;
+    uint16_t size;
+    uint16_t seqnum;
+    uint16_t result;
 } __attribute__((packed)) STM32_CMD_HDR_S, *STM32_CMD_HDR_PTR;
 
 /* 802.11-related definitions */
@@ -322,36 +323,36 @@ typedef struct stm32_txpd
     union
     {
         /* Current Tx packet status */
-        UINT32 tx_status;
+        uint32_t tx_status;
         struct
         {
             /* BSS type: client, AP, etc. */
-            UINT8 bss_type;
+            uint8_t bss_type;
             /* BSS number */
-            UINT8 bss_num;
+            uint8_t bss_num;
             /* Reserved */
-            UINT16 reserved;
+            uint16_t reserved;
         } __attribute__((packed)) bss;
 
     } __attribute__((packed)) u ;
 
     /* Tx control */
-    UINT32 tx_control;
-    UINT32 tx_packet_location;
+    uint32_t tx_control;
+    uint32_t tx_packet_location;
     /* Tx packet length */
-    UINT16 tx_packet_length;
+    uint16_t tx_packet_length;
     /* First 2 byte of destination MAC address */
-    UINT8 tx_dest_addr_high[2];
+    uint8_t tx_dest_addr_high[2];
     /* Last 4 byte of destination MAC address */
-    UINT8 tx_dest_addr_low[4];
+    uint8_t tx_dest_addr_low[4];
     /* Pkt Priority */
-    UINT8 priority;
+    uint8_t priority;
     /* Pkt Trasnit Power control */
-    UINT8 powermgmt;
+    uint8_t powermgmt;
     /* Amount of time the packet has been queued in the driver (units = 2ms) */
-    UINT8 pktdelay_2ms;
+    uint8_t pktdelay_2ms;
     /* reserved */
-    UINT8 reserved1;
+    uint8_t reserved1;
 } __attribute__((packed)) STM32_TXPD_S, *STM32_TXPD_PTR;
 
 /* RxPD Descriptor */
@@ -361,33 +362,33 @@ typedef struct stm32_rxpd
     union
     {
         /* Current Rx packet status */
-        UINT16 status;
+        uint16_t status;
         struct
         {
             /* BSS type: client, AP, etc. */
-            UINT8 bss_type;
+            uint8_t bss_type;
             /* BSS number */
-            UINT8 bss_num;
+            uint8_t bss_num;
         } __attribute__((packed)) bss;
     } __attribute__((packed)) u;
 
     /* SNR */
-    UINT8 snr;
+    uint8_t snr;
     /* Tx control */
-    UINT8 rx_control;
+    uint8_t rx_control;
     /* Pkt length */
-    UINT16 pkt_len;
+    uint16_t pkt_len;
     /* Noise Floor */
-    UINT8 nf;
+    uint8_t nf;
     /* Rx Packet Rate */
-    UINT8 rx_rate;
+    uint8_t rx_rate;
     /* Pkt addr */
-    UINT32 pkt_ptr;
+    uint32_t pkt_ptr;
     /* Next Rx RxPD addr */
-    UINT32 next_rxpd_ptr;
+    uint32_t next_rxpd_ptr;
     /* Pkt Priority */
-    UINT8 priority;
-    UINT8 reserved[3];
+    uint8_t priority;
+    uint8_t reserved[3];
 } __attribute__((packed)) STM32_RXPD_S, *STM32_RXPD_PTR;
 
 enum stm32_ms_type
@@ -403,40 +404,40 @@ enum stm32_ms_type
 
 typedef struct ethhdr
 {
-    UINT8 h_dest[ETH_ALEN];
-    UINT8 h_src[ETH_ALEN];
-    UINT16 h_proto;
+    uint8_t h_dest[ETH_ALEN];
+    uint8_t h_src[ETH_ALEN];
+    uint16_t h_proto;
 } __attribute__((packed)) ETHHDR_S, *ETHHDR_PTR;
 
 typedef struct beacon_info
 {
-    UINT16 len;
-    UINT8 bssid[ETH_ALEN];
-    INT8 rssi;
-    UINT8 timestamp[BEACON_TIMESTAMP_LEN];
-    UINT16 beacon_interval;
-    UINT16 capability;
+    uint16_t len;
+    uint8_t bssid[ETH_ALEN];
+    int8_t rssi;
+    uint8_t timestamp[BEACON_TIMESTAMP_LEN];
+    uint16_t beacon_interval;
+    uint16_t capability;
 } __attribute__((packed)) BEACON_INFO_S, *BEACON_INFO_PTR;
 
 typedef struct cmd_ds_802_11_scan_rsp
 {
     STM32_CMD_HDR_S hdr;
 
-    UINT16 bssdescriptsize;
-    UINT8 nr_sets;
+    uint16_t bssdescriptsize;
+    uint8_t nr_sets;
     BEACON_INFO_S beacon_info;
-    UINT8 tlvbuffer[1];
+    uint8_t tlvbuffer[1];
 } __attribute__((packed)) STM32_SCAN_RSP_S, *STM32_SCAN_RSP_PTR;
 
 
 typedef struct _stm32_frame_hdr
 {
-    UINT16 len;
+    uint16_t len;
 #if FOR_SDIO_BLK_512
-    UINT8 type;
-    UINT8 seq;
+    uint8_t type;
+    uint8_t seq;
 #else
-    UINT16 type;
+    uint16_t type;
 #endif
 
 
@@ -444,12 +445,12 @@ typedef struct _stm32_frame_hdr
 
 typedef struct _stm32_tx_frame_
 {
-    UINT16 len;
+    uint16_t len;
 #if FOR_SDIO_BLK_512
-    UINT8 type;
-    UINT8 seq;
+    uint8_t type;
+    uint8_t seq;
 #else
-    UINT16 type;
+    uint16_t type;
 #endif
 
     STM32_TXPD_S frm;
@@ -459,59 +460,59 @@ typedef struct _stm32_tx_frame_
 
 typedef struct
 {
-    UINT16 len;
-    UINT16 type;
+    uint16_t len;
+    uint16_t type;
 
     STM32_CMD_HDR_S hdr;
 
-    UINT32 resv;
+    uint32_t resv;
 } STM32_CMD_S, STM32_RSP_S;
 
 typedef struct
 {
-    UINT16 len;
-    UINT16 type;
+    uint16_t len;
+    uint16_t type;
 
     STM32_CMD_HDR_S hdr;
 
-    UINT16 private;
+    uint16_t private;
 } STM32_TX_MGMT_S, *STM32_TX_MGMT_PTR;
 
 typedef struct stm32_cmd_802_11_scan
 {
     STM32_CMD_HDR_S hdr;
 
-    UINT8 bsstype;
-    UINT8 bssid[ETH_ALEN];
-    UINT8 tlvbuffer[1];
+    uint8_t bsstype;
+    uint8_t bssid[ETH_ALEN];
+    uint8_t tlvbuffer[1];
 } __attribute__((packed)) STM32_CMD_802_11_SCAN_S, *STM32_CMD_802_11_SCAN_PTR;
 
 struct MrvlIEtype_keyParamSet
 {
     /* type ID */
-    UINT16 type;
+    uint16_t type;
 
     /* length of Payload */
-    UINT16 length;
+    uint16_t length;
 
     /* type of key: WEP=0, TKIP=1, AES=2 */
-    UINT16 keytypeid;
+    uint16_t keytypeid;
 
     /* key control Info specific to a keytypeid */
-    UINT16 keyinfo;
+    uint16_t keyinfo;
 
     /* length of key */
-    UINT16 keylen;
+    uint16_t keylen;
 
     /* key material of size keylen */
-    UINT8 key[32];
+    uint8_t key[32];
 } __attribute__((packed));
 
 typedef struct cmd_ds_802_11_key_material
 {
     STM32_CMD_HDR_S hdr;
 
-    UINT16 action;
+    uint16_t action;
     struct MrvlIEtype_keyParamSet keyParamSet[2];
 } __attribute__((packed)) STM32_KEY_MATERIAL_S, *STM32_KEY_MATERIAL_PTR;
 
@@ -519,22 +520,22 @@ typedef struct cmd_ds_802_11_associate_response
 {
     STM32_CMD_HDR_S hdr;
 
-    UINT16 capability;
-    UINT16 statuscode;
-    UINT16 aid;
-    UINT8 iebuf[512];
+    uint16_t capability;
+    uint16_t statuscode;
+    uint16_t aid;
+    uint8_t iebuf[512];
 } __attribute__((packed)) ASSOC_RESP_S, *ASSOC_RESP_PTR;
 
 typedef struct cmd_ds_802_11_associate
 {
     STM32_CMD_HDR_S hdr;
 
-    UINT8 bssid[6];
-    UINT16 capability;
-    UINT16 listeninterval;
-    UINT16 bcnperiod;
-    UINT8 dtimperiod;
-    UINT8 iebuf[512];    /* Enough for required and most optional IEs */
+    uint8_t bssid[6];
+    uint16_t capability;
+    uint16_t listeninterval;
+    uint16_t bcnperiod;
+    uint8_t dtimperiod;
+    uint8_t iebuf[512];    /* Enough for required and most optional IEs */
 } __attribute__((packed)) ASSOC_REQ_S, *ASSOC_REQ_PTR;
 
 #pragma pack()

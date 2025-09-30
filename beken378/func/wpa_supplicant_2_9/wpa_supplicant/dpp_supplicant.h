@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * wpa_supplicant - DPP
  * Copyright (c) 2017, Qualcomm Atheros, Inc.
@@ -15,8 +16,8 @@ int wpas_dpp_listen(struct wpa_supplicant *wpa_s, const char *cmd);
 void wpas_dpp_listen_stop(struct wpa_supplicant *wpa_s);
 void wpas_dpp_cancel_remain_on_channel_cb(struct wpa_supplicant *wpa_s,
 					  unsigned int freq);
-void wpas_dpp_rx_action(struct wpa_supplicant *wpa_s, const u8 *src,
-			const u8 *buf, size_t len, unsigned int freq);
+void wpas_dpp_rx_action(struct wpa_supplicant *wpa_s, const uint8_t *src,
+			const uint8_t *buf, size_t len, unsigned int freq);
 int wpas_dpp_configurator_sign(struct wpa_supplicant *wpa_s, const char *cmd);
 int wpas_dpp_pkex_add(struct wpa_supplicant *wpa_s, const char *cmd);
 int wpas_dpp_pkex_remove(struct wpa_supplicant *wpa_s, const char *id);

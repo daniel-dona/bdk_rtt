@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 #include <rthw.h>
 #include <rtthread.h>
 #include <rtdevice.h>
@@ -28,7 +30,7 @@ static struct rt_pwm_ops drv_ops =
 static rt_err_t drv_pwm_enable(pwm_param_t *param, struct rt_pwm_configuration *configuration, rt_bool_t enable)
 {
     rt_err_t result = RT_EOK;
-    UINT32 ret = DRV_SUCCESS;
+    uint32_t ret = DRV_SUCCESS;
 
     result = rt_pwm_set_channel(param, configuration);
     if (result != RT_EOK)
@@ -69,7 +71,7 @@ static rt_err_t rt_pwm_set_channel(pwm_param_t *param, struct rt_pwm_configurati
 
 static rt_err_t drv_pwm_set(pwm_param_t *param, struct rt_pwm_configuration *configuration)
 {
-    UINT32 ret = RT_EOK;
+    uint32_t ret = RT_EOK;
     if (configuration->period < 0 || configuration->pulse < 0 || (configuration->period <= configuration->pulse))
     {
         rt_kprintf("invalid param\n");

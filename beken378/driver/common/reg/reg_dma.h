@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _REG_DMA_H_
 #define _REG_DMA_H_
 

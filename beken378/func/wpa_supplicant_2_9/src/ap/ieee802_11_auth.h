@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * hostapd / IEEE 802.11 authentication (ACL)
  * Copyright (c) 2003-2005, Jouni Malinen <j@w1.fi>
@@ -16,11 +17,11 @@ enum {
 	HOSTAPD_ACL_ACCEPT_TIMEOUT = 3
 };
 
-int hostapd_check_acl(struct hostapd_data *hapd, const u8 *addr,
+int hostapd_check_acl(struct hostapd_data *hapd, const uint8_t *addr,
 		      struct vlan_description *vlan_id);
-int hostapd_allowed_address(struct hostapd_data *hapd, const u8 *addr,
-			    const u8 *msg, size_t len, u32 *session_timeout,
-			    u32 *acct_interim_interval,
+int hostapd_allowed_address(struct hostapd_data *hapd, const uint8_t *addr,
+			    const uint8_t *msg, size_t len, uint32_t *session_timeout,
+			    uint32_t *acct_interim_interval,
 			    struct vlan_description *vlan_id,
 			    struct hostapd_sta_wpa_psk_short **psk,
 			    char **identity, char **radius_cui,

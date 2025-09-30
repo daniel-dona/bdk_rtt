@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * SHA-256 internal definitions
  * Copyright (c) 2003-2011, Jouni Malinen <j@w1.fi>
@@ -12,9 +13,9 @@
 #define SHA256_BLOCK_SIZE 64
 
 struct sha256_state {
-	u64 length;
-	u32 state[8], curlen;
-	u8 buf[SHA256_BLOCK_SIZE];
+	uint64_t length;
+	uint32_t state[8], curlen;
+	uint8_t buf[SHA256_BLOCK_SIZE];
 };
 
 void sha256_init(struct sha256_state *md);

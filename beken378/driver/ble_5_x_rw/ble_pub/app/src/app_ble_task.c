@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "app_ble_task.h"
 
 

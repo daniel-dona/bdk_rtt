@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * 程序清单：动态线程
  *
@@ -12,8 +13,8 @@ static rt_thread_t tid2 = RT_NULL;
 /* 线程入口 */
 static void thread_entry(void* parameter)
 {
-    rt_uint32_t count = 0;
-    rt_uint32_t no = (rt_uint32_t) parameter; /* 获得正确的入口参数 */
+    uint32_t count = 0;
+    uint32_t no = (uint32_t) parameter; /* 获得正确的入口参数 */
 
     while (1)
     {

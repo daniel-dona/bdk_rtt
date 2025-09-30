@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
   This file is part of UFFS, the Ultra-low-cost Flash File System.
   
@@ -39,7 +40,7 @@
 #include "uffs/uffs_crc.h"
 
 /* CRC16 Table */
-static const u16 CRC16_TBL[256] = {
+static const uint16_t CRC16_TBL[256] = {
   0x0000, 0x1189, 0x2312, 0x329b, 0x4624, 0x57ad, 0x6536, 0x74bf,
   0x8c48, 0x9dc1, 0xaf5a, 0xbed3, 0xca6c, 0xdbe5, 0xe97e, 0xf8f7,
   0x1081, 0x0108, 0x3393, 0x221a, 0x56a5, 0x472c, 0x75b7, 0x643e,
@@ -76,10 +77,10 @@ static const u16 CRC16_TBL[256] = {
 
 #define CRC16(v, x) v = ((v) >> 8) ^ CRC16_TBL[((v) ^ (x)) & 0x00ff]
 
-u16 uffs_crc16update(const void *data, int length, u16 crc)
+uint16_t uffs_crc16update(const void *data, int length, uint16_t crc)
 {
 	int i;
-	const u8 *p = (const u8 *)data;
+	const uint8_t *p = (const uint8_t *)data;
 	for (i = 0; i < length; i++, p++) {
 		CRC16(crc, *p);
 	}
@@ -87,7 +88,7 @@ u16 uffs_crc16update(const void *data, int length, u16 crc)
 	return crc;
 }
 
-u16 uffs_crc16sum(const void *data, int length)
+uint16_t uffs_crc16sum(const void *data, int length)
 {
 	return uffs_crc16update(data, length, 0xFFFF);
 }

@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : devfs.c
  * This file is part of Device File System in RT-Thread RTOS
@@ -34,8 +35,8 @@
 struct device_dirent
 {
     rt_device_t *devices;
-    rt_uint16_t read_index;
-    rt_uint16_t device_count;
+    uint16_t read_index;
+    uint16_t device_count;
 };
 
 int dfs_device_fs_mount(struct dfs_filesystem *fs, unsigned long rwflag, const void *data)
@@ -146,7 +147,7 @@ int dfs_device_fs_open(struct dfs_fd *file)
         struct rt_list_node *node;
         struct rt_object_information *information;
         struct device_dirent *root_dirent;
-        rt_uint32_t count = 0;
+        uint32_t count = 0;
         
         /* lock scheduler */
         rt_enter_critical();
@@ -270,7 +271,7 @@ int dfs_device_fs_stat(struct dfs_filesystem *fs, const char *path, struct stat 
 
 int dfs_device_fs_getdents(struct dfs_fd *file, struct dirent *dirp, uint32_t count)
 {
-    rt_uint32_t index;
+    uint32_t index;
     rt_object_t object;
     struct dirent *d;
     struct device_dirent *root_dirent;
@@ -291,7 +292,7 @@ int dfs_device_fs_getdents(struct dfs_fd *file, struct dirent *dirp, uint32_t co
         d = dirp + index;
         d->d_type = DT_REG;
         d->d_namlen = RT_NAME_MAX;
-        d->d_reclen = (rt_uint16_t)sizeof(struct dirent);
+        d->d_reclen = (uint16_t)sizeof(struct dirent);
         rt_strncpy(d->d_name, object->name, RT_NAME_MAX);
     }
 

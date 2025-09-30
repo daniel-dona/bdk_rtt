@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 
@@ -16,24 +17,24 @@ struct IR_KEY_ST
 {
 	beken_queue_t IRkey_mq; 
 	
-	UINT16 IR_UserCode;
-	UINT8 valid_flag;
-	UINT8 IR_key_code;
-	UINT8 repeat_flag;
-	UINT8 repeat_cnt;
-	UINT8 timer_cnt;
+	uint16_t IR_UserCode;
+	uint8_t valid_flag;
+	uint8_t IR_key_code;
+	uint8_t repeat_flag;
+	uint8_t repeat_cnt;
+	uint8_t timer_cnt;
 };
 
 static struct IR_KEY_ST IR_key = {0};
 
 
-static UINT32 irda_ctrl(UINT32 cmd, void *param);
+static uint32_t irda_ctrl(uint32_t cmd, void *param);
 static SDD_OPERATIONS irda_op = {
             irda_ctrl
 };
 
 
-static int IR_send_key(UINT32 msg)
+static int IR_send_key(uint32_t msg)
 {
 	if(NULL != IR_key.IRkey_mq)
 		return rtos_push_to_queue(&IR_key.IRkey_mq, (void *)&msg, sizeof(msg));
@@ -41,15 +42,15 @@ static int IR_send_key(UINT32 msg)
 		return -1;
 }
 
-static void irda_key_timer_hdl(UINT8 param)
+static void irda_key_timer_hdl(uint8_t param)
 {
 #define SND_KEY (1 << 0)
 #define STOP_TIMER (1 << 1)
 
-    UINT32 	channel = IRDA_KEY_HTIMER_CHNAL;
-	static 	UINT8 hold_flag = 0;
-	UINT8  	key_type = 0;
-	UINT8	op_flag = 0;
+    uint32_t 	channel = IRDA_KEY_HTIMER_CHNAL;
+	static 	uint8_t hold_flag = 0;
+	uint8_t  	key_type = 0;
+	uint8_t	op_flag = 0;
 	
 	IR_key.timer_cnt ++;
 	if(IR_key.timer_cnt > IR_key.repeat_cnt)
@@ -97,7 +98,7 @@ static void irda_key_timer_hdl(UINT8 param)
 		sddev_control(TIMER_DEV_NAME, CMD_TIMER_UNIT_DISABLE, &channel);
 }
 
-static void start_irda_handle_timer(UINT32 period)
+static void start_irda_handle_timer(uint32_t period)
 {
 	timer_param_t param;
     
@@ -109,9 +110,9 @@ static void start_irda_handle_timer(UINT32 period)
 	sddev_control(TIMER_DEV_NAME, CMD_TIMER_INIT_PARAM, &param);    
 }
 
-static void irda_active(UINT8 enable)
+static void irda_active(uint8_t enable)
 {
-	UINT32 value;
+	uint32_t value;
 
 	value = REG_READ(IRDA_CTRL);
 	if(enable)
@@ -125,9 +126,9 @@ static void irda_active(UINT8 enable)
 	REG_WRITE(IRDA_CTRL, value);
 }
 
-static void irda_set_polarity(UINT8 polarity)
+static void irda_set_polarity(uint8_t polarity)
 {
-	UINT32 value;
+	uint32_t value;
 
 	value = REG_READ(IRDA_CTRL);
 	if(polarity){
@@ -138,31 +139,31 @@ static void irda_set_polarity(UINT8 polarity)
 	REG_WRITE(IRDA_CTRL, value);
 }
 
-static void irda_set_clk(UINT16 clk)
+static void irda_set_clk(uint16_t clk)
 {
-	UINT32 value;
+	uint32_t value;
 
 	value = REG_READ(IRDA_CTRL);
 	value &= ~(CLK_DIVID_MASK << CLK_DIVID_POSI);
 	value |= (clk << CLK_DIVID_POSI);
 	REG_WRITE(IRDA_CTRL, value);
 }
-static void irda_set_int_mask(UINT8 int_en_bits)
+static void irda_set_int_mask(uint8_t int_en_bits)
 {
-	UINT32 value;
+	uint32_t value;
 	value = REG_READ(IRDA_INT_MASK);
 	value &= ~INT_MASK_EN;
 	value |= int_en_bits;
 	REG_WRITE(IRDA_INT_MASK, value);
 }
 
-static void trng_active(UINT8 enable)
+static void trng_active(uint8_t enable)
 {
 }
 
-static UINT32 trng_get_random(void)
+static uint32_t trng_get_random(void)
 {
-	UINT32 reg, value;
+	uint32_t reg, value;
 
 	reg = REG_READ(TRNG_CTRL);
 	reg |= TRNG_EN;
@@ -177,26 +178,26 @@ static UINT32 trng_get_random(void)
 	return value;
 }
 
-static UINT32 irda_ctrl(UINT32 cmd, void *param)
+static uint32_t irda_ctrl(uint32_t cmd, void *param)
 {
-	UINT32 ret = IRDA_SUCCESS;
+	uint32_t ret = IRDA_SUCCESS;
 
 	switch(cmd)
 	{
 		case IRDA_CMD_ACTIVE:
-			irda_active(*(UINT8 *)param);
+			irda_active(*(uint8_t *)param);
 			break;
 		case IRDA_CMD_SET_POLARITY:
-			irda_set_polarity(*(UINT8 *)param);
+			irda_set_polarity(*(uint8_t *)param);
 			break;
 		case IRDA_CMD_SET_CLK:
-			irda_set_clk(*(UINT16 *)param);
+			irda_set_clk(*(uint16_t *)param);
 			break;
 		case IRDA_CMD_SET_INT_MASK:
-			irda_set_int_mask(*(UINT8*)param);
+			irda_set_int_mask(*(uint8_t*)param);
 			break;
 		case TRNG_CMD_GET:
-			*(UINT32 *)param = trng_get_random();
+			*(uint32_t *)param = trng_get_random();
 			break;
 		default:
 			ret = IRDA_FAILURE;
@@ -206,7 +207,7 @@ static UINT32 irda_ctrl(UINT32 cmd, void *param)
 	return ret;
 }
 
-long IR_get_key(void *buffer, unsigned long  size, INT32 timeout)
+long IR_get_key(void *buffer, unsigned long  size, int32_t timeout)
 {
 	OSStatus ret;
 
@@ -229,7 +230,7 @@ void irda_exit(void)
 	sddev_unregister_dev(IRDA_DEV_NAME);
 }
 
-void set_irda_usrcode(UINT16 ir_usercode)
+void set_irda_usrcode(uint16_t ir_usercode)
 {
 	IR_key.IR_UserCode = ir_usercode;
 }
@@ -237,7 +238,7 @@ void set_irda_usrcode(UINT16 ir_usercode)
 void Irda_init_app(void)
 {
 	OSStatus ret;
-	UINT32 param;
+	uint32_t param;
 
 	IR_key.valid_flag = 0;
 	ret = rtos_init_queue(&IR_key.IRkey_mq, "ir_mq", 4, 3);
@@ -271,9 +272,9 @@ void irda_isr(void)
 {
 #define REPEAT_KEY_TIME_INTERVAL 112 /*bigger than 108 ms*/
 
-	UINT32 irda_int;
-	UINT32 end_int, right_int, repeat_int;
-	UINT32 tmp;
+	uint32_t irda_int;
+	uint32_t end_int, right_int, repeat_int;
+	uint32_t tmp;
 
 	irda_int = REG_READ(IRDA_INT);
 	end_int = irda_int&IRDA_END_INT;

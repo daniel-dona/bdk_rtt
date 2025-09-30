@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 #include "intc_pub.h"
 #include "rtos_pub.h"
 
@@ -26,8 +28,8 @@
 #endif
 
 volatile static PS_MODE_STATUS    bk_ps_mode = PS_NO_PS_MODE;
-static UINT32 last_wk_tick = 0;
-UINT32 last_rw_time = 0;
+static uint32_t last_wk_tick = 0;
+uint32_t last_rw_time = 0;
 
 static STA_PS_INFO bk_ps_info = {
 	.ps_dtim_period = 1,
@@ -40,28 +42,28 @@ static STA_PS_INFO bk_ps_info = {
 };
 
 #if (CFG_SOC_NAME == SOC_BK7231)
-static UINT16 r_wakeup_time = 50;
+static uint16_t r_wakeup_time = 50;
 #elif (CFG_SOC_NAME == SOC_BK7231N)
-static UINT16 r_wakeup_time = 90;
+static uint16_t r_wakeup_time = 90;
 #else
-static UINT16 r_wakeup_time = 66;
+static uint16_t r_wakeup_time = 66;
 #endif
-static UINT32 ps_wait_status = 0;
+static uint32_t ps_wait_status = 0;
 
-static UINT32 int_enable_reg_save = 0;
-static UINT8 ps_lock = 1;
+static uint32_t int_enable_reg_save = 0;
+static uint8_t ps_lock = 1;
 static PS_FORBID_STATUS bk_forbid_code = 0;
-static UINT16 bk_forbid_count = 0;
-static UINT32 ps_dis_flag = 0;
-static UINT16 beacon_len = 0;
-static UINT8 ps_data_low_latency = 0;
+static uint16_t bk_forbid_count = 0;
+static uint32_t ps_dis_flag = 0;
+static uint16_t beacon_len = 0;
+static uint8_t ps_data_low_latency = 0;
 
 #if PS_USE_KEEP_TIMER
 static beken2_timer_t ps_keep_timer = {0};
-static UINT32 ps_keep_timer_status = 0;
-static UINT32 ps_keep_timer_period = 0;
-static UINT32 ps_reseted_moniter_flag = 0;
-static UINT32 ps_bcn_loss_max_count = 0;
+static uint32_t ps_keep_timer_status = 0;
+static uint32_t ps_keep_timer_period = 0;
+static uint32_t ps_reseted_moniter_flag = 0;
+static uint32_t ps_bcn_loss_max_count = 0;
 #endif
 
 #if PS_USE_WAIT_TIMER
@@ -83,11 +85,11 @@ void power_save_wakeup_isr ( void )
 {
 }
 
-void power_save_dtim_wake ( UINT32 status )
+void power_save_dtim_wake ( uint32_t status )
 {
 	if ( bk_ps_mode == PS_DTIM_PS_MODE &&
 	     bk_ps_info.ps_arm_wakeup_way == PS_ARM_WAKEUP_NONE ) {
-		UINT32 reg;
+		uint32_t reg;
 
 		if ( status ) {
 			if ( ( status ) & MAC_ARM_WAKEUP_EN_BIT ) {
@@ -119,8 +121,8 @@ extern uint8_t ble_switch_mac_sleeped;
 #endif
 bool power_save_sleep ( void )
 {
-	UINT32 ret = false;
-	UINT32 reg;
+	uint32_t ret = false;
+	uint32_t reg;
 	GLOBAL_INT_DECLARATION();
 	GLOBAL_INT_DISABLE();
 
@@ -212,9 +214,9 @@ bool power_save_sleep ( void )
 }
 
 /*time = BI*1024*LIST*0.016*/
-void power_save_wkup_time_cal ( UINT8 sleep_int )
+void power_save_wkup_time_cal ( uint8_t sleep_int )
 {
-	UINT32 tmp_r_wkup = r_wakeup_time + 12;
+	uint32_t tmp_r_wkup = r_wakeup_time + 12;
 	nxmac_radio_wake_up_time_setf ( tmp_r_wkup );
 }
 
@@ -259,9 +261,9 @@ void power_save_mac_idle_callback ( void )
 	bk_ps_info.sleep_count ++;
 }
 
-UINT32 power_save_get_rf_ps_dtim_time ( void )
+uint32_t power_save_get_rf_ps_dtim_time ( void )
 {
-	UINT32 tm;
+	uint32_t tm;
 	tm = bk_ps_info.ps_dtim_period * bk_ps_info.ps_dtim_multi * bk_ps_info.ps_beacon_int;
 	return tm;
 }
@@ -272,10 +274,10 @@ void power_save_sleep_status_set ( void )
 	bk_ps_info.ps_arm_wakeup_way = PS_ARM_WAKEUP_NONE;
 }
 
-UINT8 power_save_set_all_vif_prevent_sleep ( UINT32 prevent_bit )
+uint8_t power_save_set_all_vif_prevent_sleep ( uint32_t prevent_bit )
 {
 	VIF_INF_PTR vif_entry = NULL;
-	UINT32 i;
+	uint32_t i;
 
 	for ( i = 0; i < NX_VIRT_DEV_MAX; i++ ) {
 		vif_entry = &vif_info_tab[i];
@@ -295,10 +297,10 @@ void power_save_wkup_wait_idle_int_cb ( void )
 {
 }
 
-UINT8 power_save_clr_all_vif_prevent_sleep ( UINT32 prevent_bit )
+uint8_t power_save_clr_all_vif_prevent_sleep ( uint32_t prevent_bit )
 {
 	VIF_INF_PTR vif_entry = NULL;
-	UINT32 i;
+	uint32_t i;
 
 	for ( i = 0; i < NX_VIRT_DEV_MAX; i++ ) {
 		vif_entry = &vif_info_tab[i];
@@ -315,12 +317,12 @@ extern void ps_recover_ble_switch_mac_status(void);
 #endif
 void power_save_wakeup ( void )
 {
-	UINT32 reg;
+	uint32_t reg;
 	PS_DEBUG_UP_TRIGER;
 	bk_ps_info.waited_beacon = STA_GET_FALSE;
 
 	if ( bk_ps_info.ps_arm_wakeup_way == PS_ARM_WAKEUP_RW ) {
-		power_save_set_all_vif_prevent_sleep ( ( UINT32 ) ( PS_VIF_WAITING_BCN ) );
+		power_save_set_all_vif_prevent_sleep ( ( uint32_t ) ( PS_VIF_WAITING_BCN ) );
 	}
 
 #if CFG_USE_STA_PS
@@ -431,7 +433,7 @@ bool power_save_rf_sleep_check ( void )
 	return 0;
 }
 
-void power_save_me_ps_first_set_state ( UINT8 state )
+void power_save_me_ps_first_set_state ( uint8_t state )
 {
 	int param_len;
 	VIF_INF_PTR vif_entry;
@@ -467,7 +469,7 @@ void power_save_me_ps_first_set_state ( UINT8 state )
 }
 
 
-void power_save_me_ps_set_state ( UINT8 state , UINT8 vif_idx )
+void power_save_me_ps_set_state ( uint8_t state , uint8_t vif_idx )
 {
 	os_printf ( "%s:%d \r\n", __FUNCTION__, __LINE__ );
 	{
@@ -479,7 +481,7 @@ void power_save_me_ps_set_state ( UINT8 state , UINT8 vif_idx )
 	}
 }
 
-void power_save_sm_set_bcmc ( UINT8 bcmc , UINT8 vif_idx )
+void power_save_sm_set_bcmc ( uint8_t bcmc , uint8_t vif_idx )
 {
 	struct mm_set_ps_options_req *req;
 	// Get a pointer to the kernel message
@@ -494,10 +496,10 @@ void power_save_sm_set_bcmc ( UINT8 bcmc , UINT8 vif_idx )
 	ke_msg_send ( req );
 }
 
-UINT8 power_save_sm_set_all_bcmc ( UINT8 bcmc )
+uint8_t power_save_sm_set_all_bcmc ( uint8_t bcmc )
 {
 	VIF_INF_PTR vif_entry = NULL;
-	UINT32 i;
+	uint32_t i;
 
 	for ( i = 0; i < NX_VIRT_DEV_MAX; i++ ) {
 		vif_entry = &vif_info_tab[i];
@@ -520,10 +522,10 @@ UINT8 power_save_sm_set_all_bcmc ( UINT8 bcmc )
 }
 
 
-UINT8 power_save_me_ps_set_all_state ( UINT8 state )
+uint8_t power_save_me_ps_set_all_state ( uint8_t state )
 {
 	VIF_INF_PTR vif_entry = NULL;
-	UINT32 i;
+	uint32_t i;
 
 	if ( state == false ) {
 		for ( i = 0; i < NX_VIRT_DEV_MAX; i++ ) {
@@ -549,7 +551,7 @@ UINT8 power_save_me_ps_set_all_state ( UINT8 state )
 #if PS_USE_KEEP_TIMER
 void power_save_keep_timer_init ( void )
 {
-	UINT32 err;
+	uint32_t err;
 
 	if ( rtos_is_oneshot_timer_init ( &ps_keep_timer ) )
 	{
@@ -604,7 +606,7 @@ void power_save_dtim_ps_exit ( void )
 
 int power_save_dtim_enable_handler ( void )
 {
-	UINT32 ps_time, multi;
+	uint32_t ps_time, multi;
 	GLOBAL_INT_DECLARATION();
 	GLOBAL_INT_DISABLE();
 
@@ -671,7 +673,7 @@ int power_save_dtim_enable ( void )
 
 int power_save_dtim_disable_handler ( void )
 {
-	UINT32 wdt_val = 1;
+	uint32_t wdt_val = 1;
 	GLOBAL_INT_DECLARATION();
 	GLOBAL_INT_DISABLE();
 	bk_ps_mode = PS_NO_PS_MODE;
@@ -735,13 +737,13 @@ int power_save_dtim_rf_ps_disable_send_msg ( void )
 
 void power_save_rf_dtim_manual_do_wakeup ( void )
 {
-	UINT32 reg;
+	uint32_t reg;
 #if CFG_USE_AP_IDLE
 	
 	if ( bk_wlan_has_role ( VIF_AP ) && ap_ps_enable_get() ) {
 		GLOBAL_INT_DECLARATION();
 		GLOBAL_INT_DISABLE();
-		UINT32 reg = RF_HOLD_BY_AP_BIT;
+		uint32_t reg = RF_HOLD_BY_AP_BIT;
 		sddev_control(SCTRL_DEV_NAME, CMD_RF_HOLD_BIT_SET, &reg);
 		wifi_general_mac_state_set_active();
 		GLOBAL_INT_RESTORE();
@@ -786,7 +788,7 @@ void power_save_rf_dtim_manual_do_wakeup ( void )
 
 
 #if PS_USE_KEEP_TIMER
-void power_save_set_keep_timer_time ( UINT32 time )
+void power_save_set_keep_timer_time ( uint32_t time )
 {
 	if ( time >= 0 && time < 100 ) {
 		GLOBAL_INT_DECLARATION();
@@ -800,13 +802,13 @@ void power_save_set_keep_timer_time ( UINT32 time )
 }
 #endif
 
-void power_save_set_uart_linger_time ( UINT32 uart_wakeup_time )
+void power_save_set_uart_linger_time ( uint32_t uart_wakeup_time )
 {
 	bk_ps_info.PsPeriWakeupWaitTimeMs = uart_wakeup_time;
 	return;
 }
 
-void power_save_set_dtim_period ( UINT8 period )
+void power_save_set_dtim_period ( uint8_t period )
 {
 	if ( bk_ps_info.ps_dtim_period != period ) {
 		os_printf ( "new dtim period:%d\r\n", period );
@@ -815,12 +817,12 @@ void power_save_set_dtim_period ( UINT8 period )
 	bk_ps_info.ps_dtim_period = period;
 }
 
-void power_save_set_dtim_count ( UINT8 count )
+void power_save_set_dtim_count ( uint8_t count )
 {
 	bk_ps_info.ps_dtim_count = count;
 }
 
-void power_save_cal_bcn_liston_int ( UINT16 bcn_int )
+void power_save_cal_bcn_liston_int ( uint16_t bcn_int )
 {
 	if ( bcn_int != 0 ) {
 		bk_ps_info.ps_beacon_int = bcn_int;
@@ -828,7 +830,7 @@ void power_save_cal_bcn_liston_int ( UINT16 bcn_int )
 	}
 }
 
-UINT8 power_save_get_liston_int ( void )
+uint8_t power_save_get_liston_int ( void )
 {
 	return bk_ps_info.liston_int;
 }
@@ -865,7 +867,7 @@ void power_save_wait_timer_handler ( void *data )
 
 void power_save_wait_timer_init ( void )
 {
-	UINT32 err;
+	uint32_t err;
 	if ( rtos_is_oneshot_timer_init ( &ps_wait_timer ) )
 	{
 		power_save_wait_timer_stop();
@@ -901,12 +903,12 @@ void power_save_wait_timer_start ( void )
 	}
 }
 #else
-void power_save_wait_set ( UINT32 set )
+void power_save_wait_set ( uint32_t set )
 {
 	ps_wait_status = set;
 }
 
-UINT32 power_save_wait_get ( void )
+uint32_t power_save_wait_get ( void )
 {
 	return ps_wait_status;
 }
@@ -945,7 +947,7 @@ void power_save_keep_timer_real_handler(void)
 		     && ps_bcn_loss_max_count < PS_BCN_MAX_LOSS_LIMIT
 		   ) {
 			power_save_beacon_state_set ( STA_GET_TRUE );
-			power_save_clr_all_vif_prevent_sleep ( ( UINT32 ) ( PS_VIF_WAITING_BCN ) );
+			power_save_clr_all_vif_prevent_sleep ( ( uint32_t ) ( PS_VIF_WAITING_BCN ) );
 			ps_bcn_loss_max_count ++;
 		}
 		else {
@@ -990,7 +992,7 @@ void power_save_rf_ps_wkup_semlist_init ( void )
 
 void *power_save_rf_ps_wkup_semlist_create ( void )
 {
-	UINT32 ret;
+	uint32_t ret;
 	PS_DO_WKUP_SEM *sem_list = ( PS_DO_WKUP_SEM * ) os_malloc ( sizeof ( PS_DO_WKUP_SEM ) );
 
 	if ( !sem_list ) {
@@ -1017,7 +1019,7 @@ void power_save_rf_ps_wkup_semlist_wait ( void *sem_list_p )
 
 void power_save_rf_ps_wkup_semlist_destroy ( void *sem_list_p )
 {
-	UINT32 ret;
+	uint32_t ret;
 	PS_DO_WKUP_SEM *sem_list = ( PS_DO_WKUP_SEM * ) sem_list_p;
 	ret = rtos_deinit_semaphore ( &sem_list->wkup_sema );
 	ASSERT ( 0 == ret );
@@ -1025,7 +1027,7 @@ void power_save_rf_ps_wkup_semlist_destroy ( void *sem_list_p )
 
 void power_save_rf_ps_wkup_semlist_get ( void *sem_list )
 {
-	UINT32 ret;
+	uint32_t ret;
 
 	if ( sem_list ) {
 		ret = rtos_get_semaphore ( & ( ( PS_DO_WKUP_SEM * ) sem_list )->wkup_sema, BEKEN_NEVER_TIMEOUT );
@@ -1043,7 +1045,7 @@ void power_save_rf_ps_wkup_semlist_get ( void *sem_list )
 
 void power_save_rf_ps_wkup_semlist_set ( void )
 {
-	UINT32 ret;
+	uint32_t ret;
 
 	while ( !co_list_is_empty ( &bk_ps_info.wk_list ) ) {
 		PS_DO_WKUP_SEM *sem_list;
@@ -1106,7 +1108,7 @@ void power_save_bcn_callback ( uint8_t *data, int len, wifi_link_info_t *info )
 	}
 }
 
-UINT8 power_save_if_sleep_first ( void )
+uint8_t power_save_if_sleep_first ( void )
 {
 	return bk_ps_info.sleep_first;
 }
@@ -1121,17 +1123,17 @@ PS_ARM_WAKEUP_WAY power_save_wkup_way_get ( void )
 	return bk_ps_info.ps_arm_wakeup_way;
 }
 
-UINT8 power_save_if_ps_can_sleep ( void )
+uint8_t power_save_if_ps_can_sleep ( void )
 {
 	return ( bk_ps_info.ps_can_sleep == 1 );
 }
 
-INT8 power_save_if_sleep_at_first ( void )
+int8_t power_save_if_sleep_at_first ( void )
 {
 	return ( bk_ps_info.sleep_count < 6 );
 }
 
-UINT32 power_save_get_sleep_count ( void )
+uint32_t power_save_get_sleep_count ( void )
 {
 	return bk_ps_info.sleep_count;
 }
@@ -1141,22 +1143,22 @@ void power_save_ps_mode_set ( PS_MODE_STATUS mode )
 	bk_ps_mode = mode;
 }
 
-UINT16 power_save_radio_wkup_get ( void )
+uint16_t power_save_radio_wkup_get ( void )
 {
 	return r_wakeup_time;
 }
 
-void power_save_radio_wkup_set ( UINT16 time )
+void power_save_radio_wkup_set ( uint16_t time )
 {
 	r_wakeup_time = time;
 }
 
-UINT32 power_save_wkup_event_get ( void )
+uint32_t power_save_wkup_event_get ( void )
 {
 	return ps_dis_flag;
 }
 
-void power_save_wkup_event_set ( UINT32 value )
+void power_save_wkup_event_set ( uint32_t value )
 {
 	GLOBAL_INT_DECLARATION();
 	GLOBAL_INT_DISABLE();
@@ -1164,7 +1166,7 @@ void power_save_wkup_event_set ( UINT32 value )
 	GLOBAL_INT_RESTORE();
 }
 
-void power_save_wkup_event_clear ( UINT32 value )
+void power_save_wkup_event_clear ( uint32_t value )
 {
 	GLOBAL_INT_DECLARATION();
 	GLOBAL_INT_DISABLE();
@@ -1172,12 +1174,12 @@ void power_save_wkup_event_clear ( UINT32 value )
 	GLOBAL_INT_RESTORE();
 }
 
-UINT16 power_save_beacon_len_get ( void )
+uint16_t power_save_beacon_len_get ( void )
 {
 	return beacon_len;
 }
 
-void power_save_beacon_len_set ( UINT16 len )
+void power_save_beacon_len_set ( uint16_t len )
 {
 	beacon_len = len + 4/*fcs*/ /*+25 radiotap*/;
 }
@@ -1188,13 +1190,13 @@ void power_save_set_reseted_flag ( void )
 	ps_reseted_moniter_flag = 1;
 }
 
-UINT32 power_save_get_bcn_lost_count ( void )
+uint32_t power_save_get_bcn_lost_count ( void )
 {
 	return ps_bcn_loss_max_count;
 }
 #endif
 
-UINT8 power_save_set_dtim_multi ( UINT8 multi )
+uint8_t power_save_set_dtim_multi ( uint8_t multi )
 {
 	bk_ps_info.ps_dtim_multi = multi;
 
@@ -1210,7 +1212,7 @@ UINT8 power_save_set_dtim_multi ( UINT8 multi )
 	return 0;
 }
 
-UINT16 power_save_forbid_trace ( PS_FORBID_STATUS forbid )
+uint16_t power_save_forbid_trace ( PS_FORBID_STATUS forbid )
 {
 	bk_forbid_count ++;
 
@@ -1226,13 +1228,13 @@ UINT16 power_save_forbid_trace ( PS_FORBID_STATUS forbid )
 
 void power_save_dump ( void )
 {
-	UINT32 i;
-	extern UINT32 txl_cntrl_pck_get ( void );
+	uint32_t i;
+	extern uint32_t txl_cntrl_pck_get ( void );
 	os_printf ( "rf:%x\r\n", bk_ps_mode );
 	os_printf ( "info dump\r\n" );
 
 	for ( i = 0; i < sizeof ( bk_ps_info ); i++ )
-		os_printf ( " %d 0x%x\r\n", i, * ( ( UINT8 * ) ( &bk_ps_info ) + i ) );
+		os_printf ( " %d 0x%x\r\n", i, * ( ( uint8_t * ) ( &bk_ps_info ) + i ) );
 
 	os_printf ( "globel dump\r\n" );
 	os_printf ( "%d %d %d %d %d %d\r\n",
@@ -1268,7 +1270,7 @@ void power_save_wake_mac_rf_if_in_sleep(void)
     ps_set_rf_prevent();
     power_save_rf_dtim_manual_do_wakeup();
 
-    UINT32 reg = RF_HOLD_BY_MAC_USE_BIT;
+    uint32_t reg = RF_HOLD_BY_MAC_USE_BIT;
     sddev_control(SCTRL_DEV_NAME, CMD_RF_HOLD_BIT_SET, &reg);
 }
 
@@ -1279,7 +1281,7 @@ void power_save_wake_mac_rf_end_clr_flag(void)
         ps_clear_rf_prevent();
     }
     
-    UINT32 reg = RF_HOLD_BY_MAC_USE_BIT;
+    uint32_t reg = RF_HOLD_BY_MAC_USE_BIT;
     sddev_control(SCTRL_DEV_NAME, CMD_RF_HOLD_BIT_CLR, &reg);
 }
 
@@ -1298,7 +1300,7 @@ void power_save_clr_temp_use_rf_flag(void)
         ps_clear_rf_prevent();
     }
 
-    UINT32 reg = RF_HOLD_BY_TEMP_BIT;
+    uint32_t reg = RF_HOLD_BY_TEMP_BIT;
     sddev_control(SCTRL_DEV_NAME, CMD_RF_HOLD_BIT_CLR, &reg);
 }
 
@@ -1306,13 +1308,13 @@ void power_save_set_temp_use_rf_flag(void)
 {
     ps_set_rf_prevent();
 
-    UINT32 reg = RF_HOLD_BY_TEMP_BIT;
+    uint32_t reg = RF_HOLD_BY_TEMP_BIT;
     sddev_control(SCTRL_DEV_NAME, CMD_RF_HOLD_BIT_SET, &reg);
 }
 
 
 
-UINT8 power_save_if_ps_rf_dtim_enabled ( void )
+uint8_t power_save_if_ps_rf_dtim_enabled ( void )
 {
 	return ( bk_ps_mode == PS_DTIM_PS_MODE );
 }
@@ -1321,7 +1323,7 @@ PS_MODE_STATUS power_save_ps_mode_get ( void )
 {
 	return bk_ps_mode;
 }
-UINT8 power_save_if_rf_sleep ( void )
+uint8_t power_save_if_rf_sleep ( void )
 {
 #if CFG_USE_STA_PS
 
@@ -1333,11 +1335,11 @@ UINT8 power_save_if_rf_sleep ( void )
 	return 0;
 }
 
-UINT32 power_save_time_to_sleep ( void )
+uint32_t power_save_time_to_sleep ( void )
 {
-	INT32 less;
+	int32_t less;
 #if CFG_USE_STA_PS
-	UINT32 tm;
+	uint32_t tm;
 
 	if ( bk_ps_info.ps_dtim_count == 0 ) {
 		tm = bk_ps_info.ps_dtim_period * bk_ps_info.ps_dtim_multi * bk_ps_info.ps_beacon_int;
@@ -1353,12 +1355,12 @@ UINT32 power_save_time_to_sleep ( void )
 	return less;
 }
 
-void power_save_set_low_latency ( UINT8 value )
+void power_save_set_low_latency ( uint8_t value )
 {
 	ps_data_low_latency = value;
 }
 
-UINT8 power_save_low_latency_get ( void )
+uint8_t power_save_low_latency_get ( void )
 {
 	return ps_data_low_latency;
 }

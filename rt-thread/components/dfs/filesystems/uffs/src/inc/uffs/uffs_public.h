@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
   This file is part of UFFS, the Ultra-low-cost Flash File System.
   
@@ -76,12 +77,12 @@ extern "C"{
  * \brief file/dir entry info in physical storage format
  */
 struct uffs_FileInfoSt {
-    u32 attr;               //!< file/dir attribute
-    u32 create_time;
-    u32 last_modify;
-    u32 access;
-    u32 reserved;
-    u32 name_len;           //!< length of file/dir name
+    uint32_t attr;               //!< file/dir attribute
+    uint32_t create_time;
+    uint32_t last_modify;
+    uint32_t access;
+    uint32_t reserved;
+    uint32_t name_len;           //!< length of file/dir name
     char name[MAX_FILENAME_LENGTH];
 }; //6*4 + sizeof(name) = 24 + 128 = 152 Bytes
 typedef struct uffs_FileInfoSt uffs_FileInfo;
@@ -92,8 +93,8 @@ typedef struct uffs_FileInfoSt uffs_FileInfo;
  */
 typedef struct uffs_ObjectInfoSt {
     uffs_FileInfo info;
-    u32 len;                //!< length of file
-    u16 serial;             //!< object serial num
+    uint32_t len;                //!< length of file
+    uint16_t serial;             //!< object serial num
 } uffs_ObjectInfo;
 
 
@@ -102,17 +103,17 @@ typedef struct uffs_ObjectInfoSt {
  * \brief uffs tag, 8 bytes, will be store in page spare area.
  */
 struct uffs_TagStoreSt {
-	u32 dirty:1;		//!< 0: dirty, 1: clear
-	u32 valid:1;		//!< 0: valid, 1: invalid
-	u32 type:2;			//!< block type: #UFFS_TYPE_DIR, #UFFS_TYPE_FILE, #UFFS_TYPE_DATA
-	u32 block_ts:2;		//!< time stamp of block;
-	u32 data_len:12;	//!< length of page data
-	u32 serial:14;		//!< serial number
+	uint32_t dirty:1;		//!< 0: dirty, 1: clear
+	uint32_t valid:1;		//!< 0: valid, 1: invalid
+	uint32_t type:2;			//!< block type: #UFFS_TYPE_DIR, #UFFS_TYPE_FILE, #UFFS_TYPE_DATA
+	uint32_t block_ts:2;		//!< time stamp of block;
+	uint32_t data_len:12;	//!< length of page data
+	uint32_t serial:14;		//!< serial number
 
-	u32 parent:10;		//!< parent's serial number
-	u32 page_id:6;		//!< page id
-	u32 reserved:4;		//!< reserved, for UFFS2
-	u32 tag_ecc:12;		//!< tag ECC
+	uint32_t parent:10;		//!< parent's serial number
+	uint32_t page_id:6;		//!< page id
+	uint32_t reserved:4;		//!< reserved, for UFFS2
+	uint32_t tag_ecc:12;		//!< tag ECC
 };
 
 #define TAG_ECC_DEFAULT (0xFFF)	//!< 12-bit '1'
@@ -125,10 +126,10 @@ struct uffs_TagsSt {
 	struct uffs_TagStoreSt s;		/* store must be the first member */
 
 	/** data_sum for file or dir name */
-	u16 data_sum;
+	uint16_t data_sum;
 
 	/** internal used */
-	u8 seal_byte;			//!< seal byte.
+	uint8_t seal_byte;			//!< seal byte.
 };
 
 /** 
@@ -136,9 +137,9 @@ struct uffs_TagsSt {
  * \brief the mini header resides on the head of page data
  */
 struct uffs_MiniHeaderSt {
-	u8 status;
-	u8 reserved;
-	u16 crc;
+	uint8_t status;
+	uint8_t reserved;
+	uint16_t crc;
 };
 
 
@@ -150,7 +151,7 @@ struct uffs_MiniHeaderSt {
 #define TAG_DIRTY		0
 #define TAG_CLEAR		1
 
-#define TAG_IS_DIRTY(tag) (*((u32 *) &((tag)->s)) != 0xFFFFFFFF)	// tag is dirty if first 4 bytes not all 0xFF
+#define TAG_IS_DIRTY(tag) (*((uint32_t *) &((tag)->s)) != 0xFFFFFFFF)	// tag is dirty if first 4 bytes not all 0xFF
 #define TAG_IS_VALID(tag) ((tag)->s.valid == TAG_VALID)
 #define TAG_IS_SEALED(tag) ((tag)->seal_byte != 0xFF)
 
@@ -280,24 +281,24 @@ UBOOL uffs_IsBlockBad(uffs_Device *dev, uffs_BlockInfo *bc);
 #define UFFS_INVALID_BLOCK	(0xfffe)
 
 
-URET uffs_NewBlock(uffs_Device *dev, u16 block, uffs_Tags *tag, uffs_Buf *buf);
-URET uffs_BlockRecover(uffs_Device *dev, uffs_BlockInfo *old, u16 newBlock);
+URET uffs_NewBlock(uffs_Device *dev, uint16_t block, uffs_Tags *tag, uffs_Buf *buf);
+URET uffs_BlockRecover(uffs_Device *dev, uffs_BlockInfo *old, uint16_t newBlock);
 URET uffs_PageRecover(uffs_Device *dev, 
 					  uffs_BlockInfo *bc, 
-					  u16 oldPage, 
-					  u16 newPage, 
+					  uint16_t oldPage, 
+					  uint16_t newPage, 
 					  uffs_Buf *buf);
 int uffs_FindFreePageInBlock(uffs_Device *dev, uffs_BlockInfo *bc);
-u16 uffs_FindBestPageInBlock(uffs_Device *dev, uffs_BlockInfo *bc, u16 page);
-u16 uffs_FindFirstFreePage(uffs_Device *dev, uffs_BlockInfo *bc, u16 pageFrom);
-u16 uffs_FindPageInBlockWithPageId(uffs_Device *dev, uffs_BlockInfo *bc, u16 page_id);
+uint16_t uffs_FindBestPageInBlock(uffs_Device *dev, uffs_BlockInfo *bc, uint16_t page);
+uint16_t uffs_FindFirstFreePage(uffs_Device *dev, uffs_BlockInfo *bc, uint16_t pageFrom);
+uint16_t uffs_FindPageInBlockWithPageId(uffs_Device *dev, uffs_BlockInfo *bc, uint16_t page_id);
 
-u8 uffs_MakeSum8(const void *p, int len);
-u16 uffs_MakeSum16(const void *p, int len);
-URET uffs_CreateNewFile(uffs_Device *dev, u16 parent, u16 serial, uffs_BlockInfo *bc, uffs_FileInfo *fi);
+uint8_t uffs_MakeSum8(const void *p, int len);
+uint16_t uffs_MakeSum16(const void *p, int len);
+URET uffs_CreateNewFile(uffs_Device *dev, uint16_t parent, uint16_t serial, uffs_BlockInfo *bc, uffs_FileInfo *fi);
 
-int uffs_GetBlockFileDataLength(uffs_Device *dev, uffs_BlockInfo *bc, u8 type);
-UBOOL uffs_IsPageErased(uffs_Device *dev, uffs_BlockInfo *bc, u16 page);
+int uffs_GetBlockFileDataLength(uffs_Device *dev, uffs_BlockInfo *bc, uint8_t type);
+UBOOL uffs_IsPageErased(uffs_Device *dev, uffs_BlockInfo *bc, uint16_t page);
 int uffs_GetFreePagesCount(uffs_Device *dev, uffs_BlockInfo *bc);
 UBOOL uffs_IsDataBlockReguFull(uffs_Device *dev, uffs_BlockInfo *bc);
 UBOOL uffs_IsThisBlockUsed(uffs_Device *dev, uffs_BlockInfo *bc);
@@ -308,7 +309,7 @@ int uffs_GetDeviceUsed(uffs_Device *dev);
 int uffs_GetDeviceFree(uffs_Device *dev);
 int uffs_GetDeviceTotal(uffs_Device *dev);
 
-URET uffs_LoadMiniHeader(uffs_Device *dev, int block, u16 page, struct uffs_MiniHeaderSt *header);
+URET uffs_LoadMiniHeader(uffs_Device *dev, int block, uint16_t page, struct uffs_MiniHeaderSt *header);
 
 
 /* some functions from uffs_fd.c */

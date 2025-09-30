@@ -1,3 +1,4 @@
+#include <stdint.h>
 /* wc_port.h
  *
  * Copyright (C) 2006-2019 wolfSSL Inc.
@@ -381,7 +382,7 @@ WOLFSSL_API int wolfCrypt_Cleanup(void);
     #define XFGETS(b,s,f)       -2 /* Not ported yet */
 
 #elif defined(WOLFSSL_TELIT_M2MB)
-    #define XFILE                    INT32
+    #define XFILE                    int32_t
     #define XFOPEN(NAME, MODE)       m2mb_fs_open((NAME), 0, (MODE))
     #define XFSEEK(F, O, W)          m2mb_fs_lseek((F), (O), (W))
     #define XFTELL(F)                m2mb_fs_lseek((F), 0, M2MB_SEEK_END)

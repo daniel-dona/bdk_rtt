@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  * File      : module_lua.c
  * This file is part of RT-Thread RTOS/WebNet Server

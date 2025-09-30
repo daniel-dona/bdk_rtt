@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  * File      : hub.c
  * This file is part of RT-Thread RTOS
@@ -31,18 +33,18 @@ static struct rt_messagequeue *usb_mq;
 static struct uclass_driver hub_driver;
 static struct uhub root_hub;
 
-static rt_err_t root_hub_ctrl(struct uhcd *hcd, rt_uint16_t port, rt_uint8_t cmd, void *args)
+static rt_err_t root_hub_ctrl(struct uhcd *hcd, uint16_t port, uint8_t cmd, void *args)
 {
     switch(cmd)
     {
     case RH_GET_PORT_STATUS:
-        (*(rt_uint32_t *)args) = hcd->roothub->port_status[port-1];
+        (*(uint32_t *)args) = hcd->roothub->port_status[port-1];
         break;
     case RH_SET_PORT_STATUS:
-        hcd->roothub->port_status[port-1] = (*(rt_uint32_t *)args);
+        hcd->roothub->port_status[port-1] = (*(uint32_t *)args);
         break;
     case RH_CLEAR_PORT_FEATURE:
-        switch(((rt_uint32_t)args))
+        switch(((uint32_t)args))
         {
         case PORT_FEAT_C_CONNECTION:
             hcd->roothub->port_status[port-1] &= ~PORT_CCSC;
@@ -62,7 +64,7 @@ static rt_err_t root_hub_ctrl(struct uhcd *hcd, rt_uint16_t port, rt_uint8_t cmd
         }
         break;
     case RH_SET_PORT_FEATURE:
-        switch((rt_uint32_t)args)
+        switch((uint32_t)args)
         {
         case PORT_FEAT_CONNECTION:
             hcd->roothub->port_status[port-1] |= PORT_CCSC;
@@ -92,7 +94,7 @@ static rt_err_t root_hub_ctrl(struct uhcd *hcd, rt_uint16_t port, rt_uint8_t cmd
     }
     return RT_EOK;
 } 
-void rt_usbh_root_hub_connect_handler(struct uhcd *hcd, rt_uint8_t port, rt_bool_t isHS)
+void rt_usbh_root_hub_connect_handler(struct uhcd *hcd, uint8_t port, rt_bool_t isHS)
 {
     struct uhost_msg msg;
     msg.type = USB_MSG_CONNECT_CHANGE;
@@ -109,7 +111,7 @@ void rt_usbh_root_hub_connect_handler(struct uhcd *hcd, rt_uint8_t port, rt_bool
     rt_usbh_event_signal(&msg);
 }
 
-void rt_usbh_root_hub_disconnect_handler(struct uhcd *hcd, rt_uint8_t port)
+void rt_usbh_root_hub_disconnect_handler(struct uhcd *hcd, uint8_t port)
 {
     struct uhost_msg msg;
     msg.type = USB_MSG_CONNECT_CHANGE;
@@ -129,7 +131,7 @@ void rt_usbh_root_hub_disconnect_handler(struct uhcd *hcd, rt_uint8_t port)
  * 
  * @return the error code, RT_EOK on successfully.
  */
-rt_err_t rt_usbh_hub_get_descriptor(struct uinstance* device, rt_uint8_t *buffer, rt_size_t nbytes)
+rt_err_t rt_usbh_hub_get_descriptor(struct uinstance* device, uint8_t *buffer, rt_size_t nbytes)
 {
     struct urequest setup;
     int timeout = 100;
@@ -162,7 +164,7 @@ rt_err_t rt_usbh_hub_get_descriptor(struct uinstance* device, rt_uint8_t *buffer
  * 
  * @return the error code, RT_EOK on successfully.
  */
-rt_err_t rt_usbh_hub_get_status(struct uinstance* device, rt_uint32_t* buffer)
+rt_err_t rt_usbh_hub_get_status(struct uinstance* device, uint32_t* buffer)
 {
     struct urequest setup;
     int timeout = 100;
@@ -195,7 +197,7 @@ rt_err_t rt_usbh_hub_get_status(struct uinstance* device, rt_uint32_t* buffer)
  * 
  * @return the error code, RT_EOK on successfully.
  */
-rt_err_t rt_usbh_hub_get_port_status(uhub_t hub, rt_uint16_t port, rt_uint32_t* buffer)
+rt_err_t rt_usbh_hub_get_port_status(uhub_t hub, uint16_t port, uint32_t* buffer)
 {
     struct urequest setup;
     int timeout = 100;
@@ -237,7 +239,7 @@ rt_err_t rt_usbh_hub_get_port_status(uhub_t hub, rt_uint16_t port, rt_uint32_t* 
  * 
  * @return the error code, RT_EOK on successfully.
  */
-rt_err_t rt_usbh_hub_clear_port_feature(uhub_t hub, rt_uint16_t port, rt_uint16_t feature)
+rt_err_t rt_usbh_hub_clear_port_feature(uhub_t hub, uint16_t port, uint16_t feature)
 {
     struct urequest setup;
     int timeout = 100;
@@ -277,8 +279,8 @@ rt_err_t rt_usbh_hub_clear_port_feature(uhub_t hub, rt_uint16_t port, rt_uint16_
  * 
  * @return the error code, RT_EOK on successfully.
  */
-rt_err_t rt_usbh_hub_set_port_feature(uhub_t hub, rt_uint16_t port, 
-    rt_uint16_t feature)
+rt_err_t rt_usbh_hub_set_port_feature(uhub_t hub, uint16_t port, 
+    uint16_t feature)
 {
     struct urequest setup;
     int timeout = 100;
@@ -316,10 +318,10 @@ rt_err_t rt_usbh_hub_set_port_feature(uhub_t hub, rt_uint16_t port,
  * 
  * @return the error code, RT_EOK on successfully.
  */
-rt_err_t rt_usbh_hub_reset_port(uhub_t hub, rt_uint16_t port)
+rt_err_t rt_usbh_hub_reset_port(uhub_t hub, uint16_t port)
 {
     rt_err_t ret;
-    rt_uint32_t pstatus;
+    uint32_t pstatus;
     
     /* parameter check */
     RT_ASSERT(hub != RT_NULL);
@@ -353,11 +355,11 @@ rt_err_t rt_usbh_hub_reset_port(uhub_t hub, rt_uint16_t port)
  * 
  * @return the error code, RT_EOK on successfully.
  */
-rt_err_t rt_usbh_hub_port_debounce(uhub_t hub, rt_uint16_t port)
+rt_err_t rt_usbh_hub_port_debounce(uhub_t hub, uint16_t port)
 {
     rt_err_t ret;
     int i = 0, times = 20;
-    rt_uint32_t pstatus;
+    uint32_t pstatus;
     rt_bool_t connect = RT_TRUE;
 
     /* parameter check */
@@ -402,7 +404,7 @@ static rt_err_t rt_usbh_hub_port_change(uhub_t hub)
     {
         rt_err_t ret;
         struct uinstance* device;
-        rt_uint32_t pstatus = 0;
+        uint32_t pstatus = 0;
 
         reconnect = RT_FALSE;
         
@@ -524,7 +526,7 @@ static rt_err_t rt_usbh_hub_enable(void *arg)
     intf->user_data = (void*)hub;
 
     /* get hub descriptor head */
-    ret = rt_usbh_hub_get_descriptor(device, (rt_uint8_t*)&hub->hub_desc, 8);
+    ret = rt_usbh_hub_get_descriptor(device, (uint8_t*)&hub->hub_desc, 8);
     if(ret != RT_EOK)
     {
         rt_kprintf("get hub descriptor failed\n");
@@ -532,7 +534,7 @@ static rt_err_t rt_usbh_hub_enable(void *arg)
     }
 
     /* get full hub descriptor */
-    ret = rt_usbh_hub_get_descriptor(device, (rt_uint8_t*)&hub->hub_desc, 
+    ret = rt_usbh_hub_get_descriptor(device, (uint8_t*)&hub->hub_desc, 
         hub->hub_desc.length);
     if(ret != RT_EOK)
     {

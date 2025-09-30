@@ -1,3 +1,4 @@
+#include <stdint.h>
 /* misc.h
  *
  * Copyright (C) 2006-2019 wolfSSL Inc.
@@ -83,12 +84,12 @@ void   ByteReverseWords64(word64*, const word64*, word32);
 
 
 void c32to24(word32 in, word24 out);
-void c16toa(word16 u16, byte* c);
-void c32toa(word32 u32, byte* c);
-void c24to32(const word24 u24, word32* u32);
-void ato16(const byte* c, word16* u16);
+void c16toa(word16 uint16_t, byte* c);
+void c32toa(word32 uint32_t, byte* c);
+void c24to32(const word24 u24, word32* uint32_t);
+void ato16(const byte* c, word16* uint16_t);
 void ato24(const byte* c, word32* u24);
-void ato32(const byte* c, word32* u32);
+void ato32(const byte* c, word32* uint32_t);
 word32 btoi(byte b);
 
 

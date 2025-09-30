@@ -1,3 +1,4 @@
+#include <stdint.h>
 /******************************************************************
  *                                                                *
  *      Copyright (c)  Mentor Graphics Corporation 2004           *

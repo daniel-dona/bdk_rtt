@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
   This file is part of UFFS, the Ultra-low-cost Flash File System.
   
@@ -391,7 +393,7 @@ static int cmd_cp(int argc, char *argv[])
 	char buf[100];
 	int fd1 = -1, fd2 = -1;
 	int len;
-	BOOL src_local = FALSE, des_local = FALSE;
+	bool src_local = FALSE, des_local = FALSE;
 	FILE *fp1 = NULL, *fp2 = NULL;
 	int ret = -1;
 
@@ -616,7 +618,7 @@ static int cmd_wl(int argc, char *argv[])
 	struct uffs_PartitionSt *par;
 	uffs_FileEmu *emu;
 	int i, max;
-	u32 n;
+	uint32_t n;
 
 #define NUM_PER_LINE	10
 

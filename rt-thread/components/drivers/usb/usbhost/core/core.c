@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : core.c
  * This file is part of RT-Thread RTOS
@@ -104,7 +105,7 @@ rt_err_t rt_usbh_attatch_instance(uinst_t device)
     udev_desc_t dev_desc;
     uintf_desc_t intf_desc;
     uep_desc_t ep_desc;
-    rt_uint8_t ep_index;
+    uint8_t ep_index;
     upipe_t pipe;
     ucd_t drv;
 
@@ -311,7 +312,7 @@ rt_err_t rt_usbh_detach_instance(uinst_t device)
  * 
  * @return the error code, RT_EOK on successfully.
  */
-rt_err_t rt_usbh_get_descriptor(uinst_t device, rt_uint8_t type, void* buffer, 
+rt_err_t rt_usbh_get_descriptor(uinst_t device, uint8_t type, void* buffer, 
     int nbytes)
 {
     struct urequest setup;
@@ -482,14 +483,14 @@ rt_err_t rt_usbh_clear_feature(uinst_t device, int endpoint, int feature)
 rt_err_t rt_usbh_get_interface_descriptor(ucfg_desc_t cfg_desc, int num, 
     uintf_desc_t* intf_desc)
 {
-    rt_uint32_t ptr, depth = 0;
+    uint32_t ptr, depth = 0;
     udesc_t desc;
 
     /* check parameter */
     RT_ASSERT(cfg_desc != RT_NULL);
 
-    ptr = (rt_uint32_t)cfg_desc + cfg_desc->bLength;
-    while(ptr < (rt_uint32_t)cfg_desc + cfg_desc->wTotalLength)
+    ptr = (uint32_t)cfg_desc + cfg_desc->bLength;
+    while(ptr < (uint32_t)cfg_desc + cfg_desc->wTotalLength)
     {
         if(depth++ > 0x20) 
         {
@@ -508,7 +509,7 @@ rt_err_t rt_usbh_get_interface_descriptor(ucfg_desc_t cfg_desc, int num,
                 return RT_EOK;
             }
         }    
-        ptr = (rt_uint32_t)desc + desc->bLength;
+        ptr = (uint32_t)desc + desc->bLength;
     }
 
     rt_kprintf("rt_usb_get_interface_descriptor %d failed\n", num);
@@ -528,7 +529,7 @@ rt_err_t rt_usbh_get_endpoint_descriptor(uintf_desc_t intf_desc, int num,
     uep_desc_t* ep_desc)
 {
     int count = 0, depth = 0;
-    rt_uint32_t ptr;    
+    uint32_t ptr;    
     udesc_t desc;
 
     /* check parameter */
@@ -536,7 +537,7 @@ rt_err_t rt_usbh_get_endpoint_descriptor(uintf_desc_t intf_desc, int num,
     RT_ASSERT(num < intf_desc->bNumEndpoints);
     *ep_desc = RT_NULL;
 
-    ptr = (rt_uint32_t)intf_desc + intf_desc->bLength;
+    ptr = (uint32_t)intf_desc + intf_desc->bLength;
     while(count < intf_desc->bNumEndpoints)
     {
         if(depth++ > 0x20) 
@@ -557,7 +558,7 @@ rt_err_t rt_usbh_get_endpoint_descriptor(uintf_desc_t intf_desc, int num,
             }
             else count++;
         }
-        ptr = (rt_uint32_t)desc + desc->bLength;
+        ptr = (uint32_t)desc + desc->bLength;
     }
 
     rt_kprintf("rt_usb_get_endpoint_descriptor %d failed\n", num);
@@ -569,7 +570,7 @@ int rt_usb_hcd_pipe_xfer(uhcd_t hcd, upipe_t pipe, void* buffer, int nbytes, int
     rt_size_t remain_size;
     rt_size_t send_size;
     remain_size = nbytes;
-    rt_uint8_t * pbuffer = (rt_uint8_t *)buffer;
+    uint8_t * pbuffer = (uint8_t *)buffer;
     do
     {
         RT_DEBUG_LOG(RT_DEBUG_USB,("pipe transform remain size,: %d\n", remain_size));

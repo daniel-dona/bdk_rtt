@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "bk_ef.h"
 #include "base_64.h"

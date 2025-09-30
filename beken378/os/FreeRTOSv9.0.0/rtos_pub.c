@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
 
@@ -120,7 +122,7 @@ OSStatus rtos_thread_join(beken_thread_t* thread)
     return kNoErr;
 }
 
-BOOL rtos_is_current_thread( beken_thread_t* thread )
+bool rtos_is_current_thread( beken_thread_t* thread )
 {
     if ( xTaskGetCurrentTaskHandle() == *thread )
     {
@@ -535,7 +537,7 @@ OSStatus rtos_deinit_queue( beken_queue_t* queue )
     return kNoErr;
 }
 
-BOOL rtos_is_queue_empty( beken_queue_t* queue )
+bool rtos_is_queue_empty( beken_queue_t* queue )
 {
     signed portBASE_TYPE result;
 
@@ -546,7 +548,7 @@ BOOL rtos_is_queue_empty( beken_queue_t* queue )
     return ( result != 0 ) ? true : false;
 }
 
-BOOL rtos_is_queue_full( beken_queue_t* queue )
+bool rtos_is_queue_full( beken_queue_t* queue )
 {
     signed portBASE_TYPE result;
 
@@ -646,12 +648,12 @@ OSStatus rtos_stop_oneshot_timer( beken2_timer_t* timer )
 }
 
 
-BOOL rtos_is_oneshot_timer_init( beken2_timer_t* timer )
+bool rtos_is_oneshot_timer_init( beken2_timer_t* timer )
 {
     return timer->handle ? true : false;
 }
 
-BOOL rtos_is_oneshot_timer_running( beken2_timer_t* timer )
+bool rtos_is_oneshot_timer_running( beken2_timer_t* timer )
 {
     return ( xTimerIsTimerActive( timer->handle ) != 0 ) ? true : false;
 }
@@ -850,12 +852,12 @@ uint32_t rtos_get_current_timer_count(void)
     return xTimerGetCurrentTimerCount();
 }
 
-BOOL rtos_is_timer_init( beken_timer_t* timer )
+bool rtos_is_timer_init( beken_timer_t* timer )
 {
     return timer->handle ? true : false;
 }
 
-BOOL rtos_is_timer_running( beken_timer_t* timer )
+bool rtos_is_timer_running( beken_timer_t* timer )
 {
     return ( xTimerIsTimerActive( timer->handle ) != 0 ) ? true : false;
 }

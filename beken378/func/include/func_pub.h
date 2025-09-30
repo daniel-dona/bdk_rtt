@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _FUNC_PUB_H_
 #define _FUNC_PUB_H_
 
@@ -10,8 +11,8 @@
 #define FUNC_WPRT                os_null_printf
 #endif
 
-extern UINT32 func_init_extended(void);
-extern UINT32 func_init_basic(void);
+extern uint32_t func_init_extended(void);
+extern uint32_t func_init_basic(void);
 #endif // _FUNC_PUB_H_
 // eof
 

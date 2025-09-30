@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 #include <reent.h>
 #include <sys/errno.h>
 #include <sys/time.h>

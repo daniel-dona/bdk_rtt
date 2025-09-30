@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 
@@ -35,7 +36,7 @@ static void spi_psram_init_extral_gpio(void)
 
 static void spi_psram_enable_voltage(void)
 {
-    UINT32 param;
+    uint32_t param;
 
     param = BLK_BIT_MIC_QSPI_RAM_OR_FLASH;
     sddev_control(SCTRL_DEV_NAME, CMD_SCTRL_BLK_ENABLE, &param);
@@ -49,15 +50,15 @@ static void spi_psram_enable_voltage(void)
 
 static void spi_psram_disable_voltage(void)
 {
-    UINT32 param;
+    uint32_t param;
 
     param = BLK_BIT_MIC_QSPI_RAM_OR_FLASH;
     sddev_control(SCTRL_DEV_NAME, CMD_SCTRL_BLK_DISABLE, &param);
 }
 
-static void spi_psram_send_command(UINT8 cmd)
+static void spi_psram_send_command(uint8_t cmd)
 {
-    UINT8 ucmd = cmd;
+    uint8_t ucmd = cmd;
     struct spi_message msg;
 
     os_memset(&msg, 0, sizeof(struct spi_message));
@@ -86,12 +87,12 @@ int32_t spi_psram_burst_set(uint32_t burst_size)
 
 int32_t spi_psram_read_id(uint8_t id[12])
 {
-    UINT8 id_buf[PSRAM_ID_LEN] = {0};
-    UINT8 id_cmd[] = {PSRAM_CMD_READ_ID};
+    uint8_t id_buf[PSRAM_ID_LEN] = {0};
+    uint8_t id_cmd[] = {PSRAM_CMD_READ_ID};
       
     struct spi_message msg;
 
-    os_memset(id_buf, 0, PSRAM_ID_LEN * sizeof(UINT8));
+    os_memset(id_buf, 0, PSRAM_ID_LEN * sizeof(uint8_t));
     os_memset(&msg, 0, sizeof(struct spi_message));
     msg.send_buf = id_cmd;
     msg.send_len = sizeof(id_cmd);
@@ -112,8 +113,8 @@ int32_t spi_psram_read_id(uint8_t id[12])
 uint32_t spi_psram_read(uint32_t addr, uint8_t* buffer, uint32_t size)
 {
     struct spi_message msg;
-    UINT8 ucmd[] = {PSRAM_CMD_READ, 0x00, 0x00, 0x00};
-    UINT32 send_len;
+    uint8_t ucmd[] = {PSRAM_CMD_READ, 0x00, 0x00, 0x00};
+    uint32_t send_len;
 
     if(buffer == NULL)
         return 1;
@@ -140,8 +141,8 @@ uint32_t spi_psram_read(uint32_t addr, uint8_t* buffer, uint32_t size)
 uint32_t spi_psram_write(uint32_t addr, uint8_t* buffer, uint32_t size)
 {
     struct spi_message msg;
-    UINT8 *ucmd;
-    UINT32 send_len;
+    uint8_t *ucmd;
+    uint32_t send_len;
 
     if(buffer == NULL)
         return 1;

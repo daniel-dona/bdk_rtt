@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * Copyright (c) 2006-2019, RT-Thread Development Team
  *
@@ -515,7 +516,7 @@ __exit:
  */
 int webclient_header_fields_add(struct webclient_session *session, const char *fmt, ...)
 {
-    rt_int32_t length;
+    int32_t length;
     va_list args;
 
     RT_ASSERT(session);
@@ -1588,7 +1589,7 @@ int webclient_response(struct webclient_session *session, void **response, size_
 
 int webclient_request_header_add(char **request_header, const char *fmt, ...)
 {
-    rt_int32_t length, header_length;
+    int32_t length, header_length;
     char *header;
     va_list args;
 

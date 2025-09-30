@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * UPnP for WPS / internal definitions
  * Copyright (c) 2000-2003 Intel Corporation
@@ -86,7 +87,7 @@ struct subscription {
 	 * us and given to the subscriber when the subscription is accepted;
 	 * and is then included with each event sent to the subscriber.
 	 */
-	u8 uuid[UUID_LEN];
+	uint8_t uuid[UUID_LEN];
 	/* Linked list of address alternatives (rotate through on failure) */
 	struct dl_list addr_list;
 	struct dl_list event_queue; /* Queued event messages. */
@@ -95,10 +96,10 @@ struct subscription {
 	int last_event_failed; /* Whether delivery of last event failed */
 
 	/* Information from SetSelectedRegistrar action */
-	u8 selected_registrar;
-	u16 dev_password_id;
-	u16 config_methods;
-	u8 authorized_macs[WPS_MAX_AUTHORIZED_MACS][ETH_ALEN];
+	uint8_t selected_registrar;
+	uint16_t dev_password_id;
+	uint16_t config_methods;
+	uint8_t authorized_macs[WPS_MAX_AUTHORIZED_MACS][ETH_ALEN];
 	struct wps_registrar *reg;
 };
 
@@ -125,7 +126,7 @@ struct upnp_wps_device_sm {
 	char *root_dir;
 	char *desc_url;
 	int started; /* nonzero if we are active */
-	u8 mac_addr[ETH_ALEN]; /* mac addr of network i.f. we use */
+	uint8_t mac_addr[ETH_ALEN]; /* mac addr of network i.f. we use */
 	char *ip_addr_text; /* IP address of network i.f. we use */
 	unsigned ip_addr; /* IP address of network i.f. we use (host order) */
 	int multicast_sd; /* send multicast messages over this socket */
@@ -152,13 +153,13 @@ void format_date(struct wpabuf *buf);
 struct subscription * subscription_start(struct upnp_wps_device_sm *sm,
 					 const char *callback_urls);
 struct subscription * subscription_renew(struct upnp_wps_device_sm *sm,
-					 const u8 uuid[UUID_LEN]);
+					 const uint8_t uuid[UUID_LEN]);
 void subscription_destroy(struct subscription *s);
 struct subscription * subscription_find(struct upnp_wps_device_sm *sm,
-					const u8 uuid[UUID_LEN]);
+					const uint8_t uuid[UUID_LEN]);
 void subscr_addr_delete(struct subscr_addr *a);
 int get_netif_info(const char *net_if, unsigned *ip_addr, char **ip_addr_text,
-		   u8 mac[ETH_ALEN]);
+		   uint8_t mac[ETH_ALEN]);
 
 /* wps_upnp_ssdp.c */
 void msearchreply_state_machine_stop(struct advertisement_state_machine *a);
@@ -169,7 +170,7 @@ void ssdp_listener_stop(struct upnp_wps_device_sm *sm);
 int ssdp_listener_start(struct upnp_wps_device_sm *sm);
 int ssdp_listener_open(void);
 int add_ssdp_network(const char *net_if);
-int ssdp_open_multicast_sock(u32 ip_addr, const char *forced_ifname);
+int ssdp_open_multicast_sock(uint32_t ip_addr, const char *forced_ifname);
 int ssdp_open_multicast(struct upnp_wps_device_sm *sm);
 
 /* wps_upnp_web.c */

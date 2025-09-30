@@ -1,3 +1,4 @@
+#include <stdint.h>
 /**
  ****************************************************************************************
  *
@@ -526,8 +527,8 @@ extern int rwnx_get_noht_rssi_thresold(void) __attribute__ ((weak));
  *       0,11 legacy rate refer to HW_RATE_E
  *       128,159 HT rate MCS0, ...
  */
-extern UINT32 rwnx_setting_for_single_rate(INT32 rate) __attribute__ ((weak));
-extern INT32 rwnx_printf_fun(const char *fmt, ...) __attribute__ ((weak));
+extern uint32_t rwnx_setting_for_single_rate(int32_t rate) __attribute__ ((weak));
+extern int32_t rwnx_printf_fun(const char *fmt, ...) __attribute__ ((weak));
 
 #endif // _RWNX_CONFIG_H_
 // eof

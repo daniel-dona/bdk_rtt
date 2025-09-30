@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  *  heap management in finsh shell.
  *

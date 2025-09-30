@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "airkiss_pingpong.h"
 #include "mem_pub.h"

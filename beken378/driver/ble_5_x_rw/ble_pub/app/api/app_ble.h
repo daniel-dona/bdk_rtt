@@ -332,7 +332,7 @@ uint8_t app_ble_get_connhdl(int conn_idx);
 void app_ble_run(uint8_t idx, ble_cmd_t cmd, uint32_t op_mask, ble_cmd_cb_t callback);
 void app_ble_reset(void);
 ble_err_t app_ble_create_advertising(uint8_t actv_idx, uint8_t chnl_map, uint32_t intv_min, uint32_t intv_max);
-ble_err_t app_ble_start_advertising(uint8_t actv_idx, uint16 duration);
+ble_err_t app_ble_start_advertising(uint8_t actv_idx, uint16_t duration);
 ble_err_t app_ble_stop_advertising(uint8_t actv_idx);
 ble_err_t app_ble_delete_advertising(uint8_t actv_idx);
 ble_err_t app_ble_set_adv_data(uint8_t actv_idx, unsigned char* adv_buff, unsigned char adv_len);

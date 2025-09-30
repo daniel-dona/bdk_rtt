@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 #ifndef CYGONCE_INFRA_CYG_TYPE_H
 #define CYGONCE_INFRA_CYG_TYPE_H
 
@@ -46,7 +48,7 @@
 // Contributors:  nickg
 // Date:        1997-09-08
 // Purpose:     share unambiguously sized types.
-// Description: we typedef [cyg_][u]int8,16,32 &c for general use.
+// Description: we typedef [cyg_][u]int8_t,16,32 &c for general use.
 // Usage:       #include "cyg/infra/cyg_type.h"
 //              ...
 //              cyg_int32 my_32bit_integer;

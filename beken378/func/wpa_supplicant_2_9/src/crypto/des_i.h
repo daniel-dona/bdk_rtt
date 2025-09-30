@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * DES and 3DES-EDE ciphers
  * Copyright (c) 2006-2009, Jouni Malinen <j@w1.fi>
@@ -10,16 +11,16 @@
 #define DES_I_H
 
 struct des3_key_s {
-	u32 ek[3][32];
-	u32 dk[3][32];
+	uint32_t ek[3][32];
+	uint32_t dk[3][32];
 };
 
-void des_key_setup(const u8 *key, u32 *ek, u32 *dk);
-void des_block_encrypt(const u8 *plain, const u32 *ek, u8 *crypt);
-void des_block_decrypt(const u8 *crypt, const u32 *dk, u8 *plain);
+void des_key_setup(const uint8_t *key, uint32_t *ek, uint32_t *dk);
+void des_block_encrypt(const uint8_t *plain, const uint32_t *ek, uint8_t *crypt);
+void des_block_decrypt(const uint8_t *crypt, const uint32_t *dk, uint8_t *plain);
 
-void des3_key_setup(const u8 *key, struct des3_key_s *dkey);
-void des3_encrypt(const u8 *plain, const struct des3_key_s *key, u8 *crypt);
-void des3_decrypt(const u8 *crypt, const struct des3_key_s *key, u8 *plain);
+void des3_key_setup(const uint8_t *key, struct des3_key_s *dkey);
+void des3_encrypt(const uint8_t *plain, const struct des3_key_s *key, uint8_t *crypt);
+void des3_decrypt(const uint8_t *crypt, const struct des3_key_s *key, uint8_t *plain);
 
 #endif /* DES_I_H */

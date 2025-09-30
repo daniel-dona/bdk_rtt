@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "string.h"
 #include "ble_ui.h"
 #include "app_ble.h"
@@ -175,7 +176,7 @@ ble_err_t bk_ble_create_advertising(uint8_t actv_idx,
 	return ret;
 }
 
-ble_err_t bk_ble_start_advertising(uint8_t actv_idx, uint16 duration, ble_cmd_cb_t callback)
+ble_err_t bk_ble_start_advertising(uint8_t actv_idx, uint16_t duration, ble_cmd_cb_t callback)
 {
 	uint32_t op_mask;
 	ble_err_t ret = ERR_SUCCESS;

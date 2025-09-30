@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * 程序清单：静态线程
  *
@@ -9,17 +10,17 @@
 /* 线程1控制块 */
 static struct rt_thread thread1;
 /* 线程1栈 */
-static rt_uint8_t thread1_stack[THREAD_STACK_SIZE];
+static uint8_t thread1_stack[THREAD_STACK_SIZE];
 /* 线程2控制块 */
 static struct rt_thread thread2;
 /* 线程2栈 */
-static rt_uint8_t thread2_stack[THREAD_STACK_SIZE];
+static uint8_t thread2_stack[THREAD_STACK_SIZE];
 
 /* 线程入口 */
 static void thread_entry(void* parameter)
 {
-    rt_uint32_t count = 0;
-    rt_uint32_t no = (rt_uint32_t) parameter; /* 获得正确的入口参数 */
+    uint32_t count = 0;
+    uint32_t no = (uint32_t) parameter; /* 获得正确的入口参数 */
 
     while (1)
     {

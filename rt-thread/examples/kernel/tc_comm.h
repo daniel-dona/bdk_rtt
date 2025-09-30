@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef __TC_COMM_H__
 #define __TC_COMM_H__
 
@@ -28,8 +29,8 @@
 #ifdef RT_USING_TC
 void tc_start(const char* tc_prefix);
 void tc_stop(void);
-void tc_done(rt_uint8_t state);
-void tc_stat(rt_uint8_t state);
+void tc_done(uint8_t state);
+void tc_stat(uint8_t state);
 void tc_cleanup(void (*cleanup)(void));
 #else
 #define tc_start(x)

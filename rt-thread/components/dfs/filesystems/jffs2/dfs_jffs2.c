@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : dfs_jffs2.c
  * This file is part of Device File System in RT-Thread RTOS
@@ -450,14 +451,14 @@ static int dfs_jffs2_lseek(struct dfs_fd* file,
 /* return the size of  struct dirent*/
 static int dfs_jffs2_getdents(struct dfs_fd* file,
                        struct dirent* dirp,
-                       rt_uint32_t count)
+                       uint32_t count)
 {
     cyg_file * jffs2_file;
     struct CYG_UIO_TAG uio_s;
     struct CYG_IOVEC_TAG iovec;
     struct jffs2_dirent jffs2_d;
     struct dirent * d;
-    rt_uint32_t index;
+    uint32_t index;
 #if !defined (CYGPKG_FS_JFFS2_RET_DIRENT_DTYPE)
     struct jffs2_stat s;
     cyg_mtab_entry * mte;
@@ -534,7 +535,7 @@ static int dfs_jffs2_getdents(struct dfs_fd* file,
 #endif
         /* write the rest fields of struct dirent* dirp  */
         d->d_namlen = rt_strlen(jffs2_d.d_name);
-        d->d_reclen = (rt_uint16_t)sizeof(struct dirent);
+        d->d_reclen = (uint16_t)sizeof(struct dirent);
         rt_strncpy(d->d_name, jffs2_d.d_name, d->d_namlen + 1);
 
         index ++;

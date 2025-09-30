@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "rw_platf_pub.h"
 #include "sys_config.h"
 #include "reg_mac_core.h"
@@ -5,7 +6,7 @@
 #include "mcu_ps_pub.h"
 
 extern void rwnxl_violence_reset_patch(void);
-UINT32 mcu_ps_machw_reset(void);
+uint32_t mcu_ps_machw_reset(void);
 
 void rwxl_reset_patch(void)
 {

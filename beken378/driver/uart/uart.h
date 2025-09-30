@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _UART_H_
 #define _UART_H_
 
@@ -116,7 +117,7 @@
 
 typedef struct _uart_
 {
-    UINT16 status;
+    uint16_t status;
 
     KFIFO_PTR rx;
 
@@ -279,26 +280,26 @@ typedef struct _uart_
 * Function Declarations
 *******************************************************************************/
 #if CFG_UART_DEBUG_COMMAND_LINE
-extern UINT32 uart_sw_init(UINT8 ch);
-extern UINT32 uart_sw_uninit(UINT8 ch);
-extern void uart_fifo_flush(UINT8 ch);
-extern void uart_hw_uninit(UINT8 ch);
-extern void uart_reset(UINT8 ch);
+extern uint32_t uart_sw_init(uint8_t ch);
+extern uint32_t uart_sw_uninit(uint8_t ch);
+extern void uart_fifo_flush(uint8_t ch);
+extern void uart_hw_uninit(uint8_t ch);
+extern void uart_reset(uint8_t ch);
 
-extern UINT32 uart_write_fifo_frame(UINT8 ch, KFIFO_PTR tx_ptr, UINT32 count);
-extern UINT32 uart_read_fifo_frame(UINT8 ch, KFIFO_PTR rx_ptr);
+extern uint32_t uart_write_fifo_frame(uint8_t ch, KFIFO_PTR tx_ptr, uint32_t count);
+extern uint32_t uart_read_fifo_frame(uint8_t ch, KFIFO_PTR rx_ptr);
 
-extern UINT32 uart1_open(UINT32 op_flag);
-extern UINT32 uart1_close(void);
-extern UINT32 uart1_read(char *user_buf, UINT32 count, UINT32 op_flag);
-extern UINT32 uart1_write(char *user_buf, UINT32 count, UINT32 op_flag);
-extern UINT32 uart1_ctrl(UINT32 cmd, void *parm);
+extern uint32_t uart1_open(uint32_t op_flag);
+extern uint32_t uart1_close(void);
+extern uint32_t uart1_read(char *user_buf, uint32_t count, uint32_t op_flag);
+extern uint32_t uart1_write(char *user_buf, uint32_t count, uint32_t op_flag);
+extern uint32_t uart1_ctrl(uint32_t cmd, void *parm);
 
-extern UINT32 uart2_open(UINT32 op_flag);
-extern UINT32 uart2_close(void);
-extern UINT32 uart2_read(char *user_buf, UINT32 count, UINT32 op_flag);
-extern UINT32 uart2_write(char *user_buf, UINT32 count, UINT32 op_flag);
-extern UINT32 uart2_ctrl(UINT32 cmd, void *parm);
+extern uint32_t uart2_open(uint32_t op_flag);
+extern uint32_t uart2_close(void);
+extern uint32_t uart2_read(char *user_buf, uint32_t count, uint32_t op_flag);
+extern uint32_t uart2_write(char *user_buf, uint32_t count, uint32_t op_flag);
+extern uint32_t uart2_ctrl(uint32_t cmd, void *parm);
 #endif
 
 int uart_read_byte(int uport);
@@ -306,8 +307,8 @@ int uart_write_byte(int uport, char c);
 int uart_rx_callback_set(int uport, uart_callback callback, void *param);
 int uart_tx_fifo_needwr_callback_set(int uport, uart_callback callback, void *param);
 int uart_tx_end_callback_set(int uport, uart_callback callback, void *param);
-void uart_set_tx_stop_end_int(UINT8 uport, UINT8 set);
-void uart_set_tx_fifo_needwr_int(UINT8 uport, UINT8 set);
-void uart_hw_set_change(UINT8 uport, bk_uart_config_t *uart_config);
+void uart_set_tx_stop_end_int(uint8_t uport, uint8_t set);
+void uart_set_tx_fifo_needwr_int(uint8_t uport, uint8_t set);
+void uart_hw_set_change(uint8_t uport, bk_uart_config_t *uart_config);
 
 #endif // _UART_H_

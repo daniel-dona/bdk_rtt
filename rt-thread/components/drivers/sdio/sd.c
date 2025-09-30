@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : sd.c
  * This file is part of RT-Thread RTOS
@@ -25,38 +26,38 @@
 #include <drivers/mmcsd_core.h>
 #include <drivers/sd.h>
 
-static const rt_uint32_t tran_unit[] =
+static const uint32_t tran_unit[] =
 {
     10000, 100000, 1000000, 10000000,
     0,     0,      0,       0
 };
 
-static const rt_uint8_t tran_value[] =
+static const uint8_t tran_value[] =
 {
     0,  10, 12, 13, 15, 20, 25, 30,
     35, 40, 45, 50, 55, 60, 70, 80,
 };
 
-static const rt_uint32_t tacc_uint[] =
+static const uint32_t tacc_uint[] =
 {
     1, 10, 100, 1000, 10000, 100000, 1000000, 10000000,
 };
 
-static const rt_uint8_t tacc_value[] =
+static const uint8_t tacc_value[] =
 {
     0,  10, 12, 13, 15, 20, 25, 30,
     35, 40, 45, 50, 55, 60, 70, 80,
 };
 
-rt_inline rt_uint32_t GET_BITS(rt_uint32_t *resp,
-                               rt_uint32_t  start,
-                               rt_uint32_t  size)
+rt_inline uint32_t GET_BITS(uint32_t *resp,
+                               uint32_t  start,
+                               uint32_t  size)
 {                               
-        const rt_int32_t __size = size;
-        const rt_uint32_t __mask = (__size < 32 ? 1 << __size : 0) - 1; 
-        const rt_int32_t __off = 3 - ((start) / 32);
-        const rt_int32_t __shft = (start) & 31;
-        rt_uint32_t __res;
+        const int32_t __size = size;
+        const uint32_t __mask = (__size < 32 ? 1 << __size : 0) - 1; 
+        const int32_t __off = 3 - ((start) / 32);
+        const int32_t __shft = (start) & 31;
+        uint32_t __res;
 
         __res = resp[__off] >> __shft;
         if (__size + __shft > 32)
@@ -65,10 +66,10 @@ rt_inline rt_uint32_t GET_BITS(rt_uint32_t *resp,
         return __res & __mask;
 }
 
-static rt_int32_t mmcsd_parse_csd(struct rt_mmcsd_card *card)
+static int32_t mmcsd_parse_csd(struct rt_mmcsd_card *card)
 {
     struct rt_mmcsd_csd *csd = &card->csd;
-    rt_uint32_t *resp = card->resp_csd;
+    uint32_t *resp = card->resp_csd;
 
     csd->csd_structure = GET_BITS(resp, 126, 2);
 
@@ -176,10 +177,10 @@ static rt_int32_t mmcsd_parse_csd(struct rt_mmcsd_card *card)
     return 0;
 }
 
-static rt_int32_t mmcsd_parse_scr(struct rt_mmcsd_card *card)
+static int32_t mmcsd_parse_scr(struct rt_mmcsd_card *card)
 {
     struct rt_sd_scr *scr = &card->scr;
-    rt_uint32_t resp[4];
+    uint32_t resp[4];
 
     resp[3] = card->resp_scr[1];
     resp[2] = card->resp_scr[0];
@@ -189,16 +190,16 @@ static rt_int32_t mmcsd_parse_scr(struct rt_mmcsd_card *card)
     return 0;
 }
 
-static rt_int32_t mmcsd_switch(struct rt_mmcsd_card *card)
+static int32_t mmcsd_switch(struct rt_mmcsd_card *card)
 {
-    rt_int32_t err;
+    int32_t err;
     struct rt_mmcsd_host *host = card->host;
     struct rt_mmcsd_req req;
     struct rt_mmcsd_cmd cmd;
     struct rt_mmcsd_data data;
-    rt_uint8_t *buf;
+    uint8_t *buf;
 
-    buf = (rt_uint8_t*)rt_malloc(64);
+    buf = (uint8_t*)rt_malloc(64);
     if (!buf) 
     {
         rt_kprintf("alloc memory failed\n");
@@ -224,7 +225,7 @@ static rt_int32_t mmcsd_switch(struct rt_mmcsd_card *card)
     data.blksize = 64;
     data.blks = 1;
     data.flags = DATA_DIR_READ;
-    data.buf = (rt_uint32_t *)buf;
+    data.buf = (uint32_t *)buf;
 
     rt_memset(&req, 0, sizeof(struct rt_mmcsd_req));
 
@@ -254,7 +255,7 @@ static rt_int32_t mmcsd_switch(struct rt_mmcsd_card *card)
     data.blksize = 64;
     data.blks = 1;
     data.flags = DATA_DIR_READ;
-    data.buf = (rt_uint32_t *)buf;
+    data.buf = (uint32_t *)buf;
 
     rt_memset(&req, 0, sizeof(struct rt_mmcsd_req));
 
@@ -327,7 +328,7 @@ rt_err_t mmcsd_send_app_cmd(struct rt_mmcsd_host *host,
 {
     struct rt_mmcsd_req req;
 
-    rt_uint32_t i; 
+    uint32_t i; 
     rt_err_t err;
 
     err = -RT_ERROR;
@@ -376,7 +377,7 @@ rt_err_t mmcsd_send_app_cmd(struct rt_mmcsd_host *host,
     return err;
 }
 
-rt_err_t mmcsd_app_set_bus_width(struct rt_mmcsd_card *card, rt_int32_t width)
+rt_err_t mmcsd_app_set_bus_width(struct rt_mmcsd_card *card, int32_t width)
 {
     rt_err_t err;
     struct rt_mmcsd_cmd cmd;
@@ -406,11 +407,11 @@ rt_err_t mmcsd_app_set_bus_width(struct rt_mmcsd_card *card, rt_int32_t width)
 }
 
 rt_err_t mmcsd_send_app_op_cond(struct rt_mmcsd_host *host,
-                                rt_uint32_t           ocr,
-                                rt_uint32_t          *rocr)
+                                uint32_t           ocr,
+                                uint32_t          *rocr)
 {
     struct rt_mmcsd_cmd cmd;
-    rt_uint32_t i;
+    uint32_t i;
     rt_err_t err = RT_EOK;
 
     rt_memset(&cmd, 0, sizeof(struct rt_mmcsd_cmd));
@@ -460,11 +461,11 @@ rt_err_t mmcsd_send_app_op_cond(struct rt_mmcsd_host *host,
  * before SD_APP_OP_COND. This command will harmlessly fail for
  * SD 1.0 cards.
  */
-rt_err_t mmcsd_send_if_cond(struct rt_mmcsd_host *host, rt_uint32_t ocr)
+rt_err_t mmcsd_send_if_cond(struct rt_mmcsd_host *host, uint32_t ocr)
 {
     struct rt_mmcsd_cmd cmd;
     rt_err_t err;
-    rt_uint8_t pattern;
+    uint8_t pattern;
 
     cmd.cmd_code = SD_SEND_IF_COND;
     cmd.arg = ((ocr & 0xFF8000) != 0) << 8 | 0xAA;
@@ -485,7 +486,7 @@ rt_err_t mmcsd_send_if_cond(struct rt_mmcsd_host *host, rt_uint32_t ocr)
     return RT_EOK;
 }
 
-rt_err_t mmcsd_get_card_addr(struct rt_mmcsd_host *host, rt_uint32_t *rca)
+rt_err_t mmcsd_get_card_addr(struct rt_mmcsd_host *host, uint32_t *rca)
 {
     rt_err_t err;
     struct rt_mmcsd_cmd cmd;
@@ -505,15 +506,15 @@ rt_err_t mmcsd_get_card_addr(struct rt_mmcsd_host *host, rt_uint32_t *rca)
     return RT_EOK;
 }
 
-#define be32_to_cpu(x) ((rt_uint32_t)(              \
-    (((rt_uint32_t)(x) & (rt_uint32_t)0x000000ffUL) << 24) |        \
-    (((rt_uint32_t)(x) & (rt_uint32_t)0x0000ff00UL) <<  8) |        \
-    (((rt_uint32_t)(x) & (rt_uint32_t)0x00ff0000UL) >>  8) |        \
-    (((rt_uint32_t)(x) & (rt_uint32_t)0xff000000UL) >> 24)))
+#define be32_to_cpu(x) ((uint32_t)(              \
+    (((uint32_t)(x) & (uint32_t)0x000000ffUL) << 24) |        \
+    (((uint32_t)(x) & (uint32_t)0x0000ff00UL) <<  8) |        \
+    (((uint32_t)(x) & (uint32_t)0x00ff0000UL) >>  8) |        \
+    (((uint32_t)(x) & (uint32_t)0xff000000UL) >> 24)))
 
-rt_int32_t mmcsd_get_scr(struct rt_mmcsd_card *card, rt_uint32_t *scr)
+int32_t mmcsd_get_scr(struct rt_mmcsd_card *card, uint32_t *scr)
 {
-    rt_int32_t err;
+    int32_t err;
     struct rt_mmcsd_req req;
     struct rt_mmcsd_cmd cmd;
     struct rt_mmcsd_data data;
@@ -554,13 +555,13 @@ rt_int32_t mmcsd_get_scr(struct rt_mmcsd_card *card, rt_uint32_t *scr)
 }
 
 
-static rt_int32_t mmcsd_sd_init_card(struct rt_mmcsd_host *host,
-                                     rt_uint32_t           ocr)
+static int32_t mmcsd_sd_init_card(struct rt_mmcsd_host *host,
+                                     uint32_t           ocr)
 {
     struct rt_mmcsd_card *card;
-    rt_int32_t err;
-    rt_uint32_t resp[4];
-    rt_uint32_t max_data_rate;
+    int32_t err;
+    uint32_t resp[4];
+    uint32_t max_data_rate;
 
     mmcsd_go_idle(host);
 
@@ -685,10 +686,10 @@ err:
 /*
  * Starting point for SD card init.
  */
-rt_int32_t init_sd(struct rt_mmcsd_host *host, rt_uint32_t ocr)
+int32_t init_sd(struct rt_mmcsd_host *host, uint32_t ocr)
 {
-    rt_int32_t err;
-    rt_uint32_t  current_ocr;
+    int32_t err;
+    uint32_t  current_ocr;
     /*
      * We need to get OCR a different way for SPI.
      */

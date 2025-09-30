@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * Channel on VMM Bus
  *
@@ -49,7 +50,7 @@ static void _tx_complete(void *ctx)
         dev->tx_complete(dev, 0);
 }
 
-static rt_err_t _open(rt_device_t dev, rt_uint16_t oflag)
+static rt_err_t _open(rt_device_t dev, uint16_t oflag)
 {
     int chnr;
     struct rt_vbus_dev *vdev = dev->user_data;
@@ -235,7 +236,7 @@ rt_err_t  _control(rt_device_t dev, int cmd, void *args)
     return -RT_ENOSYS;
 }
 
-rt_uint8_t rt_vbus_get_chnnr(rt_device_t dev)
+uint8_t rt_vbus_get_chnnr(rt_device_t dev)
 {
     struct rt_vbus_dev *vdev;
 

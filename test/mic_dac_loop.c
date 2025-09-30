@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -58,8 +59,8 @@ static void mic_dac_record_thread_entry(void *parameter)
 {
     int ret = RT_EOK;
     uint8_t *mempool;
-    rt_uint8_t *buffer;
-    rt_uint32_t read_bytes = 0;
+    uint8_t *buffer;
+    uint32_t read_bytes = 0;
     int rate, channel;
 
     /* initialize mempool */

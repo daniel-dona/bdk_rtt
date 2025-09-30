@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _DDRV_H_
 #define _DDRV_H_
 
@@ -11,7 +12,7 @@
 #define SIOCIWFIRSTPRIV	                 0x8BE0
 #define SIOCIWLASTPRIV	                 0x8BFF
 
-extern int ioctl_inet(int dev, u8 vif_index, unsigned int cmd, unsigned long arg);
+extern int ioctl_inet(int dev, uint8_t vif_index, unsigned int cmd, unsigned long arg);
 extern void exit(int seconds);
 
 #endif

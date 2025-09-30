@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _APP_SDP_H_
 #define _APP_SDP_H_
 
@@ -16,7 +17,7 @@ typedef enum{
 }CHAR_TYPE;
 
 typedef void (*app_sdp_callback)(unsigned char conidx,uint16_t chars_val_hdl,unsigned char uuid_len,unsigned char *uuid);
-typedef void (*app_sdp_charac_callback)(CHAR_TYPE type,uint8 conidx,uint16_t hdl,uint16_t len,uint8 *data);
+typedef void (*app_sdp_charac_callback)(CHAR_TYPE type,uint8_t conidx,uint16_t hdl,uint16_t len,uint8_t *data);
 
 typedef struct{
 	/// Service UUID Length
@@ -53,7 +54,7 @@ extern void app_sdp_characteristic_callback_handler(unsigned char conidx,uint16_
  * We pass the data to the application layer through this callback.
  * You need to handle the connection number, handle, and escalation data to prevent data on the application from not matching.
 */
-extern void app_sdp_charac_callback_handler(CHAR_TYPE type,uint8 conidx,uint16_t hdl,uint16_t len,uint8 *data);
+extern void app_sdp_charac_callback_handler(CHAR_TYPE type,uint8_t conidx,uint16_t hdl,uint16_t len,uint8_t *data);
 
 
 /////////extern function

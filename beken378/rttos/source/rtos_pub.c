@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 #include "sys_rtos.h"
 #include "error.h"
 #include "rtos_pub.h"
@@ -60,7 +62,7 @@ OSStatus rtos_delete_thread( beken_thread_t* thread )
 
 }
 
-BOOL rtos_is_current_thread(beken_thread_t *thread)
+bool rtos_is_current_thread(beken_thread_t *thread)
 {
 	rt_thread_t t = (rt_thread_t)*thread;
 
@@ -72,8 +74,8 @@ void rtos_thread_sleep(uint32_t seconds)
     rt_thread_delay(rt_tick_from_millisecond(seconds * 1000));
 }
 
-static rt_uint32_t rtos_sem_cnt = 0;
-static rt_uint32_t rtos_mutex_cnt = 0;
+static uint32_t rtos_sem_cnt = 0;
+static uint32_t rtos_mutex_cnt = 0;
 
 OSStatus rtos_init_semaphore( beken_semaphore_t* semaphore, int maxCount )
 {
@@ -269,7 +271,7 @@ OSStatus rtos_push_to_queue(beken_queue_t* queue, void* message, uint32_t timeou
 	if(msg_tmp)
 	{
 		memcpy(msg_tmp, message, mq->message_size);
-		ret = rt_mb_send_wait(mq->handle, (rt_uint32_t)msg_tmp, rt_tick_from_millisecond(timeout_ms));
+		ret = rt_mb_send_wait(mq->handle, (uint32_t)msg_tmp, rt_tick_from_millisecond(timeout_ms));
 		if(ret != RT_EOK)
 		{
 			if(msg_tmp)
@@ -301,7 +303,7 @@ OSStatus rtos_pop_from_queue(beken_queue_t* queue, void* message, uint32_t timeo
     beken_queue_t mq = *queue;
     rt_err_t result;
 
-	result = rt_mb_recv(mq->handle, (rt_uint32_t *)&msg_tmp, rt_tick_from_millisecond(timeout_ms));
+	result = rt_mb_recv(mq->handle, (uint32_t *)&msg_tmp, rt_tick_from_millisecond(timeout_ms));
 	if(result != RT_EOK)
 	{
 		RTOS_DBG("%s rt_mb_recv ret:%d, ms:=%d!\r\n", __FUNCTION__, result, rt_tick_from_millisecond(timeout_ms));
@@ -348,7 +350,7 @@ OSStatus rtos_deinit_queue(beken_queue_t* queue)
     return kNoErr;
 }
 
-BOOL rtos_is_queue_empty(beken_queue_t* queue )
+bool rtos_is_queue_empty(beken_queue_t* queue )
 {
     beken_queue_t mq = *queue;
 
@@ -365,7 +367,7 @@ BOOL rtos_is_queue_empty(beken_queue_t* queue )
     return false;
 }
 
-BOOL rtos_is_queue_full(beken_queue_t* queue)
+bool rtos_is_queue_full(beken_queue_t* queue)
 {
     beken_queue_t mq = *queue;
 
@@ -430,13 +432,13 @@ OSStatus rtos_stop_oneshot_timer(beken2_timer_t* timer)
     return kGeneralErr;
 }
 
-BOOL rtos_is_oneshot_timer_init(beken2_timer_t* timer)
+bool rtos_is_oneshot_timer_init(beken2_timer_t* timer)
 {
     RTOS_DBG("oneshot_timer is init \n");
     return timer->handle ? true : false;
 }
 
-BOOL rtos_is_oneshot_timer_running(beken2_timer_t* timer)
+bool rtos_is_oneshot_timer_running(beken2_timer_t* timer)
 {
     rt_timer_t os_timer = (rt_timer_t)(timer->handle);
 
@@ -582,13 +584,13 @@ OSStatus rtos_stop_timer(beken_timer_t* timer)
     return RT_ERROR;
 }
 
-BOOL rtos_is_timer_init(beken_timer_t* timer)
+bool rtos_is_timer_init(beken_timer_t* timer)
 {
     RTOS_DBG("period_timer is init \n");
     return timer->handle ? true : false;
 }
 
-BOOL rtos_is_timer_running(beken_timer_t* timer)
+bool rtos_is_timer_running(beken_timer_t* timer)
 {
     rt_timer_t os_timer = (rt_timer_t)(timer->handle);
 
@@ -615,7 +617,7 @@ OSStatus rtos_reload_timer( beken_timer_t* timer)
 
 OSStatus rtos_change_period( beken_timer_t* timer, uint32_t time_ms)
 {
-    rt_uint32_t timeout_value;
+    uint32_t timeout_value;
 
     timeout_value = rt_tick_from_millisecond(time_ms);
     rt_timer_control(timer->handle, RT_TIMER_CTRL_SET_TIME, (void *)&timeout_value);

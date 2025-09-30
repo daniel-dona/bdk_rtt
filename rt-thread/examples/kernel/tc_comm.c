@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "tc_comm.h"
 #ifdef RT_USING_FINSH
 #include <finsh.h>
@@ -7,18 +8,18 @@
 #define TC_PRIORITY        25
 #define TC_STACK_SIZE    0x400
 
-static rt_uint8_t _tc_stat;
+static uint8_t _tc_stat;
 static struct rt_semaphore _tc_sem;
 static struct rt_thread _tc_thread;
-static rt_uint8_t _tc_stack[TC_STACK_SIZE];
+static uint8_t _tc_stack[TC_STACK_SIZE];
 static char _tc_prefix[64];
 static const char* _tc_current;
 static void (*_tc_cleanup)(void) = RT_NULL;
 
-static rt_uint32_t _tc_scale = 1;
+static uint32_t _tc_scale = 1;
 FINSH_VAR_EXPORT(_tc_scale, finsh_type_int, the testcase timer timeout scale)
 
-static rt_uint32_t _tc_loop;
+static uint32_t _tc_loop;
 
 void tc_thread_entry(void* parameter)
 {
@@ -110,7 +111,7 @@ void tc_stop()
 }
 FINSH_FUNCTION_EXPORT(tc_stop, stop testcase thread);
 
-void tc_done(rt_uint8_t stat)
+void tc_done(uint8_t stat)
 {
     _tc_stat |= stat;
     _tc_stat &= ~TC_STAT_RUNNING;
@@ -119,7 +120,7 @@ void tc_done(rt_uint8_t stat)
     rt_sem_release(&_tc_sem);
 }
 
-void tc_stat(rt_uint8_t stat)
+void tc_stat(uint8_t stat)
 {
     if (stat & TC_STAT_FAILED)
     {

@@ -1,3 +1,4 @@
+#include <stdint.h>
 /**
  * @file
  * Ethernet Interface Skeleton
@@ -114,7 +115,7 @@ const char wlan_name[][6] =
 static void low_level_init(struct netif *netif)
 {
     VIF_INF_PTR vif_entry = (VIF_INF_PTR)(netif->state);
-    u8 *macptr = (u8*)&vif_entry->mac_addr;
+    uint8_t *macptr = (uint8_t*)&vif_entry->mac_addr;
     
 #if LWIP_NETIF_HOSTNAME
     /* Initialize interface hostname */

@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  *  FIPS-46-3 compliant Triple-DES implementation
  *

@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : cpuport.c
  * This file is part of RT-Thread RTOS
@@ -19,7 +20,7 @@ extern void machine_shutdown(void);
  */
 void rt_hw_cpu_shutdown()
 {
-    rt_uint32_t level;
+    uint32_t level;
     rt_kprintf("shutdown...\n");
 
     level = rt_hw_interrupt_disable();
@@ -44,7 +45,7 @@ void rt_hw_cpu_shutdown()
 #if defined(__CC_ARM)
 int __rt_ffs(int value)
 {
-    register rt_uint32_t x;
+    register uint32_t x;
 
     if (value == 0)
         return value;

@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _FUSB_H_
 #define _FUSB_H_
 

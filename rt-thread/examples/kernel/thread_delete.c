@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * 程序清单：删除线程
  *
@@ -15,7 +16,7 @@ static rt_thread_t tid1 = RT_NULL, tid2 = RT_NULL;
 /* 线程1的入口函数 */
 static void thread1_entry(void* parameter)
 {
-    rt_uint32_t count = 0;
+    uint32_t count = 0;
 
     while (1)
     {

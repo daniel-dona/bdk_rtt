@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "rtthread.h"
 #include <rtdevice.h>
 #include "include.h"
@@ -857,8 +858,8 @@ uint32_t mixer_mux2_acoustics(void)
     uint32_t ret;
     uint32_t expected_len;
     uint32_t inside_data_len;
-    rt_uint8_t *inside_src_buf;
-    rt_uint8_t *outside_src_buf;
+    uint8_t *inside_src_buf;
+    uint8_t *outside_src_buf;
     rt_size_t read_bytes, wr_bytes;
     rt_device_t adc_device;
     rt_device_t dac_device;
@@ -937,7 +938,7 @@ mux_exit:
 
 uint32_t mixer_single2_acoustics(void)
 {
-    rt_uint8_t *exchange_buf;
+    uint8_t *exchange_buf;
     rt_size_t read_bytes, wr_bytes;
     rt_device_t adc_device;
     rt_device_t dac_device;
@@ -995,8 +996,8 @@ uint32_t mixer_mux_acoustics(void)
     uint32_t ret;
     uint32_t expected_len;
     uint32_t inside_data_len;
-    rt_uint8_t *inside_src_buf;
-    rt_uint8_t *outside_src_buf;
+    uint8_t *inside_src_buf;
+    uint8_t *outside_src_buf;
     rt_size_t read_bytes, wr_bytes;
     rt_device_t adc_device;
     rt_device_t dac_device;
@@ -1075,7 +1076,7 @@ mux_exit:
 
 uint32_t mixer_single_acoustics(void)
 {
-    rt_uint8_t *exchange_buf;
+    uint8_t *exchange_buf;
     rt_size_t read_bytes, wr_bytes;
     rt_device_t adc_device;
     rt_device_t dac_device;
@@ -1324,7 +1325,7 @@ static void mixer_entry(void *pv)
             if(DATA_SIGNATURE == msg.sig)
             {
                 uint8_t *buf = (uint8_t *)msg.detail;
-                uint32 len = msg.len;
+                uint32_t len = msg.len;
 
                 MIXER_LOG("DATA_SIGNATURE\r\n");
                 mixer_music_src_in(buf, len);

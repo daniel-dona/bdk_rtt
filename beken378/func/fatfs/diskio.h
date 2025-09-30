@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*-----------------------------------------------------------------------
 /  Low level disk interface modlue include file
 /-----------------------------------------------------------------------*/
@@ -35,7 +36,7 @@
 extern "C" {
 #endif
 
-    typedef uint8	DSTATUS;
+    typedef uint8_t	DSTATUS;
 
     typedef enum
     {
@@ -52,9 +53,9 @@ extern "C" {
         DISK_TYPE_UDISK
     } DISKTPYE;
 
-    DSTATUS disk_initialize (uint8 pdrv);
-    DSTATUS disk_status (uint8 pdrv);
-    DRESULT disk_read (uint8 pdrv, uint8 *buff, uint32 start_sector, uint32 sector_cnt);
+    DSTATUS disk_initialize (uint8_t pdrv);
+    DSTATUS disk_status (uint8_t pdrv);
+    DRESULT disk_read (uint8_t pdrv, uint8_t *buff, uint32_t start_sector, uint32_t sector_cnt);
 
 #ifdef __cplusplus
 }
@@ -108,9 +109,9 @@ DRESULT disk_read (BYTE, BYTE *, DWORD, BYTE);
 DRESULT disk_write (BYTE, const BYTE *, DWORD, BYTE);
 #endif
 DRESULT disk_ioctl (BYTE, BYTE, void *);
-DRESULT disk_unmount(uint8 drv);
-uint8 Media_is_online(void);
-uint8 get_cur_media_type(void);
+DRESULT disk_unmount(uint8_t drv);
+uint8_t Media_is_online(void);
+uint8_t get_cur_media_type(void);
 /* Disk Status Bits (DSTATUS) */
 
 #define STA_NOINIT		0x01	/* Drive not initialized */

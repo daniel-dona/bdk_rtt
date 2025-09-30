@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  * ecp.h - Definitions for PPP Encryption Control Protocol.
  *

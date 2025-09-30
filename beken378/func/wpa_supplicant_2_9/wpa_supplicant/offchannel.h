@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * wpa_supplicant - Off-channel Action frame TX/RX
  * Copyright (c) 2009-2010, Atheros Communications
@@ -11,12 +12,12 @@
 #define OFFCHANNEL_H
 
 int offchannel_send_action(struct wpa_supplicant *wpa_s, unsigned int freq,
-			   const u8 *dst, const u8 *src, const u8 *bssid,
-			   const u8 *buf, size_t len, unsigned int wait_time,
+			   const uint8_t *dst, const uint8_t *src, const uint8_t *bssid,
+			   const uint8_t *buf, size_t len, unsigned int wait_time,
 			   void (*tx_cb)(struct wpa_supplicant *wpa_s,
-					 unsigned int freq, const u8 *dst,
-					 const u8 *src, const u8 *bssid,
-					 const u8 *data, size_t data_len,
+					 unsigned int freq, const uint8_t *dst,
+					 const uint8_t *src, const uint8_t *bssid,
+					 const uint8_t *data, size_t data_len,
 					 enum offchannel_send_action_result
 					 result),
 			   int no_cck);
@@ -27,7 +28,7 @@ void offchannel_cancel_remain_on_channel_cb(struct wpa_supplicant *wpa_s,
 					    unsigned int freq);
 void offchannel_deinit(struct wpa_supplicant *wpa_s);
 void offchannel_send_action_tx_status(
-	struct wpa_supplicant *wpa_s, const u8 *dst, const u8 *data,
+	struct wpa_supplicant *wpa_s, const uint8_t *dst, const uint8_t *data,
 	size_t data_len, enum offchannel_send_action_result result);
 const void * offchannel_pending_action_tx(struct wpa_supplicant *wpa_s);
 void offchannel_clear_pending_action_tx(struct wpa_supplicant *wpa_s);

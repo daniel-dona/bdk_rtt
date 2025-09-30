@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /**
  * @file
  * This is the IPv4 layer implementation for incoming and outgoing IP traffic.

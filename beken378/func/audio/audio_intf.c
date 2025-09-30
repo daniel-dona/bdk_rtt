@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 
@@ -45,14 +46,14 @@ enum
 
 typedef struct audio_message 
 {
-	UINT32 audio_msg;
+	uint32_t audio_msg;
 }AUDIO_MSG_T;
 #define AUDIO_QITEM_COUNT          (5)
 
 beken_queue_t audio_msg_que = NULL;
 beken_thread_t  audio_handle = NULL;
 
-void audio_intf_send_msg(u32 new_msg);
+void audio_intf_send_msg(uint32_t new_msg);
 
 
 #if CFG_USE_AUD_DAC
@@ -60,8 +61,8 @@ AUD_DAC_CFG_ST aud_dac_cfg;
 DD_HANDLE aud_dac_hdl = DD_HANDLE_UNVALID;
 
 #define AUD_DAC_BUF_LEN            (4 * 1024)
-UINT8 audio_dac_buf[AUD_DAC_BUF_LEN];
-UINT8 *audio_read;
+uint8_t audio_dac_buf[AUD_DAC_BUF_LEN];
+uint8_t *audio_read;
 
 #define DAC_TIMER_INTVAL           (15)
 beken_timer_t audio_dac_fill_timer;
@@ -71,8 +72,8 @@ __maybe_unused static void audio_intf_dac_timer_handler(void *data);
 static void audio_intf_dac_timer_poll(void)
 {
 #if 0    
-    UINT32 free_len;
-    UINT32 left = (QQQG + sizeof(QQQG)) - audio_read;
+    uint32_t free_len;
+    uint32_t left = (QQQG + sizeof(QQQG)) - audio_read;
 
     free_len = ddev_control(aud_dac_hdl, AUD_DAC_CMD_GET_FREE_BUF_SIZE, NULL);
 
@@ -81,10 +82,10 @@ static void audio_intf_dac_timer_poll(void)
         audio_read += free_len;
     }
     else if(left) {
-        UINT32 copy_from_start = free_len - left;
+        uint32_t copy_from_start = free_len - left;
         ddev_write(aud_dac_hdl, (char *)audio_read, left, 0);
         ddev_write(aud_dac_hdl, (char *)QQQG, copy_from_start, 0);
-        audio_read = (UINT8*)&QQQG[copy_from_start];
+        audio_read = (uint8_t*)&QQQG[copy_from_start];
     }
     
     //AUD_INTF_PRT("%d,%d\r\n", free_len, left);
@@ -121,7 +122,7 @@ void audio_intf_dac_play(void)
 
 static void audio_intf_dac_set_volume_poll(void)
 {
-    static UINT32 dac_vol = 0;
+    static uint32_t dac_vol = 0;
 
     dac_vol++;
     if(dac_vol >= 20)
@@ -144,10 +145,10 @@ AUD_ADC_CFG_ST aud_adc_cfg;
 DD_HANDLE aud_adc_hdl = DD_HANDLE_UNVALID;
 
 #define AUD_ADC_BUF_LEN            (3 * 1024)
-UINT8 audio_adc_buf[AUD_ADC_BUF_LEN];
+uint8_t audio_adc_buf[AUD_ADC_BUF_LEN];
 
 #define AUD_ADC_DATA_LEN        (2 * 1024)
-UINT8 adc_data[AUD_ADC_DATA_LEN];
+uint8_t adc_data[AUD_ADC_DATA_LEN];
 
 #define ADC_TIMER_INTVAL           (4)
 beken_timer_t audio_adc_get_timer;
@@ -157,7 +158,7 @@ beken_timer_t audio_adc_linein_timer;
 
 static void audio_intf_adc_timer_poll(void)
 {   
-    UINT32 mic_filled_len, audio_free_len, copy_len;
+    uint32_t mic_filled_len, audio_free_len, copy_len;
 
     audio_free_len = ddev_control(aud_dac_hdl, AUD_DAC_CMD_GET_FREE_BUF_SIZE, NULL);
     mic_filled_len = ddev_control(aud_adc_hdl, AUD_ADC_CMD_GET_FILL_BUF_SIZE, NULL);
@@ -218,11 +219,11 @@ static void audio_intf_adc_linein_timer_handler(void *data)
 }
 #endif
 
-UINT32 sample_rate_tab[] = {8000, 11025, 12000, 16000, 22050, 24000, 32000, 44100, 48000};
+uint32_t sample_rate_tab[] = {8000, 11025, 12000, 16000, 22050, 24000, 32000, 44100, 48000};
 static void audio_intf_set_sample_rate_poll(void)
 {   
-    static UINT32 i = 0;
-    UINT32 param = 0;
+    static uint32_t i = 0;
+    uint32_t param = 0;
 
     i++;
     if(i >= sizeof(sample_rate_tab)/4)
@@ -249,7 +250,7 @@ void audio_intf_set_sample_rate(void)
 static void audio_intf_main( beken_thread_arg_t data )
 {
     OSStatus err;
-    UINT32 status;
+    uint32_t status;
     GLOBAL_INT_DECLARATION();
 
 #if CFG_USE_AUD_DAC
@@ -264,10 +265,10 @@ static void audio_intf_main( beken_thread_arg_t data )
     aud_dac_cfg.mute_pin = 0;
     #endif
 
-    //audio_read = (UINT8*)&QQQG[0];
+    //audio_read = (uint8_t*)&QQQG[0];
 
     GLOBAL_INT_DISABLE();
-    aud_dac_hdl = ddev_open(AUD_DAC_DEV_NAME, &status, (UINT32)&aud_dac_cfg);
+    aud_dac_hdl = ddev_open(AUD_DAC_DEV_NAME, &status, (uint32_t)&aud_dac_cfg);
     status = status;
     if(DD_HANDLE_UNVALID == aud_dac_hdl)
     {
@@ -298,7 +299,7 @@ static void audio_intf_main( beken_thread_arg_t data )
     aud_adc_cfg.linein_detect_pin = AUD_ADC_LINEIN_DETECT_PIN;
 
     GLOBAL_INT_DISABLE();
-    aud_adc_hdl = ddev_open(AUD_ADC_DEV_NAME, &status, (UINT32)&aud_adc_cfg);
+    aud_adc_hdl = ddev_open(AUD_ADC_DEV_NAME, &status, (uint32_t)&aud_adc_cfg);
     status = status;
     if(DD_HANDLE_UNVALID == aud_adc_hdl)
     {
@@ -439,7 +440,7 @@ audio_exit:
     rtos_delete_thread(NULL);
 }
 
-UINT32 audio_intf_init(void)
+uint32_t audio_intf_init(void)
 {   
     int ret;
 	
@@ -485,7 +486,7 @@ void audio_intf_uninit(void)
 	}
 }
 
-void audio_intf_send_msg(u32 new_msg)
+void audio_intf_send_msg(uint32_t new_msg)
 {
 	OSStatus ret;
 	AUDIO_MSG_T msg;

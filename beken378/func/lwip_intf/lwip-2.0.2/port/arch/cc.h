@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * cc.h       - Architecture environment, some compiler specific, some
  *             environment specific (probably should move env stuff 

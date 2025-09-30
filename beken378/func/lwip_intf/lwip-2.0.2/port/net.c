@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 #include "include.h"
 #include <stdio.h>
 #include <string.h>
@@ -235,7 +237,7 @@ static void wm_netif_status_callback(struct netif *n)
 {
 	FUNC_1PARAM_PTR fn;
     struct dhcp *dhcp;
-	u32 val;
+	uint32_t val;
 
 	if (n->flags & NETIF_FLAG_UP)
 	{
@@ -708,8 +710,8 @@ void net_wlan_add_netif(void *mac)
     VIF_INF_PTR vif_entry = NULL;
     struct interface *wlan_if = NULL;
     err_t err;
-    u8 vif_idx;
-    u8 *b = (u8*)mac;
+    uint8_t vif_idx;
+    uint8_t *b = (uint8_t*)mac;
 
     if(!b || (!(b[0] | b[1] | b[2] | b[3] | b[4] | b[5])))
         return;
@@ -759,10 +761,10 @@ void net_wlan_add_netif(void *mac)
 void net_wlan_remove_netif(void *mac)
 {
     err_t err;
-    u8 vif_idx;
+    uint8_t vif_idx;
     VIF_INF_PTR vif_entry = NULL;
     struct netif *netif = NULL;
-    u8 *b = (u8*)mac;
+    uint8_t *b = (uint8_t*)mac;
 
     if(!b || (!(b[0] | b[1] | b[2] | b[3] | b[4] | b[5])))
         return;

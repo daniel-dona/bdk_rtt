@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * Generic advertisement service (GAS) query
  * Copyright (c) 2009, Atheros Communications
@@ -16,10 +17,10 @@ struct gas_query;
 
 struct gas_query * gas_query_init(struct wpa_supplicant *wpa_s);
 void gas_query_deinit(struct gas_query *gas);
-int gas_query_rx(struct gas_query *gas, const u8 *da, const u8 *sa,
-		 const u8 *bssid, u8 categ, const u8 *data, size_t len,
+int gas_query_rx(struct gas_query *gas, const uint8_t *da, const uint8_t *sa,
+		 const uint8_t *bssid, uint8_t categ, const uint8_t *data, size_t len,
 		 int freq);
-int pmf_in_use(struct wpa_supplicant *wpa_s, const u8 *addr);
+int pmf_in_use(struct wpa_supplicant *wpa_s, const uint8_t *addr);
 
 /**
  * enum gas_query_result - GAS query result
@@ -34,14 +35,14 @@ enum gas_query_result {
 	GAS_QUERY_DELETED_AT_DEINIT
 };
 
-int gas_query_req(struct gas_query *gas, const u8 *dst, int freq,
+int gas_query_req(struct gas_query *gas, const uint8_t *dst, int freq,
 		  int wildcard_bssid, struct wpabuf *req,
-		  void (*cb)(void *ctx, const u8 *dst, u8 dialog_token,
+		  void (*cb)(void *ctx, const uint8_t *dst, uint8_t dialog_token,
 			     enum gas_query_result result,
 			     const struct wpabuf *adv_proto,
-			     const struct wpabuf *resp, u16 status_code),
+			     const struct wpabuf *resp, uint16_t status_code),
 		  void *ctx);
-int gas_query_stop(struct gas_query *gas, u8 dialog_token);
+int gas_query_stop(struct gas_query *gas, uint8_t dialog_token);
 
 #else /* CONFIG_GAS */
 

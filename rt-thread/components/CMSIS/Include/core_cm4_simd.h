@@ -1,3 +1,4 @@
+#include <stdint.h>
 /**************************************************************************//**
  * @file     core_cm4_simd.h
  * @brief    CMSIS Cortex-M4 SIMD Header File

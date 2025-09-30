@@ -196,8 +196,8 @@ int rt_wlan_scan(struct rt_wlan_device *device, struct rt_wlan_info *info, struc
 /* get rssi */
 int rt_wlan_get_rssi(struct rt_wlan_device *device);
 /* Get/Set MAC */
-int rt_wlan_get_mac(struct rt_wlan_device *device, rt_uint8_t hwaddr[6]);
-int rt_wlan_set_mac(struct rt_wlan_device *device, rt_uint8_t hwaddr[6]);
+int rt_wlan_get_mac(struct rt_wlan_device *device, uint8_t hwaddr[6]);
+int rt_wlan_set_mac(struct rt_wlan_device *device, uint8_t hwaddr[6]);
 
 
 

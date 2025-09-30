@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _DRIVER_AUDIO_IF_H_
 #define _DRIVER_AUDIO_IF_H_
 #include "sys_rtos.h"

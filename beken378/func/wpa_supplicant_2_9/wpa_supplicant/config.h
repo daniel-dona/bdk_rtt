@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * WPA Supplicant / Configuration file structures
  * Copyright (c) 2003-2012, Jouni Malinen <j@w1.fi>
@@ -221,7 +222,7 @@ struct wpa_cred {
 	 * pre-configured with the credential since the NAI Realm information
 	 * may not be available or fetched.
 	 */
-	u8 roaming_consortium[15];
+	uint8_t roaming_consortium[15];
 
 	/**
 	 * roaming_consortium_len - Length of roaming_consortium
@@ -235,7 +236,7 @@ struct wpa_cred {
 	 * the Roaming Consortium OI that is required to be advertised by the AP
 	 * for the credential to be considered matching.
 	 */
-	u8 required_roaming_consortium[15];
+	uint8_t required_roaming_consortium[15];
 
 	/**
 	 * required_roaming_consortium_len - Length of required_roaming_consortium
@@ -252,7 +253,7 @@ struct wpa_cred {
 	 * in this list indicates that successful authentication is possible.
 	 * (Hotspot 2.0 PerProviderSubscription/<X+>/HomeSP/RoamingConsortiumOI)
 	 */
-	u8 roaming_consortiums[MAX_ROAMING_CONS][MAX_ROAMING_CONS_OI_LEN];
+	uint8_t roaming_consortiums[MAX_ROAMING_CONS][MAX_ROAMING_CONS_OI_LEN];
 
 	/**
 	 * roaming_consortiums_len - Length on roaming_consortiums[i]
@@ -288,7 +289,7 @@ struct wpa_cred {
 	char *phase2;
 
 	struct excluded_ssid {
-		u8 ssid[SSID_MAX_LEN];
+		uint8_t ssid[SSID_MAX_LEN];
 		size_t ssid_len;
 	} *excluded_ssid;
 	size_t num_excluded_ssid;
@@ -296,7 +297,7 @@ struct wpa_cred {
 	struct roaming_partner {
 		char fqdn[128];
 		int exact_match;
-		u8 priority;
+		uint8_t priority;
 		char country[3];
 	} *roaming_partner;
 	size_t num_roaming_partner;
@@ -333,7 +334,7 @@ struct wpa_cred {
 	unsigned int max_bss_load;
 
 	unsigned int num_req_conn_capab;
-	u8 *req_conn_capab_proto;
+	uint8_t *req_conn_capab_proto;
 	int **req_conn_capab_port;
 
 	/**
@@ -663,7 +664,7 @@ struct wpa_config {
 	/**
 	 * uuid - Universally Unique IDentifier (UUID; see RFC 4122) for WPS
 	 */
-	u8 uuid[16];
+	uint8_t uuid[16];
 
 	/**
 	 * auto_uuid - Automatic UUID behavior
@@ -706,7 +707,7 @@ struct wpa_config {
 	/**
 	 * device_type - Primary Device Type (WPS)
 	 */
-	u8 device_type[WPS_DEV_TYPE_LEN];
+	uint8_t device_type[WPS_DEV_TYPE_LEN];
 
 	/**
 	 * config_methods - Config Methods
@@ -725,7 +726,7 @@ struct wpa_config {
 	 * os_version - OS Version (WPS)
 	 * 4-octet operating system version number
 	 */
-	u8 os_version[4];
+	uint8_t os_version[4];
 
 	/**
 	 * country - Country code
@@ -760,7 +761,7 @@ struct wpa_config {
 	/**
 	 * sec_device_types - Secondary Device Types (P2P)
 	 */
-	u8 sec_device_type[MAX_SEC_DEVICE_TYPES][WPS_DEV_TYPE_LEN];
+	uint8_t sec_device_type[MAX_SEC_DEVICE_TYPES][WPS_DEV_TYPE_LEN];
 	int num_sec_device_types;
 
 	int p2p_listen_reg_class;
@@ -979,7 +980,7 @@ struct wpa_config {
 	 * request response only from BSSes belonging to the specified
 	 * Homogeneous ESS. This is used only if interworking is enabled.
 	 */
-	u8 hessid[ETH_ALEN];
+	uint8_t hessid[ETH_ALEN];
 
 	/**
 	 * hs20 - Hotspot 2.0
@@ -1224,10 +1225,10 @@ struct wpa_config {
 	 */
 	int tdls_external_control;
 
-	u8 ip_addr_go[4];
-	u8 ip_addr_mask[4];
-	u8 ip_addr_start[4];
-	u8 ip_addr_end[4];
+	uint8_t ip_addr_go[4];
+	uint8_t ip_addr_mask[4];
+	uint8_t ip_addr_start[4];
+	uint8_t ip_addr_end[4];
 
 	/**
 	 * osu_dir - OSU provider information directory
@@ -1517,7 +1518,7 @@ struct wpa_config {
 	 * If there are saved persistent groups, P2P cannot generate another
 	 * random MAC address, and need to restore to last used MAC address.
 	 */
-	u8 p2p_device_persistent_mac_addr[ETH_ALEN];
+	uint8_t p2p_device_persistent_mac_addr[ETH_ALEN];
 
 	/**
 	 * p2p_interface_random_mac_addr - P2P Interface MAC address policy default

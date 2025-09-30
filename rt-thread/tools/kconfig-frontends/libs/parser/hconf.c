@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /* ANSI-C code produced by gperf version 3.0.4 */
 /* Command-line: gperf -t --output-file libs/parser/hconf.c -a -C -E -g -k '1,3,$' -p -t libs/parser/hconf.gperf  */
 

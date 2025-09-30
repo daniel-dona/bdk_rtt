@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : cputime_cortexm.c
  * This file is part of RT-Thread RTOS

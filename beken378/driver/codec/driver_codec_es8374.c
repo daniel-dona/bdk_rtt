@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /****************************************************************************
 **
 ** Copyright (C) 2017 Beken Corporation, All rights reserved.
@@ -40,14 +42,14 @@ typedef struct Codec_RegCfg_s
 }Codec_ES8374_RegCfg_t;
 
 // 0-output&pullup, 1--input
-static void gpio_config_c( UINT32 index, UINT32 mode ) 
+static void gpio_config_c( uint32_t index, uint32_t mode ) 
 {
-	volatile UINT32 *gpio_cfg_addr;
-	UINT32 val;
-	UINT32 tmp;
+	volatile uint32_t *gpio_cfg_addr;
+	uint32_t val;
+	uint32_t tmp;
 	if(index >GPIONUM)
 		return;
-	gpio_cfg_addr = (volatile UINT32 *)(REG_GPIO_CFG_BASE_ADDR + index * 4);
+	gpio_cfg_addr = (volatile uint32_t *)(REG_GPIO_CFG_BASE_ADDR + index * 4);
 	tmp =mode;
 	mode &= 0xff;
 	
@@ -64,12 +66,12 @@ static void gpio_config_c( UINT32 index, UINT32 mode )
 
 
 
-static void gpio_output_c(UINT32 index, UINT32 val)
+static void gpio_output_c(uint32_t index, uint32_t val)
 {
-    UINT32 reg_val;
-    volatile UINT32 *gpio_cfg_addr;
+    uint32_t reg_val;
+    volatile uint32_t *gpio_cfg_addr;
 
-    gpio_cfg_addr = (volatile UINT32 *)(REG_GPIO_CFG_BASE_ADDR + index * 4);
+    gpio_cfg_addr = (volatile uint32_t *)(REG_GPIO_CFG_BASE_ADDR + index * 4);
     reg_val = REG_READ(gpio_cfg_addr);
 
     reg_val &= ~GCFG_OUTPUT_BIT;
@@ -77,12 +79,12 @@ static void gpio_output_c(UINT32 index, UINT32 val)
     REG_WRITE(gpio_cfg_addr, reg_val);
 }
 
-static UINT32 DATA_INPUT(void)
+static uint32_t DATA_INPUT(void)
 {
-    UINT32 val = 0;
-    volatile UINT32 *gpio_cfg_addr;
+    uint32_t val = 0;
+    volatile uint32_t *gpio_cfg_addr;
 
-    gpio_cfg_addr = (volatile UINT32 *)(REG_GPIO_CFG_BASE_ADDR + I2C_DAT * 4);
+    gpio_cfg_addr = (volatile uint32_t *)(REG_GPIO_CFG_BASE_ADDR + I2C_DAT * 4);
     val = REG_READ(gpio_cfg_addr);
 
     return (val & 1);
@@ -115,8 +117,8 @@ static void SET_DATA_INPUT(void)
 
 static void set_data_output(void)
 {
-	UINT32 mode;
-	UINT32 val = 	DATA_INPUT();
+	uint32_t mode;
+	uint32_t val = 	DATA_INPUT();
 	mode = (val<<8) ;
 	gpio_config_c(I2C_DAT,mode);
 }
@@ -183,7 +185,7 @@ static void es8374_codec_i2c_write_byte(unsigned char data)
 
 static void I2CWRNBYTE_CODEC(unsigned char reg, unsigned char val)
 {
-    UINT8 i2c_address = 0x20;
+    uint8_t i2c_address = 0x20;
 
     es8374_codec_i2c_start();
     es8374_codec_i2c_write_byte(i2c_address); 	
@@ -193,7 +195,7 @@ static void I2CWRNBYTE_CODEC(unsigned char reg, unsigned char val)
 }
 
 
-static void es8374_dac_mute(BOOL mute)
+static void es8374_dac_mute(bool mute)
 {
 	if(mute)//mute dac
 		I2CWRNBYTE_CODEC(0x36, 0x20);
@@ -509,7 +511,7 @@ void es8374_codec_volume_control(unsigned char volume)
 	es8374_dac_volume(volume);
 }
 
-void es8374_codec_mute_control(BOOL enable)
+void es8374_codec_mute_control(bool enable)
 {
     es8374_dac_mute(enable);
 }

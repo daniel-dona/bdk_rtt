@@ -1,3 +1,4 @@
+#include <stdint.h>
 /**************************************************************************//**
  * @file     core_cmInstr.h
  * @brief    CMSIS Cortex-M Core Instruction Access Header File

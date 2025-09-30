@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /* port.c
  *
  * Copyright (C) 2006-2019 wolfSSL Inc.
@@ -1580,7 +1582,7 @@ int wolfSSL_CryptHwMutexUnLock(void) {
     int wc_FreeMutex(wolfSSL_Mutex* m)
     {
         int ret = 0;
-        BOOLEAN del;
+        bool del;
 
         if (m == NULL)
             return BAD_FUNC_ARG;
@@ -1618,7 +1620,7 @@ int wolfSSL_CryptHwMutexUnLock(void) {
     int wc_UnLockMutex(wolfSSL_Mutex* m)
     {
         int ret = 0;
-        BOOLEAN rel;
+        bool rel;
 
         if (m == NULL)
             return BAD_FUNC_ARG;
@@ -1708,7 +1710,7 @@ int wolfSSL_CryptHwMutexUnLock(void) {
     {
         M2MB_OS_RESULT_E        osRes;
         M2MB_OS_MTX_ATTR_HANDLE mtxAttrHandle;
-        UINT32                  inheritVal = 1;
+        uint32_t                  inheritVal = 1;
 
         osRes = m2mb_os_mtx_setAttrItem(&mtxAttrHandle,
                                     CMDS_ARGS(
@@ -2061,7 +2063,7 @@ time_t wiced_pseudo_unix_epoch_time(time_t * timer)
     time_t m2mb_xtime(time_t * timer)
     {
         time_t myTime = 0;
-        INT32 fd = m2mb_rtc_open("/dev/rtc0", 0);
+        int32_t fd = m2mb_rtc_open("/dev/rtc0", 0);
         if (fd >= 0) {
             M2MB_RTC_TIMEVAL_T timeval;
 
@@ -2077,7 +2079,7 @@ time_t wiced_pseudo_unix_epoch_time(time_t * timer)
     time_t m2mb_xtime_ms(time_t * timer)
     {
         time_t myTime = 0;
-        INT32 fd = m2mb_rtc_open("/dev/rtc0", 0);
+        int32_t fd = m2mb_rtc_open("/dev/rtc0", 0);
         if (fd >= 0) {
             M2MB_RTC_TIMEVAL_T timeval;
 
@@ -2094,7 +2096,7 @@ time_t wiced_pseudo_unix_epoch_time(time_t * timer)
     double m2mb_xtime_bench(int reset)
     {
         double myTime = 0;
-        INT32 fd = m2mb_rtc_open("/dev/rtc0", 0);
+        int32_t fd = m2mb_rtc_open("/dev/rtc0", 0);
         if (fd >= 0) {
             M2MB_RTC_TIMEVAL_T timeval;
 

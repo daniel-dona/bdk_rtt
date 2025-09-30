@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 #ifndef _MAIN_NONE_H_
 #define _MAIN_NONE_H_
 

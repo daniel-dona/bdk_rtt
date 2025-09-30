@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : fs_test.c
  * This file is part of RT-Thread RTOS
@@ -17,7 +18,7 @@
 #include <rtthread.h>
 #include <dfs_posix.h>
 
-static rt_uint32_t stop_flag = 0;
+static uint32_t stop_flag = 0;
 static rt_thread_t fsrw1_thread = RT_NULL;
 static rt_thread_t fsrw2_thread = RT_NULL;
 
@@ -27,11 +28,11 @@ static void fsrw1_thread_entry(void* parameter)
 {
     int fd;
     int index,length;
-    rt_uint32_t round;
-    rt_uint32_t tick_start,tick_end,read_speed,write_speed;
+    uint32_t round;
+    uint32_t tick_start,tick_end,read_speed,write_speed;
 
-    static rt_uint8_t write_data1[fsrw1_data_len];
-    static rt_uint8_t read_data1[fsrw1_data_len];
+    static uint8_t write_data1[fsrw1_data_len];
+    static uint8_t read_data1[fsrw1_data_len];
 
     round = 1;
 
@@ -95,7 +96,7 @@ static void fsrw1_thread_entry(void* parameter)
         tick_start = rt_tick_get();
         for(index=0; index<8000; index++)
         {
-            rt_uint32_t i;
+            uint32_t i;
 
             length = read(fd, read_data1, fsrw1_data_len);
             if (length != fsrw1_data_len)
@@ -135,11 +136,11 @@ static void fsrw2_thread_entry(void* parameter)
 {
     int fd;
     int index,length;
-    rt_uint32_t round;
-    rt_uint32_t tick_start,tick_end,read_speed,write_speed;
+    uint32_t round;
+    uint32_t tick_start,tick_end,read_speed,write_speed;
 
-    static rt_uint8_t write_data2[fsrw2_data_len];
-    static rt_uint8_t read_data2[fsrw2_data_len];
+    static uint8_t write_data2[fsrw2_data_len];
+    static uint8_t read_data2[fsrw2_data_len];
 
     round = 1;
 
@@ -203,7 +204,7 @@ static void fsrw2_thread_entry(void* parameter)
         tick_start = rt_tick_get();
         for(index=0; index<5000; index++)
         {
-            rt_uint32_t i;
+            uint32_t i;
 
             length = read(fd, read_data2, fsrw2_data_len);
             if (length != fsrw2_data_len)
@@ -240,11 +241,11 @@ static void fsrw2_thread_entry(void* parameter)
 
 /** \brief startup filesystem read/write test(multi thread).
  *
- * \param arg rt_uint32_t [0]startup thread1,[1]startup thread2.
+ * \param arg uint32_t [0]startup thread1,[1]startup thread2.
  * \return void
  *
  */
-void fs_test(rt_uint32_t arg)
+void fs_test(uint32_t arg)
 {
     rt_kprintf("arg is : 0x%02X ",arg);
 

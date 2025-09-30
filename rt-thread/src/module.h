@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : module.h
  * This file is part of RT-Thread RTOS
@@ -28,13 +29,13 @@
 
 #include <rtdef.h>
 
-typedef rt_uint8_t              Elf_Byte;
+typedef uint8_t              Elf_Byte;
 
-typedef rt_uint32_t             Elf32_Addr;    /* Unsigned program address */
-typedef rt_uint32_t             Elf32_Off;     /* Unsigned file offset */
-typedef rt_int32_t              Elf32_Sword;   /* Signed large integer */
-typedef rt_uint32_t             Elf32_Word;    /* Unsigned large integer */
-typedef rt_uint16_t             Elf32_Half;    /* Unsigned medium integer */
+typedef uint32_t             Elf32_Addr;    /* Unsigned program address */
+typedef uint32_t             Elf32_Off;     /* Unsigned file offset */
+typedef int32_t              Elf32_Sword;   /* Signed large integer */
+typedef uint32_t             Elf32_Word;    /* Unsigned large integer */
+typedef uint16_t             Elf32_Half;    /* Unsigned medium integer */
 
 /* e_ident[] magic number */
 #define ELFMAG0                 0x7f           /* e_ident[EI_MAG0] */

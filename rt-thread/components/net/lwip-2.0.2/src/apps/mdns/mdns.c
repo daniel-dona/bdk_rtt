@@ -1,3 +1,4 @@
+#include <stdint.h>
 /**
  * @file
  * MDNS responder implementation
@@ -893,7 +894,7 @@ mdns_add_question(struct mdns_outpacket *outpkt, struct mdns_domain *domain, u16
  * Write answer to reply packet.
  * buf or answer_domain can be null. The rd_length written will be buf_length +
  * size of (compressed) domain. Most uses will need either buf or answer_domain,
- * special case is SRV that starts with 3 u16 and then a domain name.
+ * special case is SRV that starts with 3 uint16_t and then a domain name.
  * @param reply The outpacket to write to
  * @param domain The domain name the answer is for
  * @param type The DNS type of the answer (like 'AAAA', 'SRV')

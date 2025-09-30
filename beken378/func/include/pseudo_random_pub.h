@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _PSEUDO_RANDOM_PUB_H_
 #define _PSEUDO_RANDOM_PUB_H_
 

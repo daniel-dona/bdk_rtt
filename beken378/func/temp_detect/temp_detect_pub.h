@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef __TEMP_DETECT_PUB_H__
 #define __TEMP_DETECT_PUB_H__
 
@@ -49,17 +50,17 @@
 * Function Declarations
 *******************************************************************************/
 #if CFG_USE_TEMPERATURE_DETECT
-void temp_detect_change_configuration(UINT32 intval, UINT32 thre, UINT32 dist);
-UINT32 temp_detect_init(UINT32 init_val);
-UINT32 temp_detect_uninit(void);
+void temp_detect_change_configuration(uint32_t intval, uint32_t thre, uint32_t dist);
+uint32_t temp_detect_init(uint32_t init_val);
+uint32_t temp_detect_uninit(void);
 void temp_detect_pause_timer(void);
 void temp_detect_restart_detect(void);
-UINT32 temp_get_detect_time(void);
-UINT32 temp_detect_is_opened_saradc(void) ;
-UINT32 temp_detect_is_init(void);
+uint32_t temp_get_detect_time(void);
+uint32_t temp_detect_is_opened_saradc(void) ;
+uint32_t temp_detect_is_init(void);
 #endif
 
-UINT32 temp_single_get_current_temperature(UINT32 *temp_value);
+uint32_t temp_single_get_current_temperature(uint32_t *temp_value);
 #endif
 // eof
 

@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * Wrapper functions for crypto libraries
  * Copyright (c) 2004-2017, Jouni Malinen <j@w1.fi>
@@ -29,7 +30,7 @@
  * @mac: Buffer for the hash
  * Returns: 0 on success, -1 on failure
  */
-int md4_vector(size_t num_elem, const u8 *addr[], const size_t *len, u8 *mac);
+int md4_vector(size_t num_elem, const uint8_t *addr[], const size_t *len, uint8_t *mac);
 
 /**
  * md5_vector - MD5 hash for data vector
@@ -39,7 +40,7 @@ int md4_vector(size_t num_elem, const u8 *addr[], const size_t *len, u8 *mac);
  * @mac: Buffer for the hash
  * Returns: 0 on success, -1 on failure
  */
-int md5_vector(size_t num_elem, const u8 *addr[], const size_t *len, u8 *mac);
+int md5_vector(size_t num_elem, const uint8_t *addr[], const size_t *len, uint8_t *mac);
 
 
 /**
@@ -50,8 +51,8 @@ int md5_vector(size_t num_elem, const u8 *addr[], const size_t *len, u8 *mac);
  * @mac: Buffer for the hash
  * Returns: 0 on success, -1 on failure
  */
-int sha1_vector(size_t num_elem, const u8 *addr[], const size_t *len,
-		u8 *mac);
+int sha1_vector(size_t num_elem, const uint8_t *addr[], const size_t *len,
+		uint8_t *mac);
 
 /**
  * fips186_2-prf - NIST FIPS Publication 186-2 change notice 1 PRF
@@ -65,7 +66,7 @@ int sha1_vector(size_t num_elem, const u8 *addr[], const size_t *len,
  * Publication 186-2 for EAP-SIM. This PRF uses a function that is similar to
  * SHA-1, but has different message padding.
  */
-int __must_check fips186_2_prf(const u8 *seed, size_t seed_len, u8 *x,
+int __must_check fips186_2_prf(const uint8_t *seed, size_t seed_len, uint8_t *x,
 			       size_t xlen);
 
 /**
@@ -76,8 +77,8 @@ int __must_check fips186_2_prf(const u8 *seed, size_t seed_len, u8 *x,
  * @mac: Buffer for the hash
  * Returns: 0 on success, -1 on failure
  */
-int sha256_vector(size_t num_elem, const u8 *addr[], const size_t *len,
-		  u8 *mac);
+int sha256_vector(size_t num_elem, const uint8_t *addr[], const size_t *len,
+		  uint8_t *mac);
 
 /**
  * sha384_vector - SHA384 hash for data vector
@@ -87,8 +88,8 @@ int sha256_vector(size_t num_elem, const u8 *addr[], const size_t *len,
  * @mac: Buffer for the hash
  * Returns: 0 on success, -1 on failure
  */
-int sha384_vector(size_t num_elem, const u8 *addr[], const size_t *len,
-		  u8 *mac);
+int sha384_vector(size_t num_elem, const uint8_t *addr[], const size_t *len,
+		  uint8_t *mac);
 
 /**
  * sha512_vector - SHA512 hash for data vector
@@ -98,8 +99,8 @@ int sha384_vector(size_t num_elem, const u8 *addr[], const size_t *len,
  * @mac: Buffer for the hash
  * Returns: 0 on success, -1 on failure
  */
-int sha512_vector(size_t num_elem, const u8 *addr[], const size_t *len,
-		  u8 *mac);
+int sha512_vector(size_t num_elem, const uint8_t *addr[], const size_t *len,
+		  uint8_t *mac);
 
 /**
  * des_encrypt - Encrypt one block with DES
@@ -108,7 +109,7 @@ int sha512_vector(size_t num_elem, const u8 *addr[], const size_t *len,
  * @cypher: 8 octets (out)
  * Returns: 0 on success, -1 on failure
  */
-int des_encrypt(const u8 *clear, const u8 *key, u8 *cypher);
+int des_encrypt(const uint8_t *clear, const uint8_t *key, uint8_t *cypher);
 
 /**
  * aes_encrypt_init - Initialize AES for encryption
@@ -116,7 +117,7 @@ int des_encrypt(const u8 *clear, const u8 *key, u8 *cypher);
  * @len: Key length in bytes (usually 16, i.e., 128 bits)
  * Returns: Pointer to context data or %NULL on failure
  */
-void * aes_encrypt_init(const u8 *key, size_t len);
+void * aes_encrypt_init(const uint8_t *key, size_t len);
 
 /**
  * aes_encrypt - Encrypt one AES block
@@ -125,7 +126,7 @@ void * aes_encrypt_init(const u8 *key, size_t len);
  * @crypt: Buffer for the encrypted data (16 bytes)
  * Returns: 0 on success, -1 on failure
  */
-int aes_encrypt(void *ctx, const u8 *plain, u8 *crypt);
+int aes_encrypt(void *ctx, const uint8_t *plain, uint8_t *crypt);
 
 /**
  * aes_encrypt_deinit - Deinitialize AES encryption
@@ -139,7 +140,7 @@ void aes_encrypt_deinit(void *ctx);
  * @len: Key length in bytes (usually 16, i.e., 128 bits)
  * Returns: Pointer to context data or %NULL on failure
  */
-void * aes_decrypt_init(const u8 *key, size_t len);
+void * aes_decrypt_init(const uint8_t *key, size_t len);
 
 /**
  * aes_decrypt - Decrypt one AES block
@@ -148,7 +149,7 @@ void * aes_decrypt_init(const u8 *key, size_t len);
  * @plain: Buffer for the decrypted data (16 bytes)
  * Returns: 0 on success, -1 on failure
  */
-int aes_decrypt(void *ctx, const u8 *crypt, u8 *plain);
+int aes_decrypt(void *ctx, const uint8_t *crypt, uint8_t *plain);
 
 /**
  * aes_decrypt_deinit - Deinitialize AES decryption
@@ -178,7 +179,7 @@ struct crypto_hash;
  * (CONFIG_TLS=internal). If that is not used, the crypto wrapper does not need
  * to implement this.
  */
-struct crypto_hash * crypto_hash_init(enum crypto_hash_alg alg, const u8 *key,
+struct crypto_hash * crypto_hash_init(enum crypto_hash_alg alg, const uint8_t *key,
 				      size_t key_len);
 
 /**
@@ -191,7 +192,7 @@ struct crypto_hash * crypto_hash_init(enum crypto_hash_alg alg, const u8 *key,
  * (CONFIG_TLS=internal). If that is not used, the crypto wrapper does not need
  * to implement this.
  */
-void crypto_hash_update(struct crypto_hash *ctx, const u8 *data, size_t len);
+void crypto_hash_update(struct crypto_hash *ctx, const uint8_t *data, size_t len);
 
 /**
  * crypto_hash_finish - Complete hash calculation
@@ -210,7 +211,7 @@ void crypto_hash_update(struct crypto_hash *ctx, const u8 *data, size_t len);
  * (CONFIG_TLS=internal). If that is not used, the crypto wrapper does not need
  * to implement this.
  */
-int crypto_hash_finish(struct crypto_hash *ctx, u8 *hash, size_t *len);
+int crypto_hash_finish(struct crypto_hash *ctx, uint8_t *hash, size_t *len);
 
 
 enum crypto_cipher_alg {
@@ -234,7 +235,7 @@ struct crypto_cipher;
  * to implement this.
  */
 struct crypto_cipher * crypto_cipher_init(enum crypto_cipher_alg alg,
-					  const u8 *iv, const u8 *key,
+					  const uint8_t *iv, const uint8_t *key,
 					  size_t key_len);
 
 /**
@@ -250,7 +251,7 @@ struct crypto_cipher * crypto_cipher_init(enum crypto_cipher_alg alg,
  * to implement this.
  */
 int __must_check crypto_cipher_encrypt(struct crypto_cipher *ctx,
-				       const u8 *plain, u8 *crypt, size_t len);
+				       const uint8_t *plain, uint8_t *crypt, size_t len);
 
 /**
  * crypto_cipher_decrypt - Cipher decrypt
@@ -265,7 +266,7 @@ int __must_check crypto_cipher_encrypt(struct crypto_cipher *ctx,
  * to implement this.
  */
 int __must_check crypto_cipher_decrypt(struct crypto_cipher *ctx,
-				       const u8 *crypt, u8 *plain, size_t len);
+				       const uint8_t *crypt, uint8_t *plain, size_t len);
 
 /**
  * crypto_cipher_decrypt - Free cipher context
@@ -295,11 +296,11 @@ struct crypto_private_key;
  * (CONFIG_TLS=internal). If that is not used, the crypto wrapper does not need
  * to implement this.
  */
-struct crypto_public_key * crypto_public_key_import(const u8 *key, size_t len);
+struct crypto_public_key * crypto_public_key_import(const uint8_t *key, size_t len);
 
 struct crypto_public_key *
-crypto_public_key_import_parts(const u8 *n, size_t n_len,
-			       const u8 *e, size_t e_len);
+crypto_public_key_import_parts(const uint8_t *n, size_t n_len,
+			       const uint8_t *e, size_t e_len);
 
 /**
  * crypto_private_key_import - Import an RSA private key
@@ -312,7 +313,7 @@ crypto_public_key_import_parts(const u8 *n, size_t n_len,
  * (CONFIG_TLS=internal). If that is not used, the crypto wrapper does not need
  * to implement this.
  */
-struct crypto_private_key * crypto_private_key_import(const u8 *key,
+struct crypto_private_key * crypto_private_key_import(const uint8_t *key,
 						      size_t len,
 						      const char *passwd);
 
@@ -330,7 +331,7 @@ struct crypto_private_key * crypto_private_key_import(const u8 *key,
  * (CONFIG_TLS=internal). If that is not used, the crypto wrapper does not need
  * to implement this.
  */
-struct crypto_public_key * crypto_public_key_from_cert(const u8 *buf,
+struct crypto_public_key * crypto_public_key_from_cert(const uint8_t *buf,
 						       size_t len);
 
 /**
@@ -347,8 +348,8 @@ struct crypto_public_key * crypto_public_key_from_cert(const u8 *buf,
  * to implement this.
  */
 int __must_check crypto_public_key_encrypt_pkcs1_v15(
-	struct crypto_public_key *key, const u8 *in, size_t inlen,
-	u8 *out, size_t *outlen);
+	struct crypto_public_key *key, const uint8_t *in, size_t inlen,
+	uint8_t *out, size_t *outlen);
 
 /**
  * crypto_private_key_decrypt_pkcs1_v15 - Private key decryption (PKCS #1 v1.5)
@@ -364,8 +365,8 @@ int __must_check crypto_public_key_encrypt_pkcs1_v15(
  * to implement this.
  */
 int __must_check crypto_private_key_decrypt_pkcs1_v15(
-	struct crypto_private_key *key, const u8 *in, size_t inlen,
-	u8 *out, size_t *outlen);
+	struct crypto_private_key *key, const uint8_t *in, size_t inlen,
+	uint8_t *out, size_t *outlen);
 
 /**
  * crypto_private_key_sign_pkcs1 - Sign with private key (PKCS #1)
@@ -381,8 +382,8 @@ int __must_check crypto_private_key_decrypt_pkcs1_v15(
  * to implement this.
  */
 int __must_check crypto_private_key_sign_pkcs1(struct crypto_private_key *key,
-					       const u8 *in, size_t inlen,
-					       u8 *out, size_t *outlen);
+					       const uint8_t *in, size_t inlen,
+					       uint8_t *out, size_t *outlen);
 
 /**
  * crypto_public_key_free - Free public key
@@ -414,16 +415,16 @@ void crypto_private_key_free(struct crypto_private_key *key);
  * Returns: 0 on success, -1 on failure
  */
 int __must_check crypto_public_key_decrypt_pkcs1(
-	struct crypto_public_key *key, const u8 *crypt, size_t crypt_len,
-	u8 *plain, size_t *plain_len);
+	struct crypto_public_key *key, const uint8_t *crypt, size_t crypt_len,
+	uint8_t *plain, size_t *plain_len);
 
-int crypto_dh_init(u8 generator, const u8 *prime, size_t prime_len, u8 *privkey,
-		   u8 *pubkey);
-int crypto_dh_derive_secret(u8 generator, const u8 *prime, size_t prime_len,
-			    const u8 *order, size_t order_len,
-			    const u8 *privkey, size_t privkey_len,
-			    const u8 *pubkey, size_t pubkey_len,
-			    u8 *secret, size_t *len);
+int crypto_dh_init(uint8_t generator, const uint8_t *prime, size_t prime_len, uint8_t *privkey,
+		   uint8_t *pubkey);
+int crypto_dh_derive_secret(uint8_t generator, const uint8_t *prime, size_t prime_len,
+			    const uint8_t *order, size_t order_len,
+			    const uint8_t *privkey, size_t privkey_len,
+			    const uint8_t *pubkey, size_t pubkey_len,
+			    uint8_t *secret, size_t *len);
 
 /**
  * crypto_global_init - Initialize crypto wrapper
@@ -463,10 +464,10 @@ void crypto_global_deinit(void);
  * (CONFIG_TLS=internal). If that is not used, the crypto wrapper does not need
  * to implement this.
  */
-int __must_check crypto_mod_exp(const u8 *base, size_t base_len,
-				const u8 *power, size_t power_len,
-				const u8 *modulus, size_t modulus_len,
-				u8 *result, size_t *result_len);
+int __must_check crypto_mod_exp(const uint8_t *base, size_t base_len,
+				const uint8_t *power, size_t power_len,
+				const uint8_t *modulus, size_t modulus_len,
+				uint8_t *result, size_t *result_len);
 
 /**
  * rc4_skip - XOR RC4 stream to given data with skip-stream-start
@@ -481,8 +482,8 @@ int __must_check crypto_mod_exp(const u8 *base, size_t base_len,
  * stream, and XOR the end result with the data buffer to perform RC4
  * encryption/decryption.
  */
-int rc4_skip(const u8 *key, size_t keylen, size_t skip,
-	     u8 *data, size_t data_len);
+int rc4_skip(const uint8_t *key, size_t keylen, size_t skip,
+	     uint8_t *data, size_t data_len);
 
 /**
  * crypto_get_random - Generate cryptographically strong pseudy-random bytes
@@ -516,7 +517,7 @@ struct crypto_bignum * crypto_bignum_init(void);
  * @len: Length of buf in octets
  * Returns: Pointer to allocated bignum or %NULL on failure
  */
-struct crypto_bignum * crypto_bignum_init_set(const u8 *buf, size_t len);
+struct crypto_bignum * crypto_bignum_init_set(const uint8_t *buf, size_t len);
 
 /**
  * crypto_bignum_deinit - Free bignum
@@ -534,7 +535,7 @@ void crypto_bignum_deinit(struct crypto_bignum *n, int clear);
  * Returns: Number of octets written on success, -1 on failure
  */
 int crypto_bignum_to_bin(const struct crypto_bignum *a,
-			 u8 *buf, size_t buflen, size_t padlen);
+			 uint8_t *buf, size_t buflen, size_t padlen);
 
 /**
  * crypto_bignum_rand - Create a random number in range of modulus
@@ -776,7 +777,7 @@ int crypto_ec_point_x(struct crypto_ec *e, const struct crypto_ec_point *p,
  * the length of the prime defining the group.
  */
 int crypto_ec_point_to_bin(struct crypto_ec *e,
-			   const struct crypto_ec_point *point, u8 *x, u8 *y);
+			   const struct crypto_ec_point *point, uint8_t *x, uint8_t *y);
 
 /**
  * crypto_ec_point_from_bin - Create EC point from binary data
@@ -789,7 +790,7 @@ int crypto_ec_point_to_bin(struct crypto_ec *e,
  * the length of the prime defining the group.
  */
 struct crypto_ec_point * crypto_ec_point_from_bin(struct crypto_ec *e,
-						  const u8 *val);
+						  const uint8_t *val);
 
 /**
  * crypto_ec_point_add - c = a + b
@@ -880,7 +881,7 @@ struct crypto_ecdh;
 struct crypto_ecdh * crypto_ecdh_init(int group);
 struct wpabuf * crypto_ecdh_get_pubkey(struct crypto_ecdh *ecdh, int inc_y);
 struct wpabuf * crypto_ecdh_set_peerkey(struct crypto_ecdh *ecdh, int inc_y,
-					const u8 *key, size_t len);
+					const uint8_t *key, size_t len);
 void crypto_ecdh_deinit(struct crypto_ecdh *ecdh);
 
 #endif /* CRYPTO_H */

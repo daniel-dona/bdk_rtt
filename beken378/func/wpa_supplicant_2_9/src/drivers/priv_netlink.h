@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * wpa_supplicant - Private copy of Linux netlink/rtnetlink definitions.
  * Copyright (c) 2003-2005, Jouni Malinen <j@w1.fi>
@@ -77,17 +78,17 @@ struct sockaddr_nl
 {
 	sa_family_t nl_family;
 	unsigned short nl_pad;
-	u32 nl_pid;
-	u32 nl_groups;
+	uint32_t nl_pid;
+	uint32_t nl_groups;
 };
 
 struct nlmsghdr
 {
-	u32 nlmsg_len;
-	u16 nlmsg_type;
-	u16 nlmsg_flags;
-	u32 nlmsg_seq;
-	u32 nlmsg_pid;
+	uint32_t nlmsg_len;
+	uint16_t nlmsg_type;
+	uint16_t nlmsg_flags;
+	uint32_t nlmsg_seq;
+	uint32_t nlmsg_pid;
 };
 
 struct ifinfomsg

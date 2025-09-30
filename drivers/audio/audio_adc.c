@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 #include "audio.h"
@@ -24,20 +25,20 @@ enum
 
 typedef struct aud_adc_desc
 {
-    UINT8 *buf;
-    UINT16 buf_len;
-    UINT16 freq;
-    UINT16 channels;
-    UINT16 mode;
-    UINT32 linein_detect_pin;
+    uint8_t *buf;
+    uint16_t buf_len;
+    uint16_t freq;
+    uint16_t channels;
+    uint16_t mode;
+    uint32_t linein_detect_pin;
 
-    UINT32 status;
+    uint32_t status;
 } AUD_ADC_DESC_ST, *AUD_ADC_DESC_PTR;
 
-void audio_adc_set_enable_bit(UINT32 enable)
+void audio_adc_set_enable_bit(uint32_t enable)
 {
-    UINT32 reg_addr = AUDIO_CONFIG;
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = AUDIO_CONFIG;
+    uint32_t reg_val = REG_READ(reg_addr);
 
     // linein and adc enable bits are the two channels for adc
     // open both of them, no mater channel is.
@@ -48,10 +49,10 @@ void audio_adc_set_enable_bit(UINT32 enable)
     REG_WRITE(reg_addr, reg_val);
 }
 
-void audio_adc_set_int_enable_bit(UINT32 enable)
+void audio_adc_set_int_enable_bit(uint32_t enable)
 {
-    UINT32 reg_addr = AUD_FIFO_CONFIG;
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = AUD_FIFO_CONFIG;
+    uint32_t reg_val = REG_READ(reg_addr);
 
     if (enable)
         reg_val |= ADC_INT_EN;
@@ -60,29 +61,29 @@ void audio_adc_set_int_enable_bit(UINT32 enable)
     REG_WRITE(reg_addr, reg_val);
 }
 
-void audio_adc_get_l_sample(INT16 *left)
+void audio_adc_get_l_sample(int16_t *left)
 {
-    UINT32 reg_addr = AUD_ADC_FIFO_PORT;
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = AUD_ADC_FIFO_PORT;
+    uint32_t reg_val = REG_READ(reg_addr);
 
-    *left = (INT16)(reg_val & AD_ADC_L_FIFO_MASK);
+    *left = (int16_t)(reg_val & AD_ADC_L_FIFO_MASK);
 }
 
-void audio_adc_get_l_and_r_samples(INT16 *left, INT16 *right)
+void audio_adc_get_l_and_r_samples(int16_t *left, int16_t *right)
 {
-    UINT32 reg_addr = AUD_ADC_FIFO_PORT;
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = AUD_ADC_FIFO_PORT;
+    uint32_t reg_val = REG_READ(reg_addr);
 
     reg_val &= AD_ADC_LR_FIFO_MASK;
 
-    *left = (INT16)(reg_val & AD_ADC_L_FIFO_MASK);
-    *right = (INT16)((reg_val >> AD_ADC_R_FIFO_POSI) & AD_ADC_R_FIFO_MASK);
+    *left = (int16_t)(reg_val & AD_ADC_L_FIFO_MASK);
+    *right = (int16_t)((reg_val >> AD_ADC_R_FIFO_POSI) & AD_ADC_R_FIFO_MASK);
 }
 
-void audio_adc_set_hpf2_bypass_bit(UINT32 enable)
+void audio_adc_set_hpf2_bypass_bit(uint32_t enable)
 {
-    UINT32 reg_addr = AUD_ADC_CONFIG_0;
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = AUD_ADC_CONFIG_0;
+    uint32_t reg_val = REG_READ(reg_addr);
 
     if (enable)
         reg_val |= ADC_HPF2_BYPASS;
@@ -91,10 +92,10 @@ void audio_adc_set_hpf2_bypass_bit(UINT32 enable)
     REG_WRITE(reg_addr, reg_val);
 }
 
-void audio_adc_set_gain(UINT32 gain)
+void audio_adc_set_gain(uint32_t gain)
 {
-    UINT32 reg_addr = AUD_ADC_CONFIG_0;
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = AUD_ADC_CONFIG_0;
+    uint32_t reg_val = REG_READ(reg_addr);
 
     if (gain > ADC_SET_GAIN_MASK)
         gain = ADC_SET_GAIN_MASK;
@@ -105,10 +106,10 @@ void audio_adc_set_gain(UINT32 gain)
     REG_WRITE(reg_addr, reg_val);
 }
 
-void audio_adc_set_write_thred_bit(UINT32 thred)
+void audio_adc_set_write_thred_bit(uint32_t thred)
 {
-    UINT32 reg_addr = AUD_FIFO_CONFIG;
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = AUD_FIFO_CONFIG;
+    uint32_t reg_val = REG_READ(reg_addr);
 
     if (thred > ADC_WR_THRED_MASK)
         thred = ADC_WR_THRED_MASK;
@@ -121,9 +122,9 @@ void audio_adc_set_write_thred_bit(UINT32 thred)
     REG_WRITE(reg_addr, reg_val);
 }
 
-void audio_adc_set_sample_rate(UINT32 sample_rate)
+void audio_adc_set_sample_rate(uint32_t sample_rate)
 {
-    UINT32 reg;
+    uint32_t reg;
 
     /* disable adc handset bit again, to make sure this bit unset */
     reg = REG_READ(AUD_EXTEND_CFG);
@@ -227,7 +228,7 @@ void audio_adc_set_sample_rate(UINT32 sample_rate)
 }
 
 #if CFG_GENERAL_DMA
-void audio_adc_set_dma(UINT32 enable)
+void audio_adc_set_dma(uint32_t enable)
 {
     GDMA_CFG_ST en_cfg;
 
@@ -270,10 +271,10 @@ void audio_adc_disable_linein(void)
     sddev_control(SCTRL_DEV_NAME, CMD_SCTRL_DISALBLE_ADC_LINE_IN, NULL);
 }
 
-__maybe_unused static void audio_adc_init_linein_detect_pin(UINT32 pin);
-static void audio_adc_init_linein_detect_pin(UINT32 pin)
+__maybe_unused static void audio_adc_init_linein_detect_pin(uint32_t pin);
+static void audio_adc_init_linein_detect_pin(uint32_t pin)
 {
-    UINT32 param;
+    uint32_t param;
 
     ASSERT(pin < GPIONUM);
 
@@ -281,12 +282,12 @@ static void audio_adc_init_linein_detect_pin(UINT32 pin)
     sddev_control(GPIO_DEV_NAME, CMD_GPIO_CFG, &param);
 }
 
-void audio_adc_set_volume(UINT32 volume)
+void audio_adc_set_volume(uint32_t volume)
 {
-    UINT32 act_vol;
-    UINT8 high, low;
-    UINT32 reg_addr = AUD_AGC_CONFIG_2;
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t act_vol;
+    uint8_t high, low;
+    uint32_t reg_addr = AUD_AGC_CONFIG_2;
+    uint32_t reg_val = REG_READ(reg_addr);
 
     if (volume > AUD_ADC_MAX_VOLUME)
         volume = AUD_ADC_MAX_VOLUME;

@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  * ccp.c - PPP Compression Control Protocol.
  *

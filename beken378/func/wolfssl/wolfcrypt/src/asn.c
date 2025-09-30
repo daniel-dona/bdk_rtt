@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /* asn.c
  *
  * Copyright (C) 2006-2019 wolfSSL Inc.
@@ -332,13 +334,13 @@ static int SetASNNull(byte* output)
     return 2;
 }
 
-/* Get the DER/BER encoding of an ASN.1 BOOLEAN.
+/* Get the DER/BER encoding of an ASN.1 bool.
  *
  * input     Buffer holding DER/BER encoded data.
  * inOutIdx  Current index into buffer to parse.
  * maxIdx    Length of data in buffer.
  * returns BUFFER_E when there is not enough data to parse.
- *         ASN_PARSE_E when the BOOLEAN tag is not found or length is not 1.
+ *         ASN_PARSE_E when the bool tag is not found or length is not 1.
  *         Otherwise, 0 to indicate the value was false and 1 to indicate true.
  */
 static int GetBoolean(const byte* input, word32* inOutIdx, word32 maxIdx)
@@ -6930,7 +6932,7 @@ static int DecodeBasicCaConstraint(const byte* input, int sz, DecodedCert* cert)
 
     ret = GetBoolean(input, &idx, sz);
     if (ret < 0) {
-        WOLFSSL_MSG("\tfail: constraint not valid BOOLEAN");
+        WOLFSSL_MSG("\tfail: constraint not valid bool");
         return ret;
     }
 
@@ -10665,7 +10667,7 @@ static byte GetNameId(int idx)
 
  Extension ::= SEQUENCE {
  extnId     OBJECT IDENTIFIER,
- critical   BOOLEAN DEFAULT FALSE,
+ critical   bool DEFAULT FALSE,
  extnValue  OCTET STRING }
  */
 

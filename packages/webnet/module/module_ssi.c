@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : module_ssl.c
  * This file is part of RT-Thread RTOS/WebNet Server
@@ -69,7 +70,7 @@ static void _webnet_ssi_dofile(struct webnet_session* session, int fd)
     char *offset, *end;
     char *buffer;
     char *path;
-    rt_uint32_t length;
+    uint32_t length;
 
     ssi_begin = ssi_end = RT_NULL;
     offset = end = RT_NULL;
@@ -110,7 +111,7 @@ static void _webnet_ssi_dofile(struct webnet_session* session, int fd)
         if (ssi_begin == RT_NULL)
         {
             /* write content directly */
-            webnet_session_write(session, (const rt_uint8_t*)offset, end - offset);
+            webnet_session_write(session, (const uint8_t*)offset, end - offset);
             break;
         }
 
@@ -119,7 +120,7 @@ static void _webnet_ssi_dofile(struct webnet_session* session, int fd)
         if (ssi_end == RT_NULL)
         {
             /* write content directly */
-            webnet_session_write(session, (const rt_uint8_t*)offset, end - offset);
+            webnet_session_write(session, (const uint8_t*)offset, end - offset);
             break;
         }
         else
@@ -128,7 +129,7 @@ static void _webnet_ssi_dofile(struct webnet_session* session, int fd)
             char *filename;
 
             /* write content */
-            webnet_session_write(session, (const rt_uint8_t*)offset, ssi_begin - offset);
+            webnet_session_write(session, (const uint8_t*)offset, ssi_begin - offset);
 
             offset = ssi_begin + sizeof(SSI_INCLUDE_STRING) - 1;
             include_begin = strstr(ssi_begin, SSI_VIRTUAL_STRING);

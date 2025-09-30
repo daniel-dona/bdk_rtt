@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /**
  ****************************************************************************************
  *
@@ -33,10 +35,10 @@
 #include "co_bool.h"
 
 struct ieee80211_vendor_ie {
-    u8 element_id;
-    u8 len;
-    u8 oui[3];
-    u8 oui_type;
+    uint8_t element_id;
+    uint8_t len;
+    uint8_t oui[3];
+    uint8_t oui_type;
 };
 
 /*

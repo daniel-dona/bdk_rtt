@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 #include "typedef.h"
@@ -34,17 +35,17 @@
 
 struct bk_i2s_dev
 {
-	UINT8 *tx_ptr;
-    UINT32 tx_len;
+	uint8_t *tx_ptr;
+    uint32_t tx_len;
     beken_semaphore_t tx_sem;
 
-    UINT8 *rx_ptr;
-    UINT32 rx_len;
-    UINT32 rx_offset;
-    UINT32 rx_drop;
+    uint8_t *rx_ptr;
+    uint32_t rx_len;
+    uint32_t rx_offset;
+    uint32_t rx_drop;
 
-    UINT32 total_len;
-    UINT32 flag;
+    uint32_t total_len;
+    uint32_t flag;
     
     beken_mutex_t mutex;
 };
@@ -58,11 +59,11 @@ static SDD_OPERATIONS i2s_op =
     i2s_ctrl
 };
 
-void intc_service_change_handler(UINT8 int_num, FUNCPTR isr);
+void intc_service_change_handler(uint8_t int_num, FUNCPTR isr);
 
-static void i2s_active(UINT8 enable)
+static void i2s_active(uint8_t enable)
 {
-    UINT32 value_ctrl;
+    uint32_t value_ctrl;
 
     value_ctrl = REG_READ(PCM_CTRL);
 	
@@ -78,9 +79,9 @@ static void i2s_active(UINT8 enable)
     REG_WRITE(PCM_CTRL, value_ctrl);
 }
 
-static void i2s_set_msten(UINT8 enable)
+static void i2s_set_msten(uint8_t enable)
 {
-    UINT32 value_ctrl;
+    uint32_t value_ctrl;
 
     value_ctrl = REG_READ(PCM_CTRL);
 	
@@ -96,9 +97,9 @@ static void i2s_set_msten(UINT8 enable)
     REG_WRITE(PCM_CTRL, value_ctrl);
 }
 
-static void i2s_select_mode(UINT8 val)
+static void i2s_select_mode(uint8_t val)
 {
-    UINT32 value;
+    uint32_t value;
 
     if(val == 3 || val > 7)
     {
@@ -111,9 +112,9 @@ static void i2s_select_mode(UINT8 val)
     REG_WRITE(PCM_CTRL, value);
 }
 
-static void i2s_set_lrck(UINT8 val)
+static void i2s_set_lrck(uint8_t val)
 {
-    UINT32 value;
+    uint32_t value;
 
     value = REG_READ(PCM_CTRL);
     if(val)
@@ -127,9 +128,9 @@ static void i2s_set_lrck(UINT8 val)
     REG_WRITE(PCM_CTRL, value);
 }
 
-static void i2s_set_sck_inv(UINT8 val)
+static void i2s_set_sck_inv(uint8_t val)
 {
-    UINT32 value;
+    uint32_t value;
 
     value = REG_READ(PCM_CTRL);
 	
@@ -145,9 +146,9 @@ static void i2s_set_sck_inv(UINT8 val)
     REG_WRITE(PCM_CTRL, value);
 }
 
-static void i2s_set_sck_lsb(UINT8 val)
+static void i2s_set_sck_lsb(uint8_t val)
 {
-    UINT32 value;
+    uint32_t value;
 
     value = REG_READ(PCM_CTRL);
     if(val)
@@ -161,9 +162,9 @@ static void i2s_set_sck_lsb(UINT8 val)
     REG_WRITE(PCM_CTRL, value);
 }
 
-static void i2s_set_sck_synclen(UINT8 val)
+static void i2s_set_sck_synclen(uint8_t val)
 {
-    UINT32 value;
+    uint32_t value;
 
     value = REG_READ(PCM_CTRL);
     value &= ~ SYNCLEN_MASK;
@@ -171,9 +172,9 @@ static void i2s_set_sck_synclen(UINT8 val)
     REG_WRITE(PCM_CTRL, value);
 }
 /***
-static void i2s_set_data_length(UINT8 val)
+static void i2s_set_data_length(uint8_t val)
 {
-    UINT32 value;
+    uint32_t value;
 
     value = REG_READ(PCM_CTRL);
     value &= ~ DATALEN_MASK;
@@ -181,9 +182,9 @@ static void i2s_set_data_length(UINT8 val)
     REG_WRITE(PCM_CTRL, value);
 }
 ***/
-static void i2s_set_pcm_dlen(UINT8 val)
+static void i2s_set_pcm_dlen(uint8_t val)
 {
-    UINT32 value;
+    uint32_t value;
 
     value = REG_READ(PCM_CTRL);
     value &= ~ PCM_DLEN_MASK;
@@ -193,7 +194,7 @@ static void i2s_set_pcm_dlen(UINT8 val)
 
 static void i2s_set_freq_datawidth(i2s_rate_t *p_rate)
 {
-    UINT32 bitratio, value = 0,lrck_div,sys_clk= 0;
+    uint32_t bitratio, value = 0,lrck_div,sys_clk= 0;
 	
     if( (p_rate->freq != 8000) && (p_rate->freq != 16000) && 
 		(p_rate->freq != 24000) && (p_rate->freq != 32000) &&(p_rate->freq != 48000)&&
@@ -275,9 +276,9 @@ static void i2s_set_freq_datawidth(i2s_rate_t *p_rate)
     REG_WRITE(PCM_CTRL, value);
 }
 
-static void i2s_rxint_enable(UINT8 val)
+static void i2s_rxint_enable(uint8_t val)
 {
-	UINT32 value;
+	uint32_t value;
 	
 	value = REG_READ(PCM_CN);
 	if(val)
@@ -291,9 +292,9 @@ static void i2s_rxint_enable(UINT8 val)
 	REG_WRITE(PCM_CN, value);
 }
 	
-static void i2s_txint_enable(UINT8 val)
+static void i2s_txint_enable(uint8_t val)
 {
-	UINT32 value;
+	uint32_t value;
 	
 	value = REG_READ(PCM_CN);
 	if(val)
@@ -307,9 +308,9 @@ static void i2s_txint_enable(UINT8 val)
 	REG_WRITE(PCM_CN, value);
 }
 
-static void i2s_rxovr_enable(UINT8 val)
+static void i2s_rxovr_enable(uint8_t val)
 {
-	UINT32 value;
+	uint32_t value;
 	
 	value = REG_READ(PCM_CN);
 	if(val)
@@ -323,9 +324,9 @@ static void i2s_rxovr_enable(UINT8 val)
 	REG_WRITE(PCM_CN, value);
 }
 	
-static void i2s_txovr_enable(UINT8 val)
+static void i2s_txovr_enable(uint8_t val)
 {
-	UINT32 value;
+	uint32_t value;
 	
 	value = REG_READ(PCM_CN);
 	if(val)
@@ -340,9 +341,9 @@ static void i2s_txovr_enable(UINT8 val)
 }
 
 
-static void i2s_rxint_mode(UINT8 val)
+static void i2s_rxint_mode(uint8_t val)
 {
-    UINT32 value;
+    uint32_t value;
 
     value = REG_READ(PCM_CN);
 
@@ -352,9 +353,9 @@ static void i2s_rxint_mode(UINT8 val)
     REG_WRITE(PCM_CN, value);
 }
 
-static void i2s_txint_mode(UINT8 val)
+static void i2s_txint_mode(uint8_t val)
 {
-    UINT32 value;
+    uint32_t value;
 
     value = REG_READ(PCM_CN);
 
@@ -366,7 +367,7 @@ static void i2s_txint_mode(UINT8 val)
 
 static void i2s_rxfifo_clr_enable(void)
 {
-    UINT32 value;
+    uint32_t value;
 
 	value = REG_READ(PCM_CN);	
 	value |= RX_FIFO_CLR;
@@ -376,7 +377,7 @@ static void i2s_rxfifo_clr_enable(void)
 
 static void i2s_txfifo_clr_enable(void)
 {
-    UINT32 value;
+    uint32_t value;
 
 	value = REG_READ(PCM_CN);
     value = value | TX_FIFO0_CLR| TX_FIFO1_CLR| TX_FIFO2_CLR;
@@ -386,9 +387,9 @@ static void i2s_txfifo_clr_enable(void)
 
 
 
-static void i2s_icu_configuration(UINT32 enable)
+static void i2s_icu_configuration(uint32_t enable)
 {
-    UINT32 param;
+    uint32_t param;
 
     if(enable) 
     {
@@ -415,15 +416,15 @@ static void i2s_gpio_configuration()
 	sddev_control(GPIO_DEV_NAME, CMD_GPIO_ENABLE_SECOND, &val);
 }
 
-static UINT8 i2s_get_busy(void)
+static uint8_t i2s_get_busy(void)
 {
 	//TODO
 	return 0;
 }
 
-static void i2s_master_enable(UINT32 enable)
+static void i2s_master_enable(uint32_t enable)
 {
-    UINT32 value , ultemp;
+    uint32_t value , ultemp;
 	
 	ultemp = 1;
 	
@@ -449,9 +450,9 @@ static void i2s_master_enable(UINT32 enable)
 	i2s_icu_configuration(1);  //enable clock;
 }
 
-static void i2s_dma_master_enable(UINT32 enable)
+static void i2s_dma_master_enable(uint32_t enable)
 {
-    UINT32 value , ultemp;
+    uint32_t value , ultemp;
 	
 	ultemp = 1;
 	
@@ -476,15 +477,15 @@ static void i2s_dma_master_enable(UINT32 enable)
 	
 	//i2s_icu_configuration(!enable);  //enable clock;
 	{
-        UINT32 param = PWD_I2S_PCM_CLK_BIT;
+        uint32_t param = PWD_I2S_PCM_CLK_BIT;
 	    sddev_control(ICU_DEV_NAME, CMD_CLK_PWR_UP, &param);
 	}
 }
 
-static UINT8 i2s_disable_i2s(void)
+static uint8_t i2s_disable_i2s(void)
 {
-	UINT8  param;
-	UINT32 status;
+	uint8_t  param;
+	uint32_t status;
 
 	param = 0;
 	i2s_ctrl(I2S_CMD_UNIT_ENABLE, (void *)&param);
@@ -499,10 +500,10 @@ static UINT8 i2s_disable_i2s(void)
 	return 0;
 }
 
-__maybe_unused static UINT32 i2s_read_rxfifo(UINT8 *data);
-static UINT32 i2s_read_rxfifo(UINT8 *data)
+__maybe_unused static uint32_t i2s_read_rxfifo(uint8_t *data);
+static uint32_t i2s_read_rxfifo(uint8_t *data)
 {
-    UINT32 value;
+    uint32_t value;
     
     value = REG_READ(PCM_STAT);
     
@@ -521,7 +522,7 @@ static UINT32 i2s_read_rxfifo(UINT8 *data)
 __maybe_unused static void i2s_txfifo_fill(void);
 static void i2s_txfifo_fill(void)
 {
-    UINT32 value;
+    uint32_t value;
     
     value = REG_READ(PCM_STAT);
     
@@ -531,9 +532,9 @@ static void i2s_txfifo_fill(void)
     } 
 }
 
-UINT32 i2s_write_txfifo(UINT8 data)
+uint32_t i2s_write_txfifo(uint8_t data)
 {
-    UINT32 value;
+    uint32_t value;
     
     value = REG_READ(PCM_STAT);
     
@@ -565,23 +566,23 @@ void i2s_exit(void)
 
 static void i2s_enable_interrupt(void)
 {
-    UINT32 param;
+    uint32_t param;
     param = (IRQ_I2S_PCM_BIT);
     sddev_control(ICU_DEV_NAME, CMD_ICU_INT_ENABLE, &param);
 }
 
 static void i2s_disable_interrupt(void)
 {
-    UINT32 param;
+    uint32_t param;
     param = (IRQ_I2S_PCM_BIT);
     sddev_control(ICU_DEV_NAME, CMD_ICU_INT_DISABLE, &param);
 }
 
 
 
-static UINT32 i2s_ctrl(UINT32 cmd, void *param)
+static uint32_t i2s_ctrl(uint32_t cmd, void *param)
 {
-    UINT8 ret = I2S_SUCCESS;
+    uint8_t ret = I2S_SUCCESS;
 
     //peri_busy_count_add();
 
@@ -589,43 +590,43 @@ static UINT32 i2s_ctrl(UINT32 cmd, void *param)
     switch(cmd)
     {
     case I2S_CMD_UNIT_ENABLE:
-        i2s_active(*(UINT8 *)param);
+        i2s_active(*(uint8_t *)param);
 		break;
 	case I2S_CMD_SET_MSTEN:
-        i2s_set_msten(*(UINT8 *)param);
+        i2s_set_msten(*(uint8_t *)param);
 		break;
 	case I2S_CMD_SELECT_MODE:
-        i2s_select_mode(*(UINT8 *)param);
+        i2s_select_mode(*(uint8_t *)param);
 		break;
 	case I2S_CMD_SET_LRCK:
-        i2s_set_lrck(*(UINT8 *)param);
+        i2s_set_lrck(*(uint8_t *)param);
 		break;
 	case I2S_CMD_SET_SCK_INV:
-        i2s_set_sck_inv(*(UINT8 *)param);
+        i2s_set_sck_inv(*(uint8_t *)param);
 		break;
 	case I2S_CMD_SET_SCK_LSB:
-        i2s_set_sck_lsb(*(UINT8 *)param);
+        i2s_set_sck_lsb(*(uint8_t *)param);
 		break;
 	case I2S_CMD_SET_SCK_SYNCLEN:
-        i2s_set_sck_synclen(*(UINT8 *)param);
+        i2s_set_sck_synclen(*(uint8_t *)param);
 		break;
 	case I2S_CMD_SET_PCM_DLEN:
-        i2s_set_pcm_dlen(*(UINT8 *)param);
+        i2s_set_pcm_dlen(*(uint8_t *)param);
 		break;
     case I2S_CMD_SET_FREQ_DATAWIDTH:
         i2s_set_freq_datawidth((i2s_rate_t *)param);
         break;		
 	case I2S_CMD_RXINT_EN:
-        i2s_rxint_enable(*(UINT8 *)param);
+        i2s_rxint_enable(*(uint8_t *)param);
 		break;
 	case I2S_CMD_TXINT_EN:
-        i2s_txint_enable(*(UINT8 *)param);
+        i2s_txint_enable(*(uint8_t *)param);
 		break;
 	case I2S_CMD_RXOVR_EN:
-        i2s_rxovr_enable(*(UINT8 *)param);
+        i2s_rxovr_enable(*(uint8_t *)param);
 		break;
 	case I2S_CMD_TXOVR_EN:
-        i2s_txovr_enable(*(UINT8 *)param);
+        i2s_txovr_enable(*(uint8_t *)param);
 		break;
 	case I2S_CMD_RXFIFO_CLR_EN:
         i2s_rxfifo_clr_enable();
@@ -634,10 +635,10 @@ static UINT32 i2s_ctrl(UINT32 cmd, void *param)
         i2s_txfifo_clr_enable();
 		break;	
 	case I2S_CMD_RXINT_MODE:
-        i2s_rxint_mode(*(UINT8 *)param);
+        i2s_rxint_mode(*(uint8_t *)param);
 		break;
 	case I2S_CMD_TXINT_MODE:
-        i2s_txint_mode(*(UINT8 *)param);
+        i2s_txint_mode(*(uint8_t *)param);
 		break;
 	case I2S_CMD_GET_BUSY:
          i2s_get_busy();
@@ -649,13 +650,13 @@ static UINT32 i2s_ctrl(UINT32 cmd, void *param)
 		i2s_disable_interrupt();
 		break;
 	case I2S_CMD_MASTER_ENABLE:
-		i2s_master_enable(*(UINT32 *)param);	
+		i2s_master_enable(*(uint32_t *)param);	
 		break;
 	case I2S_CMD_DISABLE_I2S:
     	i2s_disable_i2s();
     	break;
     case I2S_CMD_DMA_MASTER_ENABLE:
-		i2s_dma_master_enable(*(UINT32 *)param);
+		i2s_dma_master_enable(*(uint32_t *)param);
 		break;
     case I2S_CMD_DMA_ISR:
 		intc_service_change_handler(IRQ_I2S_PCM, (FUNCPTR)param);
@@ -672,9 +673,9 @@ static UINT32 i2s_ctrl(UINT32 cmd, void *param)
 }
 
 
-UINT32 i2s_configure(UINT32 fifo_level, UINT32 sample_rate, UINT32 bits_per_sample, UINT32 mode)
+uint32_t i2s_configure(uint32_t fifo_level, uint32_t sample_rate, uint32_t bits_per_sample, uint32_t mode)
 {
- 	UINT32 param;
+ 	uint32_t param;
 	i2s_rate_t rate;
 	rate.datawidth = bits_per_sample;
 	rate.freq = sample_rate;
@@ -765,9 +766,9 @@ UINT32 i2s_configure(UINT32 fifo_level, UINT32 sample_rate, UINT32 bits_per_samp
 	return I2S_SUCCESS;
 }
 
- UINT32 i2s_close(void)
+ uint32_t i2s_close(void)
 {	
-	UINT32 param = 0;
+	uint32_t param = 0;
 	
 	i2s_icu_configuration(0);  //close clock;
 	
@@ -779,7 +780,7 @@ UINT32 i2s_configure(UINT32 fifo_level, UINT32 sample_rate, UINT32 bits_per_samp
 }
 
 
-UINT32 i2s_transfer(UINT32 *i2s_send_buf , UINT32 *i2s_recv_buf, UINT32 count, UINT32 param )
+uint32_t i2s_transfer(uint32_t *i2s_send_buf , uint32_t *i2s_recv_buf, uint32_t count, uint32_t param )
 {
 	GLOBAL_INT_DECLARATION();
 	
@@ -787,8 +788,8 @@ UINT32 i2s_transfer(UINT32 *i2s_send_buf , UINT32 *i2s_recv_buf, UINT32 count, U
 	i2s_trans.trans_done = 0;
 	i2s_trans.tx_remain_data_cnt = count;	
 	i2s_trans.rx_remain_data_cnt = count;
-	i2s_trans.p_tx_buf =(UINT32 *) i2s_send_buf;
-	i2s_trans.p_rx_buf =(UINT32 *) i2s_recv_buf;
+	i2s_trans.p_tx_buf =(uint32_t *) i2s_send_buf;
+	i2s_trans.p_rx_buf =(uint32_t *) i2s_recv_buf;
 	i2s_fifo_level.tx_level = FIFO_LEVEL_32;
 	i2s_fifo_level.rx_level = FIFO_LEVEL_32;
     GLOBAL_INT_RESTORE();	

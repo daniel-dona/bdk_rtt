@@ -27,8 +27,8 @@
 #define str_begin_with(s, prefix)       (strstr(s, prefix) == s)
 #define str_end_with(buf, len, ending)  (strstr(buf+len-1, ending) == buf+len-1)
 static struct ble_session _ble_session = {0}, *ble_session = &_ble_session;
-static rt_uint8_t ble_create_prf_ok = 0;
-static rt_uint8_t ble_netconfig_state = 0;
+static uint8_t ble_create_prf_ok = 0;
+static uint8_t ble_netconfig_state = 0;
 static rt_thread_t tid = RT_NULL;
 
 

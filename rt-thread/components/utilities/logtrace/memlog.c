@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : memlog.c
  * This file is part of RT-Thread RTOS
@@ -30,7 +31,7 @@
 #define PIPE_NAME  "memlog"
 
 static rt_pipe_t *_log_pipe = NULL;
-static rt_uint8_t outbuf[1024];
+static uint8_t outbuf[1024];
 void memlog_flush(void)
 {
     rt_size_t readsz;

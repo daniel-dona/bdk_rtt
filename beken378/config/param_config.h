@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _ARCH_CONFIG_H_
 #define _ARCH_CONFIG_H_
 
@@ -78,13 +79,13 @@ uint32_t cfg_param_init(void);
 #if (CFG_OS_FREERTOS) || (CFG_SUPPORT_RTT)
 extern uint8_t system_mac[];
 
-void cfg_load_mac(u8 *mac);
+void cfg_load_mac(uint8_t *mac);
 uint32_t cfg_ap_is_open_system(void);
-void wifi_get_mac_address(char *mac, u8 type);
+void wifi_get_mac_address(char *mac, uint8_t type);
 int wifi_set_mac_address(char *mac);
-int wifi_set_mac_address_to_efuse(UINT8 *mac);
-int wifi_get_mac_address_from_efuse(UINT8 *mac);
-int wifi_write_efuse(UINT8 addr, UINT8 data);
-UINT8 wifi_read_efuse(UINT8 addr);
+int wifi_set_mac_address_to_efuse(uint8_t *mac);
+int wifi_get_mac_address_from_efuse(uint8_t *mac);
+int wifi_write_efuse(uint8_t addr, uint8_t data);
+uint8_t wifi_read_efuse(uint8_t addr);
 #endif
 #endif

@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <rtthread.h>
 #include <finsh.h>
 #include "common.h"
@@ -298,7 +299,7 @@ static void ble_command_usage(void)
 __maybe_unused static void ble_get_info_handler(void);
 static void ble_get_info_handler(void)
 {
-    UINT8 *ble_mac;
+    uint8_t *ble_mac;
     bk_printf("\r\n****** ble information ************\r\n");
 
     if (ble_is_start() == 0) {
@@ -315,9 +316,9 @@ typedef adv_info_t ble_adv_param_t;
 
 static void ble_advertise(void)
 {
-    UINT8 mac[6];
+    uint8_t mac[6];
     char ble_name[22];
-    UINT8 adv_idx, adv_name_len;
+    uint8_t adv_idx, adv_name_len;
 
     wifi_get_mac_address((char *)mac, CONFIG_ROLE_STA);
     adv_name_len = snprintf(ble_name, sizeof(ble_name), "OpenCam-%02x%02x", mac[2], mac[1], mac[0]);
@@ -343,7 +344,7 @@ static void ble_advertise(void)
     adv_info.advData[adv_idx++] = 0x77;  // Device Information Service - Low byte (0x180A)
     adv_info.advData[adv_idx++] = 0x46;  // Device Information Service - High byte*/
 
-	/*static const UINT8 custom_uuid[] = {
+	/*static const uint8_t custom_uuid[] = {
 		0x9E, 0xCA, 0xDC, 0x24, 0x0E, 0xE5, 0xA9, 0xE0,
 		0x93, 0xF3, 0xA3, 0xB5, 0x01, 0x00, 0x40, 0x6E
 	};*/
@@ -431,10 +432,10 @@ static void ble(int argc, char **argv)
     }
     else if(os_strcmp(argv[1], "notify") == 0)
     {
-        uint8 len;
-        uint16 prf_id;
-        uint16 att_id;
-        uint8 write_buffer[20];
+        uint8_t len;
+        uint16_t prf_id;
+        uint16_t att_id;
+        uint8_t write_buffer[20];
         
         if(argc != 5)
         {
@@ -460,10 +461,10 @@ static void ble(int argc, char **argv)
     }
     else if(os_strcmp(argv[1], "indicate") == 0)
     {
-        uint8 len;
-        uint16 prf_id;
-        uint16 att_id;
-        uint8 write_buffer[20];
+        uint8_t len;
+        uint16_t prf_id;
+        uint16_t att_id;
+        uint8_t write_buffer[20];
         
         if(argc != 5)
         {
@@ -675,7 +676,7 @@ static void ble_app_sdp_characteristic_cb(unsigned char conidx,uint16_t chars_va
 	bk_printf("\r\n");
 }
 
-void app_sdp_charac_cb(CHAR_TYPE type,uint8 conidx,uint16_t hdl,uint16_t len,uint8 *data)
+void app_sdp_charac_cb(CHAR_TYPE type,uint8_t conidx,uint16_t hdl,uint16_t len,uint8_t *data)
 {
 	bk_printf("[APP]type:%x conidx:%d,handle:0x%02x(%d),len:%d,0x",type,conidx,hdl,hdl,len);
 	for(int i = 0; i< len; i++)

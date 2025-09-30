@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*  UNPUBLISHED PROPRIETARY SOURCE CODE
  *  Copyright (c) 2016 BEKEN Inc.
  *

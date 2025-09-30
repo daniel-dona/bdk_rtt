@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 #include "sys_config.h"
 #include "param_config.h"
 #include "compiler.h"
@@ -176,9 +178,9 @@ void bk_aware_monitor_cb(uint8_t *data, int len, wifi_link_info_t *info)
 		return;
 
 	if ((framectrl & MAC_FCTRL_TYPESUBTYPE_MASK) == MAC_FCTRL_ACTION) {
-		u8 category;
-		u8 user_len;
-		u8 version __maybe_unused;
+		uint8_t category;
+		uint8_t user_len;
+		uint8_t version __maybe_unused;
 
 #if BK_AWARE_DEBUG
 		print_hex_dump("MON: ", data, len);

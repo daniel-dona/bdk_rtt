@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 #include "target_util_pub.h"
@@ -34,8 +35,8 @@ beken_semaphore_t ak_semaphore = NULL;
 beken_semaphore_t ak_connect_semaphore = NULL;
 airkiss_channel_t g_chans;
 airkiss_mac_t g_macs;
-volatile u8 airkiss_exit = 0;
-u8 *read_buf = NULL;
+volatile uint8_t airkiss_exit = 0;
+uint8_t *read_buf = NULL;
 
 extern void demo_sta_app_init(char *oob_ssid, char *connect_key);
 extern void net_set_sta_ipup_callback(void *fn);
@@ -73,16 +74,16 @@ static unsigned char calcrc_bytes(unsigned char *p, unsigned int num_of_bytes)
 }
 void airkiss_count_usefull_packet(const unsigned char *frame, int size)
 {
-    u8 mac_crc = 0;
-    u8 *mac_ptr = 0;
-    u16 channel = 0;
+    uint8_t mac_crc = 0;
+    uint8_t *mac_ptr = 0;
+    uint16_t channel = 0;
     uint32_t elmt_addr, var_part_addr, var_part_len;
     int i;
     struct mac_hdr *fmac_hdr = (struct mac_hdr *)frame;
     struct bcn_frame const *frm = (struct bcn_frame const *)frame;
     chan_param_t *cur_chan = &g_chans.chan[g_chans.cur_chan_idx];
 
-    mac_ptr = (u8 *)&fmac_hdr->addr2;
+    mac_ptr = (uint8_t *)&fmac_hdr->addr2;
     mac_crc = calcrc_bytes(mac_ptr, 6);
     if(!frame || !size)
         return;
@@ -145,9 +146,9 @@ void airkiss_set_scan_all_channel(void)
     AIRKISS_WARN("change to all scan mode\r\n");
 }
 
-u32 airkiss_calc_time_for_selected_channel(u8 valid_cnt)
+uint32_t airkiss_calc_time_for_selected_channel(uint8_t valid_cnt)
 {
-    u32 timer_cnt;
+    uint32_t timer_cnt;
 
     timer_cnt = (valid_cnt / MIN_VALID_DATACNT_INCHAN) * MIN_SEL_CHAN_TIMER;
 
@@ -159,7 +160,7 @@ u32 airkiss_calc_time_for_selected_channel(u8 valid_cnt)
     return timer_cnt;
 }
 
-void airkiss_add_channel(u8 channel, u8 bcn_cnt, u8 data_cnt)
+void airkiss_add_channel(uint8_t channel, uint8_t bcn_cnt, uint8_t data_cnt)
 {
     int i;
 
@@ -170,13 +171,13 @@ void airkiss_add_channel(u8 channel, u8 bcn_cnt, u8 data_cnt)
 
     for(i = 0; i < g_chans.selected_chan_nums; i++)
     {
-        u8 cur_cnt = g_chans.chan[i].data_cnt;
-        u8 cur_chan = g_chans.chan[i].channel;
+        uint8_t cur_cnt = g_chans.chan[i].data_cnt;
+        uint8_t cur_chan = g_chans.chan[i].channel;
         if(cur_cnt < data_cnt)
         {
             if(cur_chan != channel)
             {
-                u8 move_cnt = g_chans.selected_chan_nums - i;
+                uint8_t move_cnt = g_chans.selected_chan_nums - i;
                 os_memmove(&g_chans.chan[i + 1], &g_chans.chan[i], move_cnt * sizeof(chan_param_t));
                 g_chans.selected_chan_nums += 1;
             }
@@ -199,9 +200,9 @@ void airkiss_add_channel(u8 channel, u8 bcn_cnt, u8 data_cnt)
 void airkiss_switch_channel_callback(void *data)
 {
     int ret;
-    u8 bcn_cnt = 0,  data_cnt = 0;
-    u32 timer_cnt = 0;
-    u8 channel = 0;
+    uint8_t bcn_cnt = 0,  data_cnt = 0;
+    uint32_t timer_cnt = 0;
+    uint8_t channel = 0;
     chan_param_t *cur_chan = &g_chans.chan[g_chans.cur_chan_idx];
 
     bcn_cnt = cur_chan->bcn_cnt;
@@ -322,11 +323,11 @@ void airkiss_monitor_callback(uint8_t *data, int len, wifi_link_info_t *info)
 int process_airkiss(const unsigned char *packet, int size)
 {
     int ret, result, i;
-    u8 mac_crc = 0;
-    u8 *mac_ptr = 0;
+    uint8_t mac_crc = 0;
+    uint8_t *mac_ptr = 0;
     struct mac_hdr *fmac_hdr = (struct mac_hdr *)packet;
 
-    mac_ptr = (u8 *)&fmac_hdr->addr2;
+    mac_ptr = (uint8_t *)&fmac_hdr->addr2;
     mac_crc = calcrc_bytes(mac_ptr, 6);
 
     ret = airkiss_recv(ak_contex, (void *)packet, size);
@@ -370,7 +371,7 @@ void airkiss_connected_to_bssid(void)
         rtos_set_semaphore(&ak_connect_semaphore);
 }
 
-void airkiss_start_udp_boardcast(u8 random_data)
+void airkiss_start_udp_boardcast(uint8_t random_data)
 {
     int err, i;
 
@@ -405,9 +406,9 @@ void airkiss_start_udp_boardcast(u8 random_data)
 void airkiss_main( void *arg )
 {
     int result;
-    u32 con_time;
+    uint32_t con_time;
     airkiss_result_t ak_result;
-    u8 *airkiss_read_buf = NULL;
+    uint8_t *airkiss_read_buf = NULL;
 
     result = pingpong_init();
     if(0 != result)
@@ -429,7 +430,7 @@ void airkiss_main( void *arg )
     ASSERT(kNoErr == result);
 
     ak_contex = (airkiss_context_t *)os_malloc(sizeof(airkiss_context_t));
-    airkiss_read_buf = (u8 *)os_malloc(sizeof(u8) * AIRKISS_MIN_RX_BUF_SIZE);
+    airkiss_read_buf = (uint8_t *)os_malloc(sizeof(uint8_t) * AIRKISS_MIN_RX_BUF_SIZE);
     if((!ak_contex) || (!airkiss_read_buf))
     {
         AIRKISS_FATAL("Airkiss no buffer\r\n");
@@ -601,7 +602,7 @@ uint32_t airkiss_is_at_its_context(void)
 	return (NULL != ak_thread_handle);
 }
 
-u32 airkiss_process(u8 start)
+uint32_t airkiss_process(uint8_t start)
 {
     int ret;
     GLOBAL_INT_DECLARATION();

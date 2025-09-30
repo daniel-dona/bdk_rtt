@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <rtthread.h>
 #include <ymodem.h>
 #include <dfs_posix.h>
@@ -15,7 +16,7 @@ struct custom_ctx
 
 static enum rym_code _rym_bg(
         struct rym_ctx *ctx,
-        rt_uint8_t *buf,
+        uint8_t *buf,
         rt_size_t len)
 {
     struct custom_ctx *cctx = (struct custom_ctx*)ctx;
@@ -39,7 +40,7 @@ static enum rym_code _rym_bg(
 
 static enum rym_code _rym_tof(
         struct rym_ctx *ctx,
-        rt_uint8_t *buf,
+        uint8_t *buf,
         rt_size_t len)
 {
     struct custom_ctx *cctx = (struct custom_ctx*)ctx;
@@ -59,7 +60,7 @@ static enum rym_code _rym_tof(
 
 static enum rym_code _rym_end(
         struct rym_ctx *ctx,
-        rt_uint8_t *buf,
+        uint8_t *buf,
         rt_size_t len)
 {
     struct custom_ctx *cctx = (struct custom_ctx*)ctx;

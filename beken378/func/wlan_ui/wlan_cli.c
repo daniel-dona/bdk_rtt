@@ -1,3 +1,4 @@
+#include <stdint.h>
 /**
  *  UNPUBLISHED PROPRIETARY SOURCE CODE
  *  Copyright (c) 2016 BEKEN Inc.
@@ -80,15 +81,15 @@ int mico_debug_enabled;
 static struct cli_st *pCli = NULL;
 beken_semaphore_t log_rx_interrupt_sema = NULL;
 
-extern u8* wpas_get_sta_psk(void);
+extern uint8_t* wpas_get_sta_psk(void);
 extern int cli_putstr(const char *msg);
-extern int hexstr2bin(const char *hex, u8 *buf, size_t len);
+extern int hexstr2bin(const char *hex, uint8_t *buf, size_t len);
 extern void make_tcp_server_command(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv);
 extern void net_Command(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv);
 uint32_t bk_wlan_reg_rx_mgmt_cb(mgmt_rx_cb_t cb, uint32_t rx_mgmt_flag);
 
 #if CFG_AIRKISS_TEST
-extern u32 airkiss_process(u8 start);
+extern uint32_t airkiss_process(uint8_t start);
 extern uint32_t airkiss_is_at_its_context(void);
 #endif
 
@@ -332,19 +333,19 @@ static int get_input(char *inbuf, unsigned int *bp)
 	while (cli_getchar(&inbuf[*bp]) == 1)
 	{
 #if CFG_SUPPORT_BKREG
-		if ((0x01U == (UINT8)inbuf[*bp]) && (*bp == 0)) {
+		if ((0x01U == (uint8_t)inbuf[*bp]) && (*bp == 0)) {
 			(*bp)++;
 			continue;
-		} else if ((0xe0U == (UINT8)inbuf[*bp]) && (*bp == 1)) {
+		} else if ((0xe0U == (uint8_t)inbuf[*bp]) && (*bp == 1)) {
 			(*bp)++;
 			continue;
-		} else if ((0xfcU == (UINT8)inbuf[*bp]) && (*bp == 2)) {
+		} else if ((0xfcU == (uint8_t)inbuf[*bp]) && (*bp == 2)) {
 			(*bp)++;
 			continue;
 		} else {
-			if ((0x01U == (UINT8)inbuf[0])
-				&& (0xe0U == (UINT8)inbuf[1])
-				&& (0xfcU == (UINT8)inbuf[2])
+			if ((0x01U == (uint8_t)inbuf[0])
+				&& (0xe0U == (uint8_t)inbuf[1])
+				&& (0xfcU == (uint8_t)inbuf[2])
 				&& (*bp == 3)) {
 				uint8_t ch = inbuf[*bp];
 				uint8_t left = ch, len = 4 + (uint8_t)ch;
@@ -621,7 +622,7 @@ void stop_wlan_intface_Command(char *pcWriteBuffer, int xWriteBufferLen, int arg
 void add_virtual_intface(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv)
 {
     VIF_ADDCFG_ST cfg;
-    u8 argc_cnt = 1;
+    uint8_t argc_cnt = 1;
 
     if(argc <= 1)
         return;
@@ -679,7 +680,7 @@ void add_virtual_intface(char *pcWriteBuffer, int xWriteBufferLen, int argc, cha
 void del_virtual_intface(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv)
 {
     char *type;
-    u8 role = 0xff;
+    uint8_t role = 0xff;
 
 	#if CFG_ROLE_LAUNCH
     LAUNCH_REQ param;
@@ -724,8 +725,8 @@ void del_virtual_intface(char *pcWriteBuffer, int xWriteBufferLen, int argc, cha
 
 void show_virtual_intface(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv)
 {
-    u8 i = 1;
-    u8 *mac_ptr;
+    uint8_t i = 1;
+    uint8_t *mac_ptr;
     char *role;
     const char *name;
     struct netif *lwip_if;
@@ -735,7 +736,7 @@ void show_virtual_intface(char *pcWriteBuffer, int xWriteBufferLen, int argc, ch
     vif_entry = (VIF_INF_PTR)rwm_mgmt_is_vif_first_used();
     while(vif_entry)
     {
-        mac_ptr = (u8 *)&vif_entry->mac_addr;
+        mac_ptr = (uint8_t *)&vif_entry->mac_addr;
         lwip_if = (struct netif *)vif_entry->priv;
         name = lwip_if->hostname;
         if(vif_entry->type == VIF_AP)
@@ -963,7 +964,7 @@ void easylink_Command(char *pcWriteBuffer, int xWriteBufferLen, int argc, char *
 #if CFG_AIRKISS_TEST
 void airkiss_Command(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv)
 {
-    u8 start = 0;
+    uint8_t start = 0;
 
     if(argc != 2)
     {
@@ -981,7 +982,7 @@ void airkiss_Command(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **
 #if CFG_USE_TEMPERATURE_DETECT
 void temp_detect_Command(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv)
 {
-    u8 start = 0;
+    uint8_t start = 0;
 
     if(argc != 2)
     {
@@ -1509,8 +1510,8 @@ HTTP_CMD_ERR:
 
 static void reg_write_read_test(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv)
 {
-    UINT32 reg_addr = 0, reg_value = 0;
-    UINT8 optr_len = 0, optr_tab[9];
+    uint32_t reg_addr = 0, reg_value = 0;
+    uint8_t optr_len = 0, optr_tab[9];
 
     os_memset(optr_tab, 0, 9);
     os_memset(optr_tab, 0x30, 8);
@@ -1532,7 +1533,7 @@ static void reg_write_read_test(char *pcWriteBuffer, int xWriteBufferLen, int ar
         optr_len = 8 - optr_len;
         os_memcpy(&optr_tab[optr_len], argv[2], os_strlen(argv[2]));
 
-        hexstr2bin((char*)optr_tab, (u8 *)&reg_addr, 4);
+        hexstr2bin((char*)optr_tab, (uint8_t *)&reg_addr, 4);
         reg_addr = ntohl(reg_addr);
         os_printf("regshow R: addr:0x%08x, value:0x%08x\r\n", reg_addr, REG_READ(reg_addr));
     }
@@ -1553,7 +1554,7 @@ static void reg_write_read_test(char *pcWriteBuffer, int xWriteBufferLen, int ar
         optr_len = 8 - optr_len;
         os_memcpy(&optr_tab[optr_len], argv[2], os_strlen(argv[2]));
 
-        hexstr2bin((char*)optr_tab, (u8 *)&reg_addr, 4);
+        hexstr2bin((char*)optr_tab, (uint8_t *)&reg_addr, 4);
         reg_addr = ntohl(reg_addr);
 
 
@@ -1566,12 +1567,12 @@ static void reg_write_read_test(char *pcWriteBuffer, int xWriteBufferLen, int ar
         }
         optr_len = 8 - optr_len;
         os_memcpy(&optr_tab[optr_len], argv[3], os_strlen(argv[3]));
-        hexstr2bin((char*)optr_tab, (u8 *)&reg_value, 4);
+        hexstr2bin((char*)optr_tab, (uint8_t *)&reg_value, 4);
         reg_value = ntohl(reg_value);
 
         REG_WRITE(reg_addr, reg_value);
 
-        extern INT32 rwnx_cal_save_trx_rcbekn_reg_val(void);
+        extern int32_t rwnx_cal_save_trx_rcbekn_reg_val(void);
         // when write trx and rc beken regs, updata registers save.
         if( (reg_addr & 0xfff0000) == 0x1050000)
             rwnx_cal_save_trx_rcbekn_reg_val();
@@ -1880,9 +1881,9 @@ typedef adv_info_t ble_adv_param_t;
 
 static void ble_advertise(void)
 {
-    UINT8 mac[6];
+    uint8_t mac[6];
     char ble_name[20];
-    UINT8 adv_idx, adv_name_len;
+    uint8_t adv_idx, adv_name_len;
 
     wifi_get_mac_address((char *)mac, CONFIG_ROLE_STA);
     adv_name_len = snprintf(ble_name, sizeof(ble_name), "bk72xx-%02x%02x", mac[4], mac[5]);
@@ -1964,10 +1965,10 @@ static void ble_command(char *pcWriteBuffer, int xWriteBufferLen, int argc, char
     }
     else if(os_strcmp(argv[1], "notify") == 0)
     {
-        uint8 len;
-        uint16 prf_id;
-        uint16 att_id;
-        uint8 write_buffer[20];
+        uint8_t len;
+        uint16_t prf_id;
+        uint16_t att_id;
+        uint8_t write_buffer[20];
 
         if(argc != 5)
         {
@@ -1992,10 +1993,10 @@ static void ble_command(char *pcWriteBuffer, int xWriteBufferLen, int argc, char
     }
     else if(os_strcmp(argv[1], "indicate") == 0)
     {
-        uint8 len;
-        uint16 prf_id;
-        uint16 att_id;
-        uint8 write_buffer[20];
+        uint8_t len;
+        uint16_t prf_id;
+        uint16_t att_id;
+        uint8_t write_buffer[20];
 
         if(argc != 5)
         {
@@ -2133,7 +2134,7 @@ static void ble_app_sdp_characteristic_cb(unsigned char conidx,uint16_t chars_va
 	bk_printf("\r\n");
 }
 
-void app_sdp_charac_cb(CHAR_TYPE type,uint8 conidx,uint16_t hdl,uint16_t len,uint8 *data)
+void app_sdp_charac_cb(CHAR_TYPE type,uint8_t conidx,uint16_t hdl,uint16_t len,uint8_t *data)
 {
 	bk_printf("[APP]type:%x conidx:%d,handle:0x%02x(%d),len:%d,0x",type,conidx,hdl,hdl,len);
 	for(int i = 0; i< len; i++)
@@ -2924,11 +2925,11 @@ static void Deep_Sleep_Command(char *pcWriteBuffer, int xWriteBufferLen, int arg
 
 static void Ps_Command(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv)
 {
-    UINT32 dtim = 0;
+    uint32_t dtim = 0;
 
 	#if PS_SUPPORT_MANUAL_SLEEP
-    UINT32 standby_time = 0;
-    UINT32 dtim_wait_time = 0;
+    uint32_t standby_time = 0;
+    uint32_t dtim_wait_time = 0;
 	#endif
 
     if(argc < 3)
@@ -3279,7 +3280,7 @@ static void adc_detect_callback2(int new_mv, void *user_data)
 
 static void adc_command(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv)
 {
-	UINT32 status;
+	uint32_t status;
 	DD_HANDLE flash_handle;
 	DD_HANDLE saradc_handle;
 	saradc_cal_val_t p_ADC_cal;
@@ -3310,8 +3311,8 @@ static void adc_command(char *pcWriteBuffer, int xWriteBufferLen, int argc, char
 		saradc_config_param_init(p_ADC_drv_desc);
 
 		p_ADC_drv_desc->data_buff_size = ADC_TEMP_BUFFER_SIZE;
-		p_ADC_drv_desc->pData = (UINT16 *)os_malloc(p_ADC_drv_desc->data_buff_size * sizeof(UINT16));
-		os_memset(p_ADC_drv_desc->pData, 0x00, p_ADC_drv_desc->data_buff_size * sizeof(UINT16));
+		p_ADC_drv_desc->pData = (uint16_t *)os_malloc(p_ADC_drv_desc->data_buff_size * sizeof(uint16_t));
+		os_memset(p_ADC_drv_desc->pData, 0x00, p_ADC_drv_desc->data_buff_size * sizeof(uint16_t));
 
 		if (p_ADC_drv_desc->pData == NULL) {
 			os_printf("malloc1 failed!\r\n");
@@ -3319,11 +3320,11 @@ static void adc_command(char *pcWriteBuffer, int xWriteBufferLen, int argc, char
 			return;
 		}
 
-		UINT32 ret = 0;
+		uint32_t ret = 0;
 		do {
 			GLOBAL_INT_DISABLE();
 			if (saradc_check_busy() == 0) {
-				saradc_handle = ddev_open(SARADC_DEV_NAME, &status, (UINT32)p_ADC_drv_desc);
+				saradc_handle = ddev_open(SARADC_DEV_NAME, &status, (uint32_t)p_ADC_drv_desc);
 				if (DD_HANDLE_UNVALID != saradc_handle) {
 					GLOBAL_INT_RESTORE();
 					break;
@@ -3352,8 +3353,8 @@ static void adc_command(char *pcWriteBuffer, int xWriteBufferLen, int argc, char
 		}
 
 		{
-			UINT32 sum = 0, sum1, sum2;
-			UINT16 *pData = p_ADC_drv_desc->pData;
+			uint32_t sum = 0, sum1, sum2;
+			uint16_t *pData = p_ADC_drv_desc->pData;
 			sum1 = pData[1] + pData[2];
 			sum2 = pData[3] + pData[4];
 			sum = sum1 / 2  + sum2 / 2;
@@ -3371,7 +3372,7 @@ static void adc_command(char *pcWriteBuffer, int xWriteBufferLen, int argc, char
 			return;
 		}
 		p_ADC_cal.val = p_ADC_drv_desc->pData[4];
-		if (SARADC_FAILURE == ddev_control(saradc_handle, SARADC_CMD_SET_CAL_VAL, (VOID *)&p_ADC_cal)) {
+		if (SARADC_FAILURE == ddev_control(saradc_handle, SARADC_CMD_SET_CAL_VAL, (void *)&p_ADC_cal)) {
 			os_printf("set calibrate value failture\r\n");
 			os_free(p_ADC_drv_desc->pData);
 			os_free(p_ADC_drv_desc);

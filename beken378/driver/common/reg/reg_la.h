@@ -1,3 +1,4 @@
+#include <stdint.h>
 /**
  * @file reg_la.h
  * @brief Definitions of the LA HW block registers and register access functions.

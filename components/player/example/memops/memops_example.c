@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File: tts_player_sample.c
  * COPYRIGHT (C) 2012-2018, Shanghai Real-Thread Technology Co., Ltd
@@ -45,8 +46,8 @@ rt_err_t memops_example(void)
     /* 使用 96KBytes 内存 */
     #define PIPE_SIZE (96*1024) 
 
-    rt_uint8_t *ppipe = RT_NULL; 
-	ppipe = (rt_uint8_t *)rt_malloc(PIPE_SIZE); 
+    uint8_t *ppipe = RT_NULL; 
+	ppipe = (uint8_t *)rt_malloc(PIPE_SIZE); 
     if(ppipe == RT_NULL)
     {
         rt_kprintf("ppipe malloc failed\n"); 

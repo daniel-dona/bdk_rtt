@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  *  RFC 1186/1320 compliant MD4 implementation
  *

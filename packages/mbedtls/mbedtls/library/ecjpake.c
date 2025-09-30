@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  *  Elliptic curve J-PAKE
  *

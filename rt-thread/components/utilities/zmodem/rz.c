@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : rz.c
  * the implemention of receiving files from the remote computers  
@@ -20,13 +21,13 @@
 
 
 void zr_start(char *path);
-static rt_err_t zrec_init(rt_uint8_t *rxbuf, struct zfile *zf);
+static rt_err_t zrec_init(uint8_t *rxbuf, struct zfile *zf);
 static rt_err_t zrec_files(struct zfile *zf);
-static rt_err_t zwrite_file(rt_uint8_t *buf, rt_uint16_t size, struct zfile *zf);
-static rt_err_t zrec_file_data(rt_uint8_t *buf, struct zfile *zf);;
-static rt_err_t zrec_file(rt_uint8_t *rxbuf, struct zfile *zf);
+static rt_err_t zwrite_file(uint8_t *buf, uint16_t size, struct zfile *zf);
+static rt_err_t zrec_file_data(uint8_t *buf, struct zfile *zf);;
+static rt_err_t zrec_file(uint8_t *rxbuf, struct zfile *zf);
 static rt_err_t zget_file_info(char *name, struct zfile *zf);
-static rt_err_t zwrite_file(rt_uint8_t *buf, rt_uint16_t size, struct zfile *zf);
+static rt_err_t zwrite_file(uint8_t *buf, uint16_t size, struct zfile *zf);
 static void zrec_ack_bibi(void);
 
 
@@ -34,7 +35,7 @@ static void zrec_ack_bibi(void);
 void zr_start(char *path)
 {
     struct zfile *zf;
-    rt_uint8_t n;
+    uint8_t n;
 	char ch,*p,*q;
 	rt_err_t res = -RT_ERROR;
 
@@ -88,9 +89,9 @@ void zr_start(char *path)
 }
 
 /* receiver init, wait for ack */
-static rt_err_t zrec_init(rt_uint8_t *rxbuf, struct zfile *zf)
+static rt_err_t zrec_init(uint8_t *rxbuf, struct zfile *zf)
 {
-    rt_uint8_t err_cnt = 0;
+    uint8_t err_cnt = 0;
 	rt_err_t res = -RT_ERROR;
 
 	for (;;) 
@@ -122,7 +123,7 @@ again:
 			 zsend_hex_header(ZNAK, tx_header);
 			 goto again;
 		case ZSINIT:
-			 if (zget_data((rt_uint8_t*)Attn, ZATTNLEN) == GOTCRCW) 	  /* send zack */
+			 if (zget_data((uint8_t*)Attn, ZATTNLEN) == GOTCRCW) 	  /* send zack */
 			 {
 				zsend_hex_header(ZACK, tx_header);
 				goto again;
@@ -148,11 +149,11 @@ again:
 /* receive files */
 static rt_err_t zrec_files(struct zfile *zf)
 {
-	rt_uint8_t *rxbuf;
+	uint8_t *rxbuf;
 	rt_err_t res = -RT_ERROR;
 
 	zinit_parameter();
-	rxbuf = rt_malloc(RX_BUFFER_SIZE*sizeof(rt_uint8_t));
+	rxbuf = rt_malloc(RX_BUFFER_SIZE*sizeof(uint8_t));
 	if (rxbuf == RT_NULL)
 	{
 		 rt_kprintf("rxbuf: out of memory\r\n");
@@ -184,10 +185,10 @@ static rt_err_t zrec_files(struct zfile *zf)
 	}
 }
 /* receive file */
-static rt_err_t zrec_file(rt_uint8_t *rxbuf, struct zfile *zf)
+static rt_err_t zrec_file(uint8_t *rxbuf, struct zfile *zf)
 {
 	rt_err_t res = - RT_ERROR;
-	rt_uint16_t err_cnt = 0;
+	uint16_t err_cnt = 0;
 
 	do 
 	{
@@ -253,7 +254,7 @@ static rt_err_t zget_file_info(char *name, struct zfile *zf)
 {
 	char *p;
 	char *full_path,*ptr;
-	rt_uint16_t i,len;
+	uint16_t i,len;
 	rt_err_t res  = -RT_ERROR;
 	struct statfs buf;
 	struct stat finfo;
@@ -325,7 +326,7 @@ static rt_err_t zget_file_info(char *name, struct zfile *zf)
 }
 
 /* receive file data,continously, no ack */
-static rt_err_t zrec_file_data(rt_uint8_t *buf, struct zfile *zf)
+static rt_err_t zrec_file_data(uint8_t *buf, struct zfile *zf)
 {
     rt_err_t res = -RT_ERROR;
 
@@ -370,7 +371,7 @@ more_data:
 }
 
 /* write file */
-static rt_err_t zwrite_file(rt_uint8_t *buf,rt_uint16_t size, struct zfile *zf)
+static rt_err_t zwrite_file(uint8_t *buf,uint16_t size, struct zfile *zf)
 {
 	return (write(zf->fd,buf,size));
 }
@@ -378,7 +379,7 @@ static rt_err_t zwrite_file(rt_uint8_t *buf,rt_uint16_t size, struct zfile *zf)
 /* ack bibi */
 static void zrec_ack_bibi(void)
 {
-	rt_uint8_t i;
+	uint8_t i;
 
 	zput_pos(0L);
 	for (i=0;i<3;i++) 

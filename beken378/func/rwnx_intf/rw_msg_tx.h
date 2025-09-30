@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _RW_MSG_TX_H_
 #define _RW_MSG_TX_H_
 
@@ -16,7 +17,7 @@ extern void mt_reset(void);
 extern void mt_me_config(void);
 extern void mt_channel_config(void);
 extern void mt_start(void);
-extern void mt_add_if(UINT32 type);
+extern void mt_add_if(uint32_t type);
 extern void mt_apm_start(void);
 extern void mt_key_add(KEY_PARAM_T *key_param);
 extern void mt_key_del(KEY_PARAM_T *key_param);

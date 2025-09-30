@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * 程序清单：邮箱例程
  *
@@ -29,7 +30,7 @@ static void thread1_entry(void* parameter)
         rt_kprintf("thread1: try to recv a mail\n");
 
         /* 从邮箱中收取邮件 */
-        if (rt_mb_recv(&mb, (rt_uint32_t*)&str, RT_WAITING_FOREVER) == RT_EOK)
+        if (rt_mb_recv(&mb, (uint32_t*)&str, RT_WAITING_FOREVER) == RT_EOK)
         {
             rt_kprintf("thread1: get a mail from mailbox, the content:%s\n", str);
 
@@ -42,7 +43,7 @@ static void thread1_entry(void* parameter)
 /* 线程2入口 */
 static void thread2_entry(void* parameter)
 {
-    rt_uint8_t count;
+    uint8_t count;
 
     count = 0;
     while (1)
@@ -51,12 +52,12 @@ static void thread2_entry(void* parameter)
         if (count & 0x1)
         {
             /* 发送mb_str1地址到邮箱中 */
-            rt_mb_send(&mb, (rt_uint32_t)&mb_str1[0]);
+            rt_mb_send(&mb, (uint32_t)&mb_str1[0]);
         }
         else
         {
             /* 发送mb_str2地址到邮箱中 */
-            rt_mb_send(&mb, (rt_uint32_t)&mb_str2[0]);
+            rt_mb_send(&mb, (uint32_t)&mb_str2[0]);
         }
 
         /* 延时20个OS Tick */

@@ -1,3 +1,4 @@
+#include <stdint.h>
 
 #ifndef __DRIVER_UART_IO_SIM_H__
 
@@ -99,7 +100,7 @@ extern "C" {
 
 extern void uart_io_sim_init(void);
 extern void uart_io_sim_disable(void);
-extern void uart_io_sim_send_byte(u8 data);
+extern void uart_io_sim_send_byte(uint8_t data);
 
 
 #ifdef __cplusplus

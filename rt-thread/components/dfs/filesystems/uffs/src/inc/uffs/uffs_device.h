@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
   This file is part of UFFS, the Ultra-low-cost Flash File System.
   
@@ -73,8 +74,8 @@ struct uffs_BlockInfoCacheSt {
  * \brief partition basic information
  */
 struct uffs_PartitionSt {
-	u16 start;		//!< start block number of partition
-	u16 end;		//!< end block number of partition
+	uint16_t start;		//!< start block number of partition
+	uint16_t end;		//!< end block number of partition
 };
 
 /** 
@@ -118,9 +119,9 @@ struct uffs_PageBufDescSt {
  * \note page data layout: [HEADER] + [DATA]
  */
 struct uffs_PageCommInfoSt {
-	u16 pg_data_size;			//!< page data size
-	u16 header_size;			//!< header size
-	u16 pg_size;				//!< page size
+	uint16_t pg_data_size;			//!< page data size
+	uint16_t header_size;			//!< header size
+	uint16_t pg_size;				//!< page size
 };
 
 /** 
@@ -128,7 +129,7 @@ struct uffs_PageCommInfoSt {
  * \brief holding new discovered bad block
  */
 struct uffs_NewBadBlockSt {
-	u16 block;				//!< bad block, FIX ME to process more than one bad block
+	uint16_t block;				//!< bad block, FIX ME to process more than one bad block
 };
 
 /**
@@ -184,7 +185,7 @@ struct uffs_DeviceSt {
 	struct uffs_FlashStatSt			st;			//!< statistic (counters)
 	struct uffs_memAllocatorSt		mem;		//!< uffs memory allocator
 	struct uffs_ConfigSt			cfg;		//!< uffs config
-	u32	ref_count;								//!< device reference count
+	uint32_t	ref_count;								//!< device reference count
 	int	dev_num;								//!< device number (partition number)	
 };
 

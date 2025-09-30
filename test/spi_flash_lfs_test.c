@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * 程序清单： 这是一个以littlefs挂载外部存储flash设备的使用例
  * 例程导出了spi_flash_lfs_test 命令到控制终端

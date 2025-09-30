@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : ymodem.c
  * COPYRIGHT (C) 2012, Shanghai Real-Thread Technology Co., Ltd
@@ -10,7 +11,7 @@
 #include <rthw.h>
 #include "ymodem.h"
 
-static const rt_uint16_t ccitt_table[256] = {
+static const uint16_t ccitt_table[256] = {
     0x0000, 0x1021, 0x2042, 0x3063, 0x4084, 0x50A5, 0x60C6, 0x70E7,
     0x8108, 0x9129, 0xA14A, 0xB16B, 0xC18C, 0xD1AD, 0xE1CE, 0xF1EF,
     0x1231, 0x0210, 0x3273, 0x2252, 0x52B5, 0x4294, 0x72F7, 0x62D6,
@@ -44,9 +45,9 @@ static const rt_uint16_t ccitt_table[256] = {
     0xEF1F, 0xFF3E, 0xCF5D, 0xDF7C, 0xAF9B, 0xBFBA, 0x8FD9, 0x9FF8,
     0x6E17, 0x7E36, 0x4E55, 0x5E74, 0x2E93, 0x3EB2, 0x0ED1, 0x1EF0
 };
-rt_uint16_t CRC16(unsigned char *q, int len)
+uint16_t CRC16(unsigned char *q, int len)
 {
-    rt_uint16_t crc = 0;
+    uint16_t crc = 0;
 
     while (len-- > 0)
         crc = (crc << 8) ^ ccitt_table[((crc >> 8) ^ *q++) & 0xff];
@@ -95,7 +96,7 @@ static rt_size_t _rym_read_data(
         rt_size_t len)
 {
     /* we should already have had the code */
-    rt_uint8_t *buf = ctx->buf + 1;
+    uint8_t *buf = ctx->buf + 1;
     rt_size_t readlen = 0;
 
     do
@@ -109,7 +110,7 @@ static rt_size_t _rym_read_data(
     return readlen;
 }
 
-static rt_size_t _rym_putchar(struct rym_ctx *ctx, rt_uint8_t code)
+static rt_size_t _rym_putchar(struct rym_ctx *ctx, uint8_t code)
 {
     rt_device_write(ctx->dev, 0, &code, sizeof(code));
     return 1;
@@ -121,7 +122,7 @@ static rt_err_t _rym_do_handshake(
 {
     enum rym_code code;
     rt_size_t i;
-    rt_uint16_t recv_crc, cal_crc;
+    uint16_t recv_crc, cal_crc;
 
     ctx->stage = RYM_STAGE_ESTABLISHING;
     /* send C every second, so the sender could know we are waiting for it. */
@@ -144,7 +145,7 @@ static rt_err_t _rym_do_handshake(
     if (ctx->buf[1] != 0 || ctx->buf[2] != 0xFF)
         return -RYM_ERR_SEQ;
 
-    recv_crc = (rt_uint16_t)(*(ctx->buf+_RYM_SOH_PKG_SZ-2) << 8) | *(ctx->buf+_RYM_SOH_PKG_SZ-1);
+    recv_crc = (uint16_t)(*(ctx->buf+_RYM_SOH_PKG_SZ-2) << 8) | *(ctx->buf+_RYM_SOH_PKG_SZ-1);
     cal_crc = CRC16(ctx->buf+3, _RYM_SOH_PKG_SZ-5);
     if (recv_crc != cal_crc)
         return -RYM_ERR_CRC;
@@ -162,7 +163,7 @@ static rt_err_t _rym_trans_data(
         enum rym_code *code)
 {
     const rt_size_t tsz = 2+data_sz+2;
-    rt_uint16_t recv_crc;
+    uint16_t recv_crc;
 
     /* seq + data + crc */
     rt_size_t i = _rym_read_data(ctx, tsz);
@@ -187,7 +188,7 @@ static rt_err_t _rym_trans_data(
     ctx->stage = RYM_STAGE_TRANSMITTING;
 
     /* sanity check */
-    recv_crc = (rt_uint16_t)(*(ctx->buf+tsz-1) << 8) | *(ctx->buf+tsz);
+    recv_crc = (uint16_t)(*(ctx->buf+tsz-1) << 8) | *(ctx->buf+tsz);
     if (recv_crc != CRC16(ctx->buf+3, data_sz))
         return -RYM_ERR_CRC;
 
@@ -251,7 +252,7 @@ static rt_err_t _rym_do_trans(struct rym_ctx *ctx)
 static rt_err_t _rym_do_fin(struct rym_ctx *ctx)
 {
     enum rym_code code;
-    rt_uint16_t recv_crc;
+    uint16_t recv_crc;
     rt_size_t i;
 
     ctx->stage = RYM_STAGE_FINISHING;
@@ -283,7 +284,7 @@ static rt_err_t _rym_do_fin(struct rym_ctx *ctx)
     if (ctx->buf[1] != 0 || ctx->buf[2] != 0xFF)
         return -RYM_ERR_SEQ;
 
-    recv_crc = (rt_uint16_t)(*(ctx->buf+_RYM_SOH_PKG_SZ-2) << 8) | *(ctx->buf+_RYM_SOH_PKG_SZ-1);
+    recv_crc = (uint16_t)(*(ctx->buf+_RYM_SOH_PKG_SZ-2) << 8) | *(ctx->buf+_RYM_SOH_PKG_SZ-1);
     if (recv_crc != CRC16(ctx->buf+3, _RYM_SOH_PKG_SZ-5))
         return -RYM_ERR_CRC;
 
@@ -322,7 +323,7 @@ static rt_err_t _rym_do_recv(
 rt_err_t rym_recv_on_device(
         struct rym_ctx *ctx,
         rt_device_t dev,
-        rt_uint16_t oflag,
+        uint16_t oflag,
         rym_callback on_begin,
         rym_callback on_data,
         rym_callback on_end,
@@ -330,7 +331,7 @@ rt_err_t rym_recv_on_device(
 {
     rt_err_t res;
     rt_err_t (*odev_rx_ind)(rt_device_t dev, rt_size_t size);
-    rt_uint16_t odev_flag;
+    uint16_t odev_flag;
     int int_lvl;
 
     RT_ASSERT(_rym_the_ctx == 0);

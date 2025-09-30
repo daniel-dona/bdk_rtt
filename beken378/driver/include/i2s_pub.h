@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _I2S_PUB_H_
 #define _I2S_PUB_H_
 
@@ -58,32 +59,32 @@ enum
 };
 struct i2s_message
 {
-	UINT32 *send_buf;
-	UINT32 send_len;
+	uint32_t *send_buf;
+	uint32_t send_len;
 		
-	UINT32 *recv_buf;
-	UINT32 recv_len;
+	uint32_t *recv_buf;
+	uint32_t recv_len;
 };
 
 typedef struct
 {
-    UINT32 *p_tx_buf;
-    UINT32 *p_rx_buf;
-    UINT32 trans_done;
-	volatile UINT32 tx_remain_data_cnt;
-    volatile UINT32 rx_remain_data_cnt;
+    uint32_t *p_tx_buf;
+    uint32_t *p_rx_buf;
+    uint32_t trans_done;
+	volatile uint32_t tx_remain_data_cnt;
+    volatile uint32_t rx_remain_data_cnt;
 } i2s_trans_t;
 
 typedef struct
 {
-    UINT8 rx_level;
-    UINT8 tx_level;
+    uint8_t rx_level;
+    uint8_t tx_level;
 } i2s_level_t;
 
 typedef struct
 {
-    UINT32 freq;
-    UINT32 datawidth;
+    uint32_t freq;
+    uint32_t datawidth;
 } i2s_rate_t;
 
 /*******************************************************************************
@@ -92,5 +93,5 @@ typedef struct
 void i2s_init(int register_isr);
 void i2s_exit(void);
 void i2s_isr(void);
-UINT8 is_i2s_active(void);
+uint8_t is_i2s_active(void);
 #endif //_I2S_PUB_H_

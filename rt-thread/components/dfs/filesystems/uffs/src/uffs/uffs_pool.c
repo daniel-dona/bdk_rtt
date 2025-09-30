@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
   This file is part of UFFS, the Ultra-low-cost Flash File System.
   
@@ -77,7 +78,7 @@
  * \return Returns U_SUCC if successful.
  */
 URET uffs_PoolInit(uffs_Pool *pool,
-				   void *mem, u32 mem_size, u32 buf_size, u32 num_bufs)
+				   void *mem, uint32_t mem_size, uint32_t buf_size, uint32_t num_bufs)
 {
 	unsigned int i;
 	uffs_PoolEntry *e1, *e2;
@@ -93,7 +94,7 @@ URET uffs_PoolInit(uffs_Pool *pool,
 		return U_FAIL;
 	}
 
-	pool->mem = (u8 *)mem;
+	pool->mem = (uint8_t *)mem;
 	pool->buf_size = buf_size;
 	pool->num_bufs = num_bufs;
 
@@ -121,9 +122,9 @@ URET uffs_PoolInit(uffs_Pool *pool,
 UBOOL uffs_PoolVerify(uffs_Pool *pool, void *p)
 {
 	return p &&
-		(u8 *)p >= pool->mem &&
-		(u8 *)p < pool->mem + (pool->buf_size * pool->num_bufs) &&
-		(((u8 *)p - pool->mem) % pool->buf_size) == 0 ? U_TRUE : U_FALSE;
+		(uint8_t *)p >= pool->mem &&
+		(uint8_t *)p < pool->mem + (pool->buf_size * pool->num_bufs) &&
+		(((uint8_t *)p - pool->mem) % pool->buf_size) == 0 ? U_TRUE : U_FALSE;
 }
 
 /**
@@ -238,7 +239,7 @@ int uffs_PoolPutLocked(uffs_Pool *pool, void *p)
  * \param[in] index index
  * \return Returns a pointer to the buffer.
  */
-void *uffs_PoolGetBufByIndex(uffs_Pool *pool, u32 index)
+void *uffs_PoolGetBufByIndex(uffs_Pool *pool, uint32_t index)
 {
 	if (!uffs_Assert(pool != NULL, "pool missing") ||
 		!uffs_Assert(index < pool->num_bufs,
@@ -247,7 +248,7 @@ void *uffs_PoolGetBufByIndex(uffs_Pool *pool, u32 index)
 		return NULL;
 	}
 
-	return (u8 *) pool->mem + index * pool->buf_size;
+	return (uint8_t *) pool->mem + index * pool->buf_size;
 }
 
 /**
@@ -257,7 +258,7 @@ void *uffs_PoolGetBufByIndex(uffs_Pool *pool, u32 index)
  * \param[in] p buffer to get index from
  * \return Returns the index of the buffer.
  */
-u32 uffs_PoolGetIndex(uffs_Pool *pool, void *p)
+uint32_t uffs_PoolGetIndex(uffs_Pool *pool, void *p)
 {
 	if (!uffs_Assert(pool != NULL, "pool missing") ||
 		!uffs_Assert(p >= (void *) pool->mem &&
@@ -267,7 +268,7 @@ u32 uffs_PoolGetIndex(uffs_Pool *pool, void *p)
 		uffs_Panic();
 	}
 
-	return ((u8 *) p - pool->mem) / pool->buf_size;
+	return ((uint8_t *) p - pool->mem) / pool->buf_size;
 }
 
 /**
@@ -289,9 +290,9 @@ UBOOL uffs_PoolCheckFreeList(uffs_Pool *pool, void *p)
  */
 static void * FindNextAllocatedInSmallPool(uffs_Pool *pool, void *from)
 {
-	u32 map = 0;
+	uint32_t map = 0;
 	uffs_PoolEntry *e;
-	u32 i;
+	uint32_t i;
 
 	for (e = pool->free_list; e; e = e->next)
 		map |= (1 << uffs_PoolGetIndex(pool, e));
@@ -318,7 +319,7 @@ static void * FindNextAllocatedInSmallPool(uffs_Pool *pool, void *from)
 void * uffs_PoolFindNextAllocated(uffs_Pool *pool, void *from)
 {
 	uffs_PoolEntry *e = NULL;
-	u8 *p = (u8 *)from;
+	uint8_t *p = (uint8_t *)from;
 
 	if (p == NULL)
 		p = pool->mem;
@@ -335,7 +336,7 @@ void * uffs_PoolFindNextAllocated(uffs_Pool *pool, void *from)
 		while (uffs_PoolVerify(pool, p)) {
 			e = pool->free_list;
 			while (e) {
-				if (p == (u8 *)e) {
+				if (p == (uint8_t *)e) {
 					p += pool->buf_size; // in free list, move to next entry
 					break;
 				}

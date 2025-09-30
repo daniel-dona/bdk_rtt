@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "ring_buffer.h"
 #include "arch.h"
@@ -10,7 +11,7 @@
 #define RB_INT_DISABLE()            GLOBAL_INT_DISABLE()
 #define RB_INT_RESTORE()            GLOBAL_INT_RESTORE()
 
-void rb_init(RB_PTR rb, UINT8 *addr, UINT32 capacity)
+void rb_init(RB_PTR rb, uint8_t *addr, uint32_t capacity)
 {
     RB_INT_DECLARATION();
 
@@ -32,12 +33,12 @@ void rb_clear(RB_PTR rb)
     RB_INT_RESTORE();
 }
 
-UINT32 rb_read(RB_PTR rb, UINT8 *buffer, UINT32 size, UINT32 count)
+uint32_t rb_read(RB_PTR rb, uint8_t *buffer, uint32_t size, uint32_t count)
 {
-    UINT32 required_bytes = size * count;
-    UINT32 read_bytes;
-    UINT32 remain_bytes;
-    UINT32 wp;
+    uint32_t required_bytes = size * count;
+    uint32_t read_bytes;
+    uint32_t remain_bytes;
+    uint32_t wp;
     RB_INT_DECLARATION();
 
     wp = rb->wp;
@@ -106,11 +107,11 @@ UINT32 rb_read(RB_PTR rb, UINT8 *buffer, UINT32 size, UINT32 count)
     return read_bytes;
 }
 
-UINT32 rb_write(RB_PTR rb, UINT8 *buffer, UINT32 size, UINT32 count)
+uint32_t rb_write(RB_PTR rb, uint8_t *buffer, uint32_t size, uint32_t count)
 {
-    UINT32 remain_bytes;
-    UINT32 write_bytes = size * count;
-    UINT32 rp;
+    uint32_t remain_bytes;
+    uint32_t write_bytes = size * count;
+    uint32_t rp;
     RB_INT_DECLARATION();
     
     if(write_bytes == 0) 
@@ -174,18 +175,18 @@ UINT32 rb_write(RB_PTR rb, UINT8 *buffer, UINT32 size, UINT32 count)
     return write_bytes;
 }
 
-UINT32 rb_get_fill_size(RB_PTR rb)
+uint32_t rb_get_fill_size(RB_PTR rb)
 {
-    UINT32 fill_size;
+    uint32_t fill_size;
 
     fill_size = rb->wp >= rb->rp ? rb->wp - rb->rp : rb->capacity - rb->rp + rb->wp;
 
     return fill_size;
 }
 
-UINT32 rb_get_free_size(RB_PTR rb)
+uint32_t rb_get_free_size(RB_PTR rb)
 {
-    UINT32 free_size;
+    uint32_t free_size;
 
     free_size = rb->wp >= rb->rp ? rb->capacity - rb->wp + rb->rp : rb->rp - rb->wp;
 

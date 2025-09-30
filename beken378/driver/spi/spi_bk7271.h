@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _SPI_H_
 #define _SPI_H_
 
@@ -93,7 +94,7 @@
 /*******************************************************************************
 * Function Declarations
 *******************************************************************************/
-UINT32 spi_ctrl(UINT32 cmd, void *param);
+uint32_t spi_ctrl(uint32_t cmd, void *param);
 #endif
 #endif //_SPI_H_
 

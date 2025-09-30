@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _GPIO_H_
 #define _GPIO_H_
 
@@ -11,8 +12,8 @@
 #define JTAG_GPIO_FILTER
 #endif
 
-#define GPIO_INIT_FLAG                   ((UINT32)1)
-#define GPIO_UNINIT_FLAG                 ((UINT32)-1)
+#define GPIO_INIT_FLAG                   ((uint32_t)1)
+#define GPIO_UNINIT_FLAG                 ((uint32_t)-1)
 
 #define GPIO_BASE_ADDR                       (0x0802800)
 

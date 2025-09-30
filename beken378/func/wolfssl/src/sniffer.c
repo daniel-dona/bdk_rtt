@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /* sniffer.c
  *
  * Copyright (C) 2006-2019 wolfSSL Inc.
@@ -89,9 +91,9 @@ enum {
 
 static HMODULE dllModule;  /* for error string resources */
 
-BOOL APIENTRY DllMain( HMODULE hModule,
+bool APIENTRY DllMain( HMODULE hModule,
                        DWORD  ul_reason_for_call,
-                       LPVOID lpReserved
+                       void * lpReserved
                      )
 {
 	static int didInit = 0;

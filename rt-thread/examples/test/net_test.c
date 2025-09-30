@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * Net Test Utilities for RT-Thread
  */
@@ -61,7 +62,7 @@ void udpecho_socket_entry(void *parameter)
 	int sock;
 	int bytes_read;
 	char *recv_data;
-	rt_uint32_t addr_len;
+	uint32_t addr_len;
 	struct sockaddr_in server_addr, client_addr;
 
 	/* allocate the data buffer */
@@ -175,7 +176,7 @@ rt_thread_t tcpecho_socket_tid = RT_NULL;
 void tcpecho_socket_entry(void *parameter)
 {
    char *recv_data;
-   rt_uint32_t sin_size;
+   uint32_t sin_size;
    int sock = -1, connected, bytes_received;
    struct sockaddr_in server_addr, client_addr;
 

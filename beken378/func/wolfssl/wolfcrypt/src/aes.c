@@ -1,3 +1,4 @@
+#include <stdint.h>
 /* aes.c
  *
  * Copyright (C) 2006-2019 wolfSSL Inc.
@@ -2743,7 +2744,7 @@ int wc_AesSetIV(Aes* aes, const byte* iv)
             }
 
             /* Point SEC to the location of the descriptor */
-            MCF_SEC_FR0 = (uint32)secDesc;
+            MCF_SEC_FR0 = (uint32_t)secDesc;
             /* Initialize SEC and wait for encryption to complete */
             MCF_SEC_CCCR0 = 0x0000001a;
             /* poll SISR to determine when channel is complete */

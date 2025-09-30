@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : lwp_mem.c
  * This file is part of RT-Thread RTOS
@@ -33,7 +34,7 @@
 
 // todo: remove repleat code
 #define RT_MEMHEAP_SIZE         RT_ALIGN(sizeof(struct rt_lwp_memheap_item), RT_ALIGN_SIZE)
-#define MEMITEM_SIZE(item)      ((rt_uint32_t)item->next - (rt_uint32_t)item - RT_MEMHEAP_SIZE)
+#define MEMITEM_SIZE(item)      ((uint32_t)item->next - (uint32_t)item - RT_MEMHEAP_SIZE)
 
 #ifndef LWP_MEM_PAGE_SIZE
     #define LWP_MEM_PAGE_SIZE       (4 * 1024)
@@ -128,12 +129,12 @@ void rt_lwp_mem_deinit(struct rt_lwp *lwp)
     }
 }
 
-void *rt_lwp_mem_malloc(rt_uint32_t size)
+void *rt_lwp_mem_malloc(uint32_t size)
 {
     struct rt_lwp *lwp;
     struct rt_list_node *node;
     void *addr = RT_NULL;
-    rt_uint32_t npages;
+    uint32_t npages;
 
     if (size == 0)
         return RT_NULL;
@@ -170,7 +171,7 @@ void rt_lwp_mem_free(void *addr)
         return ;
 
     /* get memory item */
-    header_ptr = (struct rt_lwp_memheap_item *)((rt_uint8_t *)addr - RT_MEMHEAP_SIZE);
+    header_ptr = (struct rt_lwp_memheap_item *)((uint8_t *)addr - RT_MEMHEAP_SIZE);
     RT_ASSERT(header_ptr);
     
     lwp_heap = header_ptr->pool_ptr;
@@ -201,7 +202,7 @@ void *rt_lwp_mem_realloc(void *rmem, rt_size_t newsize)
 
     /* get old memory item */
     header_ptr = (struct rt_lwp_memheap_item *)
-                 ((rt_uint8_t *)rmem - RT_MEMHEAP_SIZE);
+                 ((uint8_t *)rmem - RT_MEMHEAP_SIZE);
 
     new_ptr = rt_lwp_memheap_realloc(header_ptr->pool_ptr, rmem, newsize);
     if (new_ptr == RT_NULL)

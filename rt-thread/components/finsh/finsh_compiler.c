@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  *  RT-Thread finsh shell compiler
  *

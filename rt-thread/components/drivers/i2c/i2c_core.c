@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : i2c_core.c
  * This file is part of RT-Thread RTOS
@@ -59,7 +60,7 @@ struct rt_i2c_bus_device *rt_i2c_bus_device_find(const char *bus_name)
 
 rt_size_t rt_i2c_transfer(struct rt_i2c_bus_device *bus,
                           struct rt_i2c_msg         msgs[],
-                          rt_uint32_t               num)
+                          uint32_t               num)
 {
     rt_size_t ret;
 
@@ -89,10 +90,10 @@ rt_size_t rt_i2c_transfer(struct rt_i2c_bus_device *bus,
 }
 
 rt_size_t rt_i2c_master_send(struct rt_i2c_bus_device *bus,
-                             rt_uint16_t               addr,
-                             rt_uint16_t               flags,
-                             const rt_uint8_t         *buf,
-                             rt_uint32_t               count)
+                             uint16_t               addr,
+                             uint16_t               flags,
+                             const uint8_t         *buf,
+                             uint32_t               count)
 {
     rt_err_t ret;
     struct rt_i2c_msg msg;
@@ -100,7 +101,7 @@ rt_size_t rt_i2c_master_send(struct rt_i2c_bus_device *bus,
     msg.addr  = addr;
     msg.flags = flags & RT_I2C_ADDR_10BIT;
     msg.len   = count;
-    msg.buf   = (rt_uint8_t *)buf;
+    msg.buf   = (uint8_t *)buf;
 
     ret = rt_i2c_transfer(bus, &msg, 1);
 
@@ -108,10 +109,10 @@ rt_size_t rt_i2c_master_send(struct rt_i2c_bus_device *bus,
 }
 
 rt_size_t rt_i2c_master_recv(struct rt_i2c_bus_device *bus,
-                             rt_uint16_t               addr,
-                             rt_uint16_t               flags,
-                             rt_uint8_t               *buf,
-                             rt_uint32_t               count)
+                             uint16_t               addr,
+                             uint16_t               flags,
+                             uint8_t               *buf,
+                             uint32_t               count)
 {
     rt_err_t ret;
     struct rt_i2c_msg msg;

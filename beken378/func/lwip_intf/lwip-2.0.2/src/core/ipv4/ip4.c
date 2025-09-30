@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /**
  * @file
  * This is the IPv4 layer implementation for incoming and outgoing IP traffic.
@@ -360,10 +362,10 @@ return_noroute:
  * parse ipv4 IP options
  * return: < 0 if IP options contain invalid option, = 0 Ok.
  */
-int ip4_parse_opt(u8 *opt, int len)
+int ip4_parse_opt(uint8_t *opt, int len)
 {
 	int ret = 0;
-	u8 type, item_len;
+	uint8_t type, item_len;
 
 	while (len > 1) {
 		type = *opt;
@@ -382,7 +384,7 @@ int ip4_parse_opt(u8 *opt, int len)
 			return ret;
 		case 7: {
 			/* RR Option */
-			u8 *pointer = opt;
+			uint8_t *pointer = opt;
 
 			if (*pointer < 4 || (*pointer % 4))
 				return -1;
@@ -462,7 +464,7 @@ ip4_input(struct pbuf *p, struct netif *inp)
 #if LWIP_RIPPLE20
   /* Parse IP options */
   if (iphdr_hlen > 20) {
-  	u8 *opt = (u8*)p->payload;
+  	uint8_t *opt = (uint8_t*)p->payload;
     if (ip4_parse_opt(opt + 20, iphdr_hlen - 20)) {
       pbuf_free(p);
       LWIP_DEBUGF(IP_DEBUG | LWIP_DBG_LEVEL_WARNING, ("IP packet dropped due to invalid IP options\n"));

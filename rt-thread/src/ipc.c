@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  * File      : ipc.c
  * This file is part of RT-Thread RTOS
@@ -22,7 +24,7 @@
  * 2006-03-14     Bernard      the first version
  * 2006-04-25     Bernard      implement semaphore
  * 2006-05-03     Bernard      add RT_IPC_DEBUG
- *                             modify the type of IPC waiting time to rt_int32_t
+ *                             modify the type of IPC waiting time to int32_t
  * 2006-05-10     Bernard      fix the semaphore take bug and add IPC object
  * 2006-05-12     Bernard      implement mailbox and message queue
  * 2006-05-20     Bernard      implement mutex
@@ -91,7 +93,7 @@ rt_inline rt_err_t rt_ipc_object_init(struct rt_ipc_object *ipc)
  */
 rt_inline rt_err_t rt_ipc_list_suspend(rt_list_t        *list,
                                        struct rt_thread *thread,
-                                       rt_uint8_t        flag)
+                                       uint8_t        flag)
 {
     /* suspend thread */
     rt_thread_suspend(thread);
@@ -210,8 +212,8 @@ rt_inline rt_err_t rt_ipc_list_resume_all(rt_list_t *list)
  */
 rt_err_t rt_sem_init(rt_sem_t    sem,
                      const char *name,
-                     rt_uint32_t value,
-                     rt_uint8_t  flag)
+                     uint32_t value,
+                     uint8_t  flag)
 {
     RT_ASSERT(sem != RT_NULL);
 
@@ -266,7 +268,7 @@ RTM_EXPORT(rt_sem_detach);
  *
  * @see rt_sem_init
  */
-rt_sem_t rt_sem_create(const char *name, rt_uint32_t value, rt_uint8_t flag)
+rt_sem_t rt_sem_create(const char *name, uint32_t value, uint8_t flag)
 {
     rt_sem_t sem;
 
@@ -325,7 +327,7 @@ RTM_EXPORT(rt_sem_delete);
  *
  * @return the error code
  */
-rt_err_t rt_sem_take(rt_sem_t sem, rt_int32_t time)
+rt_err_t rt_sem_take(rt_sem_t sem, int32_t time)
 {
     register rt_base_t temp;
     struct rt_thread *thread;
@@ -485,10 +487,10 @@ rt_err_t rt_sem_control(rt_sem_t sem, int cmd, void *arg)
 
     if (cmd == RT_IPC_CMD_RESET)
     {
-        rt_uint32_t value;
+        uint32_t value;
 
         /* get value */
-        value = (rt_uint32_t)arg;
+        value = (uint32_t)arg;
         /* disable interrupt */
         level = rt_hw_interrupt_disable();
 
@@ -496,7 +498,7 @@ rt_err_t rt_sem_control(rt_sem_t sem, int cmd, void *arg)
         rt_ipc_list_resume_all(&sem->parent.suspend_thread);
 
         /* set new value */
-        sem->value = (rt_uint16_t)value;
+        sem->value = (uint16_t)value;
 
         /* enable interrupt */
         rt_hw_interrupt_enable(level);
@@ -522,7 +524,7 @@ RTM_EXPORT(rt_sem_control);
  *
  * @return the operation status, RT_EOK on successful
  */
-rt_err_t rt_mutex_init(rt_mutex_t mutex, const char *name, rt_uint8_t flag)
+rt_err_t rt_mutex_init(rt_mutex_t mutex, const char *name, uint8_t flag)
 {
     RT_ASSERT(mutex != RT_NULL);
 
@@ -578,7 +580,7 @@ RTM_EXPORT(rt_mutex_detach);
  *
  * @see rt_mutex_init
  */
-rt_mutex_t rt_mutex_create(const char *name, rt_uint8_t flag)
+rt_mutex_t rt_mutex_create(const char *name, uint8_t flag)
 {
     struct rt_mutex *mutex;
 
@@ -639,7 +641,7 @@ RTM_EXPORT(rt_mutex_delete);
  *
  * @return the error code
  */
-rt_err_t rt_mutex_take(rt_mutex_t mutex, rt_int32_t time)
+rt_err_t rt_mutex_take(rt_mutex_t mutex, int32_t time)
 {
     register rt_base_t temp;
     struct rt_thread *thread;
@@ -890,7 +892,7 @@ RTM_EXPORT(rt_mutex_control);
  *
  * @return the operation status, RT_EOK on successful
  */
-rt_err_t rt_event_init(rt_event_t event, const char *name, rt_uint8_t flag)
+rt_err_t rt_event_init(rt_event_t event, const char *name, uint8_t flag)
 {
     RT_ASSERT(event != RT_NULL);
 
@@ -941,7 +943,7 @@ RTM_EXPORT(rt_event_detach);
  *
  * @return the created event, RT_NULL on error happen
  */
-rt_event_t rt_event_create(const char *name, rt_uint8_t flag)
+rt_event_t rt_event_create(const char *name, uint8_t flag)
 {
     rt_event_t event;
 
@@ -999,7 +1001,7 @@ RTM_EXPORT(rt_event_delete);
  *
  * @return the error code
  */
-rt_err_t rt_event_send(rt_event_t event, rt_uint32_t set)
+rt_err_t rt_event_send(rt_event_t event, uint32_t set)
 {
     struct rt_list_node *n;
     struct rt_thread *thread;
@@ -1096,10 +1098,10 @@ RTM_EXPORT(rt_event_send);
  * @return the error code
  */
 rt_err_t rt_event_recv(rt_event_t   event,
-                       rt_uint32_t  set,
-                       rt_uint8_t   option,
-                       rt_int32_t   timeout,
-                       rt_uint32_t *recved)
+                       uint32_t  set,
+                       uint8_t   option,
+                       int32_t   timeout,
+                       uint32_t *recved)
 {
     struct rt_thread *thread;
     register rt_ubase_t level;
@@ -1261,7 +1263,7 @@ rt_err_t rt_mb_init(rt_mailbox_t mb,
                     const char  *name,
                     void        *msgpool,
                     rt_size_t    size,
-                    rt_uint8_t   flag)
+                    uint8_t   flag)
 {
     RT_ASSERT(mb != RT_NULL);
 
@@ -1322,7 +1324,7 @@ RTM_EXPORT(rt_mb_detach);
  *
  * @return the created mailbox, RT_NULL on error happen
  */
-rt_mailbox_t rt_mb_create(const char *name, rt_size_t size, rt_uint8_t flag)
+rt_mailbox_t rt_mb_create(const char *name, rt_size_t size, uint8_t flag)
 {
     rt_mailbox_t mb;
 
@@ -1341,7 +1343,7 @@ rt_mailbox_t rt_mb_create(const char *name, rt_size_t size, rt_uint8_t flag)
 
     /* init mailbox */
     mb->size     = size;
-    mb->msg_pool = RT_KERNEL_MALLOC(mb->size * sizeof(rt_uint32_t));
+    mb->msg_pool = RT_KERNEL_MALLOC(mb->size * sizeof(uint32_t));
     if (mb->msg_pool == RT_NULL)
     {
         /* delete mailbox object */
@@ -1402,12 +1404,12 @@ RTM_EXPORT(rt_mb_delete);
  * @return the error code
  */
 rt_err_t rt_mb_send_wait(rt_mailbox_t mb,
-                         rt_uint32_t  value,
-                         rt_int32_t   timeout)
+                         uint32_t  value,
+                         int32_t   timeout)
 {
     struct rt_thread *thread;
     register rt_ubase_t temp;
-    rt_uint32_t tick_delta;
+    uint32_t tick_delta;
 
     /* parameter check */
     RT_ASSERT(mb != RT_NULL);
@@ -1532,7 +1534,7 @@ RTM_EXPORT(rt_mb_send_wait);
  *
  * @return the error code
  */
-rt_err_t rt_mb_send(rt_mailbox_t mb, rt_uint32_t value)
+rt_err_t rt_mb_send(rt_mailbox_t mb, uint32_t value)
 {
     return rt_mb_send_wait(mb, value, 0);
 }
@@ -1548,11 +1550,11 @@ RTM_EXPORT(rt_mb_send);
  *
  * @return the error code
  */
-rt_err_t rt_mb_recv(rt_mailbox_t mb, rt_uint32_t *value, rt_int32_t timeout)
+rt_err_t rt_mb_recv(rt_mailbox_t mb, uint32_t *value, int32_t timeout)
 {
     struct rt_thread *thread;
     register rt_ubase_t temp;
-    rt_uint32_t tick_delta;
+    uint32_t tick_delta;
 
     /* parameter check */
     RT_ASSERT(mb != RT_NULL);
@@ -1740,7 +1742,7 @@ rt_err_t rt_mq_init(rt_mq_t     mq,
                     void       *msgpool,
                     rt_size_t   msg_size,
                     rt_size_t   pool_size,
-                    rt_uint8_t  flag)
+                    uint8_t  flag)
 {
     struct rt_mq_message *head;
     register rt_base_t temp;
@@ -1772,7 +1774,7 @@ rt_err_t rt_mq_init(rt_mq_t     mq,
     mq->msg_queue_free = RT_NULL;
     for (temp = 0; temp < mq->max_msgs; temp ++)
     {
-        head = (struct rt_mq_message *)((rt_uint8_t *)mq->msg_pool +
+        head = (struct rt_mq_message *)((uint8_t *)mq->msg_pool +
                                         temp * (mq->msg_size + sizeof(struct rt_mq_message)));
         head->next = mq->msg_queue_free;
         mq->msg_queue_free = head;
@@ -1821,7 +1823,7 @@ RTM_EXPORT(rt_mq_detach);
 rt_mq_t rt_mq_create(const char *name,
                      rt_size_t   msg_size,
                      rt_size_t   max_msgs,
-                     rt_uint8_t  flag)
+                     uint8_t  flag)
 {
     struct rt_messagequeue *mq;
     struct rt_mq_message *head;
@@ -1863,7 +1865,7 @@ rt_mq_t rt_mq_create(const char *name,
     mq->msg_queue_free = RT_NULL;
     for (temp = 0; temp < mq->max_msgs; temp ++)
     {
-        head = (struct rt_mq_message *)((rt_uint8_t *)mq->msg_pool +
+        head = (struct rt_mq_message *)((uint8_t *)mq->msg_pool +
                                         temp * (mq->msg_size + sizeof(struct rt_mq_message)));
         head->next = mq->msg_queue_free;
         mq->msg_queue_free = head;
@@ -2088,12 +2090,12 @@ RTM_EXPORT(rt_mq_urgent);
 rt_err_t rt_mq_recv(rt_mq_t    mq,
                     void      *buffer,
                     rt_size_t  size,
-                    rt_int32_t timeout)
+                    int32_t timeout)
 {
     struct rt_thread *thread;
     register rt_ubase_t temp;
     struct rt_mq_message *msg;
-    rt_uint32_t tick_delta;
+    uint32_t tick_delta;
 
     RT_ASSERT(mq != RT_NULL);
     RT_ASSERT(buffer != RT_NULL);

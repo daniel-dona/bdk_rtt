@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * MD5 internal definitions
  * Copyright (c) 2003-2005, Jouni Malinen <j@w1.fi>
@@ -10,9 +11,9 @@
 #define MD5_I_H
 
 struct MD5Context {
-	u32 buf[4];
-	u32 bits[2];
-	u8 in[64];
+	uint32_t buf[4];
+	uint32_t bits[2];
+	uint8_t in[64];
 };
 
 void MD5Init(struct MD5Context *context);

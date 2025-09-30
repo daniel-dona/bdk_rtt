@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 
@@ -163,8 +164,8 @@ static DD_INIT_S dd_init_tbl[] =
 
 void g_dd_init(void)
 {
-    UINT32 i;
-    UINT32 tbl_count;
+    uint32_t i;
+    uint32_t tbl_count;
     DD_INIT_S *dd_element;
 
     tbl_count = sizeof(dd_init_tbl) / sizeof(DD_INIT_S);
@@ -184,8 +185,8 @@ void g_dd_init(void)
 
 void g_dd_exit(void)
 {
-    UINT32 i;
-    UINT32 tbl_count;
+    uint32_t i;
+    uint32_t tbl_count;
     DD_INIT_S *dd_element;
 
     tbl_count = sizeof(dd_init_tbl) / sizeof(DD_INIT_S);

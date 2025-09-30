@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _BK_SHA_H_
 #define _BK_SHA_H_
 
@@ -26,8 +27,8 @@ typedef enum
 
 typedef struct
 {
-    UINT32 total[2];          /*!< number of bytes processed  */
-    UINT32 state[8];          /*!< intermediate digest state  */
+    uint32_t total[2];          /*!< number of bytes processed  */
+    uint32_t state[8];          /*!< intermediate digest state  */
     unsigned char buffer[64];   /*!< data block being processed */
     int step;                  /*if is inited*/
     SHA_MODE mode;

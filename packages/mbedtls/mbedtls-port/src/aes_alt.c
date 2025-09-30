@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "mbedtls/aes.h"
 
 #ifdef MBEDTLS_AES_ALT

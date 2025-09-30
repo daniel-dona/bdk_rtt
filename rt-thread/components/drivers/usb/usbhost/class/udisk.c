@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : udisk.c
  * This file is part of RT-Thread RTOS
@@ -20,7 +21,7 @@
 #ifdef RT_USBH_MSTORAGE
 
 #define UDISK_MAX_COUNT        8
-static rt_uint8_t _udisk_idset = 0;
+static uint8_t _udisk_idset = 0;
 
 static int udisk_get_id(void)
 {
@@ -85,7 +86,7 @@ static rt_size_t rt_udisk_read(rt_device_t dev, rt_off_t pos, void* buffer,
     data = (struct ustor_data*)dev->user_data;
     intf = data->intf;
 
-    ret = rt_usbh_storage_read10(intf, (rt_uint8_t*)buffer, pos, size, timeout);
+    ret = rt_usbh_storage_read10(intf, (uint8_t*)buffer, pos, size, timeout);
 
     if (ret != RT_EOK)
     {
@@ -123,7 +124,7 @@ static rt_size_t rt_udisk_write (rt_device_t dev, rt_off_t pos, const void* buff
     data = (struct ustor_data*)dev->user_data;
     intf = data->intf;
 
-    ret = rt_usbh_storage_write10(intf, (rt_uint8_t*)buffer, pos, size, timeout);
+    ret = rt_usbh_storage_write10(intf, (uint8_t*)buffer, pos, size, timeout);
     if (ret != RT_EOK)
     {
         rt_kprintf("usb mass_storage write %d sector failed\n", size);
@@ -192,7 +193,7 @@ rt_err_t rt_udisk_run(struct uhintf* intf)
     rt_err_t ret;
     char dname[4];
     char sname[8];
-    rt_uint8_t max_lun, *sector, sense[18], inquiry[36];
+    uint8_t max_lun, *sector, sense[18], inquiry[36];
     struct dfs_partition part[MAX_PARTITION_COUNT];
     ustor_t stor;
 
@@ -263,7 +264,7 @@ rt_err_t rt_udisk_run(struct uhintf* intf)
 
     /* get storage capacity */
     while((ret = rt_usbh_storage_get_capacity(intf,
-        (rt_uint8_t*)stor->capicity)) != RT_EOK)
+        (uint8_t*)stor->capicity)) != RT_EOK)
     {
         if(ret == -RT_EIO) return ret;
 
@@ -285,7 +286,7 @@ rt_err_t rt_udisk_run(struct uhintf* intf)
         stor->capicity[0], stor->capicity[1]));
 
     /* get the first sector to read partition table */
-    sector = (rt_uint8_t*) rt_malloc (SECTOR_SIZE);
+    sector = (uint8_t*) rt_malloc (SECTOR_SIZE);
     if (sector == RT_NULL)
     {
         rt_kprintf("allocate partition sector buffer failed\n");

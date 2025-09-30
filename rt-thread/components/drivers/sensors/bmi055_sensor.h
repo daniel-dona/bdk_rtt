@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  * File      : bmi055_sensor.h
  * This file is part of RT-Thread RTOS
@@ -290,9 +292,9 @@ class BMI055 :public SensorBase
 public:
     BMI055(int sensor_type, const char* iic_bus, int addr);
 
-    int read_reg(rt_uint8_t reg, rt_uint8_t* value);
-    int write_reg(rt_uint8_t reg, rt_uint8_t value);
-    int read_buffer(rt_uint8_t reg, rt_uint8_t* value, rt_size_t size);
+    int read_reg(uint8_t reg, uint8_t* value);
+    int write_reg(uint8_t reg, uint8_t value);
+    int read_buffer(uint8_t reg, uint8_t* value, rt_size_t size);
 
 private:
     struct rt_i2c_bus_device *i2c_bus;
@@ -311,7 +313,7 @@ public:
     virtual void getSensor(sensor_t *sensor);
 
 private:
-	rt_int16_t x_offset, y_offset, z_offset;
+	int16_t x_offset, y_offset, z_offset;
 	
 	rt_bool_t enable;
 	float sensitivity;
@@ -329,7 +331,7 @@ public:
     virtual void getSensor(sensor_t *sensor);
 
 private:
-	rt_int16_t x_offset, y_offset, z_offset;
+	int16_t x_offset, y_offset, z_offset;
 	
 	rt_bool_t enable;
 	float sensitivity;

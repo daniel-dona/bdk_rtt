@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  *  SSLv3/TLSv1 server-side functions
  *
@@ -4025,7 +4026,7 @@ static int ssl_write_new_session_ticket( mbedtls_ssl_context *ssl )
 
     /*
      * struct {
-     *     uint32 ticket_lifetime_hint;
+     *     uint32_t ticket_lifetime_hint;
      *     opaque ticket<0..2^16-1>;
      * } NewSessionTicket;
      *

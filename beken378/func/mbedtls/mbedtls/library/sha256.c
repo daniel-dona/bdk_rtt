@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  *  FIPS-180-2 compliant SHA-256 implementation
  *

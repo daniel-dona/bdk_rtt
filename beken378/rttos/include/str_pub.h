@@ -1,21 +1,22 @@
+#include <stdint.h>
 #ifndef _STR_PUB_H_
 #define _STR_PUB_H_
 
 #include <stdarg.h>
 
-UINT32 os_strlen(const char *str);
+uint32_t os_strlen(const char *str);
 
-INT32 os_strcmp(const char *s1, const char *s2);
+int32_t os_strcmp(const char *s1, const char *s2);
 
-INT32 os_strncmp(const char *s1, const char *s2, const UINT32 n);
+int32_t os_strncmp(const char *s1, const char *s2, const uint32_t n);
 
-INT32 os_snprintf(char *buf, UINT32 size, const char *fmt, ...);
+int32_t os_snprintf(char *buf, uint32_t size, const char *fmt, ...);
 
-INT32 os_vsnprintf(char *buf, UINT32 size, const char *fmt, va_list ap);
+int32_t os_vsnprintf(char *buf, uint32_t size, const char *fmt, va_list ap);
 
-char *os_strncpy(char *out, const char *in, const UINT32 n);
+char *os_strncpy(char *out, const char *in, const uint32_t n);
 
-UINT32 os_strtoul(const char *nptr, char **endptr, int base);
+uint32_t os_strtoul(const char *nptr, char **endptr, int base);
 
 char *os_strcpy(char *out, const char *in);
 

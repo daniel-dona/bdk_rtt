@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 #include "include.h"
 #include "doubly_list.h"
 #include "rw_msdu.h"
@@ -22,7 +24,7 @@
 #include "power_save_pub.h"
 
 void ethernetif_input(int iface, struct pbuf *p);
-UINT32 rwm_transfer_node(MSDU_NODE_T *node, u8 flag);
+uint32_t rwm_transfer_node(MSDU_NODE_T *node, uint8_t flag);
 extern int bmsg_ps_handler_rf_ps_mode_real_wakeup(void);
 
 LIST_HEAD_DEFINE(msdu_rx_list);
@@ -39,13 +41,13 @@ typedef struct sta_ps_st {
 } STA_PS_ST, *STA_PS_PTR;
 
 typedef struct rwm_ap_ps_st {
-    BOOL active;
+    bool active;
     STA_PS_ST sta_ps[MAX_PS_STA_NUM];
 } AP_PS_ST, *AP_PS_PTR;
 
 AP_PS_ST g_ap_ps = {0};
 #endif
-UINT8 g_tid = 0xFF;
+uint8_t g_tid = 0xFF;
 
 void rwm_push_rx_list(MSDU_NODE_T *node)
 {
@@ -116,18 +118,18 @@ void rwm_tx_confirm(void *param)
 	}
 }
 
-void rwm_tx_msdu_renew(UINT8 *buf, UINT32 len, UINT8 *orig_addr)
+void rwm_tx_msdu_renew(uint8_t *buf, uint32_t len, uint8_t *orig_addr)
 {
 #if CFG_GENERAL_DMA
-    gdma_memcpy((void *)((UINT32)orig_addr + CFG_MSDU_RESV_HEAD_LEN), buf, len);
+    gdma_memcpy((void *)((uint32_t)orig_addr + CFG_MSDU_RESV_HEAD_LEN), buf, len);
 #else
-    os_memmove((void *)((UINT32)orig_addr + CFG_MSDU_RESV_HEAD_LEN), buf, len);
+    os_memmove((void *)((uint32_t)orig_addr + CFG_MSDU_RESV_HEAD_LEN), buf, len);
 #endif
 }
 
-UINT8 *rwm_get_msdu_content_ptr(MSDU_NODE_T *node)
+uint8_t *rwm_get_msdu_content_ptr(MSDU_NODE_T *node)
 {
-    return (UINT8 *)((UINT32)node->msdu_ptr + CFG_MSDU_RESV_HEAD_LEN);
+    return (uint8_t *)((uint32_t)node->msdu_ptr + CFG_MSDU_RESV_HEAD_LEN);
 }
 
 void rwm_txdesc_copy(struct txdesc *dst_local, ETH_HDR_PTR eth_hdr_ptr)
@@ -145,8 +147,8 @@ int rwm_raw_frame_with_cb(uint8_t *buffer, int len, void *cb, void *param)
 	int ret = 0;
 	uint8_t *pkt = buffer;
 	MSDU_NODE_T *node;
-	UINT8 *content_ptr;
-	UINT32 queue_idx = AC_VI;
+	uint8_t *content_ptr;
+	uint32_t queue_idx = AC_VI;
 	struct txdesc *txdesc_new;
 	struct umacdesc *umac;
 
@@ -166,10 +168,10 @@ int rwm_raw_frame_with_cb(uint8_t *buffer, int len, void *cb, void *param)
 
 	txdesc_new->status = TXDESC_STA_USED;
 	txdesc_new->host.flags = TXU_CNTRL_MGMT;
-	txdesc_new->host.orig_addr = (UINT32)node->msdu_ptr;
-	txdesc_new->host.packet_addr = (UINT32)content_ptr;
+	txdesc_new->host.orig_addr = (uint32_t)node->msdu_ptr;
+	txdesc_new->host.packet_addr = (uint32_t)content_ptr;
 	txdesc_new->host.packet_len = len;
-	txdesc_new->host.status_desc_addr = (UINT32)content_ptr;
+	txdesc_new->host.status_desc_addr = (uint32_t)content_ptr;
 	txdesc_new->host.tid = 0xff;
 	txdesc_new->host.callback = (mgmt_tx_cb_t)cb;
 #if CFG_BK_AWARE
@@ -203,9 +205,9 @@ exit:
 	return ret;
 }
 
-MSDU_NODE_T *rwm_tx_node_alloc(UINT32 len)
+MSDU_NODE_T *rwm_tx_node_alloc(uint32_t len)
 {
-    UINT8 *buff_ptr;
+    uint8_t *buff_ptr;
     MSDU_NODE_T *node_ptr = 0;
 #if (CFG_SUPPORT_RTT) && (CFG_SOC_NAME == SOC_BK7221U)
     extern void *dtcm_malloc(size_t size);
@@ -230,7 +232,7 @@ MSDU_NODE_T *rwm_tx_node_alloc(UINT32 len)
         goto alloc_exit;
     }
 
-    buff_ptr = (UINT8 *)((UINT32)node_ptr + sizeof(MSDU_NODE_T));
+    buff_ptr = (uint8_t *)((uint32_t)node_ptr + sizeof(MSDU_NODE_T));
 
     node_ptr->msdu_ptr = buff_ptr;
     node_ptr->len = len;
@@ -245,14 +247,14 @@ void rwm_node_free(MSDU_NODE_T *node)
     os_free(node);
 }
 
-UINT8 *rwm_rx_buf_alloc(UINT32 len)
+uint8_t *rwm_rx_buf_alloc(uint32_t len)
 {
-    return (UINT8 *)os_malloc(len);
+    return (uint8_t *)os_malloc(len);
 }
 
-UINT32 rwm_get_rx_valid(void)
+uint32_t rwm_get_rx_valid(void)
 {
-    UINT32 count = 0;
+    uint32_t count = 0;
     LIST_HEADER_T *tmp;
     LIST_HEADER_T *pos;
     LIST_HEADER_T *head = &msdu_rx_list;
@@ -269,9 +271,9 @@ UINT32 rwm_get_rx_valid(void)
     return ((count >= MSDU_RX_MAX_CNT) ? 0 : 1);
 }
 
-UINT32 rwm_get_rx_valid_node_len(void)
+uint32_t rwm_get_rx_valid_node_len(void)
 {
-    UINT32 len = 0;
+    uint32_t len = 0;
     LIST_HEADER_T *tmp;
     LIST_HEADER_T *pos;
     MSDU_NODE_PTR node;
@@ -293,12 +295,12 @@ UINT32 rwm_get_rx_valid_node_len(void)
     return len;
 }
 
-UINT8 rwm_get_tid()
+uint8_t rwm_get_tid()
 {
     return g_tid;
 }
 
-void rwm_set_tid(UINT8 tid)
+void rwm_set_tid(uint8_t tid)
 {
     if (0xFF == tid)
     {
@@ -312,7 +314,7 @@ void rwm_set_tid(UINT8 tid)
 
 #if CFG_USE_AP_PS
 extern void bmsg_txing_sender(uint8_t sta_idx);
-void rwm_push_txing_list(MSDU_NODE_T *node, UINT8 sta_idx)
+void rwm_push_txing_list(MSDU_NODE_T *node, uint8_t sta_idx)
 {
     GLOBAL_INT_DECLARATION();
 
@@ -324,7 +326,7 @@ void rwm_push_txing_list(MSDU_NODE_T *node, UINT8 sta_idx)
     GLOBAL_INT_RESTORE();
 }
 
-MSDU_NODE_T *rwm_pop_txing_list(UINT8 sta_idx)
+MSDU_NODE_T *rwm_pop_txing_list(uint8_t sta_idx)
 {
     LIST_HEADER_T *tmp;
     LIST_HEADER_T *pos;
@@ -350,7 +352,7 @@ MSDU_NODE_T *rwm_pop_txing_list(UINT8 sta_idx)
     return node;
 }
 
-UINT32 rwm_txling_list_node_count(UINT8 sta_idx)
+uint32_t rwm_txling_list_node_count(uint8_t sta_idx)
 {
     if(sta_idx >= MAX_PS_STA_NUM)
         return 0;
@@ -358,7 +360,7 @@ UINT32 rwm_txling_list_node_count(UINT8 sta_idx)
     return list_size(&g_ap_ps.sta_ps[sta_idx].txing);
 }
 
-void rwm_flush_txing_list(UINT8 sta_idx)
+void rwm_flush_txing_list(uint8_t sta_idx)
 {
     MSDU_NODE_T *node_ptr;
     int ret;
@@ -388,8 +390,8 @@ void rwm_flush_txing_list(UINT8 sta_idx)
 
 void rwm_ps_tranfer_node(MSDU_NODE_T *node)
 {
-    UINT8 vif_idx, sta_idx;
-    BOOL need_buffer = false;
+    uint8_t vif_idx, sta_idx;
+    bool need_buffer = false;
 
     if(!node)
         return;
@@ -423,8 +425,8 @@ void rwm_ps_tranfer_node(MSDU_NODE_T *node)
              {
                 if(!rwm_txling_list_node_count(sta_idx))
                 {
-                    u8 vif_idx = sta_mgmt_get_vif_idx(sta_idx);
-                    u16 aid = sta_mgmt_get_aid(sta_idx);
+                    uint8_t vif_idx = sta_mgmt_get_vif_idx(sta_idx);
+                    uint16_t aid = sta_mgmt_get_aid(sta_idx);
                     int ret;
 
                     //os_printf("on bcn tim: vif:%d, aid:%d, sta:%d\r\n", vif_idx, aid, sta_idx);
@@ -453,11 +455,11 @@ void rwm_ps_tranfer_node(MSDU_NODE_T *node)
     }
 }
 
-void rwm_msdu_send_txing_node(UINT8 sta_idx)
+void rwm_msdu_send_txing_node(uint8_t sta_idx)
 {
     MSDU_NODE_T *node = NULL;
     struct txdesc *txdesc_new = NULL;
-    UINT32 node_left;
+    uint32_t node_left;
 
     node = rwm_pop_txing_list(sta_idx);
     if(!node)
@@ -478,8 +480,8 @@ void rwm_msdu_send_txing_node(UINT8 sta_idx)
     }
     else if(!node_left)
     {
-        u8 vif_idx = sta_mgmt_get_vif_idx(sta_idx);
-        u16 aid = sta_mgmt_get_aid(sta_idx);
+        uint8_t vif_idx = sta_mgmt_get_vif_idx(sta_idx);
+        uint16_t aid = sta_mgmt_get_aid(sta_idx);
 
         //os_printf("off bcn tim: vif:%d, aid:%d, sta:%d\r\n", vif_idx, aid, sta_idx);
 
@@ -492,7 +494,7 @@ void rwm_msdu_ps_change_ind_handler(void *msg)
 {
     struct ke_msg *msg_ptr = (struct ke_msg *)msg;
     struct mm_ps_change_ind *ind;
-    UINT32 node_left;
+    uint32_t node_left;
     int ret;
 
     if(!msg_ptr || !msg_ptr->param)
@@ -523,7 +525,7 @@ void rwm_msdu_ps_change_ind_handler(void *msg)
 
 void rwm_msdu_ap_ps_timeout(void *data)
 {
-    u8 sta_idx = (u32)data;
+    uint8_t sta_idx = (uint32_t)data;
 
     rwm_flush_txing_list(sta_idx);
 }
@@ -555,7 +557,7 @@ void rwm_msdu_init(void)
 /*
  * IEEE802.11-2016: Table 10-1—UP-to-AC mappings
  */
-uint8_t ipv4_ieee8023_dscp(UINT8 *buf)
+uint8_t ipv4_ieee8023_dscp(uint8_t *buf)
 {
 	uint8_t tos;
 	struct ip_hdr *hdr = (struct ip_hdr *)buf;
@@ -566,7 +568,7 @@ uint8_t ipv4_ieee8023_dscp(UINT8 *buf)
 }
 
 /* extract flow control field */
-uint8_t ipv6_ieee8023_dscp(UINT8 *buf)
+uint8_t ipv6_ieee8023_dscp(uint8_t *buf)
 {
 	uint8_t tos;
 	struct ip6_hdr *hdr = (struct ip6_hdr *)buf;
@@ -581,7 +583,7 @@ uint8_t ipv6_ieee8023_dscp(UINT8 *buf)
  * get user priority from @buf.
  * ipv4 dscp/tos, ipv6 flow control. for eapol packets, disable qos.
  */
-uint8_t classify8021d(UINT8 *buf)
+uint8_t classify8021d(uint8_t *buf)
 {
 #ifdef CFG_WFA_CERTIFICATION
 	struct eth_hdr *ethhdr = (struct eth_hdr *)buf;
@@ -601,9 +603,9 @@ uint8_t classify8021d(UINT8 *buf)
 #endif
 }
 
-UINT32 rwm_transfer(UINT8 vif_idx, UINT8 *buf, UINT32 len, int sync, void *args)
+uint32_t rwm_transfer(uint8_t vif_idx, uint8_t *buf, uint32_t len, int sync, void *args)
 {
-    UINT32 ret = 0;
+    uint32_t ret = 0;
     MSDU_NODE_T *node;
     ETH_HDR_PTR eth_hdr_ptr;
 
@@ -686,13 +688,13 @@ int qos_need_enabled(struct sta_info_tag *sta)
 }
 #endif
 
-UINT32 rwm_transfer_node(MSDU_NODE_T *node, u8 flag)
+uint32_t rwm_transfer_node(MSDU_NODE_T *node, uint8_t flag)
 {
-    UINT8 tid;
-    UINT32 ret = 0;
-    UINT8 *content_ptr;
+    uint8_t tid;
+    uint32_t ret = 0;
+    uint8_t *content_ptr;
 
-    UINT32 queue_idx;
+    uint32_t queue_idx;
 
     ETH_HDR_PTR eth_hdr_ptr;
     struct txdesc *txdesc_new;
@@ -719,7 +721,7 @@ UINT32 rwm_transfer_node(MSDU_NODE_T *node, u8 flag)
 		sta = &sta_info_tab[vif->u.sta.ap_id];
 		if (qos_need_enabled(sta)) {
 			int i;
-			tid = classify8021d((UINT8 *)eth_hdr_ptr);
+			tid = classify8021d((uint8_t *)eth_hdr_ptr);
 			/* check admission ctrl */
 			for (i = mac_tid2ac[tid]; i >= 0; i--)
 				if (!(vif->bss_info.edca_param.acm & BIT(i)))
@@ -758,16 +760,16 @@ UINT32 rwm_transfer_node(MSDU_NODE_T *node, u8 flag)
 
     txdesc_new->host.flags            = flag;
 #if NX_AMSDU_TX
-    txdesc_new->host.orig_addr[0]     = (UINT32)node->msdu_ptr;
-    txdesc_new->host.packet_addr[0]   = (UINT32)content_ptr + 14;
+    txdesc_new->host.orig_addr[0]     = (uint32_t)node->msdu_ptr;
+    txdesc_new->host.packet_addr[0]   = (uint32_t)content_ptr + 14;
     txdesc_new->host.packet_len[0]    = node->len - 14;
     txdesc_new->host.packet_cnt       = 1;
 #else
-    txdesc_new->host.orig_addr        = (UINT32)node->msdu_ptr;
-    txdesc_new->host.packet_addr      = (UINT32)content_ptr + 14;
+    txdesc_new->host.orig_addr        = (uint32_t)node->msdu_ptr;
+    txdesc_new->host.packet_addr      = (uint32_t)content_ptr + 14;
     txdesc_new->host.packet_len       = node->len - 14;
 #endif
-    txdesc_new->host.status_desc_addr = (UINT32)content_ptr + 14;
+    txdesc_new->host.status_desc_addr = (uint32_t)content_ptr + 14;
     txdesc_new->host.ethertype        = eth_hdr_ptr->e_proto;
     txdesc_new->host.tid              = tid;
 
@@ -800,7 +802,7 @@ tx_exit:
     return ret;
 }
 
-UINT32 rwm_get_rx_free_node(struct pbuf **p_ret, UINT32 len)
+uint32_t rwm_get_rx_free_node(struct pbuf **p_ret, uint32_t len)
 {
     struct pbuf *p;
 
@@ -810,7 +812,7 @@ UINT32 rwm_get_rx_free_node(struct pbuf **p_ret, UINT32 len)
     return RW_SUCCESS;
 }
 
-UINT32 rwm_upload_data(RW_RXIFO_PTR rx_info)
+uint32_t rwm_upload_data(RW_RXIFO_PTR rx_info)
 {
     struct pbuf *p = (struct pbuf *)rx_info->data;
 
@@ -828,10 +830,10 @@ UINT32 rwm_upload_data(RW_RXIFO_PTR rx_info)
     return RW_SUCCESS;
 }
 
-UINT32 rwm_uploaded_data_handle(UINT8 *upper_buf, UINT32 len)
+uint32_t rwm_uploaded_data_handle(uint8_t *upper_buf, uint32_t len)
 {
-    UINT32 count;
-    UINT32 ret = RW_FAILURE;
+    uint32_t count;
+    uint32_t ret = RW_FAILURE;
     MSDU_NODE_T *node_ptr;
 
     node_ptr = rwm_pop_rx_list();
@@ -853,7 +855,7 @@ UINT32 rwm_uploaded_data_handle(UINT8 *upper_buf, UINT32 len)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-VIF_INF_PTR rwm_mgmt_vif_idx2ptr(UINT8 vif_idx)
+VIF_INF_PTR rwm_mgmt_vif_idx2ptr(uint8_t vif_idx)
 {
     VIF_INF_PTR vif_entry = NULL;
 
@@ -863,10 +865,10 @@ VIF_INF_PTR rwm_mgmt_vif_idx2ptr(UINT8 vif_idx)
     return vif_entry;
 }
 
-VIF_INF_PTR rwm_mgmt_vif_type2ptr(UINT8 vif_type)
+VIF_INF_PTR rwm_mgmt_vif_type2ptr(uint8_t vif_type)
 {
     VIF_INF_PTR vif_entry = NULL;
-    UINT32 i;
+    uint32_t i;
 
     for(i = 0; i < NX_VIRT_DEV_MAX; i++)
     {
@@ -881,7 +883,7 @@ VIF_INF_PTR rwm_mgmt_vif_type2ptr(UINT8 vif_type)
     return vif_entry;
 }
 
-STA_INF_PTR rwm_mgmt_sta_idx2ptr(UINT8 staid)
+STA_INF_PTR rwm_mgmt_sta_idx2ptr(uint8_t staid)
 {
     STA_INF_PTR sta_entry = NULL;
 
@@ -893,7 +895,7 @@ STA_INF_PTR rwm_mgmt_sta_idx2ptr(UINT8 staid)
 
 STA_INF_PTR rwm_mgmt_sta_mac2ptr(void *mac)
 {
-    UINT32 i;
+    uint32_t i;
     STA_INF_PTR sta_entry = NULL;
 
     for(i = 0; i < NX_REMOTE_STA_MAX; i++)
@@ -906,10 +908,10 @@ STA_INF_PTR rwm_mgmt_sta_mac2ptr(void *mac)
     return sta_entry;
 }
 
-UINT8 rwm_mgmt_sta_mac2idx(void *mac)
+uint8_t rwm_mgmt_sta_mac2idx(void *mac)
 {
-    UINT32 i;
-    UINT8 staid = 0xff;
+    uint32_t i;
+    uint8_t staid = 0xff;
     STA_INF_PTR sta_entry = NULL;
 
     for(i = 0; i < NX_REMOTE_STA_MAX; i++)
@@ -924,9 +926,9 @@ UINT8 rwm_mgmt_sta_mac2idx(void *mac)
     return staid;
 }
 
-UINT8 rwm_mgmt_sta_mac2port(void *mac)
+uint8_t rwm_mgmt_sta_mac2port(void *mac)
 {
-    UINT32 i;
+    uint32_t i;
     STA_INF_PTR sta_entry = NULL;
 
     for(i = 0; i < NX_REMOTE_STA_MAX; i++)
@@ -945,11 +947,11 @@ UINT8 rwm_mgmt_sta_mac2port(void *mac)
 	return 0;
 }
 
-UINT8 rwm_mgmt_vif_mac2idx(void *mac)
+uint8_t rwm_mgmt_vif_mac2idx(void *mac)
 {
     VIF_INF_PTR vif_entry = NULL;
-    UINT8 vif_idx = INVALID_VIF_IDX;
-    UINT32 i;
+    uint8_t vif_idx = INVALID_VIF_IDX;
+    uint32_t i;
 
     for(i = 0; i < NX_VIRT_DEV_MAX; i++)
     {
@@ -964,12 +966,12 @@ UINT8 rwm_mgmt_vif_mac2idx(void *mac)
     return vif_idx;
 }
 
-UINT8 rwm_mgmt_vif_name2idx(char *name)
+uint8_t rwm_mgmt_vif_name2idx(char *name)
 {
     VIF_INF_PTR vif_entry = NULL;
     struct netif *lwip_if;
-    UINT8 vif_idx = 0xff;
-    UINT32 i;
+    uint8_t vif_idx = 0xff;
+    uint32_t i;
 
     for(i = 0; i < NX_VIRT_DEV_MAX; i++)
     {
@@ -990,9 +992,9 @@ UINT8 rwm_mgmt_vif_name2idx(char *name)
     return vif_idx;
 }
 
-UINT8 rwm_mgmt_get_hwkeyidx(UINT8 vif_idx, UINT8 staid)
+uint8_t rwm_mgmt_get_hwkeyidx(uint8_t vif_idx, uint8_t staid)
 {
-    UINT8 hw_key_idx = MM_SEC_MAX_KEY_NBR + 1;
+    uint8_t hw_key_idx = MM_SEC_MAX_KEY_NBR + 1;
     struct key_info_tag *key = NULL;
 
     VIF_INF_PTR vif_entry = NULL;
@@ -1022,7 +1024,7 @@ UINT8 rwm_mgmt_get_hwkeyidx(UINT8 vif_idx, UINT8 staid)
 void rwm_mgmt_set_vif_netif(struct netif *net_if)
 {
     VIF_INF_PTR vif_entry = NULL;
-    UINT8 vif_idx;
+    uint8_t vif_idx;
 
     if(!net_if)
         return;
@@ -1041,7 +1043,7 @@ void rwm_mgmt_set_vif_netif(struct netif *net_if)
     }
 }
 
-struct netif *rwm_mgmt_get_vif2netif(UINT8 vif_idx)
+struct netif *rwm_mgmt_get_vif2netif(uint8_t vif_idx)
 {
     VIF_INF_PTR vif_entry = NULL;
     struct netif *netif = NULL;
@@ -1054,9 +1056,9 @@ struct netif *rwm_mgmt_get_vif2netif(UINT8 vif_idx)
     return netif;
 }
 
-UINT8 rwm_mgmt_get_netif2vif(struct netif *netif)
+uint8_t rwm_mgmt_get_netif2vif(struct netif *netif)
 {
-    UINT8 vif_idx = 0xff;
+    uint8_t vif_idx = 0xff;
     VIF_INF_PTR vif_entry = NULL;
 
     if(netif && netif->state)
@@ -1068,9 +1070,9 @@ UINT8 rwm_mgmt_get_netif2vif(struct netif *netif)
     return vif_idx;
 }
 
-UINT8 rwm_mgmt_tx_get_staidx(UINT8 vif_idx, void *dstmac)
+uint8_t rwm_mgmt_tx_get_staidx(uint8_t vif_idx, void *dstmac)
 {
-    UINT8 staid = 0xff;
+    uint8_t staid = 0xff;
     VIF_INF_PTR vif_entry = NULL;
 
     vif_entry = rwm_mgmt_vif_idx2ptr(vif_idx);
@@ -1095,7 +1097,7 @@ UINT8 rwm_mgmt_tx_get_staidx(UINT8 vif_idx, void *dstmac)
     return staid;
 }
 
-u8 rwn_mgmt_is_only_sta_role_add(void)
+uint8_t rwn_mgmt_is_only_sta_role_add(void)
 {
     VIF_INF_PTR vif_entry = (VIF_INF_PTR)rwm_mgmt_is_vif_first_used();
 
@@ -1111,25 +1113,25 @@ u8 rwn_mgmt_is_only_sta_role_add(void)
 #include "lwip/sockets.h"
 extern uint8_t* dhcp_lookup_mac(uint8_t *chaddr);
 
-void rwn_mgmt_show_vif_peer_sta_list(UINT8 role)
+void rwn_mgmt_show_vif_peer_sta_list(uint8_t role)
 {
     struct vif_info_tag *vif = (VIF_INF_PTR)rwm_mgmt_is_vif_first_used();
     struct sta_info_tag *sta;
-    UINT8 num = 0;
+    uint8_t num = 0;
 
     while(vif) {
         if ( vif->type == role) {
             sta = (struct sta_info_tag *)co_list_pick(&vif->sta_list);
             while (sta != NULL)
             {
-                UINT8 *macptr = (UINT8*)sta->mac_addr.array;
-                UINT8 *ipptr = NULL;
+                uint8_t *macptr = (uint8_t*)sta->mac_addr.array;
+                uint8_t *ipptr = NULL;
 
                 if(role == VIF_AP) {
                     ipptr = dhcp_lookup_mac(macptr);
                 } else if (role == VIF_STA){
                     struct netif *netif = (struct netif *)vif->priv;
-                    ipptr = (UINT8 *)inet_ntoa(netif->gw);
+                    ipptr = (uint8_t *)inet_ntoa(netif->gw);
                 }
 
                 os_printf("%d: mac:%02x-%02x-%02x-%02x-%02x-%02x, ip:%s\r\n", num++,
@@ -1143,10 +1145,10 @@ void rwn_mgmt_show_vif_peer_sta_list(UINT8 role)
     }
 }
 
-UINT8 rwn_mgmt_if_ap_stas_empty()
+uint8_t rwn_mgmt_if_ap_stas_empty()
 {
     struct vif_info_tag *vif = (VIF_INF_PTR)rwm_mgmt_is_vif_first_used();
-    UINT8 role = VIF_AP;
+    uint8_t role = VIF_AP;
 
     while(vif) {
         if ( vif->type == role) {

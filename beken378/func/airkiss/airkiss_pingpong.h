@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _AIRKISS_PING_PONG_H_
 #define _AIRKISS_PING_PONG_H_
 

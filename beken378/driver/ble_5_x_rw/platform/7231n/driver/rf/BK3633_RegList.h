@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _BK3633_REGLIST_H_
 #define _BK3633_REGLIST_H_
 

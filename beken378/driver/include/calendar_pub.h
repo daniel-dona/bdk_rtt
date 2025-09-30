@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _CALENDAR_PUB_H_
 #define _CALENDAR_PUB_H_
 

@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * Wi-Fi Multimedia Admission Control (WMM-AC)
  * Copyright(c) 2014, Intel Mobile Communication GmbH.
@@ -91,14 +92,14 @@ struct wmm_ac_addts_request {
 	 * dialog token - Used to link the recived ADDTS response with this
 	 * saved ADDTS request when ADDTS response is being handled
 	 */
-	u8 dialog_token;
+	uint8_t dialog_token;
 
 	/*
 	 * address - The alleged traffic stream's receiver/transmitter address
 	 * Address and TID are used to identify the TS (TID is contained in
 	 * TSPEC)
 	 */
-	u8 address[ETH_ALEN];
+	uint8_t address[ETH_ALEN];
 
 	/*
 	 * tspec - Traffic Stream Specification, will be used to compare the
@@ -160,14 +161,14 @@ struct wmm_ac_ts_setup_params {
 	int surplus_bandwidth_allowance;
 };
 
-void wmm_ac_notify_assoc(struct wpa_supplicant *wpa_s, const u8 *ies,
+void wmm_ac_notify_assoc(struct wpa_supplicant *wpa_s, const uint8_t *ies,
 			 size_t ies_len, const struct wmm_params *wmm_params);
 void wmm_ac_notify_disassoc(struct wpa_supplicant *wpa_s);
 int wpas_wmm_ac_addts(struct wpa_supplicant *wpa_s,
 		      struct wmm_ac_ts_setup_params *params);
-int wpas_wmm_ac_delts(struct wpa_supplicant *wpa_s, u8 tsid);
-void wmm_ac_rx_action(struct wpa_supplicant *wpa_s, const u8 *da,
-			const u8 *sa, const u8 *data, size_t len);
+int wpas_wmm_ac_delts(struct wpa_supplicant *wpa_s, uint8_t tsid);
+void wmm_ac_rx_action(struct wpa_supplicant *wpa_s, const uint8_t *da,
+			const uint8_t *sa, const uint8_t *data, size_t len);
 int wpas_wmm_ac_status(struct wpa_supplicant *wpa_s, char *buf, size_t buflen);
 void wmm_ac_save_tspecs(struct wpa_supplicant *wpa_s);
 void wmm_ac_clear_saved_tspecs(struct wpa_supplicant *wpa_s);

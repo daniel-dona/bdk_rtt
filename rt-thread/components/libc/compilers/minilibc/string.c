@@ -161,7 +161,7 @@ int  strncasecmp ( const char* s1, const char* s2, size_t len )
 
 rt_inline int divide(int *n, int base)
 {
-	rt_int32_t res;
+	int32_t res;
 
 	/* optimized for processor which does not support divide instructions. */
 	if (base == 10)

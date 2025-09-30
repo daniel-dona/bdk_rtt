@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _SDP_COMM_PUB_H_
 #define _SDP_COMM_PUB_H_
 

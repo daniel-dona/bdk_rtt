@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "key_handle.h"
 #include "error.h"
 #include "include.h"
@@ -30,16 +31,16 @@
 static void key_scan_callback( void * arg ); 
 extern void bmsg_music_sender(void *arg);
 
-static UINT16 backup_keyval = MSG_NO_KEY;
-static UINT16 keycount = 0;
-static UINT16 sd_online = SD_CARD_OFFLINE;
-static UINT16 detect_cnt = 0;
+static uint16_t backup_keyval = MSG_NO_KEY;
+static uint16_t keycount = 0;
+static uint16_t sd_online = SD_CARD_OFFLINE;
+static uint16_t detect_cnt = 0;
 static beken_timer_t key_handle_timer = {0};
 
 
 void key_init(void)
 {
- 	UINT32 param;
+ 	uint32_t param;
 	OSStatus err;
 		
 	param = GPIO_CFG_PARAM(SD_CARD_DETECT_PIN, GMODE_INPUT_PULLUP);
@@ -60,18 +61,18 @@ void key_init(void)
 	KEY_PRT("==key init==\r\n");
 }
 
-uint8 sd_is_attached(void)
+uint8_t sd_is_attached(void)
 {
     return (sd_online);
 }
 
 static void sd_detect_handle()
 {
-	UINT32 sd_pin_level;
-	UINT32 sd_detect_pin = SD_CARD_DETECT_PIN;
+	uint32_t sd_pin_level;
+	uint32_t sd_detect_pin = SD_CARD_DETECT_PIN;
 	 
 	sd_pin_level = sddev_control(GPIO_DEV_NAME, CMD_GPIO_INPUT, &sd_detect_pin);
-	UINT32 msg;
+	uint32_t msg;
  	if(sd_pin_level)
 	{
 		if(sd_online == SD_CARD_ONLINE)
@@ -100,11 +101,11 @@ static void sd_detect_handle()
 	}
 }
 
-static UINT16 keyIOdetect(void)
+static uint16_t keyIOdetect(void)
 {
-	UINT16 key_pin_level;
-	UINT16 keyValue= MSG_NO_KEY;;
-	UINT32 key_detect_pin = KEY_PLAY_PAUSE_PIN;
+	uint16_t key_pin_level;
+	uint16_t keyValue= MSG_NO_KEY;;
+	uint32_t key_detect_pin = KEY_PLAY_PAUSE_PIN;
 	 
 	key_pin_level = sddev_control(GPIO_DEV_NAME, CMD_GPIO_INPUT, &key_detect_pin);
 	if(key_pin_level==0)
@@ -116,8 +117,8 @@ static UINT16 keyIOdetect(void)
 
 static void key_detect_handle(void)
 {
-	UINT32 msg;
-	UINT16 keyval = keyIOdetect();
+	uint32_t msg;
+	uint16_t keyval = keyIOdetect();
 
 	if(keyval == MSG_NO_KEY)
 	{

@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * DPP functionality shared between hostapd and wpa_supplicant
  * Copyright (c) 2017, Qualcomm Atheros, Inc.
@@ -95,7 +96,7 @@ struct dpp_curve_params {
 	size_t nonce_len;
 	size_t prime_len;
 	const char *jwk_crv;
-	u16 ike_group;
+	uint16_t ike_group;
 	const char *jws_alg;
 };
 
@@ -109,13 +110,13 @@ struct dpp_bootstrap_info {
 	unsigned int id;
 	enum dpp_bootstrap_type type;
 	char *uri;
-	u8 mac_addr[ETH_ALEN];
+	uint8_t mac_addr[ETH_ALEN];
 	char *info;
 	unsigned int freq[DPP_BOOTSTRAP_MAX_FREQ];
 	unsigned int num_freq;
 	int own;
 	EVP_PKEY *pubkey;
-	u8 pubkey_hash[SHA256_MAC_LEN];
+	uint8_t pubkey_hash[SHA256_MAC_LEN];
 	const struct dpp_curve_params *curve;
 	unsigned int pkex_t; /* number of failures before dpp_pkex
 			      * instantiation */
@@ -129,15 +130,15 @@ struct dpp_pkex {
 	unsigned int exchange_done:1;
 	unsigned int failed:1;
 	struct dpp_bootstrap_info *own_bi;
-	u8 own_mac[ETH_ALEN];
-	u8 peer_mac[ETH_ALEN];
+	uint8_t own_mac[ETH_ALEN];
+	uint8_t peer_mac[ETH_ALEN];
 	char *identifier;
 	char *code;
 	EVP_PKEY *x;
 	EVP_PKEY *y;
-	u8 Mx[DPP_MAX_SHARED_SECRET_LEN];
-	u8 Nx[DPP_MAX_SHARED_SECRET_LEN];
-	u8 z[DPP_MAX_HASH_LEN];
+	uint8_t Mx[DPP_MAX_SHARED_SECRET_LEN];
+	uint8_t Nx[DPP_MAX_SHARED_SECRET_LEN];
+	uint8_t z[DPP_MAX_HASH_LEN];
 	EVP_PKEY *peer_bootstrap_key;
 	struct wpabuf *exchange_req;
 	struct wpabuf *exchange_resp;
@@ -158,7 +159,7 @@ enum dpp_akm {
 };
 
 struct dpp_configuration {
-	u8 ssid[32];
+	uint8_t ssid[32];
 	size_t ssid_len;
 	enum dpp_akm akm;
 
@@ -170,27 +171,27 @@ struct dpp_configuration {
 
 	/* For legacy configuration */
 	char *passphrase;
-	u8 psk[32];
+	uint8_t psk[32];
 	int psk_set;
 };
 
 struct dpp_authentication {
 	void *msg_ctx;
-	u8 peer_version;
+	uint8_t peer_version;
 	const struct dpp_curve_params *curve;
 	struct dpp_bootstrap_info *peer_bi;
 	struct dpp_bootstrap_info *own_bi;
 	struct dpp_bootstrap_info *tmp_own_bi;
-	u8 waiting_pubkey_hash[SHA256_MAC_LEN];
+	uint8_t waiting_pubkey_hash[SHA256_MAC_LEN];
 	int response_pending;
 	enum dpp_status_error auth_resp_status;
 	enum dpp_status_error conf_resp_status;
-	u8 peer_mac_addr[ETH_ALEN];
-	u8 i_nonce[DPP_MAX_NONCE_LEN];
-	u8 r_nonce[DPP_MAX_NONCE_LEN];
-	u8 e_nonce[DPP_MAX_NONCE_LEN];
-	u8 i_capab;
-	u8 r_capab;
+	uint8_t peer_mac_addr[ETH_ALEN];
+	uint8_t i_nonce[DPP_MAX_NONCE_LEN];
+	uint8_t r_nonce[DPP_MAX_NONCE_LEN];
+	uint8_t e_nonce[DPP_MAX_NONCE_LEN];
+	uint8_t i_capab;
+	uint8_t r_capab;
 	EVP_PKEY *own_protocol_key;
 	EVP_PKEY *peer_protocol_key;
 	struct wpabuf *req_msg;
@@ -203,21 +204,21 @@ struct dpp_authentication {
 	unsigned int neg_freq;
 	unsigned int num_freq_iters;
 	size_t secret_len;
-	u8 Mx[DPP_MAX_SHARED_SECRET_LEN];
+	uint8_t Mx[DPP_MAX_SHARED_SECRET_LEN];
 	size_t Mx_len;
-	u8 Nx[DPP_MAX_SHARED_SECRET_LEN];
+	uint8_t Nx[DPP_MAX_SHARED_SECRET_LEN];
 	size_t Nx_len;
-	u8 Lx[DPP_MAX_SHARED_SECRET_LEN];
+	uint8_t Lx[DPP_MAX_SHARED_SECRET_LEN];
 	size_t Lx_len;
-	u8 k1[DPP_MAX_HASH_LEN];
-	u8 k2[DPP_MAX_HASH_LEN];
-	u8 ke[DPP_MAX_HASH_LEN];
+	uint8_t k1[DPP_MAX_HASH_LEN];
+	uint8_t k2[DPP_MAX_HASH_LEN];
+	uint8_t ke[DPP_MAX_HASH_LEN];
 	int initiator;
 	int waiting_auth_resp;
 	int waiting_auth_conf;
 	int auth_req_ack;
 	unsigned int auth_resp_tries;
-	u8 allowed_roles;
+	uint8_t allowed_roles;
 	int configurator;
 	int remove_on_tx_status;
 	int connect_on_tx_status;
@@ -229,10 +230,10 @@ struct dpp_authentication {
 	struct dpp_configuration *conf_sta;
 	struct dpp_configurator *conf;
 	char *connector; /* received signedConnector */
-	u8 ssid[SSID_MAX_LEN];
-	u8 ssid_len;
+	uint8_t ssid[SSID_MAX_LEN];
+	uint8_t ssid_len;
 	char passphrase[64];
-	u8 psk[PMK_LEN];
+	uint8_t psk[PMK_LEN];
 	int psk_set;
 	enum dpp_akm akm;
 	struct wpabuf *net_access_key;
@@ -256,19 +257,19 @@ struct dpp_configurator {
 };
 
 struct dpp_introduction {
-	u8 pmkid[PMKID_LEN];
-	u8 pmk[PMK_LEN_MAX];
+	uint8_t pmkid[PMKID_LEN];
+	uint8_t pmk[PMK_LEN_MAX];
 	size_t pmk_len;
 };
 
 struct dpp_relay_config {
 	const struct hostapd_ip_addr *ipaddr;
-	const u8 *pkhash;
+	const uint8_t *pkhash;
 
 	void *cb_ctx;
-	void (*tx)(void *ctx, const u8 *addr, unsigned int freq, const u8 *msg,
+	void (*tx)(void *ctx, const uint8_t *addr, unsigned int freq, const uint8_t *msg,
 		   size_t len);
-	void (*gas_resp_tx)(void *ctx, const u8 *addr, u8 dialog_token, int prot,
+	void (*gas_resp_tx)(void *ctx, const uint8_t *addr, uint8_t dialog_token, int prot,
 			    struct wpabuf *buf);
 };
 
@@ -374,13 +375,13 @@ enum dpp_test_behavior {
 };
 
 extern enum dpp_test_behavior dpp_test;
-extern u8 dpp_pkex_own_mac_override[ETH_ALEN];
-extern u8 dpp_pkex_peer_mac_override[ETH_ALEN];
-extern u8 dpp_pkex_ephemeral_key_override[600];
+extern uint8_t dpp_pkex_own_mac_override[ETH_ALEN];
+extern uint8_t dpp_pkex_peer_mac_override[ETH_ALEN];
+extern uint8_t dpp_pkex_ephemeral_key_override[600];
 extern size_t dpp_pkex_ephemeral_key_override_len;
-extern u8 dpp_protocol_key_override[600];
+extern uint8_t dpp_protocol_key_override[600];
 extern size_t dpp_protocol_key_override_len;
-extern u8 dpp_nonce_override[DPP_MAX_NONCE_LEN];
+extern uint8_t dpp_nonce_override[DPP_MAX_NONCE_LEN];
 extern size_t dpp_nonce_override_len;
 #endif /* CONFIG_TESTING_OPTIONS */
 
@@ -393,28 +394,28 @@ int dpp_parse_uri_mac(struct dpp_bootstrap_info *bi, const char *mac);
 int dpp_parse_uri_info(struct dpp_bootstrap_info *bi, const char *info);
 struct dpp_bootstrap_info * dpp_parse_qr_code(const char *uri);
 char * dpp_keygen(struct dpp_bootstrap_info *bi, const char *curve,
-		  const u8 *privkey, size_t privkey_len);
+		  const uint8_t *privkey, size_t privkey_len);
 struct hostapd_hw_modes;
 struct dpp_authentication * dpp_auth_init(void *msg_ctx,
 					  struct dpp_bootstrap_info *peer_bi,
 					  struct dpp_bootstrap_info *own_bi,
-					  u8 dpp_allowed_roles,
+					  uint8_t dpp_allowed_roles,
 					  unsigned int neg_freq,
 					  struct hostapd_hw_modes *own_modes,
-					  u16 num_modes);
+					  uint16_t num_modes);
 struct dpp_authentication *
-dpp_auth_req_rx(void *msg_ctx, u8 dpp_allowed_roles, int qr_mutual,
+dpp_auth_req_rx(void *msg_ctx, uint8_t dpp_allowed_roles, int qr_mutual,
 		struct dpp_bootstrap_info *peer_bi,
 		struct dpp_bootstrap_info *own_bi,
-		unsigned int freq, const u8 *hdr, const u8 *attr_start,
+		unsigned int freq, const uint8_t *hdr, const uint8_t *attr_start,
 		size_t attr_len);
 struct wpabuf *
-dpp_auth_resp_rx(struct dpp_authentication *auth, const u8 *hdr,
-		 const u8 *attr_start, size_t attr_len);
+dpp_auth_resp_rx(struct dpp_authentication *auth, const uint8_t *hdr,
+		 const uint8_t *attr_start, size_t attr_len);
 struct wpabuf * dpp_build_conf_req(struct dpp_authentication *auth,
 				   const char *json);
-int dpp_auth_conf_rx(struct dpp_authentication *auth, const u8 *hdr,
-		     const u8 *attr_start, size_t attr_len);
+int dpp_auth_conf_rx(struct dpp_authentication *auth, const uint8_t *hdr,
+		     const uint8_t *attr_start, size_t attr_len);
 int dpp_notify_new_qr_code(struct dpp_authentication *auth,
 			   struct dpp_bootstrap_info *peer_bi);
 struct dpp_configuration * dpp_configuration_alloc(const char *type);
@@ -430,54 +431,54 @@ int dpp_set_configurator(struct dpp_global *dpp, void *msg_ctx,
 			 const char *cmd);
 void dpp_auth_deinit(struct dpp_authentication *auth);
 struct wpabuf *
-dpp_conf_req_rx(struct dpp_authentication *auth, const u8 *attr_start,
+dpp_conf_req_rx(struct dpp_authentication *auth, const uint8_t *attr_start,
 		size_t attr_len);
 int dpp_conf_resp_rx(struct dpp_authentication *auth,
 		     const struct wpabuf *resp);
 enum dpp_status_error dpp_conf_result_rx(struct dpp_authentication *auth,
-					 const u8 *hdr,
-					 const u8 *attr_start, size_t attr_len);
+					 const uint8_t *hdr,
+					 const uint8_t *attr_start, size_t attr_len);
 struct wpabuf * dpp_build_conf_result(struct dpp_authentication *auth,
 				      enum dpp_status_error status);
 struct wpabuf * dpp_alloc_msg(enum dpp_public_action_frame_type type,
 			      size_t len);
-const u8 * dpp_get_attr(const u8 *buf, size_t len, u16 req_id, u16 *ret_len);
-int dpp_check_attrs(const u8 *buf, size_t len);
+const uint8_t * dpp_get_attr(const uint8_t *buf, size_t len, uint16_t req_id, uint16_t *ret_len);
+int dpp_check_attrs(const uint8_t *buf, size_t len);
 int dpp_key_expired(const char *timestamp, os_time_t *expiry);
 const char * dpp_akm_str(enum dpp_akm akm);
 int dpp_configurator_get_key(const struct dpp_configurator *conf, char *buf,
 			     size_t buflen);
 void dpp_configurator_free(struct dpp_configurator *conf);
 struct dpp_configurator *
-dpp_keygen_configurator(const char *curve, const u8 *privkey,
+dpp_keygen_configurator(const char *curve, const uint8_t *privkey,
 			size_t privkey_len);
 int dpp_configurator_own_config(struct dpp_authentication *auth,
 				const char *curve, int ap);
 enum dpp_status_error
 dpp_peer_intro(struct dpp_introduction *intro, const char *own_connector,
-	       const u8 *net_access_key, size_t net_access_key_len,
-	       const u8 *csign_key, size_t csign_key_len,
-	       const u8 *peer_connector, size_t peer_connector_len,
+	       const uint8_t *net_access_key, size_t net_access_key_len,
+	       const uint8_t *csign_key, size_t csign_key_len,
+	       const uint8_t *peer_connector, size_t peer_connector_len,
 	       os_time_t *expiry);
 struct dpp_pkex * dpp_pkex_init(void *msg_ctx, struct dpp_bootstrap_info *bi,
-				const u8 *own_mac,
+				const uint8_t *own_mac,
 				const char *identifier,
 				const char *code);
 struct dpp_pkex * dpp_pkex_rx_exchange_req(void *msg_ctx,
 					   struct dpp_bootstrap_info *bi,
-					   const u8 *own_mac,
-					   const u8 *peer_mac,
+					   const uint8_t *own_mac,
+					   const uint8_t *peer_mac,
 					   const char *identifier,
 					   const char *code,
-					   const u8 *buf, size_t len);
+					   const uint8_t *buf, size_t len);
 struct wpabuf * dpp_pkex_rx_exchange_resp(struct dpp_pkex *pkex,
-					  const u8 *peer_mac,
-					  const u8 *buf, size_t len);
+					  const uint8_t *peer_mac,
+					  const uint8_t *buf, size_t len);
 struct wpabuf * dpp_pkex_rx_commit_reveal_req(struct dpp_pkex *pkex,
-					      const u8 *hdr,
-					      const u8 *buf, size_t len);
-int dpp_pkex_rx_commit_reveal_resp(struct dpp_pkex *pkex, const u8 *hdr,
-				   const u8 *buf, size_t len);
+					      const uint8_t *hdr,
+					      const uint8_t *buf, size_t len);
+int dpp_pkex_rx_commit_reveal_resp(struct dpp_pkex *pkex, const uint8_t *hdr,
+				   const uint8_t *buf, size_t len);
 void dpp_pkex_free(struct dpp_pkex *pkex);
 
 char * dpp_corrupt_connector_signature(const char *connector);
@@ -490,9 +491,9 @@ struct dpp_pfs {
 	struct wpabuf *secret;
 };
 
-struct dpp_pfs * dpp_pfs_init(const u8 *net_access_key,
+struct dpp_pfs * dpp_pfs_init(const uint8_t *net_access_key,
 			      size_t net_access_key_len);
-int dpp_pfs_process(struct dpp_pfs *pfs, const u8 *peer_ie, size_t peer_ie_len);
+int dpp_pfs_process(struct dpp_pfs *pfs, const uint8_t *peer_ie, size_t peer_ie_len);
 void dpp_pfs_free(struct dpp_pfs *pfs);
 
 struct dpp_bootstrap_info * dpp_add_qr_code(struct dpp_global *dpp,
@@ -502,13 +503,13 @@ struct dpp_bootstrap_info *
 dpp_bootstrap_get_id(struct dpp_global *dpp, unsigned int id);
 int dpp_bootstrap_remove(struct dpp_global *dpp, const char *id);
 struct dpp_bootstrap_info *
-dpp_pkex_finish(struct dpp_global *dpp, struct dpp_pkex *pkex, const u8 *peer,
+dpp_pkex_finish(struct dpp_global *dpp, struct dpp_pkex *pkex, const uint8_t *peer,
 		unsigned int freq);
 const char * dpp_bootstrap_get_uri(struct dpp_global *dpp, unsigned int id);
 int dpp_bootstrap_info(struct dpp_global *dpp, int id,
 		       char *reply, int reply_size);
-void dpp_bootstrap_find_pair(struct dpp_global *dpp, const u8 *i_bootstrap,
-			     const u8 *r_bootstrap,
+void dpp_bootstrap_find_pair(struct dpp_global *dpp, const uint8_t *i_bootstrap,
+			     const uint8_t *r_bootstrap,
 			     struct dpp_bootstrap_info **own_bi,
 			     struct dpp_bootstrap_info **peer_bi);
 int dpp_configurator_add(struct dpp_global *dpp, const char *cmd);
@@ -517,10 +518,10 @@ int dpp_configurator_get_key_id(struct dpp_global *dpp, unsigned int id,
 				char *buf, size_t buflen);
 int dpp_relay_add_controller(struct dpp_global *dpp,
 			     struct dpp_relay_config *config);
-int dpp_relay_rx_action(struct dpp_global *dpp, const u8 *src, const u8 *hdr,
-			const u8 *buf, size_t len, unsigned int freq,
-			const u8 *i_bootstrap, const u8 *r_bootstrap);
-int dpp_relay_rx_gas_req(struct dpp_global *dpp, const u8 *src, const u8 *data,
+int dpp_relay_rx_action(struct dpp_global *dpp, const uint8_t *src, const uint8_t *hdr,
+			const uint8_t *buf, size_t len, unsigned int freq,
+			const uint8_t *i_bootstrap, const uint8_t *r_bootstrap);
+int dpp_relay_rx_gas_req(struct dpp_global *dpp, const uint8_t *src, const uint8_t *data,
 			 size_t data_len);
 int dpp_controller_start(struct dpp_global *dpp,
 			 struct dpp_controller_config *config);

@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : wn_mimetype.c
  * This file is part of RT-Thread RTOS
@@ -61,7 +62,7 @@ static const struct webnet_mime_entry mime_tables[] =
  */
 const char* mime_get_type(const char* url)
 {
-    rt_uint32_t index;
+    uint32_t index;
 
     index = 0;
     if (url == RT_NULL)

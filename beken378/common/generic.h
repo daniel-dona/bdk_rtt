@@ -128,8 +128,8 @@ static inline uint64_t __bswap64(uint64_t _x)
 	    ((_x << 40) & ((uint64_t)0xff << 48)) | ((_x << 56))));
 }
 
-#define __swab16(x) __bswap16((__u8 *)&(x))
-#define __swab32(x) __bswap32((__u8 *)&(x))
+#define __swab16(x) __bswap16((uint8_t *)&(x))
+#define __swab32(x) __bswap32((uint8_t *)&(x))
 
 #define cpu_to_le16(x)   (x)
 #define cpu_to_le32(x)   (x)

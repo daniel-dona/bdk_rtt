@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _FFT_H_
 #define _FFT_H_
 
@@ -56,15 +57,15 @@
 
 typedef struct
 {
-    INT16 *in;
-    INT16 *out;
-    INT32 *mac_out;
-    volatile UINT8 busy_flag;
-    UINT16 size;
+    int16_t *in;
+    int16_t *out;
+    int32_t *mac_out;
+    volatile uint8_t busy_flag;
+    uint16_t size;
 } driver_fft_t;
 
 /*******************************************************************************
 * Function Declarations
 *******************************************************************************/
-UINT32 fft_ctrl(UINT32 cmd, void *param);
+uint32_t fft_ctrl(uint32_t cmd, void *param);
 #endif //_FFT_H_

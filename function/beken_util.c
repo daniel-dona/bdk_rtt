@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <stdarg.h>
 #include "rtthread.h"
 #include "beken_util.h"

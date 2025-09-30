@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "drv_model_pub.h"
 #include "intc_pub.h"
@@ -53,18 +54,18 @@ static SDD_OPERATIONS ble_op =
 
 extern /*const */struct bd_addr common_default_bdaddr;
 extern void uart_isr(void);
-extern void intc_service_change_handler(UINT8 int_num, FUNCPTR isr);
-extern void wifi_get_mac_address(char *mac, u8 type);
+extern void intc_service_change_handler(uint8_t int_num, FUNCPTR isr);
+extern void wifi_get_mac_address(char *mac, uint8_t type);
 extern void rwnxl_reset_handle(int dummy);
 extern uint32_t ps_get_sleep_prevent(void);
-extern UINT32 txl_cntrl_pck_get(void );
+extern uint32_t txl_cntrl_pck_get(void );
 extern void sctrl_modem_core_reset(void);
-extern void delay(INT32 num);
+extern void delay(int32_t num);
 extern void rw_main(void);
 extern void appm_update_param(struct gapc_conn_param *conn_param);
-extern UINT32 flash_read(char *user_buf, UINT32 count, UINT32 address);
-extern UINT32 flash_write(char *user_buf, UINT32 count, UINT32 address);
-extern UINT32 flash_ctrl(UINT32 cmd, void *parm);
+extern uint32_t flash_read(char *user_buf, uint32_t count, uint32_t address);
+extern uint32_t flash_write(char *user_buf, uint32_t count, uint32_t address);
+extern uint32_t flash_ctrl(uint32_t cmd, void *parm);
 
 
 void ble_intc_set(uint32_t enable)
@@ -77,19 +78,19 @@ void ble_intc_set(uint32_t enable)
 
 void ble_clk_power_up(void)
 {
-    UINT32 param;
+    uint32_t param;
     param = PWD_BLE_CLK_BIT;
     sddev_control(ICU_DEV_NAME, CMD_TL410_CLK_PWR_UP, &param);
 }
 
 void ble_clk_power_down(void)
 {
-    UINT32 param;
+    uint32_t param;
     param = PWD_BLE_CLK_BIT;
     sddev_control(ICU_DEV_NAME, CMD_TL410_CLK_PWR_DOWN, &param);
 }
 
-UINT32 rf_wifi_used = 0;
+uint32_t rf_wifi_used = 0;
 
 void rf_wifi_used_set(void)
 {
@@ -113,7 +114,7 @@ void rf_wifi_used_clr(void)
     GLOBAL_INT_RESTORE();
 }
 
-UINT32 if_rf_wifi_used(void )
+uint32_t if_rf_wifi_used(void )
 {
     uint32_t value = 0;
     GLOBAL_INT_DECLARATION();
@@ -124,9 +125,9 @@ UINT32 if_rf_wifi_used(void )
 }
 
 #if CFG_SUPPORT_BLE
-uint8 is_rf_switch_to_ble(void)
+uint8_t is_rf_switch_to_ble(void)
 {
-    UINT32 param;
+    uint32_t param;
     
     sddev_control(SCTRL_DEV_NAME, CMD_BLE_RF_BIT_GET, &param);
 
@@ -136,7 +137,7 @@ uint8 is_rf_switch_to_ble(void)
 
 void ble_switch_rf_to_wifi(void)
 {
-    UINT32 reg;
+    uint32_t reg;
     // if in ble dut mode, no need change back to wifi any more.
     // ble dut mode can not exit until power off
   //  if (!is_rf_switch_to_ble() || power_save_if_rf_sleep())
@@ -266,7 +267,7 @@ void ble_switch_clear_mac_interrupts(void)
 
 void ble_switch_rf_to_ble(void)
 {
-    UINT32 reg;
+    uint32_t reg;
     if(if_rf_wifi_used())
         return;
 
@@ -397,7 +398,7 @@ void ble_release_rf_by_isr(void)
     }
 }
 
-void ble_set_power_up(uint32 up)
+void ble_set_power_up(uint32_t up)
 {
     if(up)
         sddev_control(SCTRL_DEV_NAME, CMD_SCTRL_BLE_POWERUP, NULL);
@@ -412,9 +413,9 @@ void ble_set_power_up(uint32 up)
     }
 }
 
-void ble_set_pn9_trx(uint32 param)
+void ble_set_pn9_trx(uint32_t param)
 {
-    UINT32 reg;
+    uint32_t reg;
     
     if(PN9_RX == param)
     {
@@ -449,10 +450,10 @@ void ble_exit(void)
 	return;
 }
 
-UINT32 ble_ctrl( UINT32 cmd, void *param )
+uint32_t ble_ctrl( uint32_t cmd, void *param )
 {
-    UINT32 reg;
-	UINT32 ret = ERR_SUCCESS;
+    uint32_t reg;
+	uint32_t ret = ERR_SUCCESS;
 
 	switch(cmd)
 	{
@@ -465,7 +466,7 @@ UINT32 ble_ctrl( UINT32 cmd, void *param )
     case CMD_BLE_SET_CHANNEL:
         reg = REG_READ(REG_BLE_XVR_CHANNEL_CONFIG_ADDR);
         reg &= ~(REG_BLE_XVR_CHANNEL_VALUE_MASK << REG_BLE_XVR_CHANNEL_VALUE_POST);
-        reg |= (*(UINT32 *)param) << REG_BLE_XVR_CHANNEL_VALUE_POST;
+        reg |= (*(uint32_t *)param) << REG_BLE_XVR_CHANNEL_VALUE_POST;
         REG_WRITE(REG_BLE_XVR_CHANNEL_CONFIG_ADDR, reg);
         reg = REG_READ(REG_BLE_XVR_TRX_CONFIG_ADDR);
         reg &= ~(1 << REG_BLE_XVR_TEST_RADIO_POST);
@@ -500,11 +501,11 @@ UINT32 ble_ctrl( UINT32 cmd, void *param )
         break;
 
     case CMD_BLE_SET_PN9_TRX:
-        ble_set_pn9_trx(*(UINT32 *)param);
+        ble_set_pn9_trx(*(uint32_t *)param);
         break;
 
     case CMD_BLE_SET_GFSK_SYNCWD:
-        reg = (*(UINT32 *)param);
+        reg = (*(uint32_t *)param);
         REG_WRITE(REG_BLE_XVR_GFSK_SYNCWD_ADDR, reg);
         break;
 
@@ -548,7 +549,7 @@ static void ble_main( void *arg )
 
     if(!ble_dut_flag)
     {
-        UINT8 *mac = (UINT8 *)&ble_cfg.mac;
+        uint8_t *mac = (uint8_t *)&ble_cfg.mac;
         
         os_printf("ble name:%s, %02x:%02x:%02x:%02x:%02x:%02x\r\n", 
             app_dflt_dev_name, mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
@@ -602,7 +603,7 @@ void ble_stop(void)
 
 void ble_activate(char *ble_name)
 {
-    UINT32 len;
+    uint32_t len;
 
 //    bk_wlan_stop(1);
 
@@ -646,22 +647,22 @@ void ble_dut_start(void)
     }
 }
 
-UINT8 ble_is_start(void)
+uint8_t ble_is_start(void)
 {
     return (ble_thread_handle == NULL)? 0:1;
 }
 
-UINT8* ble_get_mac_addr(void)
+uint8_t* ble_get_mac_addr(void)
 {
-    return (UINT8*)&common_default_bdaddr;
+    return (uint8_t*)&common_default_bdaddr;
 }
 
-UINT8* ble_get_name(void)
+uint8_t* ble_get_name(void)
 {
-    return (UINT8*)&app_dflt_dev_name;
+    return (uint8_t*)&app_dflt_dev_name;
 }
 
-void ble_send_msg(UINT32 data)
+void ble_send_msg(uint32_t data)
 {
 	OSStatus ret;
 	BLE_MSG_T msg;
@@ -787,7 +788,7 @@ ble_role_t ble_get_role_mode()
 }
 
 #if CFG_SUPPORT_BLE
-UINT32 ble_in_dut_mode(void)
+uint32_t ble_in_dut_mode(void)
 {
     return (ble_dut_flag == 1)  ? 1 :  0;
 }

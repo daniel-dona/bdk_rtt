@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <rthw.h>
 #include <rtthread.h>
 #include <rtdevice.h>
@@ -22,9 +23,9 @@
 #include "gpio_pub.h"
 #if defined(RT_USING_I2C) && defined(RT_USING_I2C_BITOPS)
 
-static void iic_udelay(rt_uint32_t us)
+static void iic_udelay(uint32_t us)
 {
-	volatile rt_int32_t i = us;
+	volatile int32_t i = us;
     while (i-- > 0) i = i;
 }
 
@@ -34,7 +35,7 @@ static void iic_gpio_init(void)
     bk_gpio_config_input_pup(I2C_CLK);
 }
 
-static void iic_set_sda(void *data, rt_int32_t state)
+static void iic_set_sda(void *data, int32_t state)
 {
     dbg_log(DBG_LOG, "set sda v:%d\n", state);
 
@@ -49,7 +50,7 @@ static void iic_set_sda(void *data, rt_int32_t state)
     }
 }
 
-static void iic_set_scl(void *data, rt_int32_t state)
+static void iic_set_scl(void *data, int32_t state)
 {
     dbg_log(DBG_LOG, "set scl v:%d\n", state);
 
@@ -64,9 +65,9 @@ static void iic_set_scl(void *data, rt_int32_t state)
     }
 }
 
-static rt_int32_t  iic_get_sda(void *data)
+static int32_t  iic_get_sda(void *data)
 {
-    rt_int32_t state;
+    int32_t state;
 
     state = bk_gpio_input(I2C_DAT);
     dbg_log(DBG_LOG, "get sda v:%d\n", state);
@@ -74,9 +75,9 @@ static rt_int32_t  iic_get_sda(void *data)
     return state;
 }
 
-static rt_int32_t  iic_get_scl(void *data)
+static int32_t  iic_get_scl(void *data)
 {
-    rt_int32_t state;
+    int32_t state;
 
     state = bk_gpio_input(I2C_CLK);
     dbg_log(DBG_LOG, "get scl v:%d\n", state);

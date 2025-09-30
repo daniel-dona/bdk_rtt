@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : mmc.h
  * This file is part of RT-Thread RTOS
@@ -196,8 +197,8 @@ extern "C" {
 /*
  * extern function
  */
-rt_err_t mmc_send_op_cond(struct rt_mmcsd_host *host, rt_uint32_t ocr, rt_uint32_t *rocr);
-rt_int32_t init_mmc(struct rt_mmcsd_host *host, rt_uint32_t ocr);
+rt_err_t mmc_send_op_cond(struct rt_mmcsd_host *host, uint32_t ocr, uint32_t *rocr);
+int32_t init_mmc(struct rt_mmcsd_host *host, uint32_t ocr);
 
 #ifdef __cplusplus
 }

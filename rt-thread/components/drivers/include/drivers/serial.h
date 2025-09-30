@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  * File      : serial.h
  * This file is part of RT-Thread RTOS
@@ -106,15 +108,15 @@
 
 struct serial_configure
 {
-    rt_uint32_t baud_rate;
+    uint32_t baud_rate;
 
-    rt_uint32_t data_bits               :4;
-    rt_uint32_t stop_bits               :2;
-    rt_uint32_t parity                  :2;
-    rt_uint32_t bit_order               :1;
-    rt_uint32_t invert                  :1;
-    rt_uint32_t bufsz                   :16;
-    rt_uint32_t reserved                :4;
+    uint32_t data_bits               :4;
+    uint32_t stop_bits               :2;
+    uint32_t parity                  :2;
+    uint32_t bit_order               :1;
+    uint32_t invert                  :1;
+    uint32_t bufsz                   :16;
+    uint32_t reserved                :4;
 };
 
 /*
@@ -123,9 +125,9 @@ struct serial_configure
 struct rt_serial_rx_fifo
 {
     /* software fifo */
-    rt_uint8_t *buffer;
+    uint8_t *buffer;
 
-    rt_uint16_t put_index, get_index;
+    uint16_t put_index, get_index;
 
     rt_bool_t is_full;
 };
@@ -172,14 +174,14 @@ struct rt_uart_ops
     int (*putc)(struct rt_serial_device *serial, char c);
     int (*getc)(struct rt_serial_device *serial);
 
-    rt_size_t (*dma_transmit)(struct rt_serial_device *serial, rt_uint8_t *buf, rt_size_t size, int direction);
+    rt_size_t (*dma_transmit)(struct rt_serial_device *serial, uint8_t *buf, rt_size_t size, int direction);
 };
 
 void rt_hw_serial_isr(struct rt_serial_device *serial, int event);
 
 rt_err_t rt_hw_serial_register(struct rt_serial_device *serial,
                                const char              *name,
-                               rt_uint32_t              flag,
+                               uint32_t              flag,
                                void                    *data);
 
 #endif

@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
   This file is part of UFFS, the Ultra-low-cost Flash File System.
   
@@ -58,10 +59,10 @@
 
 #if defined(CONFIG_UFFS_AUTO_LAYOUT_USE_MTD_SCHEME)
 /** Linux MTD spare layout for 512 and 2K page size */
-static const u8 MTD512_LAYOUT_ECC[] =	{0, 4, 6, 2, 0xFF, 0};
-static const u8 MTD512_LAYOUT_DATA[] = {8, 8, 0xFF, 0};
-static const u8 MTD2K_LAYOUT_ECC[] = {40, 24, 0xFF, 0};
-static const u8 MTD2K_LAYOUT_DATA[] = {2, 38, 0xFF, 0};
+static const uint8_t MTD512_LAYOUT_ECC[] =	{0, 4, 6, 2, 0xFF, 0};
+static const uint8_t MTD512_LAYOUT_DATA[] = {8, 8, 0xFF, 0};
+static const uint8_t MTD2K_LAYOUT_ECC[] = {40, 24, 0xFF, 0};
+static const uint8_t MTD2K_LAYOUT_DATA[] = {2, 38, 0xFF, 0};
 #endif
 
 static void TagMakeEcc(struct uffs_TagStoreSt *ts)
@@ -72,7 +73,7 @@ static void TagMakeEcc(struct uffs_TagStoreSt *ts)
 
 static int TagEccCorrect(struct uffs_TagStoreSt *ts)
 {
-	u16 ecc_store, ecc_read;
+	uint16_t ecc_store, ecc_read;
 	int ret;
 
 	ecc_store = ts->tag_ecc;
@@ -88,8 +89,8 @@ static int TagEccCorrect(struct uffs_TagStoreSt *ts)
 /** setup UFFS spare data & ecc layout */
 static void InitSpareLayout(uffs_Device *dev)
 {
-	u8 s; // status byte offset
-	u8 *p;
+	uint8_t s; // status byte offset
+	uint8_t *p;
 
 	s = dev->attr->block_status_offs;
 
@@ -150,7 +151,7 @@ static void InitSpareLayout(uffs_Device *dev)
 
 static int CalculateSpareDataSize(uffs_Device *dev)
 {
-	const u8 *p;
+	const uint8_t *p;
 	int ecc_last = 0, tag_last = 0;
 	int ecc_size, tag_size;
 	int n;
@@ -331,13 +332,13 @@ URET uffs_FlashInterfaceRelease(uffs_Device *dev)
  * unload spare to tag and ecc.
  */
 void uffs_FlashUnloadSpare(uffs_Device *dev,
-						const u8 *spare, struct uffs_TagStoreSt *ts, u8 *ecc)
+						const uint8_t *spare, struct uffs_TagStoreSt *ts, uint8_t *ecc)
 {
-	u8 *p_tag = (u8 *)ts;
+	uint8_t *p_tag = (uint8_t *)ts;
 	int tag_size = TAG_STORE_SIZE;
 	int ecc_size = dev->attr->ecc_size;
 	int n;
-	const u8 *p;
+	const uint8_t *p;
 
 	// unload ecc
 	p = dev->attr->ecc_layout;
@@ -381,12 +382,12 @@ int uffs_FlashReadPageTag(uffs_Device *dev,
 							int block, int page, uffs_Tags *tag)
 {
 	uffs_FlashOps *ops = dev->ops;
-	u8 * spare_buf;
+	uint8_t * spare_buf;
 	int ret = UFFS_FLASH_UNKNOWN_ERR;
 	int tmp_ret;
 	UBOOL is_bad = U_FALSE;
 
-	spare_buf = (u8 *) uffs_PoolGet(SPOOL(dev));
+	spare_buf = (uint8_t *) uffs_PoolGet(SPOOL(dev));
 	if (spare_buf == NULL)
 		goto ext;
 
@@ -490,17 +491,17 @@ int uffs_FlashReadPage(uffs_Device *dev, int block, int page, uffs_Buf *buf, UBO
 	uffs_FlashOps *ops = dev->ops;
 	struct uffs_StorageAttrSt *attr = dev->attr;
 	int size = dev->com.pg_size;
-	u8 ecc_buf[UFFS_MAX_ECC_SIZE];
-	u8 ecc_store[UFFS_MAX_ECC_SIZE];
+	uint8_t ecc_buf[UFFS_MAX_ECC_SIZE];
+	uint8_t ecc_store[UFFS_MAX_ECC_SIZE];
 	UBOOL is_bad = U_FALSE;
 #ifdef CONFIG_ENABLE_PAGE_DATA_CRC
 	UBOOL crc_ok = U_TRUE;
 #endif
-	u8 * spare;
+	uint8_t * spare;
 
 	int ret = UFFS_FLASH_UNKNOWN_ERR;
 
-	spare = (u8 *) uffs_PoolGet(SPOOL(dev));
+	spare = (uint8_t *) uffs_PoolGet(SPOOL(dev));
 	if (spare == NULL)
 		goto ext;
 
@@ -621,13 +622,13 @@ ext:
  *		 all unpacked bytes will be inited 0xFF
  */
 void uffs_FlashMakeSpare(uffs_Device *dev,
-						 const uffs_TagStore *ts, const u8 *ecc, u8* spare)
+						 const uffs_TagStore *ts, const uint8_t *ecc, uint8_t* spare)
 {
-	u8 *p_ts = (u8 *)ts;
+	uint8_t *p_ts = (uint8_t *)ts;
 	int ts_size = TAG_STORE_SIZE;
 	int ecc_size = ECC_SIZE(dev);
 	int n;
-	const u8 *p;
+	const uint8_t *p;
 
 	if (!uffs_Assert(spare != NULL, "invalid param"))
 		return;
@@ -678,9 +679,9 @@ int uffs_FlashWritePageCombine(uffs_Device *dev,
 {
 	uffs_FlashOps *ops = dev->ops;
 	int size = dev->com.pg_size;
-	u8 ecc_buf[UFFS_MAX_ECC_SIZE];
-	u8 *ecc = NULL;
-	u8 *spare;
+	uint8_t ecc_buf[UFFS_MAX_ECC_SIZE];
+	uint8_t *ecc = NULL;
+	uint8_t *spare;
 	struct uffs_MiniHeaderSt *header;
 	int ret = UFFS_FLASH_UNKNOWN_ERR;
 	UBOOL is_bad = U_FALSE;
@@ -689,7 +690,7 @@ int uffs_FlashWritePageCombine(uffs_Device *dev,
 	uffs_Tags chk_tag;
 #endif
 	
-	spare = (u8 *) uffs_PoolGet(SPOOL(dev));
+	spare = (uint8_t *) uffs_PoolGet(SPOOL(dev));
 	if (spare == NULL)
 		goto ext;
 
@@ -800,7 +801,7 @@ ext:
  */
 int uffs_FlashMarkDirtyPage(uffs_Device *dev, uffs_BlockInfo *bc, int page)
 {
-	u8 *spare;
+	uint8_t *spare;
 	uffs_FlashOps *ops = dev->ops;
 	UBOOL is_bad = U_FALSE;
 	int ret = UFFS_FLASH_UNKNOWN_ERR;
@@ -808,7 +809,7 @@ int uffs_FlashMarkDirtyPage(uffs_Device *dev, uffs_BlockInfo *bc, int page)
 	uffs_Tags *tag = GET_TAG(bc, page);
 	struct uffs_TagStoreSt *ts = &tag->s;
 
-	spare = (u8 *) uffs_PoolGet(SPOOL(dev));
+	spare = (uint8_t *) uffs_PoolGet(SPOOL(dev));
 	if (spare == NULL)
 		goto ext;
 
@@ -941,19 +942,19 @@ URET uffs_FlashEraseBlock(uffs_Device *dev, int block)
  */
 URET uffs_FlashCheckErasedBlock(uffs_Device *dev, int block)
 {
-	u8 *spare = NULL;
+	uint8_t *spare = NULL;
 	uffs_FlashOps *ops = dev->ops;
 	int ret = U_SUCC;
 	int page;
 	int flash_ret;
-	u8 ecc_store[UFFS_MAX_ECC_SIZE];
+	uint8_t ecc_store[UFFS_MAX_ECC_SIZE];
 	uffs_TagStore ts;
 	uffs_Buf *buf = NULL;
 	int size = dev->com.pg_size;
 	int i;
-	u8 *p;
+	uint8_t *p;
 	
-	spare = (u8 *) uffs_PoolGet(SPOOL(dev));
+	spare = (uint8_t *) uffs_PoolGet(SPOOL(dev));
 	
 	if (spare == NULL) {
 		uffs_Perror(UFFS_MSG_SERIOUS, "Can't allocate spare buf.");
@@ -974,7 +975,7 @@ URET uffs_FlashCheckErasedBlock(uffs_Device *dev, int block)
 			
 			if (flash_ret != UFFS_FLASH_IO_ERR) {
 				// check page tag, should be all 0xFF
-				for (i = 0, p = (u8 *)(&ts); i < sizeof(ts); i++, p++) {
+				for (i = 0, p = (uint8_t *)(&ts); i < sizeof(ts); i++, p++) {
 					if (*p != 0xFF) {
 						ret = U_FAIL;
 						goto ext;

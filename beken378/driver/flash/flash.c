@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 #include "sys_config.h"
@@ -31,7 +32,7 @@ static const flash_config_t flash_config[] =
 };
 
 static const flash_config_t *flash_current_config = NULL;
-static UINT32 flash_id;
+static uint32_t flash_id;
 static DD_OPERATIONS flash_op =
 {
     NULL,
@@ -61,9 +62,9 @@ static void flash_get_current_flash_config(void)
     }
 }
 
-static void flash_set_clk(UINT8 clk_conf)
+static void flash_set_clk(uint8_t clk_conf)
 {
-    UINT32 value;
+    uint32_t value;
 
     value = REG_READ(REG_FLASH_CONF);
     value &= ~(FLASH_CLK_CONF_MASK << FLASH_CLK_CONF_POSI);
@@ -79,7 +80,7 @@ static void flash_set_clk(UINT8 clk_conf)
 __maybe_unused static void flash_enable_cpu_data_wr(void);
 static void flash_enable_cpu_data_wr(void)
 {
-    UINT32 value;
+    uint32_t value;
 
     value = REG_READ(REG_FLASH_CONF);
     value |= (CPU_DATA_WR_MASK << CPU_DATA_WR_POSI);
@@ -88,7 +89,7 @@ static void flash_enable_cpu_data_wr(void)
 
 static void flash_disable_cpu_data_wr(void)
 {
-    UINT32 value;
+    uint32_t value;
 
     value = REG_READ(REG_FLASH_CONF);
     value &= (~(CPU_DATA_WR_MASK << CPU_DATA_WR_POSI));
@@ -98,7 +99,7 @@ static void flash_disable_cpu_data_wr(void)
 
 static void flash_write_enable(void)
 {
-    UINT32 value;
+    uint32_t value;
 
     value = (FLASH_OPCODE_WREN << OP_TYPE_SW_POSI) | OP_SW | WP_VALUE;
     REG_WRITE(REG_FLASH_OPERATE_SW, value);
@@ -108,17 +109,17 @@ static void flash_write_enable(void)
 
 static void flash_write_disable(void)
 {
-    UINT32 value;
+    uint32_t value;
 
     value = (FLASH_OPCODE_WRDI << OP_TYPE_SW_POSI) | OP_SW | WP_VALUE;
     REG_WRITE(REG_FLASH_OPERATE_SW, value);
     while(REG_READ(REG_FLASH_OPERATE_SW) & BUSY_SW);
 }
 
-static UINT16 flash_read_sr(UINT8 sr_width)
+static uint16_t flash_read_sr(uint8_t sr_width)
 {
-	UINT16 sr;
-    UINT32 value;
+	uint16_t sr;
+    uint32_t value;
 	
     while(REG_READ(REG_FLASH_OPERATE_SW) & BUSY_SW);
 
@@ -144,9 +145,9 @@ static UINT16 flash_read_sr(UINT8 sr_width)
     return sr;
 }
 
-static void flash_write_sr(UINT8 sr_width,  UINT16 val)
+static void flash_write_sr(uint8_t sr_width,  uint16_t val)
 {
-    UINT32 value;
+    uint32_t value;
 #if (CFG_SOC_NAME == SOC_BK7231N)
     GLOBAL_INT_DECLARATION();
 
@@ -179,10 +180,10 @@ static void flash_write_sr(UINT8 sr_width,  UINT16 val)
 #endif
 }
 
-static UINT8 flash_read_qe(void)
+static uint8_t flash_read_qe(void)
 {
-    UINT8 temp;
-    UINT32 value;
+    uint8_t temp;
+    uint32_t value;
 
     if(1 == flash_current_config->sr_size)
     {
@@ -204,7 +205,7 @@ static UINT8 flash_read_qe(void)
 
 static void flash_set_qe(void)
 {
-    UINT32 value, param;
+    uint32_t value, param;
 
     while(REG_READ(REG_FLASH_OPERATE_SW) & BUSY_SW);
 
@@ -239,7 +240,7 @@ static void flash_set_qe(void)
 
 static void flash_set_qwfr(void)
 {
-    UINT32 value;
+    uint32_t value;
 
     value = REG_READ(REG_FLASH_CONF);
     value &= ~(MODEL_SEL_MASK << MODEL_SEL_POSI);
@@ -249,7 +250,7 @@ static void flash_set_qwfr(void)
 
 static void flash_clr_qwfr(void)
 {
-    UINT32 value;
+    uint32_t value;
 
     value = REG_READ(REG_FLASH_CONF);
     value &= ~(MODEL_SEL_MASK << MODEL_SEL_POSI);
@@ -265,9 +266,9 @@ static void flash_clr_qwfr(void)
     while(REG_READ(REG_FLASH_OPERATE_SW) & BUSY_SW);
 }
 
-static void flash_set_wsr(UINT16 data)
+static void flash_set_wsr(uint16_t data)
 {
-    UINT32 value;
+    uint32_t value;
 
     while(REG_READ(REG_FLASH_OPERATE_SW) & BUSY_SW);
 
@@ -284,14 +285,14 @@ static void flash_set_wsr(UINT16 data)
     while(REG_READ(REG_FLASH_OPERATE_SW) & BUSY_SW);
 }
 
-UINT8 flash_get_line_mode(void)
+uint8_t flash_get_line_mode(void)
 {
     return flash_current_config->line_mode;
 }
 
-void flash_set_line_mode(UINT8 mode)
+void flash_set_line_mode(uint8_t mode)
 {
-    UINT32 value;
+    uint32_t value;
     
     if(1 == mode)
     {
@@ -325,9 +326,9 @@ void flash_set_line_mode(UINT8 mode)
     }
 }
 
-static UINT32 flash_get_id(void)
+static uint32_t flash_get_id(void)
 {
-    UINT32 value;
+    uint32_t value;
 
     value = (FLASH_OPCODE_RDID << OP_TYPE_SW_POSI) | OP_SW | WP_VALUE;
     REG_WRITE(REG_FLASH_OPERATE_SW, value);
@@ -337,10 +338,10 @@ static UINT32 flash_get_id(void)
     return flash_id;
 }
 
-static UINT32 flash_read_mid(void)
+static uint32_t flash_read_mid(void)
 {
-    UINT32 value;
-    UINT32 flash_id;
+    uint32_t value;
+    uint32_t flash_id;
 
     while(REG_READ(REG_FLASH_OPERATE_SW) & BUSY_SW);
 
@@ -359,7 +360,7 @@ static UINT32 flash_read_mid(void)
 
 PROTECT_TYPE get_flash_protect(void)
 {
-	UINT16 sr_value, cmp, param, value, type;
+	uint16_t sr_value, cmp, param, value, type;
 
 	sr_value = flash_read_sr(flash_current_config->sr_size);
 	param = (sr_value >> flash_current_config->protect_post) & flash_current_config->protect_mask;
@@ -392,7 +393,7 @@ PROTECT_TYPE get_flash_protect(void)
 
 static void set_flash_protect(PROTECT_TYPE type)
 {
-    UINT32 param, value, cmp;
+    uint32_t param, value, cmp;
 	
 	switch (type)
 	{
@@ -440,10 +441,10 @@ static void set_flash_protect(PROTECT_TYPE type)
 	}
 }
 
-static void flash_erase_sector(UINT32 address)
+static void flash_erase_sector(uint32_t address)
 {
-    UINT32 value;
-    UINT32 erase_addr = address & 0xFFF000;
+    uint32_t value;
+    uint32_t erase_addr = address & 0xFFF000;
 #if (CFG_SOC_NAME == SOC_BK7231N)
     GLOBAL_INT_DECLARATION();
 #endif
@@ -472,7 +473,7 @@ static void flash_erase_sector(UINT32 address)
 
 static void flash_set_hpm(void)
 {
-    UINT32 value;
+    uint32_t value;
 
     while(REG_READ(REG_FLASH_OPERATE_SW) & BUSY_SW);
     value = REG_READ(REG_FLASH_OPERATE_SW);
@@ -484,12 +485,12 @@ static void flash_set_hpm(void)
     while(REG_READ(REG_FLASH_OPERATE_SW) & BUSY_SW);
 }
 
-static void flash_read_data(UINT8 *buffer, UINT32 address, UINT32 len)
+static void flash_read_data(uint8_t *buffer, uint32_t address, uint32_t len)
 {
-    UINT32 i, reg_value;
-    UINT32 addr = address & (~0x1F);
-    UINT32 buf[8];
-    UINT8 *pb = (UINT8 *)&buf[0];
+    uint32_t i, reg_value;
+    uint32_t addr = address & (~0x1F);
+    uint32_t buf[8];
+    uint8_t *pb = (uint8_t *)&buf[0];
 #if (CFG_SOC_NAME == SOC_BK7231N)
     GLOBAL_INT_DECLARATION();
 #endif
@@ -535,12 +536,12 @@ static void flash_read_data(UINT8 *buffer, UINT32 address, UINT32 len)
 #endif
 }
 
-static void flash_write_data(UINT8 *buffer, UINT32 address, UINT32 len)
+static void flash_write_data(uint8_t *buffer, uint32_t address, uint32_t len)
 {
-    UINT32 i, reg_value;
-    UINT32 addr = address & (~0x1F);
-    UINT32 buf[8];
-    UINT8 *pb = (UINT8 *)&buf[0];
+    uint32_t i, reg_value;
+    uint32_t addr = address & (~0x1F);
+    uint32_t buf[8];
+    uint8_t *pb = (uint8_t *)&buf[0];
 #if (CFG_SOC_NAME == SOC_BK7231N)
     GLOBAL_INT_DECLARATION();
 #endif
@@ -602,14 +603,14 @@ static void flash_write_data(UINT8 *buffer, UINT32 address, UINT32 len)
     }
 }
 
-void flash_protection_op(UINT8 mode, PROTECT_TYPE type)
+void flash_protection_op(uint8_t mode, PROTECT_TYPE type)
 {
 	set_flash_protect(type);
 }
 
 void flash_init(void)
 {
-    UINT32 id;
+    uint32_t id;
 
     while(REG_READ(REG_FLASH_OPERATE_SW) & BUSY_SW);
 	
@@ -637,18 +638,18 @@ void flash_exit(void)
     ddev_unregister_dev(FLASH_DEV_NAME);
 }
 
-UINT32 flash_read(char *user_buf, UINT32 count, UINT32 address)
+uint32_t flash_read(char *user_buf, uint32_t count, uint32_t address)
 {
     peri_busy_count_add();
 
-    flash_read_data((UINT8 *)user_buf, address, count);
+    flash_read_data((uint8_t *)user_buf, address, count);
 
     peri_busy_count_dec();
 
     return FLASH_SUCCESS;
 }
 
-UINT32 flash_write(char *user_buf, UINT32 count, UINT32 address)
+uint32_t flash_write(char *user_buf, uint32_t count, uint32_t address)
 {
     peri_busy_count_add();
 
@@ -657,7 +658,7 @@ UINT32 flash_write(char *user_buf, UINT32 count, UINT32 address)
         flash_set_line_mode(LINE_MODE_TWO);
     }
 
-    flash_write_data((UINT8 *)user_buf, address, count);
+    flash_write_data((uint8_t *)user_buf, address, count);
 
     if(4 == flash_current_config->line_mode)
     {
@@ -669,13 +670,13 @@ UINT32 flash_write(char *user_buf, UINT32 count, UINT32 address)
 }
 
 
-UINT32 flash_ctrl(UINT32 cmd, void *parm)
+uint32_t flash_ctrl(uint32_t cmd, void *parm)
 {
-    UINT8 clk;
-    UINT16 wsr;
-    UINT32 address;
-    UINT32 reg;
-    UINT32 ret = FLASH_SUCCESS;
+    uint8_t clk;
+    uint16_t wsr;
+    uint32_t address;
+    uint32_t reg;
+    uint32_t ret = FLASH_SUCCESS;
     peri_busy_count_add();
     
     if(4 == flash_current_config->line_mode)
@@ -686,7 +687,7 @@ UINT32 flash_ctrl(UINT32 cmd, void *parm)
     switch(cmd)
     {
     case CMD_FLASH_SET_CLK:
-        clk = (*(UINT8 *)parm);
+        clk = (*(uint8_t *)parm);
         flash_set_clk(clk);
         break;
 
@@ -722,7 +723,7 @@ UINT32 flash_ctrl(UINT32 cmd, void *parm)
         break;
 
     case CMD_FLASH_READ_SR:
-        (*(UINT16 *)parm) = flash_read_sr(2);
+        (*(uint16_t *)parm) = flash_read_sr(2);
         break;
 
     case CMD_FLASH_WRITE_SR:
@@ -730,7 +731,7 @@ UINT32 flash_ctrl(UINT32 cmd, void *parm)
         break;
 
     case CMD_FLASH_READ_QE:
-        (*(UINT8 *)parm) = flash_read_qe();
+        (*(uint8_t *)parm) = flash_read_qe();
         break;
 
     case CMD_FLASH_SET_QE:
@@ -749,24 +750,24 @@ UINT32 flash_ctrl(UINT32 cmd, void *parm)
         break;
 
     case CMD_FLASH_SET_WSR:
-        wsr = (*(UINT16 *)parm);
+        wsr = (*(uint16_t *)parm);
         flash_set_wsr(wsr);
         break;
 
     case CMD_FLASH_GET_ID:
-        (*(UINT32 *)parm) = flash_get_id();
+        (*(uint32_t *)parm) = flash_get_id();
         break;
 
     case CMD_FLASH_READ_MID:
-        (*(UINT32 *)parm) = flash_read_mid();
+        (*(uint32_t *)parm) = flash_read_mid();
         break;
 		
 	case CMD_FLASH_GET_PROTECT:
-		(*(UINT32 *)parm) = get_flash_protect();
+		(*(uint32_t *)parm) = get_flash_protect();
 		break;
 
     case CMD_FLASH_ERASE_SECTOR:
-        address = (*(UINT32 *)parm);
+        address = (*(uint32_t *)parm);
         flash_erase_sector(address);
         break;
 
@@ -775,7 +776,7 @@ UINT32 flash_ctrl(UINT32 cmd, void *parm)
         break;
 	
 	case CMD_FLASH_SET_PROTECT:
-		reg =  (*(UINT32 *)parm);
+		reg =  (*(uint32_t *)parm);
 		flash_protection_op(FLASH_XTX_16M_SR_WRITE_DISABLE, reg);
 		break;
 		

@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 
@@ -15,9 +16,9 @@
 /******************************************************************************/
 /**************************** platform function *******************************/
 /******************************************************************************/
-static void beken_sdcard_set_clk_div(UINT8 clkdiv)
+static void beken_sdcard_set_clk_div(uint8_t clkdiv)
 {
-    UINT32 reg;
+    uint32_t reg;
 
     reg = REG_READ(REG_SDCARD_FIFO_THRESHOLD);
     reg &= ~(SDCARD_FIFO_SD_RATE_SELECT_MASK << SDCARD_FIFO_SD_RATE_SELECT_POSI);
@@ -29,13 +30,13 @@ static void beken_sdcard_set_clk_div(UINT8 clkdiv)
 /******************************************************************************/
 /**************************** interface function ******************************/
 /******************************************************************************/
-void sdio_set_clock(UINT8 clk_index)
+void sdio_set_clock(uint8_t clk_index)
 {
 	beken_sdcard_set_clk_div(clk_index);
 }
 void sdio_gpio_config(void)
 {
-    UINT32 param;
+    uint32_t param;
  #if (CFG_SOC_NAME == SOC_BK7221U)
  	#if (CFG_SD_HOST_INTF == SD1_HOST_INTF)
     param = GFUNC_MODE_SD1_HOST;
@@ -48,10 +49,10 @@ void sdio_gpio_config(void)
     sddev_control(GPIO_DEV_NAME, CMD_GPIO_ENABLE_SECOND, &param);
 }
 
-void sdio_clk_config(UINT8 enable)
+void sdio_clk_config(uint8_t enable)
 {
-    UINT32 param;
-    UINT32 cmd;
+    uint32_t param;
+    uint32_t cmd;
 
     if(enable)
         cmd = CMD_CLK_PWR_UP;
@@ -64,7 +65,7 @@ void sdio_clk_config(UINT8 enable)
 
 void sdio_register_reset(void)
 {
-    UINT32 reg;
+    uint32_t reg;
 
     /* Clear cmd rsp int bit */
     reg = REG_READ(REG_SDCARD_CMD_RSP_INT_SEL);
@@ -89,7 +90,7 @@ void sdio_register_reset(void)
 #if 0
 void sdio_register_reenable(void)
 {
-    UINT32 reg;
+    uint32_t reg;
 
     reg = REG_READ(REG_SDCARD_CMD_RSP_INT_SEL);
     REG_WRITE(REG_SDCARD_CMD_RSP_INT_SEL, reg);
@@ -107,19 +108,19 @@ void sdio_register_reenable(void)
     REG_WRITE(REG_SDCARD_FIFO_THRESHOLD, reg);
 }
 #endif
-void sdio_sendcmd_function( UINT8 cmd_index, UINT32 flag,
-                            UINT32 timeout, VOID *arg )
+void sdio_sendcmd_function( uint8_t cmd_index, uint32_t flag,
+                            uint32_t timeout, void *arg )
 {
-    UINT32 reg;
+    uint32_t reg;
     flag &= CMD_FLAG_MASK;
 
-    reg = (UINT32)arg;
+    reg = (uint32_t)arg;
     REG_WRITE(REG_SDCARD_CMD_SEND_AGUMENT, reg);
 
     reg = timeout;
     REG_WRITE(REG_SDCARD_CMD_RSP_TIMER, reg);
 
-    reg = ((((UINT32)cmd_index)&SDCARD_CMD_SEND_CTRL_CMD_INDEX_MASK)
+    reg = ((((uint32_t)cmd_index)&SDCARD_CMD_SEND_CTRL_CMD_INDEX_MASK)
            << SDCARD_CMD_SEND_CTRL_CMD_INDEX_POSI)
           | ((flag & SDCARD_CMD_SEND_CTRL_CMD_FLAGS_MASK)
              << SDCARD_CMD_SEND_CTRL_CMD_FLAGS_POSI)
@@ -127,9 +128,9 @@ void sdio_sendcmd_function( UINT8 cmd_index, UINT32 flag,
     REG_WRITE(REG_SDCARD_CMD_SEND_CTRL, reg);
 }
 
-SDIO_Error sdio_wait_cmd_response(UINT32 cmd)
+SDIO_Error sdio_wait_cmd_response(uint32_t cmd)
 {
-    UINT32 reg;
+    uint32_t reg;
 
     while(1)
     {
@@ -164,7 +165,7 @@ SDIO_Error sdio_wait_cmd_response(UINT32 cmd)
     return SD_OK;
 }
 
-void sdio_get_cmdresponse_argument(UINT8 num, UINT32 *resp)
+void sdio_get_cmdresponse_argument(uint8_t num, uint32_t *resp)
 {
     switch(num)
     {
@@ -185,9 +186,9 @@ void sdio_get_cmdresponse_argument(UINT8 num, UINT32 *resp)
     }
 }
 
-void sdio_setup_data(UINT32 data_dir, UINT32 byte_len)
+void sdio_setup_data(uint32_t data_dir, uint32_t byte_len)
 {
-    UINT32 reg;
+    uint32_t reg;
     if(data_dir == SD_DATA_DIR_RD)
     {
         reg = REG_READ(REG_SDCARD_FIFO_THRESHOLD);
@@ -211,7 +212,7 @@ void sdio_setup_data(UINT32 data_dir, UINT32 byte_len)
     REG_WRITE(REG_SDCARD_DATA_REC_CTRL, reg);
 }
 
-void sdio_set_data_timeout(UINT32 timeout)
+void sdio_set_data_timeout(uint32_t timeout)
 {
     REG_WRITE(REG_SDCARD_DATA_REC_TIMER, timeout);
 }
@@ -226,9 +227,9 @@ void driver_sdcard_recv_data_start(int timeout )
 #endif
 }
 
-SDIO_Error sdcard_wait_receive_data(UINT8 *receive_buf)
+SDIO_Error sdcard_wait_receive_data(uint8_t *receive_buf)
 {
-    UINT32 reg, i;
+    uint32_t reg, i;
     while(1)
     {
         reg = REG_READ(REG_SDCARD_CMD_RSP_INT_SEL);
@@ -271,9 +272,9 @@ SDIO_Error sdcard_wait_receive_data(UINT8 *receive_buf)
 }
 
 #if 0
-SDIO_Error sdcard_write_data(UINT8 *writebuff, UINT32 block)
+SDIO_Error sdcard_write_data(uint8_t *writebuff, uint32_t block)
 {
-    UINT32 i, j, reg, tmpval;
+    uint32_t i, j, reg, tmpval;
 
     i = 0;
     // 1. fill the first block to fifo and start write data enable
@@ -367,7 +368,7 @@ SDIO_Error sdcard_write_data(UINT8 *writebuff, UINT32 block)
 
 SDIO_Error sdcard_wait_write_end(void)
 {
-    UINT32 reg;
+    uint32_t reg;
     while(1)
     {
         reg = REG_READ(REG_SDCARD_CMD_RSP_INT_SEL);
@@ -397,8 +398,8 @@ SDIO_Error sdcard_wait_write_end(void)
 #endif
 int wait_Receive_Data(void)
 {
-    uint32 ret = SD_ERR_LONG_TIME_NO_RESPONS, status = 0;
-    uint32 start_tm = rtos_get_time();
+    uint32_t ret = SD_ERR_LONG_TIME_NO_RESPONS, status = 0;
+    uint32_t start_tm = rtos_get_time();
     while (1)
     {
         if(rtos_get_time() > start_tm + 4000) // 4s

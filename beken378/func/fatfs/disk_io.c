@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 #include "diskio.h"
@@ -26,9 +27,9 @@ extern void MUSB_Host_init(void);
 extern uint8_t MGC_MsdGetMediumstatus(void);
 extern uint32_t MUSB_NoneRunBackground(void);
 
-uint8 udisk_init(void)
+uint8_t udisk_init(void)
 {
-    uint32 ret = USB_RET_ERROR;
+    uint32_t ret = USB_RET_ERROR;
 
     if (MGC_MsdGetMediumstatus())
     {
@@ -63,10 +64,10 @@ uint8 udisk_init(void)
 }
 
 DD_HANDLE sdcard_hdl;
-DSTATUS disk_initialize (uint8 pdrv)
+DSTATUS disk_initialize (uint8_t pdrv)
 {
     int cnt = 5;
-    UINT32 status;
+    uint32_t status;
 
     os_printf("disk_initialize\r\n");
     if(pdrv == DISK_TYPE_SD)
@@ -91,19 +92,19 @@ DSTATUS disk_initialize (uint8 pdrv)
 }
 
 
-DSTATUS disk_status (uint8 pdrv)
+DSTATUS disk_status (uint8_t pdrv)
 {
     return RES_OK;
 }
 
 DRESULT disk_read (
-    uint8 pdrv,
-    uint8 *buff,
-    uint32 start_sector,
-    uint32 sector_cnt
+    uint8_t pdrv,
+    uint8_t *buff,
+    uint32_t start_sector,
+    uint32_t sector_cnt
 )
 {
-    uint32 err;
+    uint32_t err;
 
     os_printf("disk_read: pdrv=%d, buff=0x%p, start_sector=0x%x, sector_cnt=0x%x\r\n", pdrv, buff, start_sector, sector_cnt);
     if( pdrv == DISK_TYPE_SD)
@@ -151,9 +152,9 @@ enum
     DISK_TYPE_UDISK
 };
 
-static uint8 cur_disk_type = DISK_TYPE_SD;
+static uint8_t cur_disk_type = DISK_TYPE_SD;
 
-DSTATUS disk_initialize(uint8 pdrv)
+DSTATUS disk_initialize(uint8_t pdrv)
 {
     cur_disk_type = pdrv;
 	
@@ -211,7 +212,7 @@ DRESULT disk_write (
     BYTE count			/* Number of sectors to write (1..255) */
 )
 {
-    uint8 res = 0;
+    uint8_t res = 0;
     cur_disk_type = drv;
 
     if (!count) return RES_PARERR;      // count2??¨¹¦Ì¨¨¨®¨²0¡ê?¡¤??¨°¡¤¦Ì??2?¨ºy¡ä¨ª?¨®
@@ -222,7 +223,7 @@ DRESULT disk_write (
     }
     else
     {
-        res = udisk_wr_blk_sync((int)sector, (int)count, (uint8 *)buff);
+        res = udisk_wr_blk_sync((int)sector, (int)count, (uint8_t *)buff);
     }
 
     if (res == 0x00)return RES_OK;
@@ -278,7 +279,7 @@ DWORD get_fattime (void)
     return 0;
 }
 
-uint8 Media_is_online(void)
+uint8_t Media_is_online(void)
 {
     if (cur_disk_type == DISK_TYPE_SD)
         //        return SD_is_attached();
@@ -287,12 +288,12 @@ uint8 Media_is_online(void)
         return udisk_is_attached();
 }
 
-uint8 get_cur_media_type(void)
+uint8_t get_cur_media_type(void)
 {
     return cur_disk_type;
 }
 
-DRESULT disk_unmount(uint8 pdrv)
+DRESULT disk_unmount(uint8_t pdrv)
 {
     if (pdrv == DISK_TYPE_SD)
         //		SD_SPI_Uninit();

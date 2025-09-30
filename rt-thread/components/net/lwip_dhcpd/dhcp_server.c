@@ -207,7 +207,7 @@ static void dhcpd_thread_entry(void *parameter)
     int sock;
     int bytes_read;
     char *recv_data;
-    rt_uint32_t addr_len;
+    uint32_t addr_len;
     struct sockaddr_in server_addr, client_addr;
     struct dhcp_msg *msg;
     int optval = 1;

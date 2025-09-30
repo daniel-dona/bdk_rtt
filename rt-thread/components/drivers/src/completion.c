@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : completion.c
  * This file is part of RT-Thread RTOS
@@ -42,7 +43,7 @@ void rt_completion_init(struct rt_completion *completion)
 RTM_EXPORT(rt_completion_init);
 
 rt_err_t rt_completion_wait(struct rt_completion *completion,
-                            rt_int32_t            timeout)
+                            int32_t            timeout)
 {
     rt_err_t result;
     rt_base_t level;

@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _GPIO_PUB_H_
 #define _GPIO_PUB_H_
 
@@ -176,15 +177,15 @@ enum
 
 typedef struct gpio_int_st
 {
-	UINT32 id;
-	UINT32 mode;
+	uint32_t id;
+	uint32_t mode;
 	void * phandler;
 }GPIO_INT_ST;
 				
 __inline static void bk_gpio_config_input(GPIO_INDEX id)
 {
-    UINT32 ret;
-    UINT32 param;
+    uint32_t ret;
+    uint32_t param;
     
     param = GPIO_CFG_PARAM(id, GMODE_INPUT);
     ret = sddev_control(GPIO_DEV_NAME, CMD_GPIO_CFG, &param);
@@ -195,8 +196,8 @@ __inline static void bk_gpio_config_input(GPIO_INDEX id)
 								
 __inline static void bk_gpio_config_input_pup(GPIO_INDEX id)
 {
-    UINT32 ret;
-    UINT32 param;
+    uint32_t ret;
+    uint32_t param;
 
     param = GPIO_CFG_PARAM(id, GMODE_INPUT_PULLUP);
     ret = sddev_control(GPIO_DEV_NAME, CMD_GPIO_CFG, &param);
@@ -208,8 +209,8 @@ __inline static void bk_gpio_config_input_pup(GPIO_INDEX id)
 
 __inline static void bk_gpio_config_input_pdwn(GPIO_INDEX id)
 {
-    UINT32 ret;
-	UINT32 param;
+    uint32_t ret;
+	uint32_t param;
 
 	param = GPIO_CFG_PARAM(id, GMODE_INPUT_PULLDOWN);
 	ret = sddev_control(GPIO_DEV_NAME, CMD_GPIO_CFG, &param);
@@ -221,8 +222,8 @@ __inline static void bk_gpio_config_input_pdwn(GPIO_INDEX id)
 
 __inline static uint32_t bk_gpio_input(GPIO_INDEX id)
 {
-    UINT32 ret;                      
-    UINT32 param = id;
+    uint32_t ret;                      
+    uint32_t param = id;
     
     ret = sddev_control(GPIO_DEV_NAME, CMD_GPIO_INPUT, &param); 
     
@@ -231,19 +232,19 @@ __inline static uint32_t bk_gpio_input(GPIO_INDEX id)
 
 __inline static void bk_gpio_config_output(GPIO_INDEX id)
 {
-    UINT32 ret;
+    uint32_t ret;
     
-	UINT32 param;
+	uint32_t param;
     
 	param = GPIO_CFG_PARAM(id, GMODE_OUTPUT);
 	ret = sddev_control(GPIO_DEV_NAME, CMD_GPIO_CFG, &param);
 	ASSERT(GPIO_SUCCESS == ret);  
 }
 
-__inline static void bk_gpio_output(GPIO_INDEX id,UINT32 val)
+__inline static void bk_gpio_output(GPIO_INDEX id,uint32_t val)
 {
-    UINT32 ret;                                           
-    UINT32 param;
+    uint32_t ret;                                           
+    uint32_t param;
     
     param = GPIO_OUTPUT_PARAM(id, val);
     ret = sddev_control(GPIO_DEV_NAME, CMD_GPIO_OUTPUT, &param);
@@ -252,8 +253,8 @@ __inline static void bk_gpio_output(GPIO_INDEX id,UINT32 val)
 
 __inline static void bk_gpio_output_reverse(GPIO_INDEX id)
 {
-    UINT32 ret;
-    UINT32 param = id;
+    uint32_t ret;
+    uint32_t param = id;
     
     ret = sddev_control(GPIO_DEV_NAME, CMD_GPIO_OUTPUT_REVERSE, &param);
     ASSERT(GPIO_SUCCESS == ret);            
@@ -271,7 +272,7 @@ extern void gpio_usb_second_function(void);
 #define USB_PLUG_IN_EVENT            1
 #define USB_PLUG_OUT_EVENT           2
 
-typedef void (*usb_plug_inout_handler)(void *usr_data, UINT32 event);
+typedef void (*usb_plug_inout_handler)(void *usr_data, uint32_t event);
 typedef struct usb_plug_inout {
     usb_plug_inout_handler handler;
     void *usr_data;
@@ -279,17 +280,17 @@ typedef struct usb_plug_inout {
 
 extern USB_PLUG_INOUT_ST usb_plug;
 void usb_plug_inout_isr(void);
-UINT32 usb_is_plug_in(void);
+uint32_t usb_is_plug_in(void);
 #endif
 
-extern UINT32 gpio_ctrl(UINT32 cmd, void *param);
-extern UINT32 gpio_input(UINT32 id);
+extern uint32_t gpio_ctrl(uint32_t cmd, void *param);
+extern uint32_t gpio_input(uint32_t id);
 extern void gpio_init(void);
 extern void gpio_exit(void);
-void gpio_int_disable(UINT32 index);
-void gpio_int_enable(UINT32 index, UINT32 mode, void (*p_Int_Handler)(unsigned char));
-void gpio_config( UINT32 index, UINT32 mode ) ;
-void gpio_output(UINT32 id, UINT32 val);
+void gpio_int_disable(uint32_t index);
+void gpio_int_enable(uint32_t index, uint32_t mode, void (*p_Int_Handler)(unsigned char));
+void gpio_config( uint32_t index, uint32_t mode ) ;
+void gpio_output(uint32_t id, uint32_t val);
 
 #endif // _GPIO_PUB_H_
 

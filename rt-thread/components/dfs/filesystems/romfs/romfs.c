@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : romfs.c
  * This file is part of Device File System in RT-Thread RTOS
@@ -41,12 +42,12 @@ const static unsigned char _dummy_txt[] =
 
 RT_WEAK const struct romfs_dirent _root_dirent[] =
 {
-    {ROMFS_DIRENT_DIR, "dummy", (rt_uint8_t *)_dummy, sizeof(_dummy)/sizeof(_dummy[0])},
+    {ROMFS_DIRENT_DIR, "dummy", (uint8_t *)_dummy, sizeof(_dummy)/sizeof(_dummy[0])},
     {ROMFS_DIRENT_FILE, "dummy.txt", _dummy_txt, sizeof(_dummy_txt)},
 };
 
 RT_WEAK const struct romfs_dirent romfs_root =
 {
-    ROMFS_DIRENT_DIR, "/", (rt_uint8_t *)_root_dirent, sizeof(_root_dirent)/sizeof(_root_dirent[0])
+    ROMFS_DIRENT_DIR, "/", (uint8_t *)_root_dirent, sizeof(_root_dirent)/sizeof(_root_dirent[0])
 };
 

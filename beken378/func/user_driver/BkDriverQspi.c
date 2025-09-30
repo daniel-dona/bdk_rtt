@@ -1,3 +1,4 @@
+#include <stdint.h>
 /**
  ******************************************************************************
  * @file    BkDriverQspi.h
@@ -34,7 +35,7 @@
 
 OSStatus bk_qspi_dcache_initialize(qspi_dcache_drv_desc *qspi_config)
 {
-	UINT32 param, ret;
+	uint32_t param, ret;
 
     ret = sddev_control(QSPI_DEV_NAME, QSPI_CMD_DCACHE_CONFIG, qspi_config);
     ASSERT(QSPI_SUCCESS == ret);

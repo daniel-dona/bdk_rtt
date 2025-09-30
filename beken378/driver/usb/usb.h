@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _USB_H_
 #define _USB_H_
 
@@ -111,11 +112,11 @@ typedef volatile unsigned long *VUINT32_PTR;
 /*******************************************************************************
 * Function Declarations
 *******************************************************************************/
-extern UINT32 usb_open (UINT32 op_flag);
-extern UINT32 usb_close (void);
-extern UINT32 usb_read (char *user_buf, UINT32 count, UINT32 op_flag);
-extern UINT32 usb_write (char *user_buf, UINT32 count, UINT32 op_flag);
-extern UINT32 usb_ctrl(UINT32 cmd, void *param);
+extern uint32_t usb_open (uint32_t op_flag);
+extern uint32_t usb_close (void);
+extern uint32_t usb_read (char *user_buf, uint32_t count, uint32_t op_flag);
+extern uint32_t usb_write (char *user_buf, uint32_t count, uint32_t op_flag);
+extern uint32_t usb_ctrl(uint32_t cmd, void *param);
 extern void usb_event_post(void);
 extern void usb_isr(void);
 void usb_check_int_handler(void);

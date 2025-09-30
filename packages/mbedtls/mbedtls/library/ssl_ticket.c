@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  *  TLS server tickets callbacks implementation
  *

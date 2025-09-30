@@ -1,3 +1,4 @@
+#include <stdint.h>
 typedef enum
 {
     SCEN_BLE_NORMAL,

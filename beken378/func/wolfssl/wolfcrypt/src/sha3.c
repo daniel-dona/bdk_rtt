@@ -1,3 +1,4 @@
+#include <stdint.h>
 /* sha3.c
  *
  * Copyright (C) 2006-2019 wolfSSL Inc.
@@ -636,7 +637,7 @@ static int Sha3Update(wc_Sha3* sha3, const byte* data, word32 len, byte p)
 static int Sha3Final(wc_Sha3* sha3, byte* hash, byte p, byte l)
 {
     byte i;
-    byte *s8 = (byte *)sha3->s;
+    byte *int8_t = (byte *)sha3->s;
 
     sha3->t[p * 8 - 1]  = 0x00;
     sha3->t[  sha3->i]  = 0x06;
@@ -650,7 +651,7 @@ static int Sha3Final(wc_Sha3* sha3, byte* hash, byte p, byte l)
     ByteReverseWords64(sha3->s, sha3->s, ((l+7)/8)*8);
 #endif
     for (i = 0; i < l; i++)
-        hash[i] = s8[i];
+        hash[i] = int8_t[i];
 
     return 0;
 }

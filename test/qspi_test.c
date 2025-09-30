@@ -24,25 +24,25 @@
 #define QSPI_TEST_LENGTH			( 0x4 * 64 )
 #define QSPI_TEST_ADDR				(0x100000*8)
 
-static UINT8 DataOffset;
+static uint8_t DataOffset;
 
 static void qspi_psram_dcache_test(int argc,char *argv[])
 {
-	UINT32 i,ret;
-	UINT32 SetLineMode;
+	uint32_t i,ret;
+	uint32_t SetLineMode;
 	qspi_dcache_drv_desc qspi_cfg;
 		
-	UINT32*   p_WRData1;
-	UINT32*   p_WRData2;
-	UINT32*   p_WRData3;
-	UINT32*   p_WRData4;
-	UINT32*   p_WRData5;
+	uint32_t*   p_WRData1;
+	uint32_t*   p_WRData2;
+	uint32_t*   p_WRData3;
+	uint32_t*   p_WRData4;
+	uint32_t*   p_WRData5;
 	
-	UINT32*   p_RDData1;
-	UINT32*   p_RDData2;
-	UINT32*   p_RDData3;
-	UINT32*   p_RDData4;
-	UINT32*   p_RDData5;
+	uint32_t*   p_RDData1;
+	uint32_t*   p_RDData2;
+	uint32_t*   p_RDData3;
+	uint32_t*   p_RDData4;
+	uint32_t*   p_RDData5;
 
 	p_WRData1 = rt_malloc(QSPI_TEST_LENGTH * sizeof(p_WRData1[0]));
 	if(p_WRData1 == RT_NULL)
@@ -289,7 +289,7 @@ static void qspi_psram_dcache_test(int argc,char *argv[])
 
 static void qspi_psram_switch_line_mode(int argc,char *argv[])
 {
-	uint8 exit;
+	uint8_t exit;
 	if(argc == 2)
 	{
 		exit = atoi(argv[1]);	
@@ -304,13 +304,13 @@ static void qspi_psram_switch_line_mode(int argc,char *argv[])
 
 static void qspi_psram_line_mode_test(int argc,char *argv[])
 {
-	UINT32 i,ret;
-	UINT32 SetLineMode;
+	uint32_t i,ret;
+	uint32_t SetLineMode;
 	qspi_dcache_drv_desc qspi_cfg;
-	UINT32 addr = 0;
+	uint32_t addr = 0;
 		
-	UINT32*   p_WRData1;
-	UINT32*   p_RDData1;
+	uint32_t*   p_WRData1;
+	uint32_t*   p_RDData1;
 
 	p_WRData1 = rt_malloc(QSPI_TEST_LENGTH * sizeof(p_WRData1[0]));
 	if(p_WRData1 == RT_NULL)
@@ -417,7 +417,7 @@ static void qspi_psram_line_mode_test(int argc,char *argv[])
 
 static void qspi_psram_read_id_test(int argc,char *argv[])
 {	
-	UINT8 psram_id;
+	uint8_t psram_id;
 	
 	psram_id = bk_qspi_psram_read_id();
 
@@ -426,15 +426,15 @@ static void qspi_psram_read_id_test(int argc,char *argv[])
 }
 static void qspi_psram_while_test(int argc,char *argv[])
 {
-	UINT32 i,ret;
-	UINT32 SetLineMode;
+	uint32_t i,ret;
+	uint32_t SetLineMode;
 	qspi_dcache_drv_desc qspi_cfg;
-	UINT32 addr = 0;
-	UINT32 count,err_count =0;
-	UINT32 err_flag = 1;
+	uint32_t addr = 0;
+	uint32_t count,err_count =0;
+	uint32_t err_flag = 1;
 		
-	UINT32*   p_WRData1;
-	UINT32*   p_RDData1;
+	uint32_t*   p_WRData1;
+	uint32_t*   p_RDData1;
 
 	p_WRData1 = rt_malloc(QSPI_TEST_LENGTH * sizeof(p_WRData1[0]));
 	if(p_WRData1 == RT_NULL)

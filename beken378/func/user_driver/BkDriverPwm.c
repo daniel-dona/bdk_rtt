@@ -1,3 +1,4 @@
+#include <stdint.h>
 /**
  ******************************************************************************
  * @file    BkDriverPwm.h
@@ -38,7 +39,7 @@
 
 OSStatus bk_pwm_initialize(bk_pwm_t pwm, uint32_t frequency, uint32_t duty_cycle)
 {
-	UINT32 ret;
+	uint32_t ret;
 	pwm_param_t param;
 
 	/*init pwm*/
@@ -92,7 +93,7 @@ OSStatus bk_pwm_capture_initialize(bk_pwm_t pwm, uint8_t cap_mode)
 bk_err_t bk_pwm_update_param(bk_pwm_t pwm, uint32_t frequency, uint32_t duty_cycle)
 {
 	pwm_param_t param;
-	UINT32 ret;
+	uint32_t ret;
 
 	param.channel         = (uint8_t)pwm;
 	param.duty_cycle	  = duty_cycle;
@@ -114,7 +115,7 @@ OSStatus bk_pwm_initlevl_set_high(bk_pwm_t pwm);
 
 OSStatus bk_pwm_initialize(bk_pwm_t pwm, uint32_t frequency, uint32_t duty_cycle1,uint32_t duty_cycle2,uint32_t duty_cycle3)
 {
-    UINT32 ret;
+    uint32_t ret;
     pwm_param_t param;
 
     /*init pwm*/
@@ -145,14 +146,14 @@ OSStatus bk_pwm_initialize(bk_pwm_t pwm, uint32_t frequency, uint32_t duty_cycle
 }
 
 
-static void pwm_cap_int_callback(UINT8 channel)
+static void pwm_cap_int_callback(uint8_t channel)
 {
 	PWM_LOGI(TAG, "pwm %d cap value:%d \r\n", channel, bk_pwm_get_capvalue(channel));
 }
 
-OSStatus bk_pwm_capture_initialize(bk_pwm_t pwm, UINT8 cap_mode)
+OSStatus bk_pwm_capture_initialize(bk_pwm_t pwm, uint8_t cap_mode)
 {
-	UINT32 ret;
+	uint32_t ret;
 	pwm_param_t param;
 
 	/*init pwm*/
@@ -175,8 +176,8 @@ OSStatus bk_pwm_capture_initialize(bk_pwm_t pwm, UINT8 cap_mode)
 
 OSStatus bk_pwm_start(bk_pwm_t pwm)
 {
-	UINT32 ret;
-	UINT32 param;
+	uint32_t ret;
+	uint32_t param;
 
 	param = pwm;
 
@@ -189,8 +190,8 @@ OSStatus bk_pwm_start(bk_pwm_t pwm)
 OSStatus bk_pwm_stop(bk_pwm_t pwm)
 
 {
-	UINT32 ret;
-	UINT32 param;
+	uint32_t ret;
+	uint32_t param;
 
 	param = pwm;
 	ret = sddev_control(PWM_DEV_NAME, CMD_PWM_UNIT_DISABLE, &param);
@@ -199,29 +200,29 @@ OSStatus bk_pwm_stop(bk_pwm_t pwm)
 	return ret;
 }
 
-UINT32 bk_pwm_get_capvalue(bk_pwm_t pwm)
+uint32_t bk_pwm_get_capvalue(bk_pwm_t pwm)
 {
-	UINT32 ret;
+	uint32_t ret;
 
 	pwm_capture_t pwm_cap;
 
 	pwm_cap.ucChannel = pwm;
 
-	ret = sddev_control(PWM_DEV_NAME, CMD_PWM_CAP_GET, (VOID *)&pwm_cap);
+	ret = sddev_control(PWM_DEV_NAME, CMD_PWM_CAP_GET, (void *)&pwm_cap);
 	ASSERT(PWM_SUCCESS == ret);
 
 	return pwm_cap.value;
 }
 
 #if (CFG_SOC_NAME == SOC_BK7231N) || (CFG_SOC_NAME == SOC_BK7236)
-static UINT8 group_flag = 0;
-static UINT8 pwm1_set_high_flag = 0;
-static UINT8 pwm2_set_low_flag = 0;
+static uint8_t group_flag = 0;
+static uint8_t pwm1_set_high_flag = 0;
+static uint8_t pwm2_set_low_flag = 0;
 
 OSStatus bk_pwm_initlevl_set_low(bk_pwm_t pwm)
 {
-	UINT32 ret;
-	UINT32 param;
+	uint32_t ret;
+	uint32_t param;
 
 	param = pwm;
 	ret = sddev_control(PWM_DEV_NAME, CMD_PWM_INIT_LEVL_SET_LOW, &param);
@@ -232,8 +233,8 @@ OSStatus bk_pwm_initlevl_set_low(bk_pwm_t pwm)
 
 OSStatus bk_pwm_initlevl_set_high(bk_pwm_t pwm)
 {
-	UINT32 ret;
-	UINT32 param;
+	uint32_t ret;
+	uint32_t param;
 
 	param = pwm;
 	ret = sddev_control(PWM_DEV_NAME, CMD_PWM_INIT_LEVL_SET_HIGH, &param);
@@ -246,7 +247,7 @@ OSStatus bk_pwm_initlevl_set_high(bk_pwm_t pwm)
 bk_err_t bk_pwm_update_param(bk_pwm_t pwm, uint32_t frequency, uint32_t duty_cycle)
 {
 	pwm_param_t param;
-	UINT32 ret;
+	uint32_t ret;
 
 	param.channel         = (uint8_t)pwm;
 	param.duty_cycle1	  = duty_cycle;

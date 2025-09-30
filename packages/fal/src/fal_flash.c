@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : fal_flash.c
  * This file is part of FAL (Flash Abstraction Layer) package

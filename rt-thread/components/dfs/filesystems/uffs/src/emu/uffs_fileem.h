@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
   This file is part of UFFS, the Ultra-low-cost Flash File System.
   
@@ -58,9 +59,9 @@ typedef struct uffs_FileEmuSt {
 	int initCount;
 	FILE *fp;
 	FILE *dump_fp;
-	u8 *em_monitor_page;		// page write monitor
-	u8 * em_monitor_spare;		// spare write monitor
-	u32 *em_monitor_block;		// block erease monitor
+	uint8_t *em_monitor_page;		// page write monitor
+	uint8_t * em_monitor_spare;		// spare write monitor
+	uint32_t *em_monitor_block;		// block erease monitor
 	const char *emu_filename;
 #ifdef UFFS_FEMU_ENABLE_INJECTION
 	struct uffs_FlashOpsSt ops_orig;
@@ -82,7 +83,7 @@ void femu_setup_wrapper_functions(uffs_Device *dev);
 /* internal used functions, shared by all ecc option implementations */
 int femu_InitFlash(uffs_Device *dev);
 int femu_ReleaseFlash(uffs_Device *dev);
-int femu_EraseBlock(uffs_Device *dev, u32 blockNumber);
+int femu_EraseBlock(uffs_Device *dev, uint32_t blockNumber);
 
 #endif
 

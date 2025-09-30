@@ -1,3 +1,4 @@
+#include <stdint.h>
 /* Copyright (C) 2002-2006 Jean-Marc Valin*/
 /**
   @file speex.h

@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : device.c
  * This file is part of RT-Thread RTOS
@@ -59,7 +60,7 @@
  */
 rt_err_t rt_device_register(rt_device_t dev,
                             const char *name,
-                            rt_uint16_t flags)
+                            uint16_t flags)
 {
     if (dev == RT_NULL)
         return -RT_ERROR;
@@ -243,7 +244,7 @@ rt_err_t rt_device_init(rt_device_t dev)
  *
  * @return the result
  */
-rt_err_t rt_device_open(rt_device_t dev, rt_uint16_t oflag)
+rt_err_t rt_device_open(rt_device_t dev, uint16_t oflag)
 {
     rt_err_t result = RT_EOK;
 

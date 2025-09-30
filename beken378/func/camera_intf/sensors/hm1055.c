@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
 
     i2c_operater.salve_id = HM_1055_DEV_ID;
@@ -6,7 +7,7 @@
 
     for (i = 0; i < size; i++)
     {
-        UINT16 addr1;
+        uint16_t addr1;
         addr1 = hm_1055_init_talbe[i][0];
         data = hm_1055_init_talbe[i][1];
         addr = addr;

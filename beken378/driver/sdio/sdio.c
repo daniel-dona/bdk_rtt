@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 
@@ -18,8 +19,8 @@
 #if CFG_SDIO || CFG_SDIO_TRANS
 #if FOR_SDIO_BLK_512
 #include "sdio_intf.h"
-UINT8 beken_tx_sdio_s = 1;
-UINT8 da_hd_err = 0;
+uint8_t beken_tx_sdio_s = 1;
+uint8_t da_hd_err = 0;
 #endif
 STATIC SDIO_S sdio =
 {
@@ -35,9 +36,9 @@ STATIC DD_OPERATIONS sdio_op =
     sdio_ctrl
 };
 
-SDIO_NODE_PTR sdio_alloc_valid_node(UINT32 buf_size)
+SDIO_NODE_PTR sdio_alloc_valid_node(uint32_t buf_size)
 {
-    UINT8 *buff_ptr;
+    uint8_t *buff_ptr;
     SDIO_NODE_PTR temp_node_ptr;
     SDIO_NODE_PTR mem_node_ptr = 0;
 
@@ -53,7 +54,7 @@ SDIO_NODE_PTR sdio_alloc_valid_node(UINT32 buf_size)
     temp_node_ptr = su_pop_node(&sdio.free_nodes);
     if(temp_node_ptr)
     {
-        buff_ptr = (UINT8 *)os_malloc(CFG_MSDU_RESV_HEAD_LEN + buf_size
+        buff_ptr = (uint8_t *)os_malloc(CFG_MSDU_RESV_HEAD_LEN + buf_size
                                       + CFG_MSDU_RESV_TAIL_LEN
                                       + MALLOC_MAGIC_LEN);
         if(buff_ptr)
@@ -64,7 +65,7 @@ SDIO_NODE_PTR sdio_alloc_valid_node(UINT32 buf_size)
             }
 
             temp_node_ptr->orig_addr = buff_ptr;
-            temp_node_ptr->addr   = (UINT8 *)((UINT32)buff_ptr + CFG_MSDU_RESV_HEAD_LEN);
+            temp_node_ptr->addr   = (uint8_t *)((uint32_t)buff_ptr + CFG_MSDU_RESV_HEAD_LEN);
             temp_node_ptr->length = buf_size;
             mem_node_ptr = temp_node_ptr;
         }
@@ -85,7 +86,7 @@ av_exit:
 
 void sdio_free_valid_node(SDIO_NODE_PTR node_ptr)
 {
-    //UINT8 *buff_ptr;
+    //uint8_t *buff_ptr;
 
     //buff_ptr = node_ptr->addr;
     if(MALLOC_MAGIC_LEN)
@@ -104,10 +105,10 @@ void sdio_free_valid_node(SDIO_NODE_PTR node_ptr)
 }
 
 
-void sdio_cmd_handler(void *buf, UINT32 len)
+void sdio_cmd_handler(void *buf, uint32_t len)
 {
-    UINT32 count;
-    UINT32 remain;
+    uint32_t count;
+    uint32_t remain;
     SDIO_PTR sdio_ptr;
     SDIO_DCMD_PTR cmd_ptr;
     SDIO_CMD_PTR reg_cmd_ptr;
@@ -115,7 +116,7 @@ void sdio_cmd_handler(void *buf, UINT32 len)
 
 #if FOR_SDIO_BLK_512
     struct _stm32_frame_hdr *h_hd;
-    UINT32 m_size = 2048;
+    uint32_t m_size = 2048;
 #endif
 
     ASSERT(NULL != buf)
@@ -286,14 +287,14 @@ void sdio_cmd_handler(void *buf, UINT32 len)
 
     case OPC_WR_REG :
     {
-        UINT8 reg_numb = (reg_cmd_ptr->len - 4) >> 3;
-        UINT8 i;
-        UINT32 reg_addr, reg_val;
+        uint8_t reg_numb = (reg_cmd_ptr->len - 4) >> 3;
+        uint8_t i;
+        uint32_t reg_addr, reg_val;
         for(i = 0; i < reg_numb; i++)
         {
             reg_addr = reg_cmd_ptr->content[i];
             reg_val = reg_cmd_ptr->content[i + reg_numb];
-            *((UINT32 *)reg_addr) = reg_val;
+            *((uint32_t *)reg_addr) = reg_val;
         }
 
         break;
@@ -301,17 +302,17 @@ void sdio_cmd_handler(void *buf, UINT32 len)
 
     case OPC_RD_REG :
     {
-        UINT8 reg_numb = (reg_cmd_ptr->len - 4) >> 2;
-        UINT8 i;
-        UINT32 reg_addr, reg_val[16];
+        uint8_t reg_numb = (reg_cmd_ptr->len - 4) >> 2;
+        uint8_t i;
+        uint32_t reg_addr, reg_val[16];
         for(i = 0; i < reg_numb; i++)
         {
             reg_addr = reg_cmd_ptr->content[i];
-            reg_val[i] = *((UINT32 *)reg_addr);
+            reg_val[i] = *((uint32_t *)reg_addr);
         }
 
         sdio_ptr->transaction_len = MIN(64, reg_numb << 2);
-        sdma_start_tx((UINT8 *)reg_val, sdio_ptr->transaction_len);
+        sdma_start_tx((uint8_t *)reg_val, sdio_ptr->transaction_len);
 
         break;
     }
@@ -326,7 +327,7 @@ void sdio_cmd_handler(void *buf, UINT32 len)
 
 void sdio_tx_cb(void)
 {
-    UINT32 remain;
+    uint32_t remain;
     SDIO_PTR sdio_ptr;
     SDIO_NODE_PTR mem_node_ptr;
 #if FOR_SDIO_BLK_512
@@ -387,15 +388,15 @@ void sdio_tx_cb(void)
 }
 
 
-void sdio_rx_cb(UINT32 count)
+void sdio_rx_cb(uint32_t count)
 {
-    UINT32 remain;
+    uint32_t remain;
     SDIO_PTR sdio_ptr;
     SDIO_NODE_PTR mem_node_ptr;
 #if FOR_SDIO_BLK_512
     struct stm32_cmd_hdr   *c_hd;
     struct _stm32_frame_hdr *h_hd;
-    UINT8 data_err = 0;
+    uint8_t data_err = 0;
 #endif
     sdio_ptr = &sdio;
 
@@ -502,7 +503,7 @@ void sdio_register_rx_cb(FUNCPTR func)
 
 static void sdio_intfer_gpio_config(void)
 {
-	UINT32 param;
+	uint32_t param;
 
 	param = GFUNC_MODE_SD_DMA;
 	sddev_control(GPIO_DEV_NAME, CMD_GPIO_ENABLE_SECOND, &param);    
@@ -539,14 +540,14 @@ void sdio_exit(void)
     ddev_unregister_dev(SDIO_DEV_NAME);
 }
 
-UINT32 sdio_open(UINT32 op_flag)
+uint32_t sdio_open(uint32_t op_flag)
 {
-    UINT32 reg;
+    uint32_t reg;
 
     sdma_open();
-    sdma_start_cmd((UINT8 *)&sdio.cmd, sizeof(sdio.cmd));
+    sdma_start_cmd((uint8_t *)&sdio.cmd, sizeof(sdio.cmd));
 
-    reg = *((volatile UINT32 *)((0x00802000 + 16 * 4)));
+    reg = *((volatile uint32_t *)((0x00802000 + 16 * 4)));
     if(reg & (1 << FIQ_SDIO_DMA))
     {
         ASSERT(0);
@@ -557,17 +558,17 @@ UINT32 sdio_open(UINT32 op_flag)
     return SDIO_SUCCESS;
 }
 
-UINT32 sdio_close(void)
+uint32_t sdio_close(void)
 {
     sdma_close();
 
     return SDIO_SUCCESS;
 }
 
-UINT32 sdio_read(char *user_buf, UINT32 count, UINT32 op_flag)
+uint32_t sdio_read(char *user_buf, uint32_t count, uint32_t op_flag)
 {
-    UINT32 ret;
-    UINT32 len;
+    uint32_t ret;
+    uint32_t len;
     SDIO_NODE_PTR mem_node_ptr;
 
     ret = SDIO_FAILURE;
@@ -626,7 +627,7 @@ UINT32 sdio_read(char *user_buf, UINT32 count, UINT32 op_flag)
             mem_node_ptr->Lparam = &sdio.free_nodes;
             mem_node_ptr->Rparam = mem_node_ptr;
 
-            ret = (UINT32)mem_node_ptr;
+            ret = (uint32_t)mem_node_ptr;
         }
         else
         {
@@ -640,9 +641,9 @@ rd_exit:
     return ret;
 }
 
-UINT32 sdio_write(char *user_buf, UINT32 count, UINT32 op_flag)
+uint32_t sdio_write(char *user_buf, uint32_t count, uint32_t op_flag)
 {
-    UINT32 ret;
+    uint32_t ret;
     SDIO_NODE_PTR mem_node_ptr;
 
     ret = SDIO_FAILURE;
@@ -713,9 +714,9 @@ exit_wr:
     return ret;
 }
 
-UINT32 sdio_ctrl(UINT32 cmd, void *param)
+uint32_t sdio_ctrl(uint32_t cmd, void *param)
 {
-    UINT32 ret;
+    uint32_t ret;
     SDIO_NODE_PTR mem_node_ptr;
 
     ret = SDIO_SUCCESS;
@@ -731,9 +732,9 @@ UINT32 sdio_ctrl(UINT32 cmd, void *param)
         break;
 
     case SDIO_CMD_GET_FREE_NODE:
-        mem_node_ptr = sdio_alloc_valid_node(*(UINT32 *)param);
+        mem_node_ptr = sdio_alloc_valid_node(*(uint32_t *)param);
 
-        ret = (UINT32)mem_node_ptr;
+        ret = (uint32_t)mem_node_ptr;
         break;
 
     case SDIO_CMD_REG_RX_CALLBACK:
@@ -741,7 +742,7 @@ UINT32 sdio_ctrl(UINT32 cmd, void *param)
         break;
 
     case SDIO_CMD_GET_CNT_FREE_NODE:
-        *((UINT32 *)param) = su_get_node_count(&sdio.free_nodes);
+        *((uint32_t *)param) = su_get_node_count(&sdio.free_nodes);
         break;
 
     case SDIO_CMD_CLEAR_TX_VALID:

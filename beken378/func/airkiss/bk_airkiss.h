@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _BEKEN_AIR_KISS_H_
 #define _BEKEN_AIR_KISS_H_
 

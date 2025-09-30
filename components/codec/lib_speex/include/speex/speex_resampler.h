@@ -1,3 +1,4 @@
+#include <stdint.h>
 /* Copyright (C) 2007 Jean-Marc Valin
 
    File: speex_resampler.h

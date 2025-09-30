@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _FAKE_CLOCK_PUB_H_
 #define _FAKE_CLOCK_PUB_H_
 
@@ -43,16 +44,16 @@ typedef enum
 
 typedef struct
 {
-    UINT32 fclk_tick;
-    UINT32 tmp1;
+    uint32_t fclk_tick;
+    uint32_t tmp1;
 } CAL_TICK_T;
 
-extern UINT64 fclk_get_tick(void);
-extern UINT32 fclk_get_second(void);
+extern uint64_t fclk_get_tick(void);
+extern uint32_t fclk_get_second(void);
 extern void fclk_reset_count(void);
 extern void fclk_init(void);
-extern UINT32 fclk_from_sec_to_tick(UINT32 sec);
-extern UINT32 fclk_cal_endvalue(UINT32 mode);
+extern uint32_t fclk_from_sec_to_tick(uint32_t sec);
+extern uint32_t fclk_cal_endvalue(uint32_t mode);
 BK_HW_TIMER_INDEX fclk_get_tick_id(void);;
 
 #endif // _FAKE_CLOCK_PUB_H_

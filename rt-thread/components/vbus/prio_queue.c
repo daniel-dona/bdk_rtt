@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * Priority Queue
  *
@@ -38,7 +39,7 @@ struct rt_prio_queue_item {
 };
 
 static void _do_push(struct rt_prio_queue *que,
-                     rt_uint8_t prio,
+                     uint8_t prio,
                      struct rt_prio_queue_item *item)
 {
     if (que->head[prio] == RT_NULL)
@@ -151,9 +152,9 @@ void rt_prio_queue_delete(struct rt_prio_queue *que)
 #endif
 
 rt_err_t rt_prio_queue_push(struct rt_prio_queue *que,
-                            rt_uint8_t prio,
+                            uint8_t prio,
                             void *data,
-                            rt_int32_t timeout)
+                            int32_t timeout)
 {
     rt_ubase_t level;
     struct rt_prio_queue_item *item;
@@ -199,7 +200,7 @@ rt_err_t rt_prio_queue_push(struct rt_prio_queue *que,
 
 rt_err_t rt_prio_queue_pop(struct rt_prio_queue *que,
                            void *data,
-                           rt_int32_t timeout)
+                           int32_t timeout)
 {
     rt_ubase_t level;
     struct rt_prio_queue_item *item;

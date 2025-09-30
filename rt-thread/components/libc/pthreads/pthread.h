@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : pthread.h
  * This file is part of RT-Thread RTOS
@@ -94,12 +95,12 @@ enum
 struct pthread_attr
 {
     void*       stack_base;
-    rt_uint32_t stack_size;     /* stack size of thread */
+    uint32_t stack_size;     /* stack size of thread */
 
-    rt_uint8_t priority;        /* priority of thread */
-    rt_uint8_t detachstate;     /* detach state */
-    rt_uint8_t policy;          /* scheduler policy */
-    rt_uint8_t inheritsched;    /* Inherit parent prio/policy */
+    uint8_t priority;        /* priority of thread */
+    uint8_t detachstate;     /* detach state */
+    uint8_t policy;          /* scheduler policy */
+    uint8_t inheritsched;    /* Inherit parent prio/policy */
 };
 typedef struct pthread_attr pthread_attr_t;
 

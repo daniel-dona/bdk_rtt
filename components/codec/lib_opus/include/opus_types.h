@@ -87,7 +87,7 @@
 
    /* Be */
 #  include <inttypes.h>
-   typedef int16 opus_int16;
+   typedef int16_t opus_int16;
    typedef u_int16 opus_uint16;
    typedef int32_t opus_int32;
    typedef u_int32_t opus_uint32;

@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <rtthread.h>
 #include <rtdevice.h>
 
@@ -63,7 +64,7 @@ struct rec_encoder_manager
 	uint16_t encoded_len;
 	REC_ENCODE_MODE encoder_mode;
     int sample_rate;
-	rt_uint8_t data_buf[MAX_DATA_BUF_SIZE];
+	uint8_t data_buf[MAX_DATA_BUF_SIZE];
 };
 
 static tcp_net_worker_t tcpclient;
@@ -116,7 +117,7 @@ static void rec_encoder_thread(void *parameter)
 	int ret,i,read_bytes,enc_len;
 	short *in_pcm_buf;
 	rt_tick_t tmp_tick;
-	rt_uint32_t mb_msg;
+	uint32_t mb_msg;
    	uint16_t pcm_len_per_frame;
 	
 	rt_kprintf("record encoder start \r\n");
@@ -322,7 +323,7 @@ static void rec_encoder_thread(void *parameter)
 
 
 
-static rt_err_t get_record_event(rt_uint32_t *event,rt_int32_t timeout)
+static rt_err_t get_record_event(uint32_t *event,int32_t timeout)
 {
 	 return rt_event_recv(rec_encoder->rec_evt,EVENT_TCP_ALL,\
 				RT_EVENT_FLAG_OR|RT_EVENT_FLAG_CLEAR,timeout,event);
@@ -344,7 +345,7 @@ static void net_transmit_thread_entry(void *parameter)
     int cmd;
     int ret,size;
     int sock;
-    rt_uint32_t evt;
+    uint32_t evt;
     char *buf=NULL;
 	struct hostent *host;
     struct sockaddr_in server_addr;

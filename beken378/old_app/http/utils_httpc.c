@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  * Copyright (C) 2015-2017 Alibaba Group Holding Limited
  */
@@ -29,7 +31,7 @@
 
 #define HTTP_RETRIEVE_MORE_DATA   (1)            /**< More data needs to be retrieved. */
 
-extern void flash_protection_op(UINT8 mode,PROTECT_TYPE type);
+extern void flash_protection_op(uint8_t mode,PROTECT_TYPE type);
 
 #if CFG_SUPPORT_OTA_TFTP
 #define HTTP_FLASH_WR_BUF_MAX WR_BUF_MAX
@@ -48,7 +50,7 @@ HTTP_DATA_ST bk_http = {
 #endif
 };
 HTTP_DATA_ST *bk_http_ptr = &bk_http;
-static UINT32 ota_wr_block = 0;
+static uint32_t ota_wr_block = 0;
 
 static int httpclient_parse_host(const char *url, char *host, uint32_t maxhost_len);
 static int httpclient_parse_url(const char *url, char *scheme, uint32_t max_scheme_len, char *host,
@@ -430,9 +432,9 @@ int httpclient_recv(httpclient_t *client, char *buf, int min_len, int max_len, i
 }
 
 #if HTTP_WR_TO_FLASH
-void http_flash_wr(UINT8 *src, unsigned len)
+void http_flash_wr(uint8_t *src, unsigned len)
 {
-	UINT32 param;
+	uint32_t param;
 	GLOBAL_INT_DECLARATION();
 
 	if (bk_http_ptr->flash_address % 0x1000 == 0) {
@@ -442,14 +444,14 @@ void http_flash_wr(UINT8 *src, unsigned len)
 		GLOBAL_INT_RESTORE();
 	}
 
-	if (((u32)bk_http_ptr->flash_address >= bk_http_ptr->pt->partition_start_addr)
-		&& (((u32)bk_http_ptr->flash_address + len) < (bk_http_ptr->pt->partition_start_addr + bk_http_ptr->pt->partition_length))) {
+	if (((uint32_t)bk_http_ptr->flash_address >= bk_http_ptr->pt->partition_start_addr)
+		&& (((uint32_t)bk_http_ptr->flash_address + len) < (bk_http_ptr->pt->partition_start_addr + bk_http_ptr->pt->partition_length))) {
 		GLOBAL_INT_DISABLE();
-		ddev_write(bk_http_ptr->flash_hdl, (char *)src, len, (u32)bk_http_ptr->flash_address);
+		ddev_write(bk_http_ptr->flash_hdl, (char *)src, len, (uint32_t)bk_http_ptr->flash_address);
 		GLOBAL_INT_RESTORE();
 		if (bk_http_ptr->wr_tmp_buf) {
 			GLOBAL_INT_DISABLE();
-			ddev_read(bk_http_ptr->flash_hdl, (char *)bk_http_ptr->wr_tmp_buf, len, (u32)bk_http_ptr->flash_address);
+			ddev_read(bk_http_ptr->flash_hdl, (char *)bk_http_ptr->wr_tmp_buf, len, (uint32_t)bk_http_ptr->flash_address);
 			GLOBAL_INT_RESTORE();
 			if (!os_memcmp(src, bk_http_ptr->wr_tmp_buf, len)) {
 			} else
@@ -465,7 +467,7 @@ void http_flash_wr(UINT8 *src, unsigned len)
 
 void http_flash_init(void)
 {
-	UINT32 status;
+	uint32_t status;
 	bk_http_ptr->wr_buf = NULL;
 	bk_http_ptr->wr_tmp_buf = NULL;
 
@@ -506,13 +508,13 @@ void http_flash_deinit(void)
 	os_printf("write over\r\n");
 }
 
-void http_wr_to_flash(char *page, UINT32 len)
+void http_wr_to_flash(char *page, uint32_t len)
 {
-	UINT8 *tmp;
-	UINT32 w_l = 0, i = 0;
+	uint8_t *tmp;
+	uint32_t w_l = 0, i = 0;
 
 	i = 0;
-	tmp = (UINT8 *)page;
+	tmp = (uint8_t *)page;
 	while (i < len) {
 		w_l = min(len - i, HTTP_FLASH_WR_BUF_MAX - bk_http_ptr->wr_last_len);
 		os_memcpy(bk_http_ptr->wr_buf + bk_http_ptr->wr_last_len, tmp + i, w_l);
@@ -532,7 +534,7 @@ void http_wr_to_flash(char *page, UINT32 len)
 }
 #endif
 
-void http_data_process(char *buf, UINT32 len)
+void http_data_process(char *buf, uint32_t len)
 {
     #if HTTP_WR_TO_FLASH
     http_wr_to_flash(buf,len);

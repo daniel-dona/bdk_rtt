@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : pthread_tls.c
  * This file is part of RT-Thread RTOS
@@ -75,7 +76,7 @@ RTM_EXPORT(pthread_setspecific);
 
 int pthread_key_create(pthread_key_t *key, void (*destructor)(void*))
 {
-    rt_uint32_t index;
+    uint32_t index;
 
     rt_enter_critical();
     for (index = 0; index < PTHREAD_KEY_MAX; index ++)

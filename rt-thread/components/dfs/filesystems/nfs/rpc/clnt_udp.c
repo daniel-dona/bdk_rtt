@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /* @(#)clnt_udp.c	2.2 88/08/01 4.0 RPCSRC */
 /*
  * Sun RPC is a product of Sun Microsystems, Inc. and is provided for

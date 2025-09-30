@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef DRIVER_AUDIO_IF_PUB_H
 #define DRIVER_AUDIO_IF_PUB_H
 

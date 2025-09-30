@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  * chap_ms.c - Microsoft MS-CHAP compatible implementation.
  *

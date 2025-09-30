@@ -66,7 +66,7 @@ static void w25qxx_unlock(struct rt_mtd_nor_device *device)
     rt_mutex_release(&mtd->lock);
 }
 
-static rt_uint8_t w25qxx_read_status(struct rt_mtd_nor_device *device)
+static uint8_t w25qxx_read_status(struct rt_mtd_nor_device *device)
 {
     struct spi_flash_mtd *mtd = (struct spi_flash_mtd *)device;
     return rt_spi_sendrecv8(mtd->rt_spi_device, CMD_RDSR1);
@@ -79,8 +79,8 @@ static void w25qxx_wait_busy(struct rt_mtd_nor_device *device)
 
 static rt_err_t w25qxx_read_id(struct rt_mtd_nor_device *device)
 {
-    rt_uint8_t cmd;
-    rt_uint8_t id_recv[3];
+    uint8_t cmd;
+    uint8_t id_recv[3];
 
     struct spi_flash_mtd *mtd = (struct spi_flash_mtd *)device;
 
@@ -98,13 +98,13 @@ static rt_err_t w25qxx_read_id(struct rt_mtd_nor_device *device)
 
     w25qxx_unlock(device);
 
-    return (rt_uint32_t)(id_recv[0] << 16) | (id_recv[1] << 8) | id_recv[2];
+    return (uint32_t)(id_recv[0] << 16) | (id_recv[1] << 8) | id_recv[2];
 }
 
-static rt_size_t w25qxx_read(struct rt_mtd_nor_device *device, rt_off_t offset, rt_uint8_t *buffer, rt_size_t length)
+static rt_size_t w25qxx_read(struct rt_mtd_nor_device *device, rt_off_t offset, uint8_t *buffer, rt_size_t length)
 {
     struct spi_flash_mtd *mtd = (struct spi_flash_mtd *)device;
-    rt_uint8_t send_buffer[4];
+    uint8_t send_buffer[4];
 
     if((offset + length) > device->block_end * FLASH_BLOCK_SIZE)
         return 0;
@@ -116,9 +116,9 @@ static rt_size_t w25qxx_read(struct rt_mtd_nor_device *device, rt_off_t offset, 
     rt_spi_send(mtd->rt_spi_device, send_buffer, 1);
 
     send_buffer[0] = CMD_READ;
-    send_buffer[1] = (rt_uint8_t)(offset>>16);
-    send_buffer[2] = (rt_uint8_t)(offset>>8);
-    send_buffer[3] = (rt_uint8_t)(offset);
+    send_buffer[1] = (uint8_t)(offset>>16);
+    send_buffer[2] = (uint8_t)(offset>>8);
+    send_buffer[3] = (uint8_t)(offset);
     rt_spi_send_then_recv(mtd->rt_spi_device,
                           send_buffer, 4,
                           buffer, length);
@@ -127,11 +127,11 @@ static rt_size_t w25qxx_read(struct rt_mtd_nor_device *device, rt_off_t offset, 
     return length;
 }
 
-static rt_size_t w25qxx_write(struct rt_mtd_nor_device *device, rt_off_t offset, const rt_uint8_t *buffer, rt_size_t length)
+static rt_size_t w25qxx_write(struct rt_mtd_nor_device *device, rt_off_t offset, const uint8_t *buffer, rt_size_t length)
 {
     struct spi_flash_mtd *mtd = (struct spi_flash_mtd *)device;
-    rt_uint8_t send_buffer[4];
-    rt_uint8_t *write_ptr ;
+    uint8_t send_buffer[4];
+    uint8_t *write_ptr ;
     rt_size_t   write_size,write_total;
 
     if((offset + length) > device->block_end * FLASH_BLOCK_SIZE)
@@ -145,7 +145,7 @@ static rt_size_t w25qxx_write(struct rt_mtd_nor_device *device, rt_off_t offset,
 
     write_size  = 0;
     write_total = 0;
-    write_ptr   = (rt_uint8_t *)buffer;
+    write_ptr   = (uint8_t *)buffer;
     while(write_total < length)
     {
         send_buffer[0] = CMD_WREN;
@@ -153,9 +153,9 @@ static rt_size_t w25qxx_write(struct rt_mtd_nor_device *device, rt_off_t offset,
 
         //write first page...
         send_buffer[0] = CMD_PP;
-        send_buffer[1] = (rt_uint8_t)(offset >> 16);
-        send_buffer[2] = (rt_uint8_t)(offset >> 8);
-        send_buffer[3] = (rt_uint8_t)(offset);
+        send_buffer[1] = (uint8_t)(offset >> 16);
+        send_buffer[2] = (uint8_t)(offset >> 8);
+        send_buffer[3] = (uint8_t)(offset);
 
         //address % FLASH_PAGE_SIZE + length
         if(((offset & (FLASH_PAGE_SIZE - 1)) + (length - write_total)) > FLASH_PAGE_SIZE)
@@ -185,11 +185,11 @@ static rt_size_t w25qxx_write(struct rt_mtd_nor_device *device, rt_off_t offset,
     return length;
 }
 
-static rt_err_t w25qxx_erase_block(struct rt_mtd_nor_device *device, rt_off_t offset, rt_uint32_t length)
+static rt_err_t w25qxx_erase_block(struct rt_mtd_nor_device *device, rt_off_t offset, uint32_t length)
 {
     struct spi_flash_mtd *mtd = (struct spi_flash_mtd *)device;
-    rt_uint8_t  send_buffer[4];
-    rt_uint32_t erase_size = 0;
+    uint8_t  send_buffer[4];
+    uint32_t erase_size = 0;
 
     //offset must be ALIGN_DOWN to BLOCKSIZE
     if(offset != RT_ALIGN_DOWN(offset,FLASH_BLOCK_SIZE))
@@ -213,9 +213,9 @@ static rt_err_t w25qxx_erase_block(struct rt_mtd_nor_device *device, rt_off_t of
     while (erase_size < length)
     {
         send_buffer[0] = CMD_ERASE_4K;
-        send_buffer[1] = (rt_uint8_t) (offset >> 16);
-        send_buffer[2] = (rt_uint8_t) (offset >> 8);
-        send_buffer[3] = (rt_uint8_t) (offset);
+        send_buffer[1] = (uint8_t) (offset >> 16);
+        send_buffer[2] = (uint8_t) (offset >> 8);
+        send_buffer[3] = (uint8_t) (offset);
         rt_spi_send(mtd->rt_spi_device, send_buffer, 4);
         w25qxx_wait_busy(device);    // wait erase done.
 
@@ -240,8 +240,8 @@ const static struct rt_mtd_nor_driver_ops w25qxx_mtd_ops =
 rt_err_t w25qxx_mtd_init(const char *mtd_name,const char * spi_device_name)
 {
     rt_err_t    result = RT_EOK;
-    rt_uint32_t id;
-    rt_uint8_t  send_buffer[3];
+    uint32_t id;
+    uint8_t  send_buffer[3];
 
     struct rt_spi_device*   rt_spi_device;
     struct spi_flash_mtd*   mtd = (struct spi_flash_mtd *)rt_malloc(sizeof(struct spi_flash_mtd));

@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 
@@ -12,17 +13,17 @@ char *os_strchr(const char *s, int c)
     return strchr(s, c);
 }
 
-UINT32 os_strlen(const char *str)
+uint32_t os_strlen(const char *str)
 {
     return strlen(str);
 }
 
-INT32 os_strcmp(const char *s1, const char *s2)
+int32_t os_strcmp(const char *s1, const char *s2)
 {
     return strcmp(s1, s2);
 }
 
-UINT32 os_strtoul(const char *nptr, char **endptr, int base)
+uint32_t os_strtoul(const char *nptr, char **endptr, int base)
 {
     return strtoul(nptr, endptr, base);
 }
@@ -32,7 +33,7 @@ char *os_strcpy(char *out, const char *in)
     return strcpy(out, in);
 }
 
-char *os_strncpy(char *out, const char *in, const UINT32 n)
+char *os_strncpy(char *out, const char *in, const uint32_t n)
 {
     return strncpy(out, in, (unsigned int)n);
 }
@@ -65,15 +66,15 @@ size_t os_strlcpy(char *dest, const char *src, size_t siz)
     return s - src - 1;
 }
 
-INT32 os_strncmp(const char *s1, const char *s2, const UINT32 n)
+int32_t os_strncmp(const char *s1, const char *s2, const uint32_t n)
 {
     return strncmp(s1, s2, (unsigned int)n);
 }
 
-INT32 os_snprintf(char *buf, UINT32 size, const char *fmt, ...)
+int32_t os_snprintf(char *buf, uint32_t size, const char *fmt, ...)
 {
     va_list args;
-    INT32 rc;
+    int32_t rc;
 
     va_start(args, fmt);
     rc = vsnprintf(buf, size, fmt, args);
@@ -81,12 +82,12 @@ INT32 os_snprintf(char *buf, UINT32 size, const char *fmt, ...)
 
     /* if want to print more than the limitation */
     if (rc > size)
-        rc = (INT32)size - rc;
+        rc = (int32_t)size - rc;
 
     return rc;
 }
 
-INT32 os_vsnprintf(char *buf, UINT32 size, const char *fmt, va_list ap)
+int32_t os_vsnprintf(char *buf, uint32_t size, const char *fmt, va_list ap)
 {
     return vsnprintf(buf, size, fmt, ap);
 }

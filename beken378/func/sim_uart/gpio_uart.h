@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _GPIO_UART_H_
 #define _GPIO_UART_H_
 

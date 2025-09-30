@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include <stdlib.h>
 
@@ -33,7 +34,7 @@
 
 #if CFG_PERIPHERAL_TEST
 
-INT32 os_strcmp(const char *s1, const char *s2);
+int32_t os_strcmp(const char *s1, const char *s2);
 
 
 #define I2C_TEST_LEGNTH					32
@@ -52,7 +53,7 @@ static void i2c1_test_eeprom(char *pcWriteBuffer, int xWriteBufferLen, int argc,
 
 	os_printf(" i2c1_test_eeprom start  \r\n");
 
-	i2c_msg_config.pData = (UINT8 *)os_malloc(I2C_TEST_EEPROM_LEGNTH);
+	i2c_msg_config.pData = (uint8_t *)os_malloc(I2C_TEST_EEPROM_LEGNTH);
 	if (i2c_msg_config.pData == NULL) {
 		os_printf("malloc fail\r\n");
 		goto exit;
@@ -119,7 +120,7 @@ static void i2c2_test_eeprom(char *pcWriteBuffer, int xWriteBufferLen, int argc,
 
 	os_printf(" i2c2_test_eeprom start  \r\n");
 
-	i2c_msg_config.pData = (UINT8 *)os_malloc(I2C_TEST_EEPROM_LEGNTH);
+	i2c_msg_config.pData = (uint8_t *)os_malloc(I2C_TEST_EEPROM_LEGNTH);
 	if (i2c_msg_config.pData == NULL) {
 		os_printf("malloc fail\r\n");
 		goto exit;
@@ -187,8 +188,8 @@ int spi_channel;
 void gspi_test(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv)
 {
 	struct spi_message  msg;
-	UINT32 max_hz;
-	UINT32 mode;
+	uint32_t max_hz;
+	uint32_t mode;
 
 #if (CFG_SOC_NAME == SOC_BK7271)
 	spi_channel = 2;
@@ -217,7 +218,7 @@ void gspi_test(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv)
 #if CFG_USE_SPI_DMA
 	else if (os_strcmp(argv[1], "slave_dma_rx") == 0)
 	{
-		UINT8 *buf;
+		uint8_t *buf;
 		int rx_len, ret;
 
 		if (argc < 2)
@@ -227,7 +228,7 @@ void gspi_test(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv)
 
 		bk_printf("spi dma rx: rx_len:%d\n", rx_len);
 
-		buf = os_malloc(rx_len * sizeof(UINT8));
+		buf = os_malloc(rx_len * sizeof(uint8_t));
 		if (!buf) {
 			bk_printf("spi test malloc buf fail\r\n");
 			return ;
@@ -259,7 +260,7 @@ void gspi_test(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv)
 		}
 	} else if ((os_strcmp(argv[1], "slave_dma_tx") == 0))
 	{
-		UINT8 *buf;
+		uint8_t *buf;
 		int tx_len, ret;
 
 		if (argc < 2)
@@ -269,7 +270,7 @@ void gspi_test(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv)
 
 		bk_printf("spi dma tx: tx_len:%d,%d\n", tx_len, max_hz);
 
-		buf = os_malloc(tx_len * sizeof(UINT8));
+		buf = os_malloc(tx_len * sizeof(uint8_t));
 		if (!buf) {
 			bk_printf("spi test malloc buf fail\r\n");
 			return ;
@@ -304,7 +305,7 @@ void gspi_test(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv)
 		}
 	} else if ((os_strcmp(argv[1], "master_dma_tx") == 0))
 	{
-		UINT8 *buf;
+		uint8_t *buf;
 		int tx_len, ret;
 
 		if (argc < 2)
@@ -316,7 +317,7 @@ void gspi_test(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv)
 
 		bk_printf("spi master  dma tx: tx_len:%d max_hz:%d\r\n", tx_len, max_hz);
 
-		buf = os_malloc(tx_len * sizeof(UINT8));
+		buf = os_malloc(tx_len * sizeof(uint8_t));
 		if (!buf) {
 			bk_printf("spi test malloc buf fail\r\n");
 			return ;
@@ -350,7 +351,7 @@ void gspi_test(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv)
 		}
 	} else if ((os_strcmp(argv[1], "master_dma_rx") == 0))
 	{
-		UINT8 *buf;
+		uint8_t *buf;
 		int rx_len, ret;
 
 		if (argc < 2)
@@ -362,7 +363,7 @@ void gspi_test(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv)
 
 		bk_printf("spi master  dma rx: rx_len:%d max_hz:%d\r\n\n", rx_len, max_hz);
 
-		buf = os_malloc(rx_len * sizeof(UINT8));
+		buf = os_malloc(rx_len * sizeof(uint8_t));
 		if (!buf) {
 			bk_printf("spi test malloc buf fail\r\n");
 			return ;
@@ -394,9 +395,9 @@ void gspi_test(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv)
 
 	} else if ((os_strcmp(argv[1], "master_tx_loop") == 0))
 	{
-		UINT8 *buf;
+		uint8_t *buf;
 		int tx_len, ret;
-		UINT32 cnt = 0;
+		uint32_t cnt = 0;
 
 		if (argc < 2)
 			tx_len = SPI_RX_BUF_LEN;
@@ -407,7 +408,7 @@ void gspi_test(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv)
 
 		bk_printf("spi master  dma tx: tx_len:%d max_hz:%d\r\n", tx_len, max_hz);
 
-		buf = os_malloc(tx_len * sizeof(UINT8));
+		buf = os_malloc(tx_len * sizeof(uint8_t));
 		if (!buf) {
 			bk_printf("buf malloc fail\r\n");
 			return;
@@ -451,7 +452,7 @@ void gspi_test(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv)
 
 	if (os_strcmp(argv[2], "tx") == 0)
 	{
-		UINT8 *buf;
+		uint8_t *buf;
 		int tx_len;
 
 		if (argc < 4)
@@ -461,7 +462,7 @@ void gspi_test(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv)
 
 		bk_printf("spi init tx_len:%d\n", tx_len);
 
-		buf = os_malloc(tx_len * sizeof(UINT8));
+		buf = os_malloc(tx_len * sizeof(uint8_t));
 
 		if (buf) {
 			os_memset(buf, 0, tx_len);
@@ -485,7 +486,7 @@ void gspi_test(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv)
 		}
 	} else if (os_strcmp(argv[2], "rx") == 0)
 	{
-		UINT8 *buf;
+		uint8_t *buf;
 		int rx_len;
 
 		if (argc < 4)
@@ -495,7 +496,7 @@ void gspi_test(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv)
 
 		bk_printf("SPI_RX: rx_len:%d\n", rx_len);
 
-		buf = os_malloc(rx_len * sizeof(UINT8));
+		buf = os_malloc(rx_len * sizeof(uint8_t));
 
 		if (buf) {
 			os_memset(buf, 0, rx_len);
@@ -528,7 +529,7 @@ void gspi_test(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv)
 
 
 
-uint32 spi_dma_slave_rx_thread_main(void);
+uint32_t spi_dma_slave_rx_thread_main(void);
 
 void spi_Command(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv)
 {
@@ -549,12 +550,12 @@ void spi_Command(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv
 
 static void pwm_Command(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv)
 {
-	UINT8 channel1;
-	UINT32 duty_cycle1, cycle, cap_value;
+	uint8_t channel1;
+	uint32_t duty_cycle1, cycle, cap_value;
 #if (CFG_SOC_NAME == SOC_BK7231N) || (CFG_SOC_NAME == SOC_BK7236)
-	UINT8 channel2;
-	UINT32 duty_cycle2;
-	UINT32 dead_band;
+	uint8_t channel2;
+	uint32_t duty_cycle2;
+	uint32_t dead_band;
 #endif
 
 	/*get the parameters from command line*/

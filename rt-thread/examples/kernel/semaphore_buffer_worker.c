@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  * 程序清单：信号量实现生产者消费者间的互斥
  *
@@ -12,9 +14,9 @@
 /* 一个环形buffer的实现 */
 struct rb
 {
-    rt_uint16_t read_index, write_index;
-    rt_uint8_t *buffer_ptr;
-    rt_uint16_t buffer_size;
+    uint16_t read_index, write_index;
+    uint8_t *buffer_ptr;
+    uint16_t buffer_size;
 };
 
 /* 指向信号量控制块的指针 */
@@ -25,11 +27,11 @@ static rt_thread_t tid = RT_NULL, worker = RT_NULL;
 /* 环形buffer的内存块（用数组体现出来） */
 #define BUFFER_SIZE        256
 #define BUFFER_ITEM        32
-static rt_uint8_t working_buffer[BUFFER_SIZE];
+static uint8_t working_buffer[BUFFER_SIZE];
 struct rb working_rb;
 
 /* 初始化环形buffer，size指的是buffer的大小。注：这里并没对数据地址对齐做处理 */
-static void rb_init(struct rb* rb, rt_uint8_t *pool, rt_uint16_t size)
+static void rb_init(struct rb* rb, uint8_t *pool, uint16_t size)
 {
     RT_ASSERT(rb != RT_NULL);
 
@@ -42,7 +44,7 @@ static void rb_init(struct rb* rb, rt_uint8_t *pool, rt_uint16_t size)
 }
 
 /* 向环形buffer中写入数据 */
-static rt_bool_t rb_put(struct rb* rb, const rt_uint8_t *ptr, rt_uint16_t length)
+static rt_bool_t rb_put(struct rb* rb, const uint8_t *ptr, uint16_t length)
 {
     rt_size_t size;
 
@@ -87,7 +89,7 @@ static rt_bool_t rb_put(struct rb* rb, const rt_uint8_t *ptr, rt_uint16_t length
 }
 
 /* 从环形buffer中读出数据 */
-static rt_bool_t rb_get(struct rb* rb, rt_uint8_t *ptr, rt_uint16_t length)
+static rt_bool_t rb_get(struct rb* rb, uint8_t *ptr, uint16_t length)
 {
     rt_size_t size;
 
@@ -135,7 +137,7 @@ static rt_bool_t rb_get(struct rb* rb, rt_uint8_t *ptr, rt_uint16_t length)
 static void thread_entry(void* parameter)
 {
     rt_bool_t result;
-    rt_uint8_t data_buffer[BUFFER_ITEM + 1];
+    uint8_t data_buffer[BUFFER_ITEM + 1];
 
     while (1)
     {
@@ -162,8 +164,8 @@ static void thread_entry(void* parameter)
 static void worker_entry(void* parameter)
 {
     rt_bool_t result;
-    rt_uint32_t index, setchar;
-    rt_uint8_t  data_buffer[BUFFER_ITEM];
+    uint32_t index, setchar;
+    uint8_t  data_buffer[BUFFER_ITEM];
 
     setchar = 0x21;
     while (1)

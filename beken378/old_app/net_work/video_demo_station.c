@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "video_demo_config.h"
 
@@ -43,30 +44,30 @@ typedef enum
 
 typedef struct temp_message
 {
-    u32 dmsg;
-    u32 data;
+    uint32_t dmsg;
+    uint32_t data;
 } DRONE_MSG_T;
 
 typedef struct app_demo_sta_st
 {
     beken_thread_t thread_hdl;
     beken_queue_t msg_que;
-    u32 status;
+    uint32_t status;
     char *wifi_ssid;
     char *wifi_key;
 } APP_DEMO_STA_ST, *APP_DEMO_STA_PTR;
 
 typedef struct head_param
 {
-    u32 type;
-    u32 len;
+    uint32_t type;
+    uint32_t len;
 } head_param_t;
 
 APP_DEMO_STA_PTR g_demo_sta = NULL;
 
 extern void bk_wlan_status_register_cb(FUNC_1PARAM_PTR cb);
 
-uint32 app_demo_sta_alloc_buffer(void)
+uint32_t app_demo_sta_alloc_buffer(void)
 {
     if (g_demo_sta == NULL)
     {
@@ -131,7 +132,7 @@ void app_demo_sta_free_buffer(void)
     }
 }
 
-void app_demo_sta_send_msg(u32 new_msg, u32 new_data)
+void app_demo_sta_send_msg(uint32_t new_msg, uint32_t new_data)
 {
     OSStatus ret;
     DRONE_MSG_T msg;
@@ -207,7 +208,7 @@ static int app_demo_sta_setup(void)
 static void app_demo_sta_main(beken_thread_arg_t data)
 {
     OSStatus err;
-    u32 status;
+    uint32_t status;
 
     g_demo_sta->status = APS_WIFI_DISCONECTED;
 

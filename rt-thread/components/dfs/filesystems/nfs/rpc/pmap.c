@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 #include "pmap.h"
 #include "clnt.h"
 #include <rpc/rpc.h>

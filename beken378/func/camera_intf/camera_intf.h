@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef __CAMERA_INTF_H__
 #define __CAMERA_INTF_H__
 
@@ -14,8 +15,8 @@
 #define USE_JTAG_FOR_DEBUG          1 // USE I2C2 and not I2C1!!!
 #define I2C_WIRTE_TIMEOUT_COUNT     20
 
-void camera_intf_sccb_write(UINT8 addr, UINT8 data);
-void camera_intf_sccb_read(UINT8 addr, UINT8 *data);
+void camera_intf_sccb_write(uint8_t addr, uint8_t data);
+void camera_intf_sccb_read(uint8_t addr, uint8_t *data);
 uint8_t camera_intf_sccb_write2(uint8_t device_addr, uint8_t register_addr, uint8_t *data, uint8_t len);
 uint8_t camera_intf_sccb_read2(uint8_t device_addr, uint8_t register_addr, uint8_t *data, uint8_t len);
 

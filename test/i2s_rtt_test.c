@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <rtthread.h>
 #include <rtdevice.h>
 #include "finsh.h"
@@ -30,17 +31,17 @@ int i2s_test_loopback(int sample_rate, int bits_length)
     const char *i2s_bus_device_name = I2S_DEV_NAME;
     rt_device_t i2s_device = RT_NULL;
 
-    rt_uint32_t *buffers[2];
+    uint32_t *buffers[2];
     rt_err_t result;
-    rt_uint32_t buffer_index;
-    rt_uint8_t index;
-    rt_uint8_t master = 0;
+    uint32_t buffer_index;
+    uint8_t index;
+    uint8_t master = 0;
 
     memset((void *)buffers, 0, sizeof(buffers));
 
     for (index = 0; index < 2; index++)
     {
-        buffers[index] = (rt_uint32_t *)malloc(I2S_TEST_BUFFER_LENGTH * sizeof(buffers[index][0]));
+        buffers[index] = (uint32_t *)malloc(I2S_TEST_BUFFER_LENGTH * sizeof(buffers[index][0]));
         if (RT_NULL == buffers[index])
         {
             rt_kprintf("%s buffers[%d]=NULL\r\n", __FUNCTION__, index);
@@ -86,7 +87,7 @@ int i2s_test_loopback(int sample_rate, int bits_length)
     /* NOTICE: should change sample_rate or bits_length before DMA enable */
     rt_device_control(i2s_device, RT_DEVICE_CTRL_I2S_SAMPLE_RATE_SET, (void *)&sample_rate);
     rt_device_control(i2s_device, RT_DEVICE_CTRL_I2S_BIT_LENGTH_SET, (void *)&bits_length);
-    rt_uint32_t value = 1;
+    uint32_t value = 1;
     rt_device_control(i2s_device, RT_DEVICE_CTRL_I2S_DMA_MASTER_ENABLE, (void *)&value);
     rt_device_control(i2s_device, RT_DEVICE_CTRL_I2S_DMA_RX_ENABLE, (void *)&value);
     rt_device_control(i2s_device, RT_DEVICE_CTRL_I2S_DMA_TX_ENABLE, (void *)&value);
@@ -184,11 +185,11 @@ static int i2s_test_rtt(int argc, char *argv[])
     const char *i2s_bus_device_name = I2S_DEV_NAME;
     rt_device_t i2s_device = RT_NULL;
 
-    rt_uint32_t *buffers[I2S_TEST_BUFFER_COUNT];
+    uint32_t *buffers[I2S_TEST_BUFFER_COUNT];
     rt_err_t result;
-    rt_uint32_t buffer_index;
-    rt_uint8_t index;
-    rt_uint8_t master = 0;
+    uint32_t buffer_index;
+    uint8_t index;
+    uint8_t master = 0;
 
 
     if (argc < 2)
@@ -228,7 +229,7 @@ static int i2s_test_rtt(int argc, char *argv[])
 
     for (index = 0; index < I2S_TEST_BUFFER_COUNT; index++)
     {
-        buffers[index] = (rt_uint32_t *)malloc(I2S_TEST_BUFFER_LENGTH * sizeof(buffers[index][0]));
+        buffers[index] = (uint32_t *)malloc(I2S_TEST_BUFFER_LENGTH * sizeof(buffers[index][0]));
         if (RT_NULL == buffers[index])
         {
             rt_kprintf("%s buffers[%d]=NULL\r\n", __FUNCTION__, index);
@@ -280,7 +281,7 @@ static int i2s_test_rtt(int argc, char *argv[])
 
     if (master)
     {
-        rt_uint32_t enable = 1;
+        uint32_t enable = 1;
         rt_device_control(i2s_device, RT_DEVICE_CTRL_I2S_DMA_MASTER_ENABLE, (void *)&enable);
         rt_device_control(i2s_device, RT_DEVICE_CTRL_I2S_DMA_TX_ENABLE, (void *)&enable);
         rt_device_set_tx_complete(i2s_device, i2s_test_rtt_tx_done);
@@ -313,7 +314,7 @@ static int i2s_test_rtt(int argc, char *argv[])
     }
     else
     {
-        rt_uint32_t enable = 0;
+        uint32_t enable = 0;
         rt_device_control(i2s_device, RT_DEVICE_CTRL_I2S_DMA_MASTER_ENABLE, (void *)&enable);
 
         enable = 1;

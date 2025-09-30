@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : dfs_romfs.c
  * This file is part of Device File System in RT-Thread RTOS
@@ -289,7 +290,7 @@ int dfs_romfs_getdents(struct dfs_fd *file, struct dirent *dirp, uint32_t count)
             d->d_type = DT_REG;
 
         d->d_namlen = rt_strlen(name);
-        d->d_reclen = (rt_uint16_t)sizeof(struct dirent);
+        d->d_reclen = (uint16_t)sizeof(struct dirent);
         rt_strncpy(d->d_name, name, rt_strlen(name) + 1);
 
         /* move to next position */

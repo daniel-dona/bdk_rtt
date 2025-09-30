@@ -1,3 +1,4 @@
+#include <stdint.h>
 /**
  * makefsdata: Converts a directory structure for use with the lwIP httpd.
  *
@@ -37,8 +38,8 @@
 #if MAKEFS_SUPPORT_DEFLATE
 #include "../miniz.c"
 
-typedef unsigned char uint8;
-typedef unsigned short uint16;
+typedef unsigned char uint8_t;
+typedef unsigned short uint16_t;
 typedef unsigned int uint;
 
 #define my_max(a,b) (((a) > (b)) ? (a) : (b))
@@ -51,8 +52,8 @@ typedef unsigned int uint;
 /* OUT_BUF_SIZE is the size of the output buffer used during decompression.
    OUT_BUF_SIZE must be a power of 2 >= TINFL_LZ_DICT_SIZE (because the low-level decompressor not only writes, but reads from the output buffer as it decompresses) */
 #define OUT_BUF_SIZE COPY_BUFSIZE
-static uint8 s_outbuf[OUT_BUF_SIZE];
-static uint8 s_checkbuf[OUT_BUF_SIZE];
+static uint8_t s_outbuf[OUT_BUF_SIZE];
+static uint8_t s_checkbuf[OUT_BUF_SIZE];
 
 /* tdefl_compressor contains all the state needed by the low-level compressor so it's a pretty big struct (~300k).
    This example makes it a global vs. putting it on the stack, of course in real-world usage you'll probably malloc() or new it. */

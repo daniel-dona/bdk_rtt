@@ -1,8 +1,9 @@
+#include <stdint.h>
 #define BF_2013_DEV             (0xABC04)
 #define BF_2013_DEV_ID          (0x6e)
 
 
-const UINT8 bf_2013_init_talbe[][2] = {
+const uint8_t bf_2013_init_talbe[][2] = {
     {0x12, 0x00},			//CHEN-TEST
     {0x09, 0x01},
     {0x15, 0x02},

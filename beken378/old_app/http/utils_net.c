@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <string.h>
 #include "include.h"
 #include "utils_net.h"

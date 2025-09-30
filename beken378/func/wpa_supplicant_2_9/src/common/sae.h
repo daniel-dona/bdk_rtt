@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * Simultaneous authentication of equals
  * Copyright (c) 2012-2013, Jouni Malinen <j@w1.fi>
@@ -22,7 +23,7 @@
 #define SAE_SILENTLY_DISCARD 65535
 
 struct sae_temporary_data {
-	u8 kck[SAE_KCK_LEN];
+	uint8_t kck[SAE_KCK_LEN];
 	struct crypto_bignum *own_commit_scalar;
 	struct crypto_bignum *own_commit_element_ffc;
 	struct crypto_ec_point *own_commit_element_ecc;
@@ -42,7 +43,7 @@ struct sae_temporary_data {
 	struct wpabuf *anti_clogging_token;
 	char *pw_id;
 	int vlan_id;
-	u8 bssid[ETH_ALEN];
+	uint8_t bssid[ETH_ALEN];
 };
 
 enum sae_state {
@@ -51,13 +52,13 @@ enum sae_state {
 
 struct sae_data {
 	enum sae_state state;
-	u16 send_confirm;
-	u8 pmk[SAE_PMK_LEN];
-	u8 pmkid[SAE_PMKID_LEN];
+	uint16_t send_confirm;
+	uint8_t pmk[SAE_PMK_LEN];
+	uint8_t pmkid[SAE_PMKID_LEN];
 	struct crypto_bignum *peer_commit_scalar;
 	int group;
 	unsigned int sync; /* protocol instance variable: Sync */
-	u16 rc; /* protocol instance variable: Rc (received send-confirm) */
+	uint16_t rc; /* protocol instance variable: Rc (received send-confirm) */
 	struct sae_temporary_data *tmp;
 };
 
@@ -65,17 +66,17 @@ int sae_set_group(struct sae_data *sae, int group);
 void sae_clear_temp_data(struct sae_data *sae);
 void sae_clear_data(struct sae_data *sae);
 
-int sae_prepare_commit(const u8 *addr1, const u8 *addr2,
-		       const u8 *password, size_t password_len,
+int sae_prepare_commit(const uint8_t *addr1, const uint8_t *addr2,
+		       const uint8_t *password, size_t password_len,
 		       const char *identifier, struct sae_data *sae);
 int sae_process_commit(struct sae_data *sae);
 void sae_write_commit(struct sae_data *sae, struct wpabuf *buf,
 		      const struct wpabuf *token, const char *identifier);
-u16 sae_parse_commit(struct sae_data *sae, const u8 *data, size_t len,
-		     const u8 **token, size_t *token_len, int *allowed_groups);
+uint16_t sae_parse_commit(struct sae_data *sae, const uint8_t *data, size_t len,
+		     const uint8_t **token, size_t *token_len, int *allowed_groups);
 void sae_write_confirm(struct sae_data *sae, struct wpabuf *buf);
-int sae_check_confirm(struct sae_data *sae, const u8 *data, size_t len);
-u16 sae_group_allowed(struct sae_data *sae, int *allowed_groups, u16 group);
+int sae_check_confirm(struct sae_data *sae, const uint8_t *data, size_t len);
+uint16_t sae_group_allowed(struct sae_data *sae, int *allowed_groups, uint16_t group);
 const char * sae_state_txt(enum sae_state state);
 
 #endif /* SAE_H */

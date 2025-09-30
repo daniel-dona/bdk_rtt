@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : mass.c
  * This file is part of RT-Thread RTOS
@@ -97,7 +98,7 @@ static rt_err_t _pipe_check(struct uhintf* intf, upipe_t pipe)
  * @return the error code, RT_EOK on successfully.
  */
 static rt_err_t rt_usb_bulk_only_xfer(struct uhintf* intf, 
-    ustorage_cbw_t cmd, rt_uint8_t* buffer, int timeout)
+    ustorage_cbw_t cmd, uint8_t* buffer, int timeout)
 {
     rt_size_t size;
     rt_err_t ret;    
@@ -190,7 +191,7 @@ static rt_err_t rt_usb_bulk_only_xfer(struct uhintf* intf,
  * 
  * @return the error code, RT_EOK on successfully.
  */
-rt_err_t rt_usbh_storage_get_max_lun(struct uhintf* intf, rt_uint8_t* max_lun)
+rt_err_t rt_usbh_storage_get_max_lun(struct uhintf* intf, uint8_t* max_lun)
 {
     struct uinstance* device;    
     struct urequest setup;
@@ -288,8 +289,8 @@ rt_err_t rt_usbh_storage_reset(struct uhintf* intf)
  * 
  * @return the error code, RT_EOK on successfully.
  */
-rt_err_t rt_usbh_storage_read10(struct uhintf* intf, rt_uint8_t *buffer, 
-    rt_uint32_t sector, rt_size_t count, int timeout)
+rt_err_t rt_usbh_storage_read10(struct uhintf* intf, uint8_t *buffer, 
+    uint32_t sector, rt_size_t count, int timeout)
 {
     struct ustorage_cbw cmd;
 
@@ -313,13 +314,13 @@ rt_err_t rt_usbh_storage_read10(struct uhintf* intf, rt_uint8_t *buffer,
     cmd.cb_len = 10;
     cmd.cb[0] = SCSI_READ_10;
     cmd.cb[1] = 0;
-    cmd.cb[2] = (rt_uint8_t)(sector >> 24);
-    cmd.cb[3] = (rt_uint8_t)(sector >> 16);
-    cmd.cb[4] = (rt_uint8_t)(sector >> 8);
-    cmd.cb[5] = (rt_uint8_t)sector;
+    cmd.cb[2] = (uint8_t)(sector >> 24);
+    cmd.cb[3] = (uint8_t)(sector >> 16);
+    cmd.cb[4] = (uint8_t)(sector >> 8);
+    cmd.cb[5] = (uint8_t)sector;
     cmd.cb[6] = 0;
     cmd.cb[7] = (count & 0xff00) >> 8;
-    cmd.cb[8] = (rt_uint8_t) count & 0xff;
+    cmd.cb[8] = (uint8_t) count & 0xff;
 
     return rt_usb_bulk_only_xfer(intf, &cmd, buffer, timeout);
 }
@@ -334,8 +335,8 @@ rt_err_t rt_usbh_storage_read10(struct uhintf* intf, rt_uint8_t *buffer,
  * 
  * @return the error code, RT_EOK on successfully.
  */
-rt_err_t rt_usbh_storage_write10(struct uhintf* intf, rt_uint8_t *buffer, 
-    rt_uint32_t sector, rt_size_t count, int timeout)
+rt_err_t rt_usbh_storage_write10(struct uhintf* intf, uint8_t *buffer, 
+    uint32_t sector, rt_size_t count, int timeout)
 {
     struct ustorage_cbw cmd;
 
@@ -359,13 +360,13 @@ rt_err_t rt_usbh_storage_write10(struct uhintf* intf, rt_uint8_t *buffer,
     cmd.cb_len = 10;
     cmd.cb[0] = SCSI_WRITE_10;
     cmd.cb[1] = 0;
-    cmd.cb[2] = (rt_uint8_t)(sector >> 24);
-    cmd.cb[3] = (rt_uint8_t)(sector >> 16);
-    cmd.cb[4] = (rt_uint8_t)(sector >> 8);
-    cmd.cb[5] = (rt_uint8_t)sector;
+    cmd.cb[2] = (uint8_t)(sector >> 24);
+    cmd.cb[3] = (uint8_t)(sector >> 16);
+    cmd.cb[4] = (uint8_t)(sector >> 8);
+    cmd.cb[5] = (uint8_t)sector;
     cmd.cb[6] = 0;
     cmd.cb[7] = (count & 0xff00) >> 8;
-    cmd.cb[8] = (rt_uint8_t) count & 0xff;
+    cmd.cb[8] = (uint8_t) count & 0xff;
 
     return rt_usb_bulk_only_xfer(intf, &cmd, buffer, timeout);
 }
@@ -378,7 +379,7 @@ rt_err_t rt_usbh_storage_write10(struct uhintf* intf, rt_uint8_t *buffer,
  * 
  * @return the error code, RT_EOK on successfully.
  */
-rt_err_t rt_usbh_storage_request_sense(struct uhintf* intf, rt_uint8_t* buffer)
+rt_err_t rt_usbh_storage_request_sense(struct uhintf* intf, uint8_t* buffer)
 {
     struct ustorage_cbw cmd;
     int timeout = 200;
@@ -450,7 +451,7 @@ rt_err_t rt_usbh_storage_test_unit_ready(struct uhintf* intf)
  * 
  * @return the error code, RT_EOK on successfully.
  */
-rt_err_t rt_usbh_storage_inquiry(struct uhintf* intf, rt_uint8_t* buffer)
+rt_err_t rt_usbh_storage_inquiry(struct uhintf* intf, uint8_t* buffer)
 {
     struct ustorage_cbw cmd;
     int timeout = 200;
@@ -487,7 +488,7 @@ rt_err_t rt_usbh_storage_inquiry(struct uhintf* intf, rt_uint8_t* buffer)
  * 
  * @return the error code, RT_EOK on successfully.
  */
-rt_err_t rt_usbh_storage_get_capacity(struct uhintf* intf, rt_uint8_t* buffer)
+rt_err_t rt_usbh_storage_get_capacity(struct uhintf* intf, uint8_t* buffer)
 {
     struct ustorage_cbw cmd;
     int timeout = 200;

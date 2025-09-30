@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 #include "rwnx_config.h"
@@ -24,10 +25,10 @@
 #include "lwip/inet.h"
 
 #if CFG_SUPPORT_OTA_TFTP
-extern void flash_protection_op(UINT8 mode,PROTECT_TYPE type);
+extern void flash_protection_op(uint8_t mode,PROTECT_TYPE type);
 #if (CFG_SUPPORT_OTA_TFTP || CFG_SUPPORT_OTA_HTTP)
 SEND_PTK_HD send_hd, send_hd_bk;
-static u32 os_data_addr = OS1_FLASH_ADDR;
+static uint32_t os_data_addr = OS1_FLASH_ADDR;
 uint32_t tftp_crc = 0;
 IMG_HEAD img_hd = {0,};
 #endif
@@ -196,7 +197,7 @@ TftpHandler (
 
     case TFTP_OACK:
 #ifdef ET_DEBUG
-        TFTP_PRT("Got OACK: %s %s\n", pkt, pkt + os_strlen((UINT8 *)pkt) + 1);
+        TFTP_PRT("Got OACK: %s %s\n", pkt, pkt + os_strlen((uint8_t *)pkt) + 1);
 #endif
         TftpState = STATE_OACK;
         TftpServerPort = port;
@@ -287,7 +288,7 @@ TftpHandler (
         TFTP_WARN("TftpState %d\r\n", TftpState);
 
         TftpLastBlock = TftpBlock;
-        store_block (TftpBlock - 1, (UINT8 *)(pkt + 2), len);
+        store_block (TftpBlock - 1, (uint8_t *)(pkt + 2), len);
 
         /*
          *	Acknoledge the block just received, which will prompt
@@ -436,7 +437,7 @@ exit:
 
 void tftp_start(void)
 {
-    UINT32 ret;
+    uint32_t ret;
     
     Tftp_Uninit();
 
@@ -464,8 +465,8 @@ void tftp_start(void)
 void store_block (unsigned block, uint8_t *src, unsigned len)
 {
     uint8_t *f_data;
-    UINT32 param , or_crc;
-    UINT32 param1;
+    uint32_t param , or_crc;
+    uint32_t param1;
 
 
     TFTP_WARN ("p_len%d \r\n", len);
@@ -503,19 +504,19 @@ void store_block (unsigned block, uint8_t *src, unsigned len)
     }
 
     TFTP_WARN ("w_addr:%x \r\n", os_data_addr);
-    if((u32)os_data_addr >= 0x200000 || (u32)os_data_addr < 0x27000)
+    if((uint32_t)os_data_addr >= 0x200000 || (uint32_t)os_data_addr < 0x27000)
     {
         TFTP_PRT ("eerr_addr:%x \r\n", os_data_addr);
         return;
     }
 
-    if((u32)os_data_addr < 0x400000)
+    if((uint32_t)os_data_addr < 0x400000)
     {
-        flash_write(src + TFTP_PKT_HD_LEN , len - TFTP_PKT_HD_LEN, (u32)os_data_addr);
+        flash_write(src + TFTP_PKT_HD_LEN , len - TFTP_PKT_HD_LEN, (uint32_t)os_data_addr);
         f_data = os_malloc(1024);
         if(f_data)
         {
-            flash_read(f_data, len - TFTP_PKT_HD_LEN, (u32)os_data_addr);
+            flash_read(f_data, len - TFTP_PKT_HD_LEN, (uint32_t)os_data_addr);
             if(!os_memcmp(src + TFTP_PKT_HD_LEN, f_data, len - TFTP_PKT_HD_LEN))
             {
                 TFTP_WARN ("block%d WRITE ok !\n", block);
@@ -533,12 +534,12 @@ void store_block (unsigned block, uint8_t *src, unsigned len)
         }
 
         if(send_hd.seq != send_hd.total_seq)
-            tftp_crc = co_crc32((UINT32)src, len, tftp_crc);
+            tftp_crc = co_crc32((uint32_t)src, len, tftp_crc);
         else
         {
             TFTP_WARN ("seq%d  send over\n", send_hd.seq);
             os_memcpy(&or_crc, src + len - TFTP_ALL_CRC_LEN, TFTP_ALL_CRC_LEN);
-            tftp_crc = co_crc32((UINT32)src, len - TFTP_ALL_CRC_LEN, tftp_crc);
+            tftp_crc = co_crc32((uint32_t)src, len - TFTP_ALL_CRC_LEN, tftp_crc);
             if(tftp_crc == or_crc)
             {
                 TFTP_PRT ("crc OK:%x %x\n", tftp_crc, or_crc);
@@ -549,9 +550,9 @@ void store_block (unsigned block, uint8_t *src, unsigned len)
                 img_hd.os_addr = send_hd.os0_flash_addr;
                 img_hd.hd_addr = send_hd.os_hd_addr;
                 img_hd.status = 1;
-                param = (u32)send_hd.os_hd_addr;
+                param = (uint32_t)send_hd.os_hd_addr;
                 flash_ctrl(CMD_FLASH_ERASE_SECTOR, &param);
-                flash_write((char *)&img_hd, sizeof(img_hd), (u32)send_hd.os_hd_addr);
+                flash_write((char *)&img_hd, sizeof(img_hd), (uint32_t)send_hd.os_hd_addr);
 
                 TFTP_WARN ("%X %X %X %X %X \r\n", img_hd.bkup_addr,
                            img_hd.bkup_len, img_hd.crc, img_hd.ex_addr, img_hd.status);

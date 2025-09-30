@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : ringbuffer.c
  * This file is part of RT-Thread RTOS
@@ -41,8 +42,8 @@ rt_inline enum rt_ringbuffer_state rt_ringbuffer_status(struct rt_ringbuffer *rb
 }
 
 void rt_ringbuffer_init(struct rt_ringbuffer *rb,
-                        rt_uint8_t           *pool,
-                        rt_int16_t            size)
+                        uint8_t           *pool,
+                        int16_t            size)
 {
     RT_ASSERT(rb != RT_NULL);
     RT_ASSERT(size > 0);
@@ -61,10 +62,10 @@ RTM_EXPORT(rt_ringbuffer_init);
  * put a block of data into ring buffer
  */
 rt_size_t rt_ringbuffer_put(struct rt_ringbuffer *rb,
-                            const rt_uint8_t     *ptr,
-                            rt_uint16_t           length)
+                            const uint8_t     *ptr,
+                            uint16_t           length)
 {
-    rt_uint16_t size;
+    uint16_t size;
 
     RT_ASSERT(rb != RT_NULL);
 
@@ -110,10 +111,10 @@ RTM_EXPORT(rt_ringbuffer_put);
  * When the buffer is full, it will discard the old data.
  */
 rt_size_t rt_ringbuffer_put_force(struct rt_ringbuffer *rb,
-                            const rt_uint8_t     *ptr,
-                            rt_uint16_t           length)
+                            const uint8_t     *ptr,
+                            uint16_t           length)
 {
-    rt_uint16_t space_length;
+    uint16_t space_length;
 
     RT_ASSERT(rb != RT_NULL);
 
@@ -164,8 +165,8 @@ RTM_EXPORT(rt_ringbuffer_put_force);
  *  get data from ring buffer
  */
 rt_size_t rt_ringbuffer_get(struct rt_ringbuffer *rb,
-                            rt_uint8_t           *ptr,
-                            rt_uint16_t           length)
+                            uint8_t           *ptr,
+                            uint16_t           length)
 {
     rt_size_t size;
 
@@ -210,7 +211,7 @@ RTM_EXPORT(rt_ringbuffer_get);
 /**
  * put a character into ring buffer
  */
-rt_size_t rt_ringbuffer_putchar(struct rt_ringbuffer *rb, const rt_uint8_t ch)
+rt_size_t rt_ringbuffer_putchar(struct rt_ringbuffer *rb, const uint8_t ch)
 {
     RT_ASSERT(rb != RT_NULL);
 
@@ -240,7 +241,7 @@ RTM_EXPORT(rt_ringbuffer_putchar);
  *
  * When the buffer is full, it will discard one old data.
  */
-rt_size_t rt_ringbuffer_putchar_force(struct rt_ringbuffer *rb, const rt_uint8_t ch)
+rt_size_t rt_ringbuffer_putchar_force(struct rt_ringbuffer *rb, const uint8_t ch)
 {
     enum rt_ringbuffer_state old_state;
 
@@ -275,7 +276,7 @@ RTM_EXPORT(rt_ringbuffer_putchar_force);
 /**
  * get a character from a ringbuffer
  */
-rt_size_t rt_ringbuffer_getchar(struct rt_ringbuffer *rb, rt_uint8_t *ch)
+rt_size_t rt_ringbuffer_getchar(struct rt_ringbuffer *rb, uint8_t *ch)
 {
     RT_ASSERT(rb != RT_NULL);
 
@@ -337,10 +338,10 @@ RTM_EXPORT(rt_ringbuffer_reset);
 
 #ifdef RT_USING_HEAP
 
-struct rt_ringbuffer* rt_ringbuffer_create(rt_uint16_t size)
+struct rt_ringbuffer* rt_ringbuffer_create(uint16_t size)
 {
     struct rt_ringbuffer *rb;
-    rt_uint8_t *pool;
+    uint8_t *pool;
 
 	RT_ASSERT(size > 0);
 

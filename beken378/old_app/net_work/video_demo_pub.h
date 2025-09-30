@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef __VOID_DEMO_PUB_H__
 #define __VOID_DEMO_PUB_H__
 
@@ -16,7 +17,7 @@ typedef struct tvideo_ota_st
 {
     const char *http_url;
     int    http_port;
-    UINT32 http_timeout;
+    uint32_t http_timeout;
 } TV_OTA_ST, *TV_OTA_PTR;
 
 #endif  // __VOID_DEMO_PUB_H__

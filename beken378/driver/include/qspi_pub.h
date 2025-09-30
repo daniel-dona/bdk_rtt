@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _QSPI_PUB_H_
 #define _QSPI_PUB_H_
 
@@ -131,7 +132,7 @@ void qspi_init(void);
 void qspi_exit(void);
 
 void qspi_isr(void);
-UINT32 qspi_ctrl(UINT32 cmd, void *param);
+uint32_t qspi_ctrl(uint32_t cmd, void *param);
 
 /*
  *	mode: 1: 1 linemode
@@ -139,15 +140,15 @@ UINT32 qspi_ctrl(UINT32 cmd, void *param);
  *  div：qspi clk freq div
  *
  */
-extern void bk_qspi_mode_start(UINT32 mode, UINT32 div);
+extern void bk_qspi_mode_start(uint32_t mode, uint32_t div);
 extern void bk_qspi_psram_quad_mode_switch(unsigned char ucEnterOrExit);
 extern void bk_qspi_psram_reset_enable(void);
 extern void bk_qspi_psram_reset(void);
 extern void bk_qspi_psram_set_length(void);
-extern UINT16 bk_qspi_psram_read_id(void);
+extern uint16_t bk_qspi_psram_read_id(void);
 extern void psram_init(uint8_t line_mode,uint8_t voltage_level);
 extern int bk_qspi_dcache_configure(qspi_dcache_drv_desc *qspi_cfg);
-extern int bk_qspi_dcache_write_data(UINT32 set_addr, UINT32 *wr_data, UINT32 data_length);
-extern int bk_qspi_dcache_read_data(UINT32 set_addr, UINT32 *rd_data, UINT32 data_length);
+extern int bk_qspi_dcache_write_data(uint32_t set_addr, uint32_t *wr_data, uint32_t data_length);
+extern int bk_qspi_dcache_read_data(uint32_t set_addr, uint32_t *rd_data, uint32_t data_length);
 #endif //_QSPI_PUB_H_
 

@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _U_MP3_H_
 #define _U_MP3_H_
 

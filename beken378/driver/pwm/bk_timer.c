@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 
@@ -15,11 +16,11 @@ static SDD_OPERATIONS bk_timer_op =
     bk_timer_ctrl
 };
 
-void (*p_TIMER_Int_Handler[TIMER_CHANNEL_NO])(UINT8) = {NULL,};
+void (*p_TIMER_Int_Handler[TIMER_CHANNEL_NO])(uint8_t) = {NULL,};
 
-static UINT32 bk_timer_cal_endvalue(UINT32 ucChannel, UINT32 time_ms, UINT32 div)
+static uint32_t bk_timer_cal_endvalue(uint32_t ucChannel, uint32_t time_ms, uint32_t div)
 {
-    UINT64 value;
+    uint64_t value;
 
     if(div == 0)
         div = 1;
@@ -38,12 +39,12 @@ static UINT32 bk_timer_cal_endvalue(UINT32 ucChannel, UINT32 time_ms, UINT32 div
     if(value > 0xffffffff)
         value = 0xffffffff;
 
-    return (UINT32)value;
+    return (uint32_t)value;
 }
 
-static UINT32 bk_timer_cal_endvalue_us(UINT32 ucChannel, UINT32 time_us, UINT32 div)
+static uint32_t bk_timer_cal_endvalue_us(uint32_t ucChannel, uint32_t time_us, uint32_t div)
 {
-    UINT64 value;
+    uint64_t value;
     
     if(div == 0)
         div = 1;
@@ -54,14 +55,14 @@ static UINT32 bk_timer_cal_endvalue_us(UINT32 ucChannel, UINT32 time_us, UINT32 
     if(value > 0xffffffff)
         value = 0xffffffff;
 
-    return (UINT32)value;
+    return (uint32_t)value;
 }
 
-static UINT32 init_timer_param(timer_param_t *timer_param)
+static uint32_t init_timer_param(timer_param_t *timer_param)
 {
-    UINT32 value;	
+    uint32_t value;	
 	GLOBAL_INT_DECLARATION();
-    UINT32 ucChannel = timer_param->channel;	
+    uint32_t ucChannel = timer_param->channel;	
 
 
     if (timer_param == NULL)
@@ -117,10 +118,10 @@ static UINT32 init_timer_param(timer_param_t *timer_param)
     return BK_TIMER_SUCCESS;
 }
 
-static UINT32 init_timer_param_us(timer_param_t *timer_param)
+static uint32_t init_timer_param_us(timer_param_t *timer_param)
 {
-    UINT32 value;
-    UINT32 ucChannel = timer_param->channel;
+    uint32_t value;
+    uint32_t ucChannel = timer_param->channel;
 	GLOBAL_INT_DECLARATION();
 
     if (timer_param == NULL)
@@ -154,19 +155,19 @@ static UINT32 init_timer_param_us(timer_param_t *timer_param)
     return BK_TIMER_SUCCESS;
 }
 
-UINT32 bk_timer_ctrl(UINT32 cmd, void *param)
+uint32_t bk_timer_ctrl(uint32_t cmd, void *param)
 {
     int i_time_out;
-    UINT32 ret = BK_TIMER_SUCCESS;
-    UINT32 ucChannel;
-    UINT32 value;
+    uint32_t ret = BK_TIMER_SUCCESS;
+    uint32_t ucChannel;
+    uint32_t value;
     timer_param_t *p_param;
 	GLOBAL_INT_DECLARATION();
 
     switch(cmd)
     {
     case CMD_TIMER_UNIT_ENABLE:
-        ucChannel = (*(UINT32 *)param);
+        ucChannel = (*(uint32_t *)param);
         if(ucChannel > 5)
         {
             ret = BK_TIMER_FAILURE;
@@ -194,7 +195,7 @@ UINT32 bk_timer_ctrl(UINT32 cmd, void *param)
         break;
 		
     case CMD_TIMER_UNIT_DISABLE:
-        ucChannel = (*(UINT32 *)param);
+        ucChannel = (*(uint32_t *)param);
         if(ucChannel > 5)
         {
             ret = BK_TIMER_FAILURE;
@@ -279,7 +280,7 @@ UINT32 bk_timer_ctrl(UINT32 cmd, void *param)
 
 void bk_timer_init(void)
 {
-	UINT32 value;   
+	uint32_t value;   
 	 
 	value = REG_READ(TIMER0_2_CTL);
 	value &= ~(0x7 );
@@ -303,8 +304,8 @@ void bk_timer_exit(void)
 void bk_timer_isr(void)
 {
     int i;
-    UINT32 status0;
-    UINT32 status1;
+    uint32_t status0;
+    uint32_t status1;
 
     status0 = REG_READ(TIMER0_2_CTL) & (0x7 << TIMERCTLA_INT_POSI);
     for(i = 0; i < 3; i++)
@@ -313,7 +314,7 @@ void bk_timer_isr(void)
         {
             if(p_TIMER_Int_Handler[i])
             {
-                p_TIMER_Int_Handler[i]((UINT8)i);
+                p_TIMER_Int_Handler[i]((uint8_t)i);
             }
         }
     }
@@ -330,7 +331,7 @@ void bk_timer_isr(void)
         {
             if(p_TIMER_Int_Handler[i + 3])
             {
-                p_TIMER_Int_Handler[i + 3]((UINT8)(i + 3));
+                p_TIMER_Int_Handler[i + 3]((uint8_t)(i + 3));
             }
         }
     }

@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <rtdevice.h>
 #include <rthw.h>
 #include <rtthread.h>
@@ -36,7 +37,7 @@ uint8_t comm_uart_getchar(void)
     return ch;
 }
 
-int comm_uart_putchar(const rt_uint8_t ch)
+int comm_uart_putchar(const uint8_t ch)
 {
     return rt_device_write(g_comm_uart.device, 0, &ch, 1);
 }

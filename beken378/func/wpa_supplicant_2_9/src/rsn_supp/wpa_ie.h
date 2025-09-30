@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * wpa_supplicant - WPA/RSN IE and KDE definitions
  * Copyright (c) 2004-2007, Jouni Malinen <j@w1.fi>
@@ -12,55 +13,55 @@
 struct wpa_sm;
 
 struct wpa_eapol_ie_parse {
-	const u8 *wpa_ie;
+	const uint8_t *wpa_ie;
 	size_t wpa_ie_len;
-	const u8 *rsn_ie;
+	const uint8_t *rsn_ie;
 	size_t rsn_ie_len;
-	const u8 *pmkid;
-	const u8 *gtk;
+	const uint8_t *pmkid;
+	const uint8_t *gtk;
 	size_t gtk_len;
-	const u8 *mac_addr;
+	const uint8_t *mac_addr;
 	size_t mac_addr_len;
 #ifdef CONFIG_IEEE80211W
-	const u8 *igtk;
+	const uint8_t *igtk;
 	size_t igtk_len;
 #endif /* CONFIG_IEEE80211W */
-	const u8 *mdie;
+	const uint8_t *mdie;
 	size_t mdie_len;
-	const u8 *ftie;
+	const uint8_t *ftie;
 	size_t ftie_len;
-	const u8 *reassoc_deadline;
-	const u8 *key_lifetime;
-	const u8 *lnkid;
+	const uint8_t *reassoc_deadline;
+	const uint8_t *key_lifetime;
+	const uint8_t *lnkid;
 	size_t lnkid_len;
-	const u8 *ext_capab;
+	const uint8_t *ext_capab;
 	size_t ext_capab_len;
-	const u8 *supp_rates;
+	const uint8_t *supp_rates;
 	size_t supp_rates_len;
-	const u8 *ext_supp_rates;
+	const uint8_t *ext_supp_rates;
 	size_t ext_supp_rates_len;
-	const u8 *ht_capabilities;
-	const u8 *vht_capabilities;
-	const u8 *supp_channels;
+	const uint8_t *ht_capabilities;
+	const uint8_t *vht_capabilities;
+	const uint8_t *supp_channels;
 	size_t supp_channels_len;
-	const u8 *supp_oper_classes;
+	const uint8_t *supp_oper_classes;
 	size_t supp_oper_classes_len;
-	u8 qosinfo;
-	u16 aid;
-	const u8 *wmm;
+	uint8_t qosinfo;
+	uint16_t aid;
+	const uint8_t *wmm;
 	size_t wmm_len;
 #ifdef CONFIG_P2P
-	const u8 *ip_addr_req;
-	const u8 *ip_addr_alloc;
+	const uint8_t *ip_addr_req;
+	const uint8_t *ip_addr_alloc;
 #endif /* CONFIG_P2P */
 #ifdef CONFIG_OCV
-	const u8 *oci;
+	const uint8_t *oci;
 	size_t oci_len;
 #endif /* CONFIG_OCV */
 };
 
-int wpa_supplicant_parse_ies(const u8 *buf, size_t len,
+int wpa_supplicant_parse_ies(const uint8_t *buf, size_t len,
 			     struct wpa_eapol_ie_parse *ie);
-int wpa_gen_wpa_ie(struct wpa_sm *sm, u8 *wpa_ie, size_t wpa_ie_len);
+int wpa_gen_wpa_ie(struct wpa_sm *sm, uint8_t *wpa_ie, size_t wpa_ie_len);
 
 #endif /* WPA_IE_H */

@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  * This file is part of the Serial Flash Universal Driver Library.
  *

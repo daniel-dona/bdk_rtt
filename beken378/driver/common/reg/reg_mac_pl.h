@@ -1,3 +1,4 @@
+#include <stdint.h>
 /**
  * @file reg_mac_pl.h
  * @brief Definitions of the NXMAC HW block registers and register access functions.
@@ -5888,7 +5889,7 @@ __INLINE void nxmac_timers_int_un_mask_set(uint32_t value)
 
 extern void rwnxl_set_nxmac_timer_value_set_bit(uint32_t bit);
 extern void rwnxl_set_nxmac_timer_value_clear_bit(uint32_t bit);
-extern UINT32 nxmac_timer_saved;
+extern uint32_t nxmac_timer_saved;
 __INLINE void nxmac_timers_int_un_mask_set_bit(uint32_t bit)
 {
     uint32_t timer_msk;

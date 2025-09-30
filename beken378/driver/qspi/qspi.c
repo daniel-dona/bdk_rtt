@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 #include "drv_model_pub.h"
@@ -17,7 +18,7 @@
 #include "mem_pub.h"
 
 static volatile QSPI_GE0_DRV_DESC   *sg_p_qspi_ge0_drv_desc ;
-__maybe_unused static UINT8  qspi_ge0_busy(void);
+__maybe_unused static uint8_t  qspi_ge0_busy(void);
 void qspi_printf(void);
 
 #define QSPI_VID_DEP                    0x80
@@ -44,16 +45,16 @@ void qspi_exit(void)
     sddev_unregister_dev(QSPI_DEV_NAME);
 }
 
-static void qspi_psram_set_voltage(UINT32 mode)
+static void qspi_psram_set_voltage(uint32_t mode)
 {
-    UINT32 param;
+    uint32_t param;
 
     param = mode;
     sddev_control(SCTRL_DEV_NAME, CMD_QSPI_IO_VOLTAGE, &param);
     sddev_control(SCTRL_DEV_NAME, CMD_QSPI_VDDRAM_VOLTAGE, &param);
 }
 
-static void qspi_gpio_configuration(UINT8 LineMode)
+static void qspi_gpio_configuration(uint8_t LineMode)
 {
     uint32_t val;
 
@@ -82,9 +83,9 @@ static void qspi_gpio_configuration(UINT8 LineMode)
 	}
 }
 
-static void qspi_icu_configuration(UINT32 enable)
+static void qspi_icu_configuration(uint32_t enable)
 {
-    UINT32 param;
+    uint32_t param;
 
     if(enable) 
     {
@@ -112,37 +113,37 @@ static void qspi_icu_configuration(UINT32 enable)
 
 static void qspi_clk_set_26M(void)
 {		
-	UINT32 param;
+	uint32_t param;
 	param = PCLK_POSI_QSPI_26M;
 	sddev_control(ICU_DEV_NAME, CMD_QSPI_CLK_SEL, &param);
 }
 
 static void qspi_clk_set_dco(void)
 {		
-	UINT32 param;
+	uint32_t param;
 	param = PCLK_POSI_QSPI_DCO;
 	sddev_control(ICU_DEV_NAME, CMD_QSPI_CLK_SEL, &param);
 }
 
 static void qspi_clk_set_120M(void)
 {		
-	UINT32 param;
+	uint32_t param;
 	param = PCLK_POSI_QSPI_120M;
 	sddev_control(ICU_DEV_NAME, CMD_QSPI_CLK_SEL, &param);
 }
 
-static void qspi_div_clk_set(UINT32 clk)
+static void qspi_div_clk_set(uint32_t clk)
 {
-	UINT32 val;
+	uint32_t val;
 
 	val = REG_READ(QSPI_CTRL);
 	val = ((val & (~(0x07 << 8))) | ((clk & 0x07) << 8));
 	REG_WRITE(QSPI_CTRL, val);
 }
 
-static void qspi_dcache_wr_cmd(UINT8 command ,UINT8 linemode)
+static void qspi_dcache_wr_cmd(uint8_t command ,uint8_t linemode)
 {
-	UINT32 val;
+	uint32_t val;
 
 	val = REG_READ(QSPI_DCACHE_WR_CMD);
 
@@ -160,9 +161,9 @@ static void qspi_dcache_wr_cmd(UINT8 command ,UINT8 linemode)
 	REG_WRITE(QSPI_DCACHE_WR_CMD, val);	
 }
 
-static void qspi_dcache_wr_addr(UINT8 linemode)
+static void qspi_dcache_wr_addr(uint8_t linemode)
 {
-	UINT32 val;
+	uint32_t val;
 
 	val = REG_READ(QSPI_DCACHE_WR_ADDR);
 
@@ -180,9 +181,9 @@ static void qspi_dcache_wr_addr(UINT8 linemode)
 	REG_WRITE(QSPI_DCACHE_WR_ADDR, val);	
 }
 
-static void qspi_dcache_wr_dum(UINT8 linemode, UINT8 dummy_size)
+static void qspi_dcache_wr_dum(uint8_t linemode, uint8_t dummy_size)
 {
-	UINT32 val;
+	uint32_t val;
 
 	val = REG_READ(QSPI_DCACHE_WR_DUM);
 
@@ -200,9 +201,9 @@ static void qspi_dcache_wr_dum(UINT8 linemode, UINT8 dummy_size)
 	REG_WRITE(QSPI_DCACHE_WR_DUM, val);	
 }
 
-static void qspi_dcache_wr_dat(UINT8 linemode)
+static void qspi_dcache_wr_dat(uint8_t linemode)
 {
-	UINT32 val;
+	uint32_t val;
 
 	val = REG_READ(QSPI_DCACHE_WR_DAT);
 
@@ -220,9 +221,9 @@ static void qspi_dcache_wr_dat(UINT8 linemode)
 	REG_WRITE(QSPI_DCACHE_WR_DAT, val);	
 }
 
-static void qspi_dcache_rd_cmd(UINT8 command ,UINT8 linemode)
+static void qspi_dcache_rd_cmd(uint8_t command ,uint8_t linemode)
 {
-	UINT32 val;
+	uint32_t val;
 
 	val = REG_READ(QSPI_DCACHE_RD_CMD);
 
@@ -240,9 +241,9 @@ static void qspi_dcache_rd_cmd(UINT8 command ,UINT8 linemode)
 	REG_WRITE(QSPI_DCACHE_RD_CMD, val);	
 }
 
-static void qspi_dcache_rd_addr(UINT8 linemode)
+static void qspi_dcache_rd_addr(uint8_t linemode)
 {
-	UINT32 val = 0;
+	uint32_t val = 0;
 
 	if(linemode == 0)
 	{
@@ -258,9 +259,9 @@ static void qspi_dcache_rd_addr(UINT8 linemode)
 	REG_WRITE(QSPI_DCACHE_RD_ADDR, val);	
 }
 
-static void qspi_dcache_rd_dum(UINT8 linemode, UINT8 dummy_size)
+static void qspi_dcache_rd_dum(uint8_t linemode, uint8_t dummy_size)
 {
-	UINT32 val;
+	uint32_t val;
 
 	val = REG_READ(QSPI_DCACHE_RD_DUM);
 
@@ -278,9 +279,9 @@ static void qspi_dcache_rd_dum(UINT8 linemode, UINT8 dummy_size)
 	REG_WRITE(QSPI_DCACHE_RD_DUM, val);	
 }
 
-static void qspi_dcache_rd_dat(UINT8 linemode)
+static void qspi_dcache_rd_dat(uint8_t linemode)
 {
-	UINT32 val;
+	uint32_t val;
 
 	val = REG_READ(QSPI_DCACHE_RD_DAT);
 
@@ -304,9 +305,9 @@ static void qspi_dcache_request(void)
 	REG_WRITE(QSPI_DCACHE_REQUEST, 1);	
 }
 
-static UINT32 qspi_open(UINT32 op_flag)
+static uint32_t qspi_open(uint32_t op_flag)
 {
-	UINT32 value;
+	uint32_t value;
 	
 	value = op_flag;
 	qspi_icu_configuration(value);
@@ -314,32 +315,32 @@ static UINT32 qspi_open(UINT32 op_flag)
 	return QSPI_SUCCESS;
 }
 
-static UINT32 qspi_close(void)
+static uint32_t qspi_close(void)
 {
 	qspi_icu_configuration(0);
 	return QSPI_SUCCESS;
 }
 
-static UINT32 qspi_ctrl(UINT32 cmd, void *param)
+static uint32_t qspi_ctrl(uint32_t cmd, void *param)
 {
-	UINT32 ret = QSPI_SUCCESS;
+	uint32_t ret = QSPI_SUCCESS;
 	qspi_dcache_drv_desc * p_param;
 	
     peri_busy_count_add();
 
 	switch(cmd){
 	case QSPI_CMD_SET_VOLTAGE:
-		qspi_psram_set_voltage(*(UINT8 *)param);
+		qspi_psram_set_voltage(*(uint8_t *)param);
 		break;
 	case QSPI_CMD_DCACHE_CONFIG:
 		p_param = (qspi_dcache_drv_desc *)param;
 		ret = bk_qspi_dcache_configure(p_param);
 		break;
 	case QSPI_CMD_GPIO_CONFIG:
-		qspi_gpio_configuration(*(UINT8 *)param);
+		qspi_gpio_configuration(*(uint8_t *)param);
 		break;		
 	case QSPI_CMD_DIV_CLK_SET:
-		qspi_div_clk_set(*(UINT8 *)param);
+		qspi_div_clk_set(*(uint8_t *)param);
 		break;
 	case QSPI_CMD_CLK_SET_26M:
 		qspi_clk_set_26M();
@@ -369,8 +370,8 @@ static UINT32 qspi_ctrl(UINT32 cmd, void *param)
 
 int bk_qspi_dcache_configure(qspi_dcache_drv_desc *qspi_cfg)
 {
-	UINT32 line_mode, param;
-	UINT32 wr_cmd, rd_cmd, wr_dummy_size, rd_dummy_size;
+	uint32_t line_mode, param;
+	uint32_t wr_cmd, rd_cmd, wr_dummy_size, rd_dummy_size;
 
 	ASSERT(qspi_cfg != NULL);
 		
@@ -740,7 +741,7 @@ void bk_qspi_psram_set_length(void)
 	os_free(p_QSPI_GE0_drv_desc);
 }
 
-static UINT8  qspi_ge0_busy(void)
+static uint8_t  qspi_ge0_busy(void)
 {
 	int reg;
 	reg = REG_READ(REG_QSPI_ENABLE);
@@ -759,11 +760,11 @@ static UINT8  qspi_ge0_busy(void)
 #define GPIO_PSRSM_SI 		REG_GPIO_16_CONFIG
 #define GPIO_PSRSM_SO 		REG_GPIO_17_CONFIG
 
-UINT16 bk_qspi_psram_read_id(void)
+uint16_t bk_qspi_psram_read_id(void)
 {
     unsigned char i;
     unsigned int kgd;
-	UINT16 reg;
+	uint16_t reg;
 
 	kgd = 0;
 	REG_WRITE(GPIO_PSRSM_CE, 0x02);
@@ -862,9 +863,9 @@ UINT16 bk_qspi_psram_read_id(void)
 	return kgd;
 }
 
-void bk_qspi_mode_start(UINT32 mode, UINT32 div)
+void bk_qspi_mode_start(uint32_t mode, uint32_t div)
 {
-	UINT32 param;
+	uint32_t param;
 	qspi_open(1);
 
 	param = 2;
@@ -879,10 +880,10 @@ void bk_qspi_mode_start(UINT32 mode, UINT32 div)
 	qspi_ctrl(QSPI_CMD_GPIO_CONFIG, (void *)&param);	
 }
 
-int bk_qspi_dcache_write_data(UINT32 set_addr, UINT32 *wr_data, UINT32 data_length)
+int bk_qspi_dcache_write_data(uint32_t set_addr, uint32_t *wr_data, uint32_t data_length)
 {
-	UINT32 i ;
-	UINT32 value;
+	uint32_t i ;
+	uint32_t value;
 
 	if(wr_data == NULL)
 	{
@@ -900,11 +901,11 @@ int bk_qspi_dcache_write_data(UINT32 set_addr, UINT32 *wr_data, UINT32 data_leng
 	return QSPI_SUCCESS;	
 }
 
-int bk_qspi_dcache_read_data(UINT32 set_addr, UINT32 *rd_data, UINT32 data_length)
+int bk_qspi_dcache_read_data(uint32_t set_addr, uint32_t *rd_data, uint32_t data_length)
 
 {
-	UINT32 i ;
-	UINT32 value;
+	uint32_t i ;
+	uint32_t value;
 
 	if(rd_data == NULL)
 	{

@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "sys_rtos.h"
 #include "rtos_pub.h"
 #include "error.h"
@@ -44,14 +45,14 @@
 #define CHARGE_CAL_ITEM             1
 #define CHARGE_CAL_POS        CHARGE_CAL_ITEM
 
-static UINT32 charge_elect = 530;
-static UINT32 charge_func_init = 0;
-static UINT32 last_second, keep_count = 0;
+static uint32_t charge_elect = 530;
+static uint32_t charge_func_init = 0;
+static uint32_t last_second, keep_count = 0;
 static CHARGE_OPER_ST charge_cfg;
 static signed long  CodeOffset = 0, dvbatref = 0;
 static int last_vol;
 
-int wifi_get_charge_cal_from_efuse(UINT8 *cal)
+int wifi_get_charge_cal_from_efuse(uint8_t *cal)
 {
     EFUSE_OPER_ST efuse;
     int i = 0, ret;
@@ -91,14 +92,14 @@ int wifi_get_charge_cal_from_efuse(UINT8 *cal)
 
 void usb_charge_stop()
 {
-    UINT32 charge_type = 1;
+    uint32_t charge_type = 1;
     sddev_control(SCTRL_DEV_NAME, CMD_SCTRL_USB_CHARGE_STOP, &charge_type);
 }
 
-void usb_charge_start(CHARGE_STEP step, UINT32 charge_elect)
+void usb_charge_start(CHARGE_STEP step, uint32_t charge_elect)
 {
     CHARGE_TYPE type;
-    UINT8 cali_result[4];
+    uint8_t cali_result[4];
 
 #if (CFG_CHARGE_MODE == CHARGE_INTERNAL_HW_MODE)
     type = INTERNAL_HW_MODE;
@@ -122,9 +123,9 @@ void usb_charge_start(CHARGE_STEP step, UINT32 charge_elect)
     }
 
 #if (CHARGE_CAL_POS == CHARGE_CAL_EFUSE)
-    if(!wifi_get_charge_cal_from_efuse((UINT8 *)cali_result))
+    if(!wifi_get_charge_cal_from_efuse((uint8_t *)cali_result))
 #elif (CHARGE_CAL_POS == CHARGE_CAL_ITEM)
-    if(!get_info_item(CHARGE_CONFIG_ITEM, (UINT8 *)cali_result, NULL, NULL))
+    if(!get_info_item(CHARGE_CONFIG_ITEM, (uint8_t *)cali_result, NULL, NULL))
 #endif
     {
         os_printf("load charge param from %d error.\r\n", CHARGE_CAL_POS);
@@ -152,9 +153,9 @@ static int vbat_voltage_get(void)
     float ul_valueIn = 0;
     saradc_desc_t *p_ADC_drv_desc = NULL;
     DD_HANDLE saradc_handle;
-    UINT32 status;
+    uint32_t status;
 
-    usData = (UINT16 *)os_malloc(53 * sizeof(UINT16));
+    usData = (uint16_t *)os_malloc(53 * sizeof(uint16_t));
     if (usData == NULL)
     {
         os_printf("malloc usData failed!\r\n");
@@ -602,7 +603,7 @@ void usb_charge_external_sw_check(void)
 
 void usb_charge_check_cb(void)
 {
-    UINT32 tmp;
+    uint32_t tmp;
 
     if(charge_func_init && usb_power_is_pluged())
     {
@@ -708,8 +709,8 @@ int vbat_adc_cal_step2(void)
 void usb_charger_calibration(void)
 {
     CHARGE_OPER_ST chrg;
-    UINT32 reg, i, ret;
-    UINT8 cali_result[4];
+    uint32_t reg, i, ret;
+    uint8_t cali_result[4];
 
     usb_charge_set_cal_default_reg();
 
@@ -733,7 +734,7 @@ void usb_charger_calibration(void)
     usb_charge_set_charge_default_reg();
 }
 #endif
-void usb_plug_func_handler(void *usr_data, UINT32 event)
+void usb_plug_func_handler(void *usr_data, uint32_t event)
 {
     switch(event)
     {
@@ -769,16 +770,16 @@ void usb_plug_func_handler(void *usr_data, UINT32 event)
 void usb_plug_func_open(void)
 {
     DD_HANDLE usb_plug_hdl;
-    UINT32 status;
+    uint32_t status;
     USB_PLUG_INOUT_ST user_plug;
 #if CFG_USE_USB_CHARGE
-    UINT8 cali_result[4] = {0};
+    uint8_t cali_result[4] = {0};
 #endif
 
     user_plug.handler = usb_plug_func_handler;
     user_plug.usr_data = 0;
 
-    usb_plug_hdl = ddev_open(USB_PLUG_DEV_NAME, &status, (UINT32)&user_plug);
+    usb_plug_hdl = ddev_open(USB_PLUG_DEV_NAME, &status, (uint32_t)&user_plug);
     if(DD_HANDLE_UNVALID == usb_plug_hdl)
     {
         return;
@@ -788,9 +789,9 @@ void usb_plug_func_open(void)
     charge_func_init = 1;
 
 #if (CHARGE_CAL_POS == CHARGE_CAL_EFUSE)
-    if(!wifi_get_charge_cal_from_efuse((UINT8 *)cali_result))
+    if(!wifi_get_charge_cal_from_efuse((uint8_t *)cali_result))
 #elif (CHARGE_CAL_POS == CHARGE_CAL_ITEM)
-    if(!get_info_item(CHARGE_CONFIG_ITEM, (UINT8 *)cali_result, NULL, NULL))
+    if(!get_info_item(CHARGE_CONFIG_ITEM, (uint8_t *)cali_result, NULL, NULL))
 #endif
     {
         os_printf("load charge param from %d error.\r\n", CHARGE_CAL_POS);

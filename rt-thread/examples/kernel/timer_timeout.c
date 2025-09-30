@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * 程序清单：消息队列例程
  *
@@ -17,11 +18,11 @@ static char msg_pool[2048];
 
 /* 定时器的控制块 */
 static struct rt_timer timer;
-static rt_uint16_t no = 0;
+static uint16_t no = 0;
 static void timer_timeout(void* parameter)
 {
     char buf[32];
-    rt_uint32_t length;
+    uint32_t length;
 
     length = rt_snprintf(buf, sizeof(buf), "message %d", no++);
     rt_mq_send(&mq, &buf[0], length);

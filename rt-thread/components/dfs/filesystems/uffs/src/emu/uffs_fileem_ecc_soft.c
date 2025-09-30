@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
   This file is part of UFFS, the Ultra-low-cost Flash File System.
   
@@ -49,8 +50,8 @@
 #define MSG(msg,...) uffs_PerrorRaw(UFFS_MSG_NORMAL, msg, ## __VA_ARGS__)
 #define MSGLN(msg,...) uffs_Perror(UFFS_MSG_NORMAL, msg, ## __VA_ARGS__)
 
-static int femu_WritePage(uffs_Device *dev, u32 block, u32 page_num,
-							const u8 *data, int data_len, const u8 *spare, int spare_len)
+static int femu_WritePage(uffs_Device *dev, uint32_t block, uint32_t page_num,
+							const uint8_t *data, int data_len, const uint8_t *spare, int spare_len)
 {
 	int written;
 	int abs_page;
@@ -130,8 +131,8 @@ err:
 }
 
 
-static URET femu_ReadPage(uffs_Device *dev, u32 block, u32 page_num, u8 *data, int data_len, u8 *ecc,
-							u8 *spare, int spare_len)
+static URET femu_ReadPage(uffs_Device *dev, uint32_t block, uint32_t page_num, uint8_t *data, int data_len, uint8_t *ecc,
+							uint8_t *spare, int spare_len)
 {
 	int nread;
 	uffs_FileEmu *emu;

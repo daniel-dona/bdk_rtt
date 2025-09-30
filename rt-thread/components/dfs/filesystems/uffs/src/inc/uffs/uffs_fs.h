@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
   This file is part of UFFS, the Ultra-low-cost Flash File System.
   
@@ -56,23 +57,23 @@ struct uffs_ObjectSt {
 
 	/******** init level 0 ********/
 	const char * name;					//!< pointer to the start of name, for open or create
-	u32 name_len;						//!< name length
-	u16 sum;							//!< sum of name
+	uint32_t name_len;						//!< name length
+	uint16_t sum;							//!< sum of name
 	uffs_Device *dev;					//!< uffs device
-	u32 oflag;
-	u8 type;
-	u16 head_pages;						//!< data pages on file head block
-	u16 parent;
+	uint32_t oflag;
+	uint8_t type;
+	uint16_t head_pages;						//!< data pages on file head block
+	uint16_t parent;
 
 	/******* init level 1 ********/
 	TreeNode *node;						//!< file entry node in tree
-	u16 serial;
+	uint16_t serial;
 	
 	/******* output ******/
 	int err;							//!< error number
 
 	/******* current *******/
-	u32 pos;							//!< current position in file
+	uint32_t pos;							//!< current position in file
 
 	/***** others *******/
 	UBOOL attr_loaded;					//!< attributes loaded ?
@@ -112,7 +113,7 @@ URET uffs_OpenObjectEx(uffs_Object *obj, uffs_Device *dev,
 								   int dir, const char *name, int name_len, int oflag);
 
 URET uffs_OpenObject(uffs_Object *obj, const char *fullname, int oflag);
-URET uffs_TruncateObject(uffs_Object *obj, u32 remain);
+URET uffs_TruncateObject(uffs_Object *obj, uint32_t remain);
 URET uffs_CreateObject(uffs_Object *obj, const char *fullname, int oflag);
 
 URET uffs_CloseObject(uffs_Object *obj);

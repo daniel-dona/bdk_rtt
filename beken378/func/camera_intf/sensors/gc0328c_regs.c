@@ -1,7 +1,8 @@
+#include <stdint.h>
 #include "gc0328c.h"
 
 
-const UINT8 gc0328c_init_talbe[374][2] = {
+const uint8_t gc0328c_init_talbe[374][2] = {
     {0xFE, 0x80},
     {0xFE, 0x80},
     {0xFC, 0x16},
@@ -379,7 +380,7 @@ const UINT8 gc0328c_init_talbe[374][2] = {
 };
 
 
-const UINT8 gc0328c_5pfs_talbe[9][2] = {
+const uint8_t gc0328c_5pfs_talbe[9][2] = {
     // all AEC_EXP_LEVEL_X set to 0xa3c = 2620
     {0xFE, 0x01}, // page p1
 
@@ -399,7 +400,7 @@ const UINT8 gc0328c_5pfs_talbe[9][2] = {
     //{0x34,0x3c},
 };
 
-const UINT8 gc0328c_10pfs_talbe[9][2] = {
+const uint8_t gc0328c_10pfs_talbe[9][2] = {
     // all AEC_EXP_LEVEL_X set to 0x51e = 1310
     {0xFE, 0x01}, // page p1
 
@@ -419,7 +420,7 @@ const UINT8 gc0328c_10pfs_talbe[9][2] = {
     //{0x34,0x1e},
 };
 
-const UINT8 gc0328c_20pfs_talbe[9][2] = {
+const uint8_t gc0328c_20pfs_talbe[9][2] = {
     // all AEC_EXP_LEVEL_X set to 0x28f = 655
     {0xFE, 0x01}, // page p1
 
@@ -439,7 +440,7 @@ const UINT8 gc0328c_20pfs_talbe[9][2] = {
     //{0x34,0x8f},
 };
 
-const UINT8 gc0328c_QVGA_320_240_talbe[12][2] = {
+const uint8_t gc0328c_QVGA_320_240_talbe[12][2] = {
     /*#if (GC_QVGA_USE_SUBSAMPLE == 0) // crop window mode
     {0xFE, 0x00},
     {0x50, 0x01},
@@ -470,7 +471,7 @@ const UINT8 gc0328c_QVGA_320_240_talbe[12][2] = {
     {0x58, 0x40}
 };
 
-const UINT8 gc0328c_VGA_640_480_talbe[10][2] = {
+const uint8_t gc0328c_VGA_640_480_talbe[10][2] = {
 
     /*#if (GC_QVGA_USE_SUBSAMPLE == 1)
     {0xFE, 0x00},

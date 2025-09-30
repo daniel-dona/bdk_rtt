@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : i2c_dev.c
  * This file is part of RT-Thread RTOS
@@ -30,8 +31,8 @@ static rt_size_t i2c_bus_device_read(rt_device_t dev,
                                      void       *buffer,
                                      rt_size_t   count)
 {
-    rt_uint16_t addr;
-    rt_uint16_t flags;
+    uint16_t addr;
+    uint16_t flags;
     struct rt_i2c_bus_device *bus = (struct rt_i2c_bus_device *)dev->user_data;
 
     RT_ASSERT(bus != RT_NULL);
@@ -50,8 +51,8 @@ static rt_size_t i2c_bus_device_write(rt_device_t dev,
                                       const void *buffer,
                                       rt_size_t   count)
 {
-    rt_uint16_t addr;
-    rt_uint16_t flags;
+    uint16_t addr;
+    uint16_t flags;
     struct rt_i2c_bus_device *bus = (struct rt_i2c_bus_device *)dev->user_data;
 
     RT_ASSERT(bus != RT_NULL);
@@ -82,10 +83,10 @@ static rt_err_t i2c_bus_device_control(rt_device_t dev,
         bus->flags |= RT_I2C_ADDR_10BIT;
         break;
     case RT_I2C_DEV_CTRL_ADDR:
-        bus->addr = *(rt_uint16_t *)args;
+        bus->addr = *(uint16_t *)args;
         break;
     case RT_I2C_DEV_CTRL_TIMEOUT:
-        bus->timeout = *(rt_uint32_t *)args;
+        bus->timeout = *(uint32_t *)args;
         break;
     case RT_I2C_DEV_CTRL_RW:
         priv_data = (struct rt_i2c_priv_data *)args;

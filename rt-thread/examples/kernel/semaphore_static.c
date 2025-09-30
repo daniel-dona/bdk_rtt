@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * 程序清单：静态信号量
  *
@@ -10,7 +11,7 @@
 
 /* 线程控制块及栈 */
 static struct rt_thread thread;
-static rt_uint8_t thread_stack[THREAD_STACK_SIZE];
+static uint8_t thread_stack[THREAD_STACK_SIZE];
 /* 信号量控制块 */
 static struct rt_semaphore sem;
 

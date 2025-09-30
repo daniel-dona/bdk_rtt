@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  * File      : umouse.c
  * This file is part of RT-Thread RTOS
@@ -41,14 +43,14 @@ static rt_err_t rt_usbh_hid_mouse_callback(void* arg)
 {
     struct uhid* hid;
 #ifdef RT_USING_RTGUI
-    rt_uint16_t xoffset=0;
-    rt_uint16_t yoffset=0;
+    uint16_t xoffset=0;
+    uint16_t yoffset=0;
 #endif
     hid = (struct uhid*)arg;
 
     RT_DEBUG_LOG(RT_DEBUG_USB, ("hid 0x%x 0x%x\n",
-                                *(rt_uint32_t*)hid->buffer,
-                                *(rt_uint32_t*)(&hid->buffer[4])));
+                                *(uint32_t*)hid->buffer,
+                                *(uint32_t*)(&hid->buffer[4])));
 #ifdef RT_USING_RTGUI
     if(hid->buffer[1]!=0)
     {

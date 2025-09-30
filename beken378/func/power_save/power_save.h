@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 #ifndef _POWER_SAVE_H_
 #define _POWER_SAVE_H_
 
@@ -18,7 +20,7 @@ typedef enum {
     STA_GET_TIMEOUT = 3,
 } PS_STA_BEACON_STATE;
 
-typedef UINT8 PS_WAIT_STATUS;
+typedef uint8_t PS_WAIT_STATUS;
 typedef enum {
     PS_BCN_SUCC = 0,
     PS_BCN_LOSS_LEFT = 1,
@@ -69,28 +71,28 @@ typedef struct ps_do_wkup_sem {
 typedef struct  ps_sta {
 	PS_BCN_ABNORMAL_STATUS     ps_bcn_ab_status ;
 	PS_ARM_WAKEUP_WAY ps_arm_wakeup_way ;
-	UINT8     ps_real_sleep ;
-	UINT8 sleep_first;
-	UINT8 ps_can_sleep;
-	UINT8 if_wait_bcn;
-	UINT8 liston_int;
+	uint8_t     ps_real_sleep ;
+	uint8_t sleep_first;
+	uint8_t ps_can_sleep;
+	uint8_t if_wait_bcn;
+	uint8_t liston_int;
 	PS_LISTEN_MODE liston_mode;
-	UINT8 pwm0_clkmux;
+	uint8_t pwm0_clkmux;
 	PS_TM_STATUS tm_status;
-	UINT8 ps_dtim_period;
-	UINT8 ps_dtim_count;
-	UINT8 ps_dtim_multi;
+	uint8_t ps_dtim_period;
+	uint8_t ps_dtim_count;
+	uint8_t ps_dtim_multi;
 	volatile PS_STA_BEACON_STATE waited_beacon;
-	UINT8 ps_bcn_loss_cnt;
+	uint8_t ps_bcn_loss_cnt;
 	PS_BCN_CAL_STATUS ps_bcn_cal_status;
-	UINT16 ps_beacon_int;
-	UINT16 PsDataWakeupWaitTimeMs ;
-	UINT16 PsPeriWakeupWaitTimeMs ;
-	UINT16 sleep_ms;
-	UINT32 nxmac_timer_v;
-	UINT32 pwm0_less_time;
-	UINT32 sleep_count ;
-	UINT32 next_ps_time;
+	uint16_t ps_beacon_int;
+	uint16_t PsDataWakeupWaitTimeMs ;
+	uint16_t PsPeriWakeupWaitTimeMs ;
+	uint16_t sleep_ms;
+	uint32_t nxmac_timer_v;
+	uint32_t pwm0_less_time;
+	uint32_t sleep_count ;
+	uint32_t next_ps_time;
 	struct co_list wk_list;
 } STA_PS_INFO;
 
@@ -100,17 +102,17 @@ __INLINE struct ps_do_wkup_sem *list2sem ( struct co_list_hdr const *l_list ) {
 }
 
 void power_save_mac_idle_callback ( void );
-UINT32 power_save_wkup_event_get ( void );
+uint32_t power_save_wkup_event_get ( void );
 void power_save_dtim_ps_init();
 void power_save_ieee_dtim_wakeup ( void );
-UINT8 power_save_me_ps_set_all_state ( UINT8 state );
+uint8_t power_save_me_ps_set_all_state ( uint8_t state );
 PS_STA_BEACON_STATE power_save_beacon_state_get ( void );
 PS_ARM_WAKEUP_WAY power_save_wkup_way_get ( void );
-void power_save_set_uart_linger_time ( UINT32 uart_wakeup_time );
+void power_save_set_uart_linger_time ( uint32_t uart_wakeup_time );
 extern void bmsg_ps_sender ( uint8_t ioctl );
 extern void ps_fake_data_rx_check ( void );
 extern bool ps_sleep_check ( void );
-extern u8 rwn_mgmt_is_only_sta_role_add ( void );
+extern uint8_t rwn_mgmt_is_only_sta_role_add ( void );
 extern void power_save_beacon_state_set ( PS_STA_BEACON_STATE state );
 extern void power_save_wait_timer_init ( void );
 extern void power_save_keep_timer_stop ( void );

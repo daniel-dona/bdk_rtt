@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "co_list.h"
 
 #ifndef ARBITRATE_H_

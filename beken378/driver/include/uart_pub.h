@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _UART_PUB_H
 #define _UART_PUB_H
 
@@ -12,7 +13,7 @@
 #define null_prf                       os_null_printf
 
 #define UART_SUCCESS                 (0)
-#define UART_FAILURE                 ((UINT32)-1)
+#define UART_FAILURE                 ((uint32_t)-1)
 
 #define UART2_DEV_NAME               ("uart2")   /*debug purpose*/
 #define UART1_DEV_NAME               ("uart1")   /*comm purpose*/
@@ -42,9 +43,9 @@ enum
 
 typedef struct _peek_rx_
 {
-    UINT32 sig;
+    uint32_t sig;
 
-    UINT32 len;
+    uint32_t len;
     void *ptr;
 } UART_PEEK_RX_T, *UART_PEEK_RX_PTR;
 
@@ -120,14 +121,14 @@ extern void uart2_init(void);
 extern void uart2_exit(void);
 extern void uart2_isr(void);
 
-extern INT32 os_null_printf(const char *fmt, ...);
+extern int32_t os_null_printf(const char *fmt, ...);
 extern void fatal_print(const char *fmt, ...);
 extern void bk_printf(const char *fmt, ...);
-extern void uart_send_byte(UINT8 ch, UINT8 data);
-extern void bk_send_string(UINT8 uport, const char *string);
-extern UINT32 uart_wait_tx_over();
-extern UINT8 uart_is_tx_fifo_empty(UINT8 uport);
-extern UINT8 uart_is_tx_fifo_full(UINT8 uport);
+extern void uart_send_byte(uint8_t ch, uint8_t data);
+extern void bk_send_string(uint8_t uport, const char *string);
+extern uint32_t uart_wait_tx_over();
+extern uint8_t uart_is_tx_fifo_empty(uint8_t uport);
+extern uint8_t uart_is_tx_fifo_full(uint8_t uport);
 extern int uart_read_byte(int uport);
 extern int uart_write_byte(int uport, char c);
 extern void print_hex_dump(const char *prefix, void *b, int len);

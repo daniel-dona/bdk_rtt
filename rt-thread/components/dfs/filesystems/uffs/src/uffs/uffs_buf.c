@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
   This file is part of UFFS, the Ultra-low-cost Flash File System.
   
@@ -90,7 +91,7 @@ void uffs_BufInspect(uffs_Device *dev)
 URET uffs_BufInit(uffs_Device *dev, int buf_max, int dirty_buf_max)
 {
 	void *pool;
-	u8 *data;
+	uint8_t *data;
 	uffs_Buf *buf;
 	int size;
 	int i, slot;
@@ -129,9 +130,9 @@ URET uffs_BufInit(uffs_Device *dev, int buf_max, int dirty_buf_max)
 	dev->buf.pool = pool;
 
 	for (i = 0; i < buf_max; i++) {
-		buf = (uffs_Buf *)((u8 *)pool + (sizeof(uffs_Buf) * i));
+		buf = (uffs_Buf *)((uint8_t *)pool + (sizeof(uffs_Buf) * i));
 		memset(buf, 0, sizeof(uffs_Buf));
-		data = (u8 *)pool + (sizeof(uffs_Buf) * buf_max) + (dev->com.pg_size * i);
+		data = (uint8_t *)pool + (sizeof(uffs_Buf) * buf_max) + (dev->com.pg_size * i);
 		buf->header = data;
 		buf->data = data + dev->com.header_size;
 		buf->mark = UFFS_BUF_EMPTY;
@@ -141,7 +142,7 @@ URET uffs_BufInit(uffs_Device *dev, int buf_max, int dirty_buf_max)
 			dev->buf.head = buf;
 		}
 		else {
-			buf->prev = (uffs_Buf *)((u8 *)buf - sizeof(uffs_Buf));
+			buf->prev = (uffs_Buf *)((uint8_t *)buf - sizeof(uffs_Buf));
 		}
 
 		if (i == (buf_max - 1)) {
@@ -149,7 +150,7 @@ URET uffs_BufInit(uffs_Device *dev, int buf_max, int dirty_buf_max)
 			dev->buf.tail = buf;
 		}
 		else {
-			buf->next = (uffs_Buf *)((u8 *)buf + sizeof(uffs_Buf));
+			buf->next = (uffs_Buf *)((uint8_t *)buf + sizeof(uffs_Buf));
 		}
 	}
 
@@ -386,7 +387,7 @@ static uffs_Buf * _FindFreeBuf(uffs_Device *dev)
  * \return return U_SUCC if no error,
  *	 return U_FAIL if I/O error or ecc check fail
  */
-URET uffs_BufLoadPhyData(uffs_Device *dev, uffs_Buf *buf, u32 block, u32 page)
+URET uffs_BufLoadPhyData(uffs_Device *dev, uffs_Buf *buf, uint32_t block, uint32_t page)
 {
 	int ret;
 
@@ -414,7 +415,7 @@ URET uffs_BufLoadPhyData(uffs_Device *dev, uffs_Buf *buf, u32 block, u32 page)
  * \note this function should be only used when doing bad block recover.
  */
 URET uffs_LoadPhyDataToBufEccUnCare(uffs_Device *dev,
-									uffs_Buf *buf, u32 block, u32 page)
+									uffs_Buf *buf, uint32_t block, uint32_t page)
 {
 	int ret;
 
@@ -440,7 +441,7 @@ URET uffs_LoadPhyDataToBufEccUnCare(uffs_Device *dev,
  * \return return found buffer, return NULL if buffer not found
  */
 uffs_Buf * uffs_BufFindFrom(uffs_Device *dev, uffs_Buf *start,
-						u16 parent, u16 serial, u16 page_id)
+						uint16_t parent, uint16_t serial, uint16_t page_id)
 {
 	uffs_Buf *p = start;
 
@@ -468,7 +469,7 @@ uffs_Buf * uffs_BufFindFrom(uffs_Device *dev, uffs_Buf *start,
  * \return return found buffer, return NULL if buffer not found
  */
 uffs_Buf * uffs_BufFind(uffs_Device *dev,
-						u16 parent, u16 serial, u16 page_id)
+						uint16_t parent, uint16_t serial, uint16_t page_id)
 {
 	uffs_Buf *p = dev->buf.head;
 
@@ -476,7 +477,7 @@ uffs_Buf * uffs_BufFind(uffs_Device *dev,
 }
 
 
-static uffs_Buf * _FindBufInDirtyList(uffs_Buf *dirty, u16 page_id)
+static uffs_Buf * _FindBufInDirtyList(uffs_Buf *dirty, uint16_t page_id)
 {
 	while(dirty) {
 		if (dirty->page_id == page_id) 
@@ -523,9 +524,9 @@ static URET _BreakFromDirty(uffs_Device *dev, uffs_Buf *dirtyBuf)
 	return U_SUCC;
 }
 
-static u16 _GetDirOrFileNameSum(uffs_Device *dev, uffs_Buf *buf)
+static uint16_t _GetDirOrFileNameSum(uffs_Device *dev, uffs_Buf *buf)
 {
-	u16 data_sum = 0; //default: 0
+	uint16_t data_sum = 0; //default: 0
 	uffs_FileInfo *fi;
 	
 	dev = dev;
@@ -543,8 +544,8 @@ static u16 _GetDirOrFileNameSum(uffs_Device *dev, uffs_Buf *buf)
 
 static URET _CheckDirtyList(uffs_Buf *dirty)
 {
-	u16 parent;
-	u16 serial;
+	uint16_t parent;
+	uint16_t serial;
 
 	if (dirty == NULL) {
 		return U_SUCC;
@@ -613,19 +614,19 @@ static URET uffs_BufFlush_Exist_With_BlockCover(
 			uffs_BlockInfo *bc	//!< old data block info
 			)
 {
-	u16 i;
-	u8 type, timeStamp;
-	u16 page, parent, serial;
+	uint16_t i;
+	uint8_t type, timeStamp;
+	uint16_t page, parent, serial;
 	uffs_Buf *buf;
 	TreeNode *newNode;
 	uffs_BlockInfo *newBc;
 	uffs_Tags *tag, *oldTag;
 	int x;
-	u16 newBlock;
+	uint16_t newBlock;
 	UBOOL succRecover;			//U_TRUE: recover successful, erase old block,
 								//U_FALSE: fail to recover, erase new block
 	UBOOL flash_op_err;
-	u16 data_sum = 0xFFFF;
+	uint16_t data_sum = 0xFFFF;
 
 	UBOOL useCloneBuf;
 
@@ -678,7 +679,7 @@ retry:
 		TAG_PARENT(tag) = parent;
 		TAG_SERIAL(tag) = serial;
 		TAG_TYPE(tag) = type;
-		TAG_PAGE_ID(tag) = (u8)(i & 0xFF);	// now, page_id = page.
+		TAG_PAGE_ID(tag) = (uint8_t)(i & 0xFF);	// now, page_id = page.
 									// FIX ME!! if more than 256 pages in a block
 
 		SEAL_TAG(tag);
@@ -939,7 +940,7 @@ ext:
  */
 static URET _BufFlush_NewBlock(uffs_Device *dev, int slot)
 {
-	u8 type;
+	uint8_t type;
 	TreeNode *node;
 	uffs_BlockInfo *bc;
 	URET ret;
@@ -989,7 +990,7 @@ URET
 		uffs_BlockInfo *bc	//!< block info (Source, also destination)
 		)		
 {
-	u16 page;
+	uint16_t page;
 	uffs_Buf *buf;
 	uffs_Tags *tag;
 	URET ret = U_FAIL;
@@ -1029,7 +1030,7 @@ URET
 		TAG_TYPE(tag) = buf->type;
 		TAG_PARENT(tag) = buf->parent;
 		TAG_SERIAL(tag) = buf->serial;
-		TAG_PAGE_ID(tag) = (u8)(buf->page_id);
+		TAG_PAGE_ID(tag) = (uint8_t)(buf->page_id);
 
 		SEAL_TAG(tag);
 
@@ -1070,11 +1071,11 @@ URET _BufFlush(struct uffs_DeviceSt *dev,
 	uffs_Buf *dirty;
 	TreeNode *node;
 	uffs_BlockInfo *bc;
-	u16 n;
+	uint16_t n;
 	URET ret;
-	u8 type;
-	u16 parent;
-	u16 serial;
+	uint8_t type;
+	uint16_t parent;
+	uint16_t serial;
 	int block;
 	
 	if (dev->buf.dirtyGroup[slot].count == 0) {
@@ -1256,7 +1257,7 @@ URET uffs_BufFlushEx(struct uffs_DeviceSt *dev, UBOOL force_block_recover)
  * \param[in] parent parent num of the group
  * \param[in] serial serial num of the group
  */
-URET uffs_BufFlushGroup(struct uffs_DeviceSt *dev, u16 parent, u16 serial)
+URET uffs_BufFlushGroup(struct uffs_DeviceSt *dev, uint16_t parent, uint16_t serial)
 {
 	int slot;
 
@@ -1278,7 +1279,7 @@ URET uffs_BufFlushGroup(struct uffs_DeviceSt *dev, u16 parent, u16 serial)
  * \param[in] force_block_recover indicator
  */
 URET uffs_BufFlushGroupEx(struct uffs_DeviceSt *dev,
-						  u16 parent, u16 serial, UBOOL force_block_recover)
+						  uint16_t parent, uint16_t serial, UBOOL force_block_recover)
 {
 	int slot;
 
@@ -1299,7 +1300,7 @@ URET uffs_BufFlushGroupEx(struct uffs_DeviceSt *dev,
  * \param[in] serial serial num of group
  * \param[in] force_block_recover indicator
  */
-URET uffs_BufFlushGroupMatchParent(struct uffs_DeviceSt *dev, u16 parent)
+URET uffs_BufFlushGroupMatchParent(struct uffs_DeviceSt *dev, uint16_t parent)
 {
 	int slot;
 	uffs_Buf *buf;
@@ -1346,7 +1347,7 @@ int uffs_BufFindFreeGroupSlot(struct uffs_DeviceSt *dev)
  * \return slot index (0 to MAX_DIRTY_BUF_GROUPS - 1) if found one,
  *			otherwise return -1.
  */
-int uffs_BufFindGroupSlot(struct uffs_DeviceSt *dev, u16 parent, u16 serial)
+int uffs_BufFindGroupSlot(struct uffs_DeviceSt *dev, uint16_t parent, uint16_t serial)
 {
 	uffs_Buf *buf;
 	int i, slot = -1;
@@ -1372,7 +1373,7 @@ int uffs_BufFindGroupSlot(struct uffs_DeviceSt *dev, u16 parent, u16 serial)
  * \return return the buffer found in buffer list, if not found, return NULL.
  */
 uffs_Buf * uffs_BufGet(struct uffs_DeviceSt *dev,
-					   u16 parent, u16 serial, u16 page_id)
+					   uint16_t parent, uint16_t serial, uint16_t page_id)
 {
 	uffs_Buf *p;
 
@@ -1391,7 +1392,7 @@ uffs_Buf * uffs_BufGet(struct uffs_DeviceSt *dev,
  * New generate a buffer
  */
 uffs_Buf *uffs_BufNew(struct uffs_DeviceSt *dev,
-					  u8 type, u16 parent, u16 serial, u16 page_id)
+					  uint8_t type, uint16_t parent, uint16_t serial, uint16_t page_id)
 {
 	uffs_Buf *buf;
 
@@ -1447,10 +1448,10 @@ uffs_Buf *uffs_BufNew(struct uffs_DeviceSt *dev,
  *		return NULL if not free buffer.
  */
 uffs_Buf *uffs_BufGetEx(struct uffs_DeviceSt *dev,
-						u8 type, TreeNode *node, u16 page_id, int oflag)
+						uint8_t type, TreeNode *node, uint16_t page_id, int oflag)
 {
 	uffs_Buf *buf;
-	u16 parent, serial, block, page;
+	uint16_t parent, serial, block, page;
 	uffs_BlockInfo *bc;
 
 	switch (type) {
@@ -1725,7 +1726,7 @@ static UBOOL _IsBufInDirtyList(struct uffs_DeviceSt *dev, uffs_Buf *buf)
 #endif
 
 URET uffs_BufWrite(struct uffs_DeviceSt *dev,
-				   uffs_Buf *buf, void *data, u32 ofs, u32 len)
+				   uffs_Buf *buf, void *data, uint32_t ofs, uint32_t len)
 {
 	int slot;
 
@@ -1776,10 +1777,10 @@ URET uffs_BufWrite(struct uffs_DeviceSt *dev,
 }
 
 URET uffs_BufRead(struct uffs_DeviceSt *dev,
-				  uffs_Buf *buf, void *data, u32 ofs, u32 len)
+				  uffs_Buf *buf, void *data, uint32_t ofs, uint32_t len)
 {
-	u32 readSize;
-	u32 pg_data_size = dev->com.pg_data_size;
+	uint32_t readSize;
+	uint32_t pg_data_size = dev->com.pg_data_size;
 
 	readSize = (ofs >= pg_data_size ? 
 					0 : (ofs + len >= pg_data_size ? pg_data_size - ofs : len)

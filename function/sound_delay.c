@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "rtthread.h"
 #include "include.h"
 #include "sound_delay.h"
@@ -55,9 +56,9 @@ void sdly_set_value(int argc, char** argv)
 }
 MSH_CMD_EXPORT(sdly_set_value, sdly_set_value test);
 
-int32 sdly_init_mixer_entity(void)
+int32_t sdly_init_mixer_entity(void)
 {
-    int32 ret = 0;
+    int32_t ret = 0;
 
     if(sound_delay_ptr)
     {
@@ -82,7 +83,7 @@ init_exit:
     return ret;
 }
 
-int32 sdly_uninit_mixer_entity(void)
+int32_t sdly_uninit_mixer_entity(void)
 {
     if(sound_delay_ptr)
     {
@@ -95,7 +96,7 @@ int32 sdly_uninit_mixer_entity(void)
     return 0;
 }
 
-int32 sdly_is_valid_mixer_entity(void)
+int32_t sdly_is_valid_mixer_entity(void)
 {
     return (sound_delay_ptr ? 1 : 0);
 }
@@ -182,7 +183,7 @@ void sdly_change_sample_time_byadc(uint32_t time)
     SDLY_PRINTF("tmp_value:%d,adc_val:%d\r\n", sound_delay_ptr->sample_time, time);
 }
 
-uint16 sdly_get_pcm_vol(void)
+uint16_t sdly_get_pcm_vol(void)
 {
     if(0 == sdly_is_valid_mixer_entity())
     {
@@ -362,8 +363,8 @@ void sdly_mixer_multi_playing(uint8_t *sample_adc, uint8_t *sample_audio, uint16
         mix_sample_tmp += simple_ptr[i + 1];
         mix_sample_tmp = sdly_low_pass_filter(mix_sample_tmp);
 
-        left_data = (int32) (audio_ptr[i]);
-        right_data = (int32)(audio_ptr[i + 1]);
+        left_data = (int32_t) (audio_ptr[i]);
+        right_data = (int32_t)(audio_ptr[i + 1]);
 
         //temp = ((int32_t)(*sound_delay_ptr->op_ptr) * sound_delay_ptr->decay_value) / SDLY_MIN_DECAY_VAL;
         temp = (int32_t)(*sound_delay_ptr->op_ptr);

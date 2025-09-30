@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef __APP_SOUND_MIXER_H__
 #define __APP_SOUND_MIXER_H__
 
@@ -111,7 +112,7 @@ typedef struct sound_mixer_st
     uint16_t padding;
 } SDELAY_ST;
 
-extern uint8 sdly_get_idle_mixer_flag(void);
+extern uint8_t sdly_get_idle_mixer_flag(void);
 extern void sdly_exit(void);
 extern void sdly_start_play(void);
 extern void sdly_scanning_dac(void);
@@ -119,11 +120,11 @@ extern SDELAY_ERR sdly_config(uint32_t freq);
 extern void sdly_process_dac_result(uint16_t channel, uint16_t value);
 extern void sdly_mixer_single_playing(uint8_t *, uint16_t );
 extern void sdly_mixer_multi_playing(uint8_t *, uint8_t *, uint16_t );
-extern uint32 sdly_microphone_data_handler(uint8 *sbc_buf, uint32 buf_len, uint8 mode);
+extern uint32_t sdly_microphone_data_handler(uint8_t *sbc_buf, uint32_t buf_len, uint8_t mode);
 extern void sdly_deinit(void);
 extern void sdly_init(void);
-extern void sdly_set_sample_vol(uint8 vol);
-extern void sdly_set_pcm_vol(uint8 vol);
+extern void sdly_set_sample_vol(uint8_t vol);
+extern void sdly_set_pcm_vol(uint8_t vol);
 extern SDELAY_ST *sdly_get_mixer_entity(void);
 extern void sdly_forepart_mute(void *sample, uint32_t len);
 extern void sdly_init_forepart_mute(void);

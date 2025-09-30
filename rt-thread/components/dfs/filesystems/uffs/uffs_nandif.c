@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * RT-Thread Device Interface for uffs
  */
@@ -46,12 +47,12 @@ static int nand_mark_badblock(uffs_Device *dev, unsigned block)
 
 #if (RT_CONFIG_UFFS_ECC_MODE == UFFS_ECC_NONE) || (RT_CONFIG_UFFS_ECC_MODE == UFFS_ECC_SOFT)
 static int nand_read_page(uffs_Device *dev,
-                          u32          block,
-                          u32          page,
-                          u8          *data,
+                          uint32_t          block,
+                          uint32_t          page,
+                          uint8_t          *data,
                           int          data_len,
-                          u8          *ecc,
-                          rt_uint8_t  *spare,
+                          uint8_t          *ecc,
+                          uint8_t  *spare,
                           int          spare_len)
 {
     int res;
@@ -63,7 +64,7 @@ static int nand_read_page(uffs_Device *dev,
         RT_ASSERT(0); //should not be here
 #else
         /* check block status: bad or good */
-        rt_uint8_t spare[UFFS_MAX_SPARE_SIZE];
+        uint8_t spare[UFFS_MAX_SPARE_SIZE];
 
         rt_memset(spare, 0, UFFS_MAX_SPARE_SIZE);
 
@@ -85,11 +86,11 @@ static int nand_read_page(uffs_Device *dev,
 }
 
 static int nand_write_page(uffs_Device *dev,
-                           u32          block,
-                           u32          page,
-                           const u8    *data,
+                           uint32_t          block,
+                           uint32_t          page,
+                           const uint8_t    *data,
                            int          data_len,
-                           const u8    *spare,
+                           const uint8_t    *spare,
                            int          spare_len)
 {
     int res;
@@ -104,7 +105,7 @@ static int nand_write_page(uffs_Device *dev,
         RT_ASSERT(0); //should not be here
 #else
         /* mark bad block  */
-        rt_uint8_t spare[UFFS_MAX_SPARE_SIZE];
+        uint8_t spare[UFFS_MAX_SPARE_SIZE];
 
         rt_memset(spare, 0xFF, UFFS_MAX_SPARE_SIZE);
         spare[dev->attr->block_status_offs] =  0x00;
@@ -163,16 +164,16 @@ void uffs_setup_storage(struct uffs_StorageAttrSt *attr,
 
 #elif  RT_CONFIG_UFFS_ECC_MODE == UFFS_ECC_HW_AUTO
 static int WritePageWithLayout(uffs_Device         *dev,
-                               u32                  block,
-                               u32                  page,
-                               const u8            *data,
+                               uint32_t                  block,
+                               uint32_t                  page,
+                               const uint8_t            *data,
                                int                  data_len,
-                               const u8            *ecc,  //NULL
+                               const uint8_t            *ecc,  //NULL
                                const uffs_TagStore *ts)
 {
     int res;
     int spare_len;
-    rt_uint8_t spare[UFFS_MAX_SPARE_SIZE];
+    uint8_t spare[UFFS_MAX_SPARE_SIZE];
 
     RT_ASSERT(UFFS_MAX_SPARE_SIZE >= dev->attr->spare_size);
 
@@ -209,7 +210,7 @@ static int WritePageWithLayout(uffs_Device         *dev,
 
     if (ts != RT_NULL)
     {
-        uffs_FlashMakeSpare(dev, ts, RT_NULL, (u8 *)spare);
+        uffs_FlashMakeSpare(dev, ts, RT_NULL, (uint8_t *)spare);
         dev->st.spare_write_count++;
         dev->st.io_write += spare_len;
     }
@@ -226,17 +227,17 @@ __error:
 }
 
 static URET ReadPageWithLayout(uffs_Device   *dev,
-                               u32            block,
-                               u32            page,
-                               u8            *data,
+                               uint32_t            block,
+                               uint32_t            page,
+                               uint8_t            *data,
                                int            data_len,
-                               u8            *ecc,              //NULL
+                               uint8_t            *ecc,              //NULL
                                uffs_TagStore *ts,
-                               u8            *ecc_store)        //NULL
+                               uint8_t            *ecc_store)        //NULL
 {
     int res = UFFS_FLASH_NO_ERR;
     int spare_len;
-    rt_uint8_t spare[UFFS_MAX_SPARE_SIZE];
+    uint8_t spare[UFFS_MAX_SPARE_SIZE];
 
     RT_ASSERT(UFFS_MAX_SPARE_SIZE >= dev->attr->spare_size);
 
@@ -283,7 +284,7 @@ static URET ReadPageWithLayout(uffs_Device   *dev,
     if (ts != RT_NULL)
     {
         // unload ts and ecc from spare, you can modify it if you like
-        uffs_FlashUnloadSpare(dev, (const u8 *)spare, ts, RT_NULL);
+        uffs_FlashUnloadSpare(dev, (const uint8_t *)spare, ts, RT_NULL);
 
         if ((spare[spare_len - 1] == 0xFF) && (res == UFFS_FLASH_NO_ERR))
             res = UFFS_FLASH_NOT_SEALED;
@@ -314,12 +315,12 @@ const uffs_FlashOps nand_ops =
     nand_erase_block,   /* EraseBlock() */
 };
 
-static rt_uint8_t hw_flash_data_layout[UFFS_SPARE_LAYOUT_SIZE] =
+static uint8_t hw_flash_data_layout[UFFS_SPARE_LAYOUT_SIZE] =
 {
     0x05, 0x08, 0xFF, 0x00
 };
 
-static rt_uint8_t hw_flash_ecc_layout[UFFS_SPARE_LAYOUT_SIZE] =
+static uint8_t hw_flash_ecc_layout[UFFS_SPARE_LAYOUT_SIZE] =
 {
     0x00, 0x04, 0xFF, 0x00
 };

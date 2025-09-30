@@ -1,3 +1,4 @@
+#include <stdint.h>
 #define PAS6329_DEV             (0xABC00)
 #define PAS6329_DEV_ID          (0x40)
 
@@ -6,7 +7,7 @@
 #define PAS6329_SET_PAGE1  camera_intf_sccb_write(0xef, 0x01)
 #define PAS6329_SET_PAGE2  camera_intf_sccb_write(0xef, 0x02)
 
-const UINT8 pas6329_page0[][2] = {
+const uint8_t pas6329_page0[][2] = {
     {0x04, 0x00},    // 00//01//AE Indoor stage select[0];0:11 ; 1:12 ..
     {0x05, 0x65},    // 3d//66//6f//66//AE_HIST_LLTHd[7:3];AE_HIST_LLBit[2:0]; AE Bias4 parameters
     {0x06, 0x00},    // 1a//00//0c//0c//0C//1A==>JS//AE_HIST_LLUB[5:0]; AE Bias4 parameters
@@ -178,7 +179,7 @@ const UINT8 pas6329_page0[][2] = {
     {0xED, 0x01},
 };
 
-const UINT8 pas6329_page1[][2] = {
+const uint8_t pas6329_page1[][2] = {
     {0x02, 0x01},
     {0x03, 0x83},
     {0x04, 0x62},    // 0xFC);//0x78);
@@ -327,7 +328,7 @@ const UINT8 pas6329_page1[][2] = {
     {0x11, 0x01},
 };
 
-const UINT8 pas6329_page2[][2] = {
+const uint8_t pas6329_page2[][2] = {
     {0x00, 0x00},
     {0x0B, 0x1A},    // 1a//0a//1a//0A//1A==>JS//AUTO_Contrast_EnH[4];AUTO_Contrast_Strength[3:0]
     {0x0C, 0x4B},    // AUTO_Contrast_UB[7:0]

@@ -1,25 +1,26 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 #include <string.h>
 
 #include <rtthread.h>
 
-INT32 os_memcmp(const void *s1, const void *s2, UINT32 n)
+int32_t os_memcmp(const void *s1, const void *s2, uint32_t n)
 {
     return memcmp(s1, s2, (unsigned int)n);
 }
 
-void *os_memmove(void *out, const void *in, UINT32 n)
+void *os_memmove(void *out, const void *in, uint32_t n)
 {
     return memmove(out, in, n);
 }
 
-void *os_memcpy(void *out, const void *in, UINT32 n)
+void *os_memcpy(void *out, const void *in, uint32_t n)
 {
     return memcpy(out, in, n);
 }
 
-void *os_memset(void *b, int c, UINT32 len)
+void *os_memset(void *b, int c, uint32_t len)
 {
     return (void *)memset(b, c, (unsigned int)len);
 }

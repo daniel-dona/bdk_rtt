@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _USB_MSD_H_
 #define _USB_MSD_H_
 

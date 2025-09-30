@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef __SPI_DMA_H__
 #define __SPI_DMA_H__
 
@@ -94,10 +95,10 @@
 
 #if CFG_USE_HSLAVE_SPI
 static void spidma_isr(void);
-static void spidma_rx_callback(UINT16 used_data_len);
-static UINT32 spidma_open(UINT32 op_flag);
-static UINT32 spidma_close(void);
-static UINT32 spidma_ctrl(UINT32 cmd, void *param);
+static void spidma_rx_callback(uint16_t used_data_len);
+static uint32_t spidma_open(uint32_t op_flag);
+static uint32_t spidma_close(void);
+static uint32_t spidma_ctrl(uint32_t cmd, void *param);
 #endif
 
 #endif // __SPI_DMA_H__

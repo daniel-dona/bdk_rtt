@@ -8,7 +8,7 @@
 #include "power_save_pub.h"
 
 extern void WFI(void);
-extern UINT32 mcu_power_save(UINT32 sleep_tick);
+extern uint32_t mcu_power_save(uint32_t sleep_tick);
 extern void rt_user_idle_hook(void);
 
 

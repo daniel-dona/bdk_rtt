@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
@@ -26,7 +28,7 @@ void BeginCountRdtsc(LARGE_INTEGER * pbeginTime64)
    pbeginTime64->QuadPart=__rdtsc();
 }
 
-LARGE_INTEGER GetResRdtsc(LARGE_INTEGER beginTime64,BOOL fComputeTimeQueryPerf)
+LARGE_INTEGER GetResRdtsc(LARGE_INTEGER beginTime64,bool fComputeTimeQueryPerf)
 {
     LARGE_INTEGER LIres;
     unsigned _int64 res=__rdtsc()-((unsigned _int64)(beginTime64.QuadPart));
@@ -54,7 +56,7 @@ void BeginCountRdtsc(LARGE_INTEGER * pbeginTime64)
     myGetRDTSC32(pbeginTime64);
 }
 
-LARGE_INTEGER GetResRdtsc(LARGE_INTEGER beginTime64,BOOL fComputeTimeQueryPerf)
+LARGE_INTEGER GetResRdtsc(LARGE_INTEGER beginTime64,bool fComputeTimeQueryPerf)
 {
     LARGE_INTEGER LIres,endTime64;
     myGetRDTSC32(&endTime64);
@@ -72,7 +74,7 @@ void BeginCountRdtsc(LARGE_INTEGER * pbeginTime64)
 {
 }
 
-LARGE_INTEGER GetResRdtsc(LARGE_INTEGER beginTime64,BOOL fComputeTimeQueryPerf)
+LARGE_INTEGER GetResRdtsc(LARGE_INTEGER beginTime64,bool fComputeTimeQueryPerf)
 {
     LARGE_INTEGER lr;
     lr.QuadPart=0;
@@ -81,7 +83,7 @@ LARGE_INTEGER GetResRdtsc(LARGE_INTEGER beginTime64,BOOL fComputeTimeQueryPerf)
 #endif
 #endif
 
-void BeginCountPerfCounter(LARGE_INTEGER * pbeginTime64,BOOL fComputeTimeQueryPerf)
+void BeginCountPerfCounter(LARGE_INTEGER * pbeginTime64,bool fComputeTimeQueryPerf)
 {
     if ((!fComputeTimeQueryPerf) || (!QueryPerformanceCounter(pbeginTime64)))
     {
@@ -90,7 +92,7 @@ void BeginCountPerfCounter(LARGE_INTEGER * pbeginTime64,BOOL fComputeTimeQueryPe
     }
 }
 
-DWORD GetMsecSincePerfCounter(LARGE_INTEGER beginTime64,BOOL fComputeTimeQueryPerf)
+DWORD GetMsecSincePerfCounter(LARGE_INTEGER beginTime64,bool fComputeTimeQueryPerf)
 {
     LARGE_INTEGER endTime64,ticksPerSecond,ticks;
     DWORDLONG ticksShifted,tickSecShifted;

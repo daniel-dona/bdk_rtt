@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : workqueue.c
  * This file is part of RT-Thread RTOS
@@ -95,7 +96,7 @@ static void _workqueue_thread_entry(void* parameter)
     }
 }
 
-struct rt_workqueue *rt_workqueue_create(const char* name, rt_uint16_t stack_size, rt_uint8_t priority)
+struct rt_workqueue *rt_workqueue_create(const char* name, uint16_t stack_size, uint8_t priority)
 {
     struct rt_workqueue *queue = RT_NULL;
 

@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File : quicklz_test.c
  * this example is a very simple test program for the quicklz library,
@@ -55,8 +56,8 @@ static int quicklz_compress_file(int fd_in, int fd_out)
 {
     /* Start to compress file  */
     qlz_state_compress *state_compress = RT_NULL;
-    rt_uint8_t *cmprs_buffer = RT_NULL, *buffer = RT_NULL;
-    rt_uint8_t buffer_hdr[BLOCK_HEADER_SIZE] = { 0 };
+    uint8_t *cmprs_buffer = RT_NULL, *buffer = RT_NULL;
+    uint8_t buffer_hdr[BLOCK_HEADER_SIZE] = { 0 };
     size_t cmprs_size = 0, block_size = 0, totle_cmprs_size = 0;
     size_t file_size = 0, i = 0;
     int ret = 0;
@@ -64,8 +65,8 @@ static int quicklz_compress_file(int fd_in, int fd_out)
     file_size = lseek(fd_in, 0, SEEK_END);
     lseek(fd_in, 0, SEEK_SET);
 
-    cmprs_buffer = (rt_uint8_t *) malloc(COMPRESS_BUFFER_SIZE + BUFFER_PADDING);
-    buffer = (rt_uint8_t *) malloc(COMPRESS_BUFFER_SIZE);
+    cmprs_buffer = (uint8_t *) malloc(COMPRESS_BUFFER_SIZE + BUFFER_PADDING);
+    buffer = (uint8_t *) malloc(COMPRESS_BUFFER_SIZE);
     if (!cmprs_buffer || !buffer)
     {
         rt_kprintf("[qlz] No memory for cmprs_buffer or buffer!\n");
@@ -143,8 +144,8 @@ static int quicklz_decompress_file(int fd_in, int fd_out)
 {
     /* Start to decompress file  */
     qlz_state_decompress *state_decompress = RT_NULL;
-    rt_uint8_t *dcmprs_buffer = RT_NULL, *buffer = RT_NULL;
-    rt_uint8_t buffer_hdr[BLOCK_HEADER_SIZE] = { 0 };
+    uint8_t *dcmprs_buffer = RT_NULL, *buffer = RT_NULL;
+    uint8_t buffer_hdr[BLOCK_HEADER_SIZE] = { 0 };
     size_t dcmprs_size = 0, block_size = 0, total_dcmprs_size = 0;
     size_t file_size = 0, i = 0;
     int ret = 0;
@@ -159,8 +160,8 @@ static int quicklz_decompress_file(int fd_in, int fd_out)
         goto _dcmprs_exit;
     }
 
-    dcmprs_buffer = (rt_uint8_t *) malloc(DCOMPRESS_BUFFER_SIZE);
-    buffer = (rt_uint8_t *) malloc(DCOMPRESS_BUFFER_SIZE + BUFFER_PADDING);
+    dcmprs_buffer = (uint8_t *) malloc(DCOMPRESS_BUFFER_SIZE);
+    buffer = (uint8_t *) malloc(DCOMPRESS_BUFFER_SIZE + BUFFER_PADDING);
     if (!dcmprs_buffer || !buffer)
     {
         rt_kprintf("[qlz] No memory for dcmprs_buffer or buffer!\n");

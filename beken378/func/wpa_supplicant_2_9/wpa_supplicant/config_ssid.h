@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * WPA Supplicant / Network configuration structures
  * Copyright (c) 2003-2013, Jouni Malinen <j@w1.fi>
@@ -42,9 +43,9 @@
 
 struct psk_list_entry {
 	struct dl_list list;
-	u8 addr[ETH_ALEN];
-	u8 psk[32];
-	u8 p2p;
+	uint8_t addr[ETH_ALEN];
+	uint8_t psk[32];
+	uint8_t p2p;
 };
 
 enum wpas_mode {
@@ -122,7 +123,7 @@ struct wpa_ssid {
 	 * terminated string. ssid_len defines how many characters are valid
 	 * and the ssid field is not guaranteed to be nul terminated.
 	 */
-	u8 *ssid;
+	uint8_t *ssid;
 
 	/**
 	 * ssid_len - Length of the SSID
@@ -138,18 +139,18 @@ struct wpa_ssid {
 	 * If this is a persistent P2P group (disabled == 2), this is the GO
 	 * Device Address.
 	 */
-	u8 bssid[ETH_ALEN];
+	uint8_t bssid[ETH_ALEN];
 
 	/**
 	 * bssid_blacklist - List of inacceptable BSSIDs
 	 */
-	u8 *bssid_blacklist;
+	uint8_t *bssid_blacklist;
 	size_t num_bssid_blacklist;
 
 	/**
 	 * bssid_blacklist - List of acceptable BSSIDs
 	 */
-	u8 *bssid_whitelist;
+	uint8_t *bssid_whitelist;
 	size_t num_bssid_whitelist;
 
 	/**
@@ -163,7 +164,7 @@ struct wpa_ssid {
 	 * If set, this is configured to the driver as a preferred initial BSSID
 	 * while connecting to this network.
 	 */
-	u8 bssid_hint[ETH_ALEN];
+	uint8_t bssid_hint[ETH_ALEN];
 
 	/**
 	 * bssid_hint_set - Whether BSSID hint is configured for this network
@@ -174,13 +175,13 @@ struct wpa_ssid {
 	/**
 	 * go_p2p_dev_addr - GO's P2P Device Address or all zeros if not set
 	 */
-	u8 go_p2p_dev_addr[ETH_ALEN];
+	uint8_t go_p2p_dev_addr[ETH_ALEN];
 #endif
 
 	/**
 	 * psk - WPA pre-shared key (256 bits)
 	 */
-	u8 psk[32];
+	uint8_t psk[32];
 
 	/**
 	 * psk_set - Whether PSK field is configured
@@ -304,7 +305,7 @@ struct wpa_ssid {
 	/**
 	 * wep_key - WEP keys
 	 */
-	u8 wep_key[NUM_WEP_KEYS][MAX_WEP_KEY_LEN];
+	uint8_t wep_key[NUM_WEP_KEYS][MAX_WEP_KEY_LEN];
 
 	/**
 	 * wep_key_len - WEP key lengths
@@ -595,7 +596,7 @@ struct wpa_ssid {
 	 * the persistent group. This is maintained on the GO for persistent
 	 * group entries (disabled == 2).
 	 */
-	u8 *p2p_client_list;
+	uint8_t *p2p_client_list;
 
 	/**
 	 * num_p2p_clients - Number of entries in p2p_client_list
@@ -833,7 +834,7 @@ struct wpa_ssid {
 	 * 0: No replay window, strict check (default)
 	 * 1..2^32-1: number of packets that could be misordered
 	 */
-	u32 macsec_replay_window;
+	uint32_t macsec_replay_window;
 
 	/**
 	 * macsec_port - MACsec port (in SCI)
@@ -856,14 +857,14 @@ struct wpa_ssid {
 	 */
 #define MACSEC_CKN_MAX_LEN 32
 	size_t mka_ckn_len;
-	u8 mka_ckn[MACSEC_CKN_MAX_LEN];
+	uint8_t mka_ckn[MACSEC_CKN_MAX_LEN];
 
 	/**
 	 * mka_cak - MKA pre-shared CAK
 	 */
 #define MACSEC_CAK_MAX_LEN 32
 	size_t mka_cak_len;
-	u8 mka_cak[MACSEC_CAK_MAX_LEN];
+	uint8_t mka_cak[MACSEC_CAK_MAX_LEN];
 
 #define MKA_PSK_SET_CKN BIT(0)
 #define MKA_PSK_SET_CAK BIT(1)
@@ -871,7 +872,7 @@ struct wpa_ssid {
 	/**
 	 * mka_psk_set - Whether mka_ckn and mka_cak are set
 	 */
-	u8 mka_psk_set;
+	uint8_t mka_psk_set;
 #endif /* CONFIG_MACSEC */
 
 #ifdef CONFIG_HS20
@@ -883,7 +884,7 @@ struct wpa_ssid {
 	 * The matching Roaming Consortium OI that was used to generate this
 	 * network profile.
 	 */
-	u8 *roaming_consortium_selection;
+	uint8_t *roaming_consortium_selection;
 
 	/**
 	 * roaming_consortium_selection_len - roaming_consortium_selection len
@@ -947,7 +948,7 @@ struct wpa_ssid {
 	/**
 	 * dpp_netaccesskey - DPP netAccessKey (own private key)
 	 */
-	u8 *dpp_netaccesskey;
+	uint8_t *dpp_netaccesskey;
 
 	/**
 	 * dpp_netaccesskey_len - DPP netAccessKey length in octets
@@ -964,7 +965,7 @@ struct wpa_ssid {
 	/**
 	 * dpp_csign - C-sign-key (Configurator public key)
 	 */
-	u8 *dpp_csign;
+	uint8_t *dpp_csign;
 
 	/**
 	 * dpp_csign_len - C-sign-key length in octets

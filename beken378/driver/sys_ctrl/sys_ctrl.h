@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _SCTRL_H_
 #define _SCTRL_H_
 
@@ -538,21 +539,21 @@ enum
 #define DCO_CNTI_120M           (0x127U)  // set DCO out clk with 120M
 
 #include "arm_arch.h"
-__inline static UINT32 sctrl_analog_get(UINT32 address)
+__inline static uint32_t sctrl_analog_get(uint32_t address)
 {
 	while(REG_READ(SCTRL_ANALOG_SPI) & (ANA_SPI_STAET_MASK<<ANA_SPI_STATE_POSI));
 	return REG_READ(address);                      
 }
 
-__inline static void sctrl_analog_set(UINT32 address, UINT32 value)
+__inline static void sctrl_analog_set(uint32_t address, uint32_t value)
 {
 	REG_WRITE(address, value);
 	while(REG_READ(SCTRL_ANALOG_SPI) & (ANA_SPI_STAET_MASK<<ANA_SPI_STATE_POSI));
 }
 
 typedef struct  sctrl_ps_save_values{
-UINT32    peri_clk_cfg;
-UINT32    int_enable_cfg;
+uint32_t    peri_clk_cfg;
+uint32_t    int_enable_cfg;
 }SCTRL_PS_SAVE_VALUES;
 
 #define PS_CLOSE_PERI_CLK            0
@@ -560,7 +561,7 @@ UINT32    int_enable_cfg;
 /*******************************************************************************
 * Function Declarations
 *******************************************************************************/
-extern UINT32 sctrl_ctrl(UINT32 cmd, void *parm);
+extern uint32_t sctrl_ctrl(uint32_t cmd, void *parm);
 extern void sctrl_sub_reset(void);
 
 #if CFG_USE_BLE_PS

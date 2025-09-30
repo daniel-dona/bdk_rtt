@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 #include "drv_model_pub.h"
@@ -81,7 +82,7 @@ void cal_exit(void)
 	cal_disable();
 }
 
-UINT32 cal_ctrl(UINT32 cmd, void *param)
+uint32_t cal_ctrl(uint32_t cmd, void *param)
 {
 	switch(cmd)
 	{		

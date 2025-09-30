@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
   This file is part of UFFS, the Ultra-low-cost Flash File System.
   
@@ -80,7 +81,7 @@ typedef enum {
 
 
 static void do_ReleaseObjectResource(uffs_Object *obj);
-static URET do_TruncateObject(uffs_Object *obj, u32 remain, RunOptionE run_opt);
+static URET do_TruncateObject(uffs_Object *obj, uint32_t remain, RunOptionE run_opt);
 
 
 static int _object_data[(sizeof(struct uffs_ObjectSt) * MAX_OBJECT_HANDLE) / sizeof(int)];
@@ -578,9 +579,9 @@ URET uffs_ParseObject(uffs_Object *obj, const char *name)
 	int len, m_len, d_len;
 	uffs_Device *dev;
 	const char *start, *p, *dname;
-	u16 dir;
+	uint16_t dir;
 	TreeNode *node;
-	u16 sum;
+	uint16_t sum;
 
 	if (uffs_ReInitObject(obj) == U_FAIL)
 		return U_FAIL;
@@ -781,11 +782,11 @@ ext:
 	return (obj->err == UENOERR ? U_SUCC : U_FAIL);
 }
 
-static u16 GetFdnByOfs(uffs_Object *obj, u32 ofs)
+static uint16_t GetFdnByOfs(uffs_Object *obj, uint32_t ofs)
 {
 	uffs_Device *dev = obj->dev;
 
-	if (ofs < (u32)(obj->head_pages * dev->com.pg_data_size)) {
+	if (ofs < (uint32_t)(obj->head_pages * dev->com.pg_data_size)) {
 		return 0;
 	}
 	else {
@@ -795,7 +796,7 @@ static u16 GetFdnByOfs(uffs_Object *obj, u32 ofs)
 }
 
 
-static u32 GetStartOfDataBlock(uffs_Object *obj, u16 fdn)
+static uint32_t GetStartOfDataBlock(uffs_Object *obj, uint16_t fdn)
 {
 	if (fdn == 0) {
 		return 0;
@@ -809,12 +810,12 @@ static u32 GetStartOfDataBlock(uffs_Object *obj, u16 fdn)
 
 
 static int do_WriteNewBlock(uffs_Object *obj,
-						  const void *data, u32 len,
-						  u16 parent,
-						  u16 serial)
+						  const void *data, uint32_t len,
+						  uint16_t parent,
+						  uint16_t serial)
 {
 	uffs_Device *dev = obj->dev;
-	u16 page_id;
+	uint16_t page_id;
 	int wroteSize = 0;
 	int size;
 	uffs_Buf *buf;
@@ -832,7 +833,7 @@ static int do_WriteNewBlock(uffs_Object *obj,
 			break;
 		}
 		// Note: if data == NULL, we will fill '\0'
-		ret = uffs_BufWrite(dev, buf, data == NULL ? NULL : (u8 *)data + wroteSize, 0, size);
+		ret = uffs_BufWrite(dev, buf, data == NULL ? NULL : (uint8_t *)data + wroteSize, 0, size);
 		uffs_BufPut(dev, buf);
 
 		if (ret != U_SUCC) {
@@ -848,22 +849,22 @@ static int do_WriteNewBlock(uffs_Object *obj,
 
 static int do_WriteInternalBlock(uffs_Object *obj,
 							   TreeNode *node,
-							   u16 fdn,
+							   uint16_t fdn,
 							   const void *data,
-							   u32 len,
-							   u32 blockOfs)
+							   uint32_t len,
+							   uint32_t blockOfs)
 {
 	uffs_Device *dev = obj->dev;
-	u16 maxPageID;
-	u16 page_id;
-	u32 size;
-	u32 pageOfs;
-	u32 wroteSize = 0;
+	uint16_t maxPageID;
+	uint16_t page_id;
+	uint32_t size;
+	uint32_t pageOfs;
+	uint32_t wroteSize = 0;
 	URET ret;
 	uffs_Buf *buf;
-	u32 block_start;
-	u8 type;
-	u16 parent, serial;
+	uint32_t block_start;
+	uint8_t type;
+	uint16_t parent, serial;
 
 	block_start = GetStartOfDataBlock(obj, fdn);
 
@@ -914,7 +915,7 @@ static int do_WriteInternalBlock(uffs_Object *obj,
 		}
 
 		// Note: if data == NULL, then we will fill '\0'
-		ret = uffs_BufWrite(dev, buf, data == NULL ? NULL : (u8 *)data + wroteSize, pageOfs, size);
+		ret = uffs_BufWrite(dev, buf, data == NULL ? NULL : (uint8_t *)data + wroteSize, pageOfs, size);
 
 		uffs_BufPut(dev, buf);
 
@@ -943,10 +944,10 @@ static int do_WriteObject(uffs_Object *obj, const void *data, int len)
 	uffs_Device *dev = obj->dev;
 	TreeNode *fnode = obj->node;
 	int remain = len;
-	u16 fdn;
-	u32 write_start;
+	uint16_t fdn;
+	uint32_t write_start;
 	TreeNode *dnode;
-	u32 size;
+	uint32_t size;
 
 	while (remain > 0) {
 		write_start = obj->pos + len - remain;
@@ -963,7 +964,7 @@ static int do_WriteObject(uffs_Object *obj, const void *data, int len)
 				uffs_Perror(UFFS_MSG_NOISY, "insufficient block in write obj, new block");
 				break;
 			}
-			size = do_WriteNewBlock(obj, data ? (u8 *)data + len - remain : NULL,
+			size = do_WriteNewBlock(obj, data ? (uint8_t *)data + len - remain : NULL,
 										remain, fnode->u.file.serial, fdn);
 
 			//
@@ -1000,7 +1001,7 @@ static int do_WriteObject(uffs_Object *obj, const void *data, int len)
 				break;
 			}
 			size = do_WriteInternalBlock(obj, dnode, fdn,
-									data ? (u8 *)data + len - remain : NULL, remain,
+									data ? (uint8_t *)data + len - remain : NULL, remain,
 									write_start - GetStartOfDataBlock(obj, fdn));
 #ifdef CONFIG_FLUSH_BUF_AFTER_WRITE
 			if (fdn == 0)
@@ -1035,7 +1036,7 @@ int uffs_WriteObject(uffs_Object *obj, const void *data, int len)
 	uffs_Device *dev = obj->dev;
 	TreeNode *fnode = NULL;
 	int remain;
-	u32 pos;
+	uint32_t pos;
 	int wrote = 0;
 
 	if (obj == NULL) 
@@ -1103,16 +1104,16 @@ int uffs_ReadObject(uffs_Object *obj, void *data, int len)
 {
 	uffs_Device *dev = obj->dev;
 	TreeNode *fnode = NULL;
-	u32 remain = len;
-	u16 fdn;
-	u32 read_start;
+	uint32_t remain = len;
+	uint16_t fdn;
+	uint32_t read_start;
 	TreeNode *dnode;
-	u32 size;
+	uint32_t size;
 	uffs_Buf *buf;
-	u32 blockOfs;
-	u16 page_id;
-	u8 type;
-	u32 pageOfs;
+	uint32_t blockOfs;
+	uint16_t page_id;
+	uint8_t type;
+	uint32_t pageOfs;
 
 	if (obj == NULL)
 		return 0;
@@ -1174,7 +1175,7 @@ int uffs_ReadObject(uffs_Object *obj, void *data, int len)
 			page_id++;
 		}
 
-		buf = uffs_BufGetEx(dev, type, dnode, (u16)page_id, obj->oflag);
+		buf = uffs_BufGetEx(dev, type, dnode, (uint16_t)page_id, obj->oflag);
 		if (buf == NULL) {
 			uffs_Perror(UFFS_MSG_SERIOUS, "can't get buffer when read obj.");
 			obj->err = UEIOERR;
@@ -1189,7 +1190,7 @@ int uffs_ReadObject(uffs_Object *obj, void *data, int len)
 		}
 		size = (remain + pageOfs > buf->data_len ? buf->data_len - pageOfs : remain);
 
-		uffs_BufRead(dev, buf, (u8 *)data + len - remain, pageOfs, size);
+		uffs_BufRead(dev, buf, (uint8_t *)data + len - remain, pageOfs, size);
 		uffs_BufPut(dev, buf);
 
 		remain -= size;
@@ -1304,16 +1305,16 @@ int uffs_EndOfFile(uffs_Object *obj)
 // We need to discard one or more pages within this block, hence requires 'block recover'.
 //
 static URET do_TruncateInternalWithBlockRecover(uffs_Object *obj,
-												u16 fdn, u32 remain, RunOptionE run_opt)
+												uint16_t fdn, uint32_t remain, RunOptionE run_opt)
 {
 	uffs_Device *dev = obj->dev;
 	TreeNode *fnode = obj->node;
-	u16 page_id, max_page_id;
+	uint16_t page_id, max_page_id;
 	TreeNode *node;
 	uffs_Buf *buf = NULL;
-	u8 type;
-	u32 block_start;
-	u16 parent, serial;
+	uint8_t type;
+	uint32_t block_start;
+	uint16_t parent, serial;
 	int slot;
 	uffs_BlockInfo *bc = NULL;
 	int block = -1;
@@ -1438,7 +1439,7 @@ ext:
  *
  * \return U_SUCC or U_FAIL (error code in obj->err)
  */
-URET uffs_TruncateObject(uffs_Object *obj, u32 remain)
+URET uffs_TruncateObject(uffs_Object *obj, uint32_t remain)
 {
 	uffs_ObjectDevLock(obj);
 	if (do_TruncateObject(obj, remain, eDRY_RUN) == U_SUCC)
@@ -1451,17 +1452,17 @@ URET uffs_TruncateObject(uffs_Object *obj, u32 remain)
 }
 
 /** truncate obj without lock device */
-static URET do_TruncateObject(uffs_Object *obj, u32 remain, RunOptionE run_opt)
+static URET do_TruncateObject(uffs_Object *obj, uint32_t remain, RunOptionE run_opt)
 {
 	uffs_Device *dev = obj->dev;
 	TreeNode *fnode = obj->node;
-	u16 fdn;
-	u32 flen;
-	u32 block_start;
+	uint16_t fdn;
+	uint32_t flen;
+	uint32_t block_start;
 	TreeNode *node;
 	uffs_BlockInfo *bc;
 	uffs_Buf *buf;
-	u16 page;
+	uint16_t page;
 	int pos;
 
 	pos = obj->pos;   // save current file position
@@ -1582,7 +1583,7 @@ int _CheckObjBufRef(uffs_Object *obj)
 	uffs_Device *dev = obj->dev;
 	uffs_Buf *buf;
 	TreeNode *node = obj->node;
-	u16 parent, serial, last_serial;
+	uint16_t parent, serial, last_serial;
 
 	// check the DIR or FILE block
 	for (buf = uffs_BufFind(dev, obj->parent, obj->serial, UFFS_ALL_PAGES);
@@ -1647,8 +1648,8 @@ URET uffs_DeleteObject(const char * name, int *err)
 	uffs_Object *obj, *work;
 	TreeNode *node, *d_node;
 	uffs_Device *dev = NULL;
-	u16 block;
-	u16 serial, parent, last_serial;
+	uint16_t block;
+	uint16_t serial, parent, last_serial;
 	UBOOL bad = U_FALSE;
 	URET ret = U_FAIL;
 

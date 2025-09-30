@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 
@@ -39,7 +40,7 @@
 #define DCO_CLK_SELECT          DCO_CALIB_180M
 #define USE_DCO_CLK_POWON       1
 
-UINT8  calib_charger[3] = {
+uint8_t  calib_charger[3] = {
     0x23,   //vlcf
     0x15,   //icp
     0x1b    //vcv
@@ -52,7 +53,7 @@ UINT8  calib_charger[3] = {
 static SCTRL_PS_SAVE_VALUES ps_saves[2];
 
 #if (CFG_USE_DEEP_PS && PS_SUPPORT_MANUAL_SLEEP)
-static UINT32 ps_block_value = 0;
+static uint32_t ps_block_value = 0;
 #endif
 
 static SCTRL_MCU_PS_INFO sctrl_mcu_ps_info =
@@ -69,10 +70,10 @@ static SDD_OPERATIONS sctrl_op =
     sctrl_ctrl
 };
 
-static UINT32 rf_hold_status = 0;
-UINT32 rf_sleepe_enable = 1;
-UINT32 rf_sleeped = 0;
-UINT32 sta_rf_sleeped = 0;
+static uint32_t rf_hold_status = 0;
+uint32_t rf_sleepe_enable = 1;
+uint32_t rf_sleeped = 0;
+uint32_t sta_rf_sleeped = 0;
 
 static void sctrl_rf_init(void);
 extern void WFI( void );
@@ -83,7 +84,7 @@ void sctrl_fix_dpll_div(void);
 /**********************************************************************/
 void sctrl_dpll_delay10us(void)
 {
-    volatile UINT32 i = 0;
+    volatile uint32_t i = 0;
 
     for(i = 0; i < DPLL_DELAY_TIME_10US; i ++)
     {
@@ -93,7 +94,7 @@ void sctrl_dpll_delay10us(void)
 
 void sctrl_dpll_delay200us(void)
 {
-    volatile UINT32 i = 0;
+    volatile uint32_t i = 0;
 
     for(i = 0; i < DPLL_DELAY_TIME_200US; i ++)
     {
@@ -101,9 +102,9 @@ void sctrl_dpll_delay200us(void)
     }
 }
 
-void sctrl_ps_dpll_delay(UINT32 time)
+void sctrl_ps_dpll_delay(uint32_t time)
 {
-    volatile UINT32 i = 0;
+    volatile uint32_t i = 0;
 
     for(i = 0; i < time; i ++)
     {
@@ -111,9 +112,9 @@ void sctrl_ps_dpll_delay(UINT32 time)
     }
 }
 
-void sctrl_cali_dpll(UINT8 flag)
+void sctrl_cali_dpll(uint8_t flag)
 {
-    UINT32 param;
+    uint32_t param;
 
 #if (CFG_SOC_NAME == SOC_BK7231N)
     extern void bk7011_update_tx_power_when_cal_dpll(int start_or_stop);
@@ -164,7 +165,7 @@ void sctrl_dpll_isr(void)
 
 void sctrl_dpll_int_open(void)
 {
-    UINT32 param;
+    uint32_t param;
 
     param = (FIQ_DPLL_UNLOCK_BIT);
     sddev_control(ICU_DEV_NAME, CMD_ICU_INT_ENABLE, &param);
@@ -177,7 +178,7 @@ void sctrl_dpll_int_open(void)
 
 void sctrl_dpll_int_close(void)
 {
-    UINT32 param;
+    uint32_t param;
 
     #if (CFG_SOC_NAME != SOC_BK7231)
     param = 0;
@@ -188,9 +189,9 @@ void sctrl_dpll_int_close(void)
     sddev_control(ICU_DEV_NAME, CMD_ICU_INT_DISABLE, &param);
 }
 
-void sctrl_dco_cali(UINT32 speed)
+void sctrl_dco_cali(uint32_t speed)
 {
-    UINT32 reg_val;
+    uint32_t reg_val;
 
     switch(speed)
     {
@@ -257,7 +258,7 @@ void sctrl_dco_cali(UINT32 speed)
 
 void sctrl_set_cpu_clk_dco(void)
 {
-    UINT32 reg_val;
+    uint32_t reg_val;
 
     reg_val = REG_READ(SCTRL_CONTROL);
     reg_val &= ~(MCLK_DIV_MASK << MCLK_DIV_POSI);
@@ -276,7 +277,7 @@ void sctrl_set_cpu_clk_dco(void)
 void sctrl_flash_select_dco(void)
 {
     DD_HANDLE flash_hdl;
-    UINT32 status;
+    uint32_t status;
 
     /* Flash 26MHz clock select dco clock*/
     flash_hdl = ddev_open(FLASH_DEV_NAME, &status, 0);
@@ -289,7 +290,7 @@ void sctrl_flash_select_dco(void)
 
 void sctrl_sta_ps_init(void)
 {
-    UINT32 reg;
+    uint32_t reg;
     extern void power_save_wakeup_isr(void);
 
 #if (CFG_SOC_NAME == SOC_BK7231)
@@ -333,7 +334,7 @@ void sctrl_ble_ps_init(void)
 
 static void sctrl_mac_ahb_slave_clock_enable(void)
 {
-	UINT32 reg;
+	uint32_t reg;
 #if (CFG_SOC_NAME == SOC_BK7271)
 	reg = REG_READ(SCTRL_CONTROL);
 	REG_WRITE(SCTRL_CONTROL, reg | MAC_HCLK_EN_BIT);
@@ -345,7 +346,7 @@ static void sctrl_mac_ahb_slave_clock_enable(void)
 
 static void sctrl_mac_ahb_slave_clock_disable(void)
 {
-	UINT32 reg;
+	uint32_t reg;
 #if (CFG_SOC_NAME == SOC_BK7271)
 	reg = REG_READ(SCTRL_CONTROL);
 	reg &= ~MAC_HCLK_EN_BIT;
@@ -360,7 +361,7 @@ static void sctrl_mac_ahb_slave_clock_disable(void)
 
 void sctrl_init(void)
 {
-    UINT32 param;
+    uint32_t param;
 
     sddev_register_dev(SCTRL_DEV_NAME, &sctrl_op);
 
@@ -525,7 +526,7 @@ void sctrl_sub_reset(void)
 
 static void sctrl_rf_init(void)
 {
-    UINT32 reg;
+    uint32_t reg;
 
     /* Modem AHB clock enable*/
     reg = REG_READ(SCTRL_MODEM_CORE_RESET_PHY_HCLK);
@@ -542,16 +543,16 @@ static void sctrl_rf_init(void)
     rf_sleeped = 0;
 }
 
-void ps_delay(volatile UINT16 times)
+void ps_delay(volatile uint16_t times)
 {
-	UINT32	delay = times;
+	uint32_t	delay = times;
     while(delay--) ;
 }
 
 __maybe_unused static void sctrl_unconditional_mac_sleep(void);
 static void sctrl_unconditional_mac_sleep(void)
 {
-    UINT32 reg;
+    uint32_t reg;
     GLOBAL_INT_DECLARATION();
     GLOBAL_INT_DISABLE();
 
@@ -573,7 +574,7 @@ static void sctrl_unconditional_mac_sleep(void)
 __maybe_unused static void sctrl_unconditional_mac_wakeup(void);
 static void sctrl_unconditional_mac_wakeup(void)
 {
-    UINT32 reg;
+    uint32_t reg;
     GLOBAL_INT_DECLARATION();
     GLOBAL_INT_DISABLE();
     if( sta_rf_sleeped == 1 )
@@ -593,7 +594,7 @@ static void sctrl_unconditional_mac_wakeup(void)
 
 void sctrl_ps_dump()
 {
-    UINT32 i;
+    uint32_t i;
 
     os_printf("reg dump\r\n");
     os_printf("sys\r\n0x%8x:0x%8x\r\n", SCTRL_CONTROL, REG_READ(SCTRL_CONTROL));
@@ -611,12 +612,12 @@ void sctrl_ps_dump()
     os_printf("0x%8x:0x%8x\r\n", NXMAC_BCN_CNTRL_1_ADDR, nxmac_bcn_cntrl_1_get());
     os_printf("saves dump\r\n");
     for(i = 0; i < (3 * (sizeof(SCTRL_PS_SAVE_VALUES) / 4)); i++)
-        os_printf(" %d 0x%x\r\n", i, *((UINT32 *)(&ps_saves) + i));
+        os_printf(" %d 0x%x\r\n", i, *((uint32_t *)(&ps_saves) + i));
 }
 
-void sctrl_hw_sleep(UINT32 peri_clk)
+void sctrl_hw_sleep(uint32_t peri_clk)
 {
-    UINT32 reg;
+    uint32_t reg;
     PS_DEBUG_DOWN_TRIGER;
     if(4 == flash_get_line_mode())
     {
@@ -710,7 +711,7 @@ void sctrl_hw_sleep(UINT32 peri_clk)
 
 void sctrl_hw_wakeup(void)
 {
-    UINT32 reg;
+    uint32_t reg;
 
 	PS_DEBUG_BCN_TRIGER;
 #if (CFG_SOC_NAME != SOC_BK7221U)
@@ -793,9 +794,9 @@ void sctrl_hw_wakeup(void)
 	PS_DEBUG_BCN_TRIGER;
 }
 
-UINT8 sctrl_if_rf_sleep(void)
+uint8_t sctrl_if_rf_sleep(void)
 {
-    UINT32 value;
+    uint32_t value;
     GLOBAL_INT_DECLARATION();
     GLOBAL_INT_DISABLE();
     value =  rf_sleeped;
@@ -840,7 +841,7 @@ static void sctrl_rf_sleep(void)
     #if (!CFG_USE_PTA)
     if(sctrl_rf_ps_enabled() == 1)
     {
-    UINT32 reg;
+    uint32_t reg;
     GLOBAL_INT_DECLARATION();
     GLOBAL_INT_DISABLE();
     if(0 == rf_sleeped)
@@ -870,7 +871,7 @@ static void sctrl_rf_wakeup(void)
     #if (!CFG_USE_PTA)
     if(sctrl_rf_wakeup_enabled() == 1)
     {
-	    UINT32 reg;
+	    uint32_t reg;
 	    GLOBAL_INT_DECLARATION();
 
 	    GLOBAL_INT_DISABLE();
@@ -910,7 +911,7 @@ static void sctrl_rf_wakeup(void)
 
 void sctrl_sta_rf_sleep(void)
 {
-    UINT32 reg;
+    uint32_t reg;
     GLOBAL_INT_DECLARATION();
     GLOBAL_INT_DISABLE();
 
@@ -939,7 +940,7 @@ void sctrl_sta_rf_sleep(void)
 }
 void sctrl_sta_rf_wakeup(void)
 {
-    UINT32 reg;
+    uint32_t reg;
     GLOBAL_INT_DECLARATION();
     GLOBAL_INT_DISABLE();
     if( sta_rf_sleeped == 1 )
@@ -972,7 +973,7 @@ void sctrl_sta_rf_wakeup(void)
 #endif
 
 #if CFG_USE_MCU_PS
-UINT8 sctrl_if_mcu_can_sleep(void)
+uint8_t sctrl_if_mcu_can_sleep(void)
 {
     return (((! bk_wlan_has_role(VIF_STA))
         || power_save_if_rf_sleep())
@@ -982,9 +983,9 @@ UINT8 sctrl_if_mcu_can_sleep(void)
         && (sctrl_mcu_ps_info.hw_sleep == 0));
 }
 
-void sctrl_mcu_sleep(UINT32 peri_clk)
+void sctrl_mcu_sleep(uint32_t peri_clk)
 {
-    UINT32 reg;
+    uint32_t reg;
 
     if(sctrl_if_mcu_can_sleep())
     {
@@ -1028,9 +1029,9 @@ void sctrl_mcu_sleep(UINT32 peri_clk)
     delay(5);
 }
 
-UINT32 sctrl_mcu_wakeup(void)
+uint32_t sctrl_mcu_wakeup(void)
 {
-    UINT32 wkup_type;
+    uint32_t wkup_type;
 
     if(sctrl_mcu_ps_info.hw_sleep == 1)
     {
@@ -1059,7 +1060,7 @@ UINT32 sctrl_mcu_wakeup(void)
 
 void sctrl_mcu_init(void)
 {
-    UINT32 reg;
+    uint32_t reg;
 
     reg = REG_READ(SCTRL_CONTROL);
     reg &= ~(MCLK_DIV_MASK << MCLK_DIV_POSI);
@@ -1079,7 +1080,7 @@ void sctrl_mcu_exit(void)
 #if (USE_DCO_CLK_POWON )
     sctrl_set_cpu_clk_dco();
 #else
-    UINT32 reg;
+    uint32_t reg;
     reg = REG_READ(SCTRL_CONTROL);
     reg &= ~(MCLK_DIV_MASK << MCLK_DIV_POSI);
 
@@ -1094,11 +1095,11 @@ void sctrl_mcu_exit(void)
 }
 #endif
 
-void sctrl_subsys_power(UINT32 cmd)
+void sctrl_subsys_power(uint32_t cmd)
 {
-    UINT32 reg = 0;
-    UINT32 reg_val;
-    UINT32 reg_word = 0;
+    uint32_t reg = 0;
+    uint32_t reg_val;
+    uint32_t reg_word = 0;
 
     switch(cmd)
     {
@@ -1188,10 +1189,10 @@ void sctrl_subsys_power(UINT32 cmd)
     }
 }
 
-void sctrl_subsys_reset(UINT32 cmd)
+void sctrl_subsys_reset(uint32_t cmd)
 {
-    UINT32 reg = 0;
-    UINT32 reset_word = 0;
+    uint32_t reg = 0;
+    uint32_t reset_word = 0;
 
     switch(cmd)
     {
@@ -1232,9 +1233,9 @@ void sctrl_subsys_reset(UINT32 cmd)
 #if (CFG_SOC_NAME == SOC_BK7231N)
 void sctrl_fix_dpll_div(void)
 {
-	volatile INT32   i;
-	uint32 reg;
-	uint32 cpu_clock;
+	volatile int32_t   i;
+	uint32_t reg;
+	uint32_t cpu_clock;
 
 	GLOBAL_INT_DECLARATION();
 	GLOBAL_INT_DISABLE();
@@ -1269,7 +1270,7 @@ void sctrl_fix_dpll_div(void)
 #if (CFG_SOC_NAME == SOC_BK7231N)
 void sctrl_mdm_reset(void)
 {
-    volatile INT32 i;
+    volatile int32_t i;
     GLOBAL_INT_DECLARATION();
 
     os_printf("sctrl_mdm_reset\r\n");
@@ -1314,13 +1315,13 @@ void sctrl_mdm_reset(void)
 #endif
 
 #if CFG_USE_FAKERTC_PS
-UINT32 block_en_value;
+uint32_t block_en_value;
 
 int sctrl_unconditional_mac_set_doze(void)
 {
-    UINT32 reg;
+    uint32_t reg;
     DD_HANDLE flash_hdl;
-    UINT32 status;
+    uint32_t status;
 
     if(rwnxl_get_status_in_doze())
     {
@@ -1378,7 +1379,7 @@ int sctrl_unconditional_mac_set_doze(void)
 
 int sctrl_unconditional_mac_exit_doze(void)
 {
-    UINT32 reg;
+    uint32_t reg;
 
     delay(10);
 	PS_DEBUG_BCN_TRIGER;
@@ -1399,11 +1400,11 @@ int sctrl_unconditional_mac_exit_doze(void)
 
 volatile uint32_t g_mac_sleep_flag = 0;
 
-int sctrl_unconditional_normal_sleep(UINT32 peri_clk)
+int sctrl_unconditional_normal_sleep(uint32_t peri_clk)
 {
-    UINT32 reg;
+    uint32_t reg;
     DD_HANDLE flash_hdl;
-    UINT32 status;
+    uint32_t status;
     PS_DEBUG_DOWN_TRIGER;
 
     if(sctrl_unconditional_mac_set_doze() != 0)
@@ -1503,7 +1504,7 @@ int sctrl_unconditional_normal_sleep(UINT32 peri_clk)
 
 void sctrl_unconditional_normal_wakeup()
 {
-    UINT32 reg;
+    uint32_t reg;
 
 	PS_DEBUG_BCN_TRIGER;
 #if (CFG_SOC_NAME != SOC_BK7221U)
@@ -1616,9 +1617,9 @@ void sctrl_unconditional_normal_wakeup()
 void sctrl_enter_rtos_idle_sleep(PS_DEEP_CTRL_PARAM deep_param)
 {
     DD_HANDLE flash_hdl;
-    UINT32 status;
-    UINT32 param;
-    UINT32 reg;
+    uint32_t status;
+    uint32_t param;
+    uint32_t reg;
 
     if(4 == flash_get_line_mode())
     {
@@ -1755,7 +1756,7 @@ void sctrl_enter_rtos_idle_sleep(PS_DEEP_CTRL_PARAM deep_param)
 
 void sctrl_exit_rtos_idle_sleep(void)
 {
-    UINT32 reg;
+    uint32_t reg;
 
     /* center bias power on*/
     reg = sctrl_analog_get(SCTRL_ANALOG_CTRL2);
@@ -1843,10 +1844,10 @@ void sctrl_exit_rtos_idle_sleep(void)
 void sctrl_enter_rtos_deep_sleep(PS_DEEP_CTRL_PARAM *deep_param)
 {
     DD_HANDLE flash_hdl;
-    UINT32 status;
-    UINT32 param;
-    UINT32 reg;
-    UINT32 i;
+    uint32_t status;
+    uint32_t param;
+    uint32_t reg;
+    uint32_t i;
 
 	uart_wait_tx_over();
 
@@ -2062,7 +2063,7 @@ void sctrl_enter_rtos_deep_sleep(PS_DEEP_CTRL_PARAM *deep_param)
                 {
                     param = GPIO_CFG_PARAM(i, GMODE_INPUT_PULLUP);
                     sddev_control(GPIO_DEV_NAME, CMD_GPIO_CFG, &param);
-                    if(0x1 != (UINT32)gpio_ctrl( CMD_GPIO_INPUT, &i))
+                    if(0x1 != (uint32_t)gpio_ctrl( CMD_GPIO_INPUT, &i))
                     {   /*check gpio really input value,to correct wrong edge setting*/
                         param = GPIO_CFG_PARAM(i, GMODE_INPUT);
                         sddev_control(GPIO_DEV_NAME, CMD_GPIO_CFG, &param);
@@ -2073,7 +2074,7 @@ void sctrl_enter_rtos_deep_sleep(PS_DEEP_CTRL_PARAM *deep_param)
                 {
                     param = GPIO_CFG_PARAM(i, GMODE_INPUT_PULLDOWN);
                     sddev_control(GPIO_DEV_NAME, CMD_GPIO_CFG, &param);
-                    if(0x0 != (UINT32)gpio_ctrl( CMD_GPIO_INPUT, &i))
+                    if(0x0 != (uint32_t)gpio_ctrl( CMD_GPIO_INPUT, &i))
                     {   /*check gpio really input value,to correct wrong edge setting*/
                         param = GPIO_CFG_PARAM(i, GMODE_INPUT);
                         sddev_control(GPIO_DEV_NAME, CMD_GPIO_CFG, &param);
@@ -2092,7 +2093,7 @@ void sctrl_enter_rtos_deep_sleep(PS_DEEP_CTRL_PARAM *deep_param)
                     param = GPIO_CFG_PARAM(i + BITS_INT, GMODE_INPUT_PULLUP);
                     sddev_control(GPIO_DEV_NAME, CMD_GPIO_CFG, &param);
                     reg = i + BITS_INT;
-                    if(0x1 != (UINT32)gpio_ctrl( CMD_GPIO_INPUT, &reg))
+                    if(0x1 != (uint32_t)gpio_ctrl( CMD_GPIO_INPUT, &reg))
                     {   /*check gpio really input value,to correct wrong edge setting*/
                         param = GPIO_CFG_PARAM(i + BITS_INT, GMODE_INPUT);
                         sddev_control(GPIO_DEV_NAME, CMD_GPIO_CFG, &param);
@@ -2104,7 +2105,7 @@ void sctrl_enter_rtos_deep_sleep(PS_DEEP_CTRL_PARAM *deep_param)
                     param = GPIO_CFG_PARAM(i + BITS_INT, GMODE_INPUT_PULLDOWN);
                     sddev_control(GPIO_DEV_NAME, CMD_GPIO_CFG, &param);
                     reg = i + BITS_INT;
-                    if(0x0 != (UINT32)gpio_ctrl( CMD_GPIO_INPUT, &reg))
+                    if(0x0 != (uint32_t)gpio_ctrl( CMD_GPIO_INPUT, &reg))
                     {   /*check gpio really input value,to correct wrong edge setting*/
                         param = GPIO_CFG_PARAM(i + BITS_INT, GMODE_INPUT);
                         sddev_control(GPIO_DEV_NAME, CMD_GPIO_CFG, &param);
@@ -2307,7 +2308,7 @@ RESET_SOURCE_STATUS sctrl_get_deep_sleep_wake_soure(void)
 #if (CFG_SOC_NAME != SOC_BK7231)
 static int sctrl_read_efuse(void *param)
 {
-    UINT32 reg, ret = -1;
+    uint32_t reg, ret = -1;
     EFUSE_OPER_PTR efuse;
     efuse = (EFUSE_OPER_PTR)param;
 
@@ -2335,7 +2336,7 @@ static int sctrl_read_efuse(void *param)
     return ret;
 }
 
-static int check_efuse_can_write(UINT8 new_byte, UINT8 old_byte)
+static int check_efuse_can_write(uint8_t new_byte, uint8_t old_byte)
 {
     if(new_byte == old_byte)
     {
@@ -2345,8 +2346,8 @@ static int check_efuse_can_write(UINT8 new_byte, UINT8 old_byte)
 
     for(int i=0; i<8; i++)
     {
-        UINT8 old_bit = ((old_byte >> i) & 0x01);
-        UINT8 new_bit = ((new_byte >> i) & 0x01);
+        uint8_t old_bit = ((old_byte >> i) & 0x01);
+        uint8_t new_bit = ((new_byte >> i) & 0x01);
 
         if ((old_bit) && (!new_bit))
         {
@@ -2360,7 +2361,7 @@ static int check_efuse_can_write(UINT8 new_byte, UINT8 old_byte)
 
 static int sctrl_write_efuse(void *param)
 {
-	UINT32 reg, ret = -1;
+	uint32_t reg, ret = -1;
 	EFUSE_OPER_ST *efuse, efuse_bak;
 
 #if (CFG_SOC_NAME == SOC_BK7221U)
@@ -2412,7 +2413,7 @@ static int sctrl_write_efuse(void *param)
 		reg = efuse->data;
 		efuse->data = 0;
 		if (sctrl_read_efuse(param) == 0) {
-			if (((UINT8)reg) == efuse->data)
+			if (((uint8_t)reg) == efuse->data)
 				ret = 0;
 		}
 	}
@@ -2426,7 +2427,7 @@ wr_exit:
 
 #if CFG_USE_USB_CHARGE
 #if (CFG_SOC_NAME == SOC_BK7221U)
-UINT32 usb_charge_oper_val(UINT32 elect)
+uint32_t usb_charge_oper_val(uint32_t elect)
 {
     if(elect >= 450)
     {
@@ -2460,19 +2461,19 @@ UINT32 usb_charge_oper_val(UINT32 elect)
     }
 }
 
-UINT32 usb_power_is_pluged(void)
+uint32_t usb_power_is_pluged(void)
 {
-    UINT32 reg;
+    uint32_t reg;
     reg = sctrl_analog_get(SCTRL_CHARGE_STATUS);
     return (reg & (1 << 21));
 }
 
-void charger_module_enable(UINT32 enable)
+void charger_module_enable(uint32_t enable)
 {
     sctrl_analog_set(SCTRL_ANALOG_CTRL4, (sctrl_analog_get(SCTRL_ANALOG_CTRL4) & ~(1 << 12)) | (!!enable << 12));
 }
 
-void charger_vlcf_calibration(UINT32 type)
+void charger_vlcf_calibration(uint32_t type)
 {
 
     if(type == 0)
@@ -2516,7 +2517,7 @@ void charger_vlcf_calibration(UINT32 type)
     }
 }
 
-void charger_icp_calibration(UINT32 type)
+void charger_icp_calibration(uint32_t type)
 {
 
     if(type == 0)
@@ -2564,7 +2565,7 @@ void charger_icp_calibration(UINT32 type)
     }
 }
 
-void charger_vcv_calibration(UINT32 type)
+void charger_vcv_calibration(uint32_t type)
 {
 
     if(type == 0)
@@ -2620,7 +2621,7 @@ void charger_vcv_calibration(UINT32 type)
     }
 }
 
-void charger_calib_get(UINT8 value[])
+void charger_calib_get(uint8_t value[])
 {
     value[0] = calib_charger[0];
     value[1] = calib_charger[1];
@@ -2628,7 +2629,7 @@ void charger_calib_get(UINT8 value[])
     return;
 }
 
-void charger_calib_set(UINT8 value[])
+void charger_calib_set(uint8_t value[])
 {
     if(!value[0] || !value[1] || !value[2])
     {
@@ -2641,16 +2642,16 @@ void charger_calib_set(UINT8 value[])
     return;
 }
 
-UINT32 charger_is_full(void)
+uint32_t charger_is_full(void)
 {
-    UINT32 reg;
+    uint32_t reg;
     reg = sctrl_analog_get(SCTRL_CHARGE_STATUS);
     return (reg & (1 << 20));
 }
 
 void charger_start(void *param)
 {
-    UINT32 charge_cal_type ;
+    uint32_t charge_cal_type ;
     CHARGE_OPER_ST *chrg;
 
     chrg = (CHARGE_OPER_ST *)param;
@@ -2841,7 +2842,7 @@ void charger_start(void *param)
 }
 
 
-void charger_stop(UINT32 type)
+void charger_stop(uint32_t type)
 {
     os_printf("%s\r\n", __FUNCTION__);
     charger_module_enable(0);
@@ -2850,10 +2851,10 @@ void charger_stop(UINT32 type)
 #endif
 
 
-UINT32 sctrl_ctrl(UINT32 cmd, void *param)
+uint32_t sctrl_ctrl(uint32_t cmd, void *param)
 {
-    UINT32 ret;
-    UINT32 reg;
+    uint32_t ret;
+    uint32_t reg;
 	GLOBAL_INT_DECLARATION();
 
     ret = SCTRL_SUCCESS;
@@ -2864,7 +2865,7 @@ UINT32 sctrl_ctrl(UINT32 cmd, void *param)
     case CMD_SCTRL_NORMAL_SLEEP:
         reg = RF_HOLD_BY_STA_BIT;
         sddev_control(SCTRL_DEV_NAME, CMD_RF_HOLD_BIT_CLR, &reg);
-        sctrl_hw_sleep(*(UINT32 *)param);
+        sctrl_hw_sleep(*(uint32_t *)param);
         break;
 
     case CMD_SCTRL_NORMAL_WAKEUP:
@@ -2924,46 +2925,46 @@ UINT32 sctrl_ctrl(UINT32 cmd, void *param)
         break;
 
     case CMD_GET_SCTRL_CONTROL:
-        *((UINT32 *)param) = REG_READ(SCTRL_CONTROL);
+        *((uint32_t *)param) = REG_READ(SCTRL_CONTROL);
         break;
 
     case CMD_SET_SCTRL_CONTROL:
-        REG_WRITE(SCTRL_CONTROL, *((UINT32 *)param));
+        REG_WRITE(SCTRL_CONTROL, *((uint32_t *)param));
         break;
 
     case CMD_SCTRL_MCLK_SELECT:
         reg = REG_READ(SCTRL_CONTROL);
         reg &= ~(MCLK_MUX_MASK << MCLK_MUX_POSI);
-        reg |= ((*(UINT32 *)param) & MCLK_MUX_MASK) << MCLK_MUX_POSI;
+        reg |= ((*(uint32_t *)param) & MCLK_MUX_MASK) << MCLK_MUX_POSI;
         REG_WRITE(SCTRL_CONTROL, reg);
         break;
 
     case CMD_SCTRL_MCLK_DIVISION:
         reg = REG_READ(SCTRL_CONTROL);
         reg &= ~(MCLK_DIV_MASK << MCLK_DIV_POSI);
-        reg |= ((*(UINT32 *)param) & MCLK_DIV_MASK) << MCLK_DIV_POSI;
+        reg |= ((*(uint32_t *)param) & MCLK_DIV_MASK) << MCLK_DIV_POSI;
         REG_WRITE(SCTRL_CONTROL, reg);
         break;
 
     case CMD_SCTRL_MCLK_MUX_GET:
         reg = ((REG_READ(SCTRL_CONTROL) >> MCLK_MUX_POSI) & MCLK_MUX_MASK);
-        *(UINT32 *)param = reg;
+        *(uint32_t *)param = reg;
         break;
 
     case CMD_SCTRL_MCLK_DIV_GET:
         reg = ((REG_READ(SCTRL_CONTROL) >> MCLK_DIV_POSI) & MCLK_DIV_MASK);
-        *(UINT32 *)param = reg;
+        *(uint32_t *)param = reg;
         break;
 
     case CMD_SCTRL_RESET_SET:
         reg = REG_READ(SCTRL_RESET);
-        reg |= ((*(UINT32 *)param) & SCTRL_RESET_MASK);
+        reg |= ((*(uint32_t *)param) & SCTRL_RESET_MASK);
         REG_WRITE(SCTRL_RESET, reg);
         break;
 
     case CMD_SCTRL_RESET_CLR:
         reg = REG_READ(SCTRL_RESET);
-        reg &= ~((*(UINT32 *)param) & SCTRL_RESET_MASK);
+        reg &= ~((*(uint32_t *)param) & SCTRL_RESET_MASK);
         REG_WRITE(SCTRL_RESET, reg);
         break;
 
@@ -3005,7 +3006,7 @@ UINT32 sctrl_ctrl(UINT32 cmd, void *param)
         reg = REG_READ(SCTRL_BLOCK_EN_CFG);
         reg &= (~(BLOCK_EN_WORD_MASK << BLOCK_EN_WORD_POSI));
         reg |= (BLOCK_EN_WORD_PWD & BLOCK_EN_WORD_MASK) << BLOCK_EN_WORD_POSI;
-        reg |= ((*(UINT32 *)param) & BLOCK_EN_VALID_MASK);
+        reg |= ((*(uint32_t *)param) & BLOCK_EN_VALID_MASK);
         REG_WRITE(SCTRL_BLOCK_EN_CFG, reg);
         break;
 
@@ -3013,19 +3014,19 @@ UINT32 sctrl_ctrl(UINT32 cmd, void *param)
         reg = REG_READ(SCTRL_BLOCK_EN_CFG);
 		reg &= (~(BLOCK_EN_WORD_MASK << BLOCK_EN_WORD_POSI));
 		reg |= (BLOCK_EN_WORD_PWD & BLOCK_EN_WORD_MASK) << BLOCK_EN_WORD_POSI;
-        reg &= ~((*(UINT32 *)param) & BLOCK_EN_VALID_MASK);
+        reg &= ~((*(uint32_t *)param) & BLOCK_EN_VALID_MASK);
         REG_WRITE(SCTRL_BLOCK_EN_CFG, reg);
         break;
 
     case CMD_SCTRL_BIAS_REG_SET:
         reg = REG_READ(SCTRL_BIAS);
-        reg |= (*(UINT32 *)param);
+        reg |= (*(uint32_t *)param);
         REG_WRITE(SCTRL_BIAS, reg);
         break;
 
     case CMD_SCTRL_BIAS_REG_CLEAN:
         reg = REG_READ(SCTRL_BIAS);
-        reg &= ~(*(UINT32 *)param);
+        reg &= ~(*(uint32_t *)param);
         REG_WRITE(SCTRL_BIAS, reg);
         break;
 
@@ -3034,18 +3035,18 @@ UINT32 sctrl_ctrl(UINT32 cmd, void *param)
         break;
 
     case CMD_SCTRL_BIAS_REG_WRITE:
-        REG_WRITE(SCTRL_BIAS, *(UINT32 *)param);
+        REG_WRITE(SCTRL_BIAS, *(uint32_t *)param);
         break;
 
     case CMD_SCTRL_ANALOG_CTRL4_SET:
         reg = sctrl_analog_get(SCTRL_ANALOG_CTRL4);
-        reg |= (*(UINT32 *)param);
+        reg |= (*(uint32_t *)param);
         sctrl_analog_set(SCTRL_ANALOG_CTRL4, reg);
         break;
 
     case CMD_SCTRL_ANALOG_CTRL4_CLEAN:
         reg = sctrl_analog_get(SCTRL_ANALOG_CTRL4);
-        reg &= ~(*(UINT32 *)param);
+        reg &= ~(*(uint32_t *)param);
         sctrl_analog_set(SCTRL_ANALOG_CTRL4, reg);
         break;
 
@@ -3057,7 +3058,7 @@ UINT32 sctrl_ctrl(UINT32 cmd, void *param)
     case CMD_SCTRL_SET_XTALH_CTUNE:
         reg = sctrl_analog_get(SCTRL_ANALOG_CTRL2);
         reg &= ~(XTALH_CTUNE_MASK<< XTALH_CTUNE_POSI);
-        reg |= (((*(UINT32 *)param) &XTALH_CTUNE_MASK) << XTALH_CTUNE_POSI);
+        reg |= (((*(uint32_t *)param) &XTALH_CTUNE_MASK) << XTALH_CTUNE_POSI);
         sctrl_analog_set(SCTRL_ANALOG_CTRL2, reg);
         break;
 
@@ -3079,8 +3080,8 @@ UINT32 sctrl_ctrl(UINT32 cmd, void *param)
         break;
 
     case CMD_RF_HOLD_BIT_SET:
-        rf_hold_status |= (*(UINT32 *)param);
-        //os_printf("s:%x %x\r\n",rf_hold_status,(*(UINT32 *)param));
+        rf_hold_status |= (*(uint32_t *)param);
+        //os_printf("s:%x %x\r\n",rf_hold_status,(*(uint32_t *)param));
         if(rf_hold_status)
         {
             sctrl_rf_wakeup();
@@ -3088,8 +3089,8 @@ UINT32 sctrl_ctrl(UINT32 cmd, void *param)
         break;
 
     case CMD_RF_HOLD_BIT_CLR:
-        rf_hold_status &= ~(*(UINT32 *)param);
-        //os_printf("c:%x %x\r\n",rf_hold_status,(*(UINT32 *)param));
+        rf_hold_status &= ~(*(uint32_t *)param);
+        //os_printf("c:%x %x\r\n",rf_hold_status,(*(uint32_t *)param));
         if(0 == rf_hold_status)
         {
             sctrl_rf_sleep();
@@ -3111,7 +3112,7 @@ UINT32 sctrl_ctrl(UINT32 cmd, void *param)
 
 	case CMD_BLE_RF_BIT_GET:
 		reg = REG_READ(SCTRL_CONTROL);
-		*((UINT32 *)param) = reg & (BLE_RF_EN_BIT);
+		*((uint32_t *)param) = reg & (BLE_RF_EN_BIT);
 		break;
 
     case CMD_EFUSE_WRITE_BYTE:
@@ -3126,14 +3127,14 @@ UINT32 sctrl_ctrl(UINT32 cmd, void *param)
     case CMD_QSPI_VDDRAM_VOLTAGE:
         reg = REG_READ(SCTRL_CONTROL);
         reg &= ~(PSRAM_VDDPAD_VOLT_MASK << PSRAM_VDDPAD_VOLT_POSI);
-        reg |=(((*(UINT32 *)param) & PSRAM_VDDPAD_VOLT_MASK) << PSRAM_VDDPAD_VOLT_POSI);
+        reg |=(((*(uint32_t *)param) & PSRAM_VDDPAD_VOLT_MASK) << PSRAM_VDDPAD_VOLT_POSI);
         REG_WRITE(SCTRL_CONTROL, reg);
         break;
 
     case CMD_QSPI_IO_VOLTAGE:
         reg = REG_READ(SCTRL_CONTROL);
         reg &= ~(QSPI_IO_VOLT_MASK << QSPI_IO_VOLT_POSI);
-        reg |=(((*(UINT32 *)param) & QSPI_IO_VOLT_MASK) << QSPI_IO_VOLT_POSI);
+        reg |=(((*(uint32_t *)param) & QSPI_IO_VOLT_MASK) << QSPI_IO_VOLT_POSI);
         REG_WRITE(SCTRL_CONTROL, reg);
         break;
 #endif
@@ -3196,19 +3197,19 @@ UINT32 sctrl_ctrl(UINT32 cmd, void *param)
     case CMD_SCTRL_SET_DAC_VOLUME_ANALOG:
         reg = sctrl_analog_get(SCTRL_ANALOG_CTRL8);
         reg &= ~(AUD_DAC_GAIN_MASK << AUD_DAC_GAIN_POSI);
-        reg |= (((*(UINT32 *)param) & AUD_DAC_GAIN_MASK) << AUD_DAC_GAIN_POSI);
+        reg |= (((*(uint32_t *)param) & AUD_DAC_GAIN_MASK) << AUD_DAC_GAIN_POSI);
         sctrl_analog_set(SCTRL_ANALOG_CTRL8, reg);
         break;
 
     case CMD_SCTRL_SET_LINEIN_VOLUME_ANALOG:
         reg = sctrl_analog_get(SCTRL_ANALOG_CTRL8);
         reg &= ~(LINE_IN_GAIN_MASK << LINE_IN_GAIN_POSI);
-        reg |= (((*(UINT32 *)param) & LINE_IN_GAIN_MASK) << LINE_IN_GAIN_POSI);
+        reg |= (((*(uint32_t *)param) & LINE_IN_GAIN_MASK) << LINE_IN_GAIN_POSI);
         sctrl_analog_set(SCTRL_ANALOG_CTRL8, reg);
         break;
 
     case CMD_SCTRL_SET_VOLUME_PORT:
-        if((*(UINT32 *)param) == AUDIO_DAC_VOL_DIFF_MODE)
+        if((*(uint32_t *)param) == AUDIO_DAC_VOL_DIFF_MODE)
         {
             reg = sctrl_analog_get(SCTRL_ANALOG_CTRL9);
             reg |= (DAC_DIFF_EN);
@@ -3220,7 +3221,7 @@ UINT32 sctrl_ctrl(UINT32 cmd, void *param)
             reg |= ((0x3 & DAC_VSEL_MASK) << DAC_VSEL_POSI);;
             sctrl_analog_set(SCTRL_ANALOG_CTRL10, reg);
         }
-        else if((*(UINT32 *)param) == AUDIO_DAC_VOL_SINGLE_MODE)
+        else if((*(uint32_t *)param) == AUDIO_DAC_VOL_SINGLE_MODE)
         {
             reg = sctrl_analog_get(SCTRL_ANALOG_CTRL9);
             reg &= ~(DAC_DIFF_EN);
@@ -3236,12 +3237,12 @@ UINT32 sctrl_ctrl(UINT32 cmd, void *param)
 
     case CMD_SCTRL_SET_AUD_DAC_MUTE:
         reg = sctrl_analog_get(SCTRL_ANALOG_CTRL8);
-        if((*(UINT32 *)param) == AUDIO_DAC_ANALOG_MUTE)
+        if((*(uint32_t *)param) == AUDIO_DAC_ANALOG_MUTE)
         {
             reg |= (AUD_DAC_MUTE_EN);
             sctrl_analog_set(SCTRL_ANALOG_CTRL8, reg);
         }
-        else if((*(UINT32 *)param) == AUDIO_DAC_ANALOG_UNMUTE)
+        else if((*(uint32_t *)param) == AUDIO_DAC_ANALOG_UNMUTE)
         {
             reg &= ~(AUD_DAC_MUTE_EN);
             sctrl_analog_set(SCTRL_ANALOG_CTRL8, reg);
@@ -3256,35 +3257,35 @@ UINT32 sctrl_ctrl(UINT32 cmd, void *param)
 		break;
 #endif
 	case CMD_SCTRL_SET_ANALOG0:
-		sctrl_analog_set(SCTRL_ANALOG_CTRL0, (*(UINT32 *)param));
+		sctrl_analog_set(SCTRL_ANALOG_CTRL0, (*(uint32_t *)param));
 		break;
 	case CMD_SCTRL_SET_ANALOG1:
-		sctrl_analog_set(SCTRL_ANALOG_CTRL1, (*(UINT32 *)param));
+		sctrl_analog_set(SCTRL_ANALOG_CTRL1, (*(uint32_t *)param));
 		break;
 	case CMD_SCTRL_SET_ANALOG2:
-		sctrl_analog_set(SCTRL_ANALOG_CTRL2, (*(UINT32 *)param));
+		sctrl_analog_set(SCTRL_ANALOG_CTRL2, (*(uint32_t *)param));
 		break;
 	case CMD_SCTRL_SET_ANALOG3:
-		sctrl_analog_set(SCTRL_ANALOG_CTRL3, (*(UINT32 *)param));
+		sctrl_analog_set(SCTRL_ANALOG_CTRL3, (*(uint32_t *)param));
 		break;
 	case CMD_SCTRL_SET_ANALOG4:
-		sctrl_analog_set(SCTRL_ANALOG_CTRL4, (*(UINT32 *)param));
+		sctrl_analog_set(SCTRL_ANALOG_CTRL4, (*(uint32_t *)param));
 		break;
 	case CMD_SCTRL_SET_ANALOG5:
-		sctrl_analog_set(SCTRL_ANALOG_CTRL5, (*(UINT32 *)param));
+		sctrl_analog_set(SCTRL_ANALOG_CTRL5, (*(uint32_t *)param));
 		break;
 #if (CFG_SOC_NAME == SOC_BK7221U)
 	case CMD_SCTRL_SET_ANALOG7:
-		sctrl_analog_set(SCTRL_ANALOG_CTRL7, (*(UINT32 *)param));
+		sctrl_analog_set(SCTRL_ANALOG_CTRL7, (*(uint32_t *)param));
 		break;
 	case CMD_SCTRL_SET_ANALOG8:
-		sctrl_analog_set(SCTRL_ANALOG_CTRL8, (*(UINT32 *)param));
+		sctrl_analog_set(SCTRL_ANALOG_CTRL8, (*(uint32_t *)param));
 		break;
 	case CMD_SCTRL_SET_ANALOG9:
-		sctrl_analog_set(SCTRL_ANALOG_CTRL9, (*(UINT32 *)param));
+		sctrl_analog_set(SCTRL_ANALOG_CTRL9, (*(uint32_t *)param));
 		break;
 	case CMD_SCTRL_SET_ANALOG10:
-		sctrl_analog_set(SCTRL_ANALOG_CTRL10, (*(UINT32 *)param));
+		sctrl_analog_set(SCTRL_ANALOG_CTRL10, (*(uint32_t *)param));
 		break;
 #endif // (CFG_SOC_NAME == SOC_BK7221U)
 	case CMD_SCTRL_GET_ANALOG0:
@@ -3320,31 +3321,31 @@ UINT32 sctrl_ctrl(UINT32 cmd, void *param)
 		break;
 
 	case CMD_SCTRL_AUDIO_PLL:
-		if((*(UINT32 *)param) == 48000000)						//48MHz
+		if((*(uint32_t *)param) == 48000000)						//48MHz
 		{
 			sctrl_analog_set(SCTRL_ANALOG_CTRL5,0x3B13B13B);
 		}
-		else if((*(UINT32 *)param) == 48128000)					//48.128MHz
+		else if((*(uint32_t *)param) == 48128000)					//48.128MHz
 		{
 			sctrl_analog_set(SCTRL_ANALOG_CTRL5,0x3B3C05AC);
 		}
-		else if((*(UINT32 *)param) == 48384000)					//48.384MHz
+		else if((*(uint32_t *)param) == 48384000)					//48.384MHz
 		{
 			sctrl_analog_set(SCTRL_ANALOG_CTRL5,0x3B8CAE8E);
 		}
-		else if((*(UINT32 *)param) == 49152000)					//49.152MHz
+		else if((*(uint32_t *)param) == 49152000)					//49.152MHz
 		{
 			sctrl_analog_set(SCTRL_ANALOG_CTRL5,0x3C7EA932);
 		}
-		else if((*(UINT32 *)param) == 49392000)					//49.392MHz
+		else if((*(uint32_t *)param) == 49392000)					//49.392MHz
 		{
 			sctrl_analog_set(SCTRL_ANALOG_CTRL5,0x3CCA4785);
 		}
-		else if((*(UINT32 *)param) == 50688000)					//50.688MHz
+		else if((*(uint32_t *)param) == 50688000)					//50.688MHz
 		{
 			sctrl_analog_set(SCTRL_ANALOG_CTRL5,0x3E629E7C);
 		}
-		else if((*(UINT32 *)param) == 50803200)					//50.8032MHz
+		else if((*(uint32_t *)param) == 50803200)					//50.8032MHz
 		{
 			sctrl_analog_set(SCTRL_ANALOG_CTRL5,0x3E86EA7A);
 		}
@@ -3369,7 +3370,7 @@ UINT32 sctrl_ctrl(UINT32 cmd, void *param)
         charger_start(param);
         break;
     case CMD_SCTRL_USB_CHARGE_STOP:
-        charger_stop((*(UINT32 *)param));
+        charger_stop((*(uint32_t *)param));
         break;
 #endif
 
@@ -3377,21 +3378,21 @@ UINT32 sctrl_ctrl(UINT32 cmd, void *param)
     case CMD_SCTRL_SET_LOW_PWR_CLK:
         reg = REG_READ(SCTRL_LOW_PWR_CLK);
         reg &=~(LPO_CLK_MUX_MASK);
-        reg |=((*(UINT32 *)param) << LPO_CLK_MUX_POSI);
+        reg |=((*(uint32_t *)param) << LPO_CLK_MUX_POSI);
         REG_WRITE(SCTRL_LOW_PWR_CLK, reg);
         break;
     case CMD_SCTRL_SET_GADC_SEL:
         #if (CFG_SOC_NAME == SOC_BK7231N)
         reg = sctrl_analog_get(SCTRL_ANALOG_CTRL4);
         reg &= ~(GADC_CAL_SEL_MASK << GADC_CAL_SEL_POSI);
-        reg |= (((*(UINT32 *)param) & GADC_CAL_SEL_MASK) << GADC_CAL_SEL_POSI);
+        reg |= (((*(uint32_t *)param) & GADC_CAL_SEL_MASK) << GADC_CAL_SEL_POSI);
         sctrl_analog_set(SCTRL_ANALOG_CTRL4, reg);
         #endif
         break;
     case CMD_SCTRL_SET_VDD_VALUE:
     	reg = REG_READ(SCTRL_DIGTAL_VDD);
     	reg &= (~(DIG_VDD_ACTIVE_MASK << DIG_VDD_ACTIVE_POSI));
-        reg |=((*(UINT32 *)param) << DIG_VDD_ACTIVE_POSI);
+        reg |=((*(uint32_t *)param) << DIG_VDD_ACTIVE_POSI);
     	REG_WRITE(SCTRL_DIGTAL_VDD, reg);
         break;
     case CMD_SCTRL_GET_VDD_VALUE:
@@ -3400,11 +3401,11 @@ UINT32 sctrl_ctrl(UINT32 cmd, void *param)
         break;
 
     case CMD_GET_SCTRL_RETETION:
-        *((UINT32 *)param) = REG_READ(SCTRL_SW_RETENTION);
+        *((uint32_t *)param) = REG_READ(SCTRL_SW_RETENTION);
         break;
 
     case CMD_SET_SCTRL_RETETION:
-        REG_WRITE(SCTRL_SW_RETENTION, *((UINT32 *)param));
+        REG_WRITE(SCTRL_SW_RETENTION, *((uint32_t *)param));
         break;
 
 #if (CFG_SOC_NAME == SOC_BK7221U)

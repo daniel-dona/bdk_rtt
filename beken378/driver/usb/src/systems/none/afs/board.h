@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef __MUSB_NONE_BOARD_H__
 #define __MUSB_NONE_BOARD_H__
 

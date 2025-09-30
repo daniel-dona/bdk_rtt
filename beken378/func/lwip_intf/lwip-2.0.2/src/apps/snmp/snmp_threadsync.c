@@ -1,3 +1,4 @@
+#include <stdint.h>
 /**
  * @file
  * SNMP thread synchronization implementation.
@@ -55,7 +56,7 @@ threadsync_get_value_synced(void *ctx)
 {
   struct threadsync_data *call_data = (struct threadsync_data*)ctx;
 
-  call_data->retval.s16 = call_data->proxy_instance.get_value(&call_data->proxy_instance, call_data->arg1.value);
+  call_data->retval.int16_t = call_data->proxy_instance.get_value(&call_data->proxy_instance, call_data->arg1.value);
 
   sys_sem_signal(&call_data->threadsync_node->instance->sem);
 }
@@ -68,7 +69,7 @@ threadsync_get_value(struct snmp_node_instance* instance, void* value)
   call_data->arg1.value = value;
   call_synced_function(call_data, threadsync_get_value_synced);
 
-  return call_data->retval.s16;
+  return call_data->retval.int16_t;
 }
 
 static void

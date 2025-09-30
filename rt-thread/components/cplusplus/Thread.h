@@ -1,3 +1,4 @@
+#include <stdbool.h>
 /*
  * File      : Thread.h
  * This file is part of RT-Thread RTOS
@@ -41,16 +42,16 @@ public:
       @param   stack_size      stack size (in bytes) requirements for the thread function. (default: DEFAULT_STACK_SIZE).
       @param   stack_pointer  pointer to the stack area to be used by this thread (default: NULL).
     */
-    Thread(rt_uint32_t stack_size = 2048,
-           rt_uint8_t  priority = (RT_THREAD_PRIORITY_MAX * 2)/3,
-           rt_uint32_t tick = 20,
+    Thread(uint32_t stack_size = 2048,
+           uint8_t  priority = (RT_THREAD_PRIORITY_MAX * 2)/3,
+           uint32_t tick = 20,
            const char *name = "th");
 
     Thread(void (*entry)(void *p),
            void *p = RT_NULL,
-           rt_uint32_t stack_size = 2048,
-           rt_uint8_t  priority = (RT_THREAD_PRIORITY_MAX * 2)/3,
-           rt_uint32_t tick = 20,
+           uint32_t stack_size = 2048,
+           uint8_t  priority = (RT_THREAD_PRIORITY_MAX * 2)/3,
+           uint32_t tick = 20,
            const char *name = "th");
 
     virtual ~Thread();

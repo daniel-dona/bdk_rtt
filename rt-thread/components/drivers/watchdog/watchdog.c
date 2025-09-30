@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : watchdog.h
  * This file is part of RT-Thread RTOS
@@ -44,7 +45,7 @@ static rt_err_t rt_watchdog_init(struct rt_device *dev)
     return (-RT_ENOSYS);
 }
 
-static rt_err_t rt_watchdog_open(struct rt_device *dev, rt_uint16_t oflag)
+static rt_err_t rt_watchdog_open(struct rt_device *dev, uint16_t oflag)
 {
     return (RT_EOK);
 }
@@ -95,7 +96,7 @@ const static struct rt_device_ops wdt_ops =
  */
 rt_err_t rt_hw_watchdog_register(struct rt_watchdog_device *wtd,
                                  const char                *name,
-                                 rt_uint32_t                flag,
+                                 uint32_t                flag,
                                  void                      *data)
 {
     struct rt_device *device;

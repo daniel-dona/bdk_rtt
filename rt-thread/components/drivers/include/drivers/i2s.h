@@ -1,3 +1,4 @@
+#include <stdint.h>
 
 #ifndef __I2S_H__
 #define __I2S_H__
@@ -20,8 +21,8 @@ extern "C" {
 
 struct rt_i2s_msg
 {
-    rt_uint16_t len;
-    rt_uint8_t  *buf;
+    uint16_t len;
+    uint8_t  *buf;
 };
 
 struct rt_i2s_bus_device;
@@ -30,13 +31,13 @@ struct rt_i2s_bus_device_ops
 {
     rt_size_t (*master_xfer)(struct rt_i2s_bus_device *bus,
                              struct rt_i2s_msg msgs[],
-                             rt_uint32_t num);
+                             uint32_t num);
     rt_size_t (*slave_xfer)(struct rt_i2s_bus_device *bus,
                             struct rt_i2s_msg msgs[],
-                            rt_uint32_t num);
+                            uint32_t num);
     rt_err_t (*i2c_bus_control)(struct rt_i2s_bus_device *bus,
-                                rt_uint32_t,
-                                rt_uint32_t);
+                                uint32_t,
+                                uint32_t);
 };
 
 /*for i2c bus driver*/
@@ -48,24 +49,24 @@ struct rt_i2s_bus_device
     /* tx members */
     struct rt_data_node_list *tx_list;
     char *tx_fifo;
-    rt_uint32_t tx_dma_irq_cnt;
-	rt_uint32_t tx_fill_pos;
-	rt_uint32_t tx_fill_size;
+    uint32_t tx_dma_irq_cnt;
+	uint32_t tx_fill_pos;
+	uint32_t tx_fill_size;
 
     /* rx members */
     char *rx_fifo;
     RB_DMA_WR_ST rb_dma_wr;
 
     /* common members */
-    rt_uint32_t sample_rate;
-    rt_uint16_t bits_length;
-    rt_uint16_t open_flag;
-    rt_uint16_t dbg_flag:1;
-	rt_uint16_t tx_paused:1;
-	rt_uint16_t tx_enabled:1;
-	rt_uint16_t rx_enabled:1;
+    uint32_t sample_rate;
+    uint16_t bits_length;
+    uint16_t open_flag;
+    uint16_t dbg_flag:1;
+	uint16_t tx_paused:1;
+	uint16_t tx_enabled:1;
+	uint16_t rx_enabled:1;
 
-    rt_uint16_t status;
+    uint16_t status;
 };
 
 #ifdef RT_I2S_DEBUG
@@ -79,17 +80,17 @@ rt_err_t rt_i2s_bus_device_register(struct rt_i2s_bus_device *bus,
 struct rt_i2s_bus_device *rt_i2s_bus_device_find(const char *bus_name);
 rt_size_t rt_i2s_transfer(struct rt_i2s_bus_device *bus,
                           struct rt_i2s_msg         msgs[],
-                          rt_uint32_t               num);
+                          uint32_t               num);
 rt_size_t rt_i2s_master_send(struct rt_i2s_bus_device *bus,
-                             rt_uint16_t               addr,
-                             rt_uint16_t               flags,
-                             const rt_uint8_t         *buf,
-                             rt_uint32_t               count);
+                             uint16_t               addr,
+                             uint16_t               flags,
+                             const uint8_t         *buf,
+                             uint32_t               count);
 rt_size_t rt_i2s_master_recv(struct rt_i2s_bus_device *bus,
-                             rt_uint16_t               addr,
-                             rt_uint16_t               flags,
-                             rt_uint8_t               *buf,
-                             rt_uint32_t               count);
+                             uint16_t               addr,
+                             uint16_t               flags,
+                             uint8_t               *buf,
+                             uint32_t               count);
 int rt_i2s_core_init(void);
 
 #ifdef __cplusplus

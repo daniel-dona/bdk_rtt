@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
   This file is part of UFFS, the Ultra-low-cost Flash File System.
   
@@ -97,18 +98,18 @@ extern "C"{
  * \brief uffs device storage attribute, provide by nand specific file
  */
 struct uffs_StorageAttrSt {
-	u32 total_blocks;		//!< total blocks in this chip
-	u16 page_data_size;		//!< page data size (physical page data size, e.g. 512)
-	u16 pages_per_block;	//!< pages per block
-	u8 spare_size;			//!< page spare size (physical page spare size, e.g. 16)
-	u8 block_status_offs;	//!< block status byte offset in spare
+	uint32_t total_blocks;		//!< total blocks in this chip
+	uint16_t page_data_size;		//!< page data size (physical page data size, e.g. 512)
+	uint16_t pages_per_block;	//!< pages per block
+	uint8_t spare_size;			//!< page spare size (physical page spare size, e.g. 16)
+	uint8_t block_status_offs;	//!< block status byte offset in spare
 	int ecc_opt;			//!< ecc option ( #UFFS_ECC_[NONE|SOFT|HW|HW_AUTO] )
 	int layout_opt;			//!< layout option (#UFFS_LAYOUT_UFFS or #UFFS_LAYOUT_FLASH)
 	int ecc_size;			//!< ecc size in bytes
-	const u8 *ecc_layout;	//!< page data ECC layout: [ofs1, size1, ofs2, size2, ..., 0xFF, 0]
-	const u8 *data_layout;	//!< spare data layout: [ofs1, size1, ofs2, size2, ..., 0xFF, 0]
-	u8 _uffs_ecc_layout[UFFS_SPARE_LAYOUT_SIZE];	//!< uffs spare ecc layout
-	u8 _uffs_data_layout[UFFS_SPARE_LAYOUT_SIZE];	//!< uffs spare data layout
+	const uint8_t *ecc_layout;	//!< page data ECC layout: [ofs1, size1, ofs2, size2, ..., 0xFF, 0]
+	const uint8_t *data_layout;	//!< spare data layout: [ofs1, size1, ofs2, size2, ..., 0xFF, 0]
+	uint8_t _uffs_ecc_layout[UFFS_SPARE_LAYOUT_SIZE];	//!< uffs spare ecc layout
+	uint8_t _uffs_data_layout[UFFS_SPARE_LAYOUT_SIZE];	//!< uffs spare data layout
 	void *_private;			//!< private data for storage attribute
 };
 
@@ -155,8 +156,8 @@ struct uffs_FlashOpsSt {
 	 *
 	 * \note pad 0xFF for calculating ECC if len < page_data_size
 	 */
-	int (*ReadPage)(uffs_Device *dev, u32 block, u32 page, u8 *data, int data_len, u8 *ecc,
-						u8 *spare, int spare_len);
+	int (*ReadPage)(uffs_Device *dev, uint32_t block, uint32_t page, uint8_t *data, int data_len, uint8_t *ecc,
+						uint8_t *spare, int spare_len);
 
 	/**
 	 * Read a full nand page, driver do the layout.
@@ -185,8 +186,8 @@ struct uffs_FlashOpsSt {
 	 * \note flash driver DO NOT need to do ecc correction for tag,
 	 *		UFFS will take care of tag ecc.
 	 */
-	int (*ReadPageWithLayout)(uffs_Device *dev, u32 block, u32 page, u8* data, int data_len, u8 *ecc,
-									uffs_TagStore *ts, u8 *ecc_store);
+	int (*ReadPageWithLayout)(uffs_Device *dev, uint32_t block, uint32_t page, uint8_t* data, int data_len, uint8_t *ecc,
+									uffs_TagStore *ts, uint8_t *ecc_store);
 
 	/**
 	 * Write a full page, UFFS do the layout for spare area.
@@ -201,8 +202,8 @@ struct uffs_FlashOpsSt {
 	 *			#UFFS_FLASH_IO_ERR: I/O error, expect retry ?
 	 *			#UFFS_FLASH_BAD_BLK: a bad block detected.
 	 */
-	int (*WritePage)(uffs_Device *dev, u32 block, u32 page,
-							const u8 *data, int data_len, const u8 *spare, int spare_len);
+	int (*WritePage)(uffs_Device *dev, uint32_t block, uint32_t page,
+							const uint8_t *data, int data_len, const uint8_t *spare, int spare_len);
 
 	/**
 	 * Write full page, flash driver do the layout for spare area.
@@ -220,8 +221,8 @@ struct uffs_FlashOpsSt {
 	 *			#UFFS_FLASH_IO_ERR: I/O error, expect retry ?
 	 *			#UFFS_FLASH_BAD_BLK: a bad block detected.
 	 */
-	int (*WritePageWithLayout)(uffs_Device *dev, u32 block, u32 page,
-							const u8 *data, int data_len, const u8 *ecc, const uffs_TagStore *ts);
+	int (*WritePageWithLayout)(uffs_Device *dev, uint32_t block, uint32_t page,
+							const uint8_t *data, int data_len, const uint8_t *ecc, const uffs_TagStore *ts);
 
 	/**
 	 * Check block status.
@@ -233,7 +234,7 @@ struct uffs_FlashOpsSt {
 	 *
 	 * \return 1 if it's a bad block, 0 if it's not.
 	 */
-	int (*IsBadBlock)(uffs_Device *dev, u32 block);
+	int (*IsBadBlock)(uffs_Device *dev, uint32_t block);
 
 	/**
 	 * Mark a new bad block.
@@ -243,7 +244,7 @@ struct uffs_FlashOpsSt {
 	 *
 	 * \return 0 if success, otherwise return -1.
 	 */
-	int (*MarkBadBlock)(uffs_Device *dev, u32 block);
+	int (*MarkBadBlock)(uffs_Device *dev, uint32_t block);
 
 	/**
 	 * Erase a block, driver MUST implement this function.
@@ -252,14 +253,14 @@ struct uffs_FlashOpsSt {
 	 *			#UFFS_FLASH_IO_ERR: I/O error, expect retry ?
 	 *			#UFFS_FLASH_BAD_BLK: a bad block detected.
 	 */
-	int (*EraseBlock)(uffs_Device *dev, u32 block);
+	int (*EraseBlock)(uffs_Device *dev, uint32_t block);
 };
 
 /** make spare from tag store and ecc */
-void uffs_FlashMakeSpare(uffs_Device *dev, const uffs_TagStore *ts, const u8 *ecc, u8* spare);
+void uffs_FlashMakeSpare(uffs_Device *dev, const uffs_TagStore *ts, const uint8_t *ecc, uint8_t* spare);
 
 /** unload tag and ecc from spare */
-void uffs_FlashUnloadSpare(uffs_Device *dev, const u8 *spare, struct uffs_TagStoreSt *ts, u8 *ecc);
+void uffs_FlashUnloadSpare(uffs_Device *dev, const uint8_t *spare, struct uffs_TagStoreSt *ts, uint8_t *ecc);
 
 /** read page spare and fill to tag */
 int uffs_FlashReadPageTag(uffs_Device *dev, int block, int page, uffs_Tags *tag);
@@ -290,7 +291,7 @@ URET uffs_FlashCheckErasedBlock(uffs_Device *dev, int block);
  *
  * \return #UFFS_PAGE_INFO_IOERR if I/O error, otherwise return page info
  */
-u32 uffs_FlashGetPageInfo(uffs_Device *dev, int block, int page);
+uint32_t uffs_FlashGetPageInfo(uffs_Device *dev, int block, int page);
 
 /** load uffs_FileInfo from flash storage */
 URET uffs_FlashReadFileinfoPhy(uffs_Device *dev, int block, int page, uffs_FileInfo *info);

@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 
@@ -15,20 +17,20 @@
 #define SPI_PERI_CLK_26M		(26 * 1000 * 1000)
 #define SPI_PERI_CLK_DCO		(180 * 1000 * 1000)
 
-UINT8 spi_channel = 0;
+uint8_t spi_channel = 0;
 
 static SDD_OPERATIONS spi_op = {
 	spi_ctrl
 };
 
-void spi_channel_set(UINT8 channel )
+void spi_channel_set(uint8_t channel )
 {
 	spi_channel = channel;
 }
 
-static void spi_active(BOOLEAN val)
+static void spi_active(bool val)
 {
-	UINT32 value;
+	uint32_t value;
 
 	value = REG_READ(SPI_CTRL(spi_channel));
 	if (val == 0)
@@ -38,9 +40,9 @@ static void spi_active(BOOLEAN val)
 	REG_WRITE(SPI_CTRL(spi_channel), value);
 }
 
-static void spi_set_msten(UINT8 val)
+static void spi_set_msten(uint8_t val)
 {
-	UINT32 value;
+	uint32_t value;
 
 	value = REG_READ(SPI_CTRL(spi_channel));
 	if (val == 0)
@@ -50,9 +52,9 @@ static void spi_set_msten(UINT8 val)
 	REG_WRITE(SPI_CTRL(spi_channel), value);
 }
 
-static void spi_set_ckpha(UINT8 val)
+static void spi_set_ckpha(uint8_t val)
 {
-	UINT32 value;
+	uint32_t value;
 
 	value = REG_READ(SPI_CTRL(spi_channel));
 	if (val == 0)
@@ -62,9 +64,9 @@ static void spi_set_ckpha(UINT8 val)
 	REG_WRITE(SPI_CTRL(spi_channel), value);
 }
 
-static void spi_set_skpol(UINT8 val)
+static void spi_set_skpol(uint8_t val)
 {
-	UINT32 value;
+	uint32_t value;
 
 	value = REG_READ(SPI_CTRL(spi_channel));
 	if (val == 0)
@@ -74,9 +76,9 @@ static void spi_set_skpol(UINT8 val)
 	REG_WRITE(SPI_CTRL(spi_channel), value);
 }
 
-static void spi_set_bit_wdth(UINT8 val)
+static void spi_set_bit_wdth(uint8_t val)
 {
-	UINT32 value;
+	uint32_t value;
 
 	value = REG_READ(SPI_CTRL(spi_channel));
 	if (val == 0)
@@ -86,9 +88,9 @@ static void spi_set_bit_wdth(UINT8 val)
 	REG_WRITE(SPI_CTRL(spi_channel), value);
 }
 
-static void spi_set_nssmd(UINT8 val)
+static void spi_set_nssmd(uint8_t val)
 {
-	UINT32 value;
+	uint32_t value;
 	value = REG_READ(SPI_CTRL(spi_channel));
 	value &= ~CTRL_NSSMD_3;
 	value |= (val << 17);
@@ -106,12 +108,12 @@ static void spi_set_nssmd(UINT8 val)
     spi_clk : 90M/10=9M    - DC0180 - DIV9
     spi_clk : 90M/11=8.18M - DC0180 - DIV10
 */
-static void spi_set_clock(UINT32 max_hz)
+static void spi_set_clock(uint32_t max_hz)
 {
 	int source_clk = 0;
 	int spi_clk = 0;
 	int div = 0;
-	UINT32 param;
+	uint32_t param;
 	os_printf("max_hz :%d\r\n", max_hz);
 
 	if (spi_channel == 0)
@@ -181,9 +183,9 @@ static void spi_set_clock(UINT32 max_hz)
 
 
 
-static void spi_rxint_enable(UINT8 val)
+static void spi_rxint_enable(uint8_t val)
 {
-	UINT32 value;
+	uint32_t value;
 
 	value = REG_READ(SPI_CTRL(spi_channel));
 	if (val == 0)
@@ -193,9 +195,9 @@ static void spi_rxint_enable(UINT8 val)
 	REG_WRITE(SPI_CTRL(spi_channel), value);
 }
 
-static void spi_txint_enable(UINT8 val)
+static void spi_txint_enable(uint8_t val)
 {
-	UINT32 value;
+	uint32_t value;
 
 	value = REG_READ(SPI_CTRL(spi_channel));
 	if (val == 0)
@@ -205,9 +207,9 @@ static void spi_txint_enable(UINT8 val)
 	REG_WRITE(SPI_CTRL(spi_channel), value);
 }
 
-static void spi_rxovr_enable(UINT8 val)
+static void spi_rxovr_enable(uint8_t val)
 {
-	UINT32 value;
+	uint32_t value;
 
 	value = REG_READ(SPI_CTRL(spi_channel));
 	if (val == 0)
@@ -217,9 +219,9 @@ static void spi_rxovr_enable(UINT8 val)
 	REG_WRITE(SPI_CTRL(spi_channel), value);
 }
 
-static void spi_txovr_enable(UINT8 val)
+static void spi_txovr_enable(uint8_t val)
 {
-	UINT32 value;
+	uint32_t value;
 
 	value = REG_READ(SPI_CTRL(spi_channel));
 	if (val == 0)
@@ -229,9 +231,9 @@ static void spi_txovr_enable(UINT8 val)
 	REG_WRITE(SPI_CTRL(spi_channel), value);
 }
 
-static void spi_rxint_mode(UINT8 val)
+static void spi_rxint_mode(uint8_t val)
 {
-	UINT32 value;
+	uint32_t value;
 
 	value = REG_READ(SPI_CTRL(spi_channel));
 
@@ -241,9 +243,9 @@ static void spi_rxint_mode(UINT8 val)
 	REG_WRITE(SPI_CTRL(spi_channel), value);
 }
 
-static void spi_txint_mode(UINT8 val)
+static void spi_txint_mode(uint8_t val)
 {
-	UINT32 value;
+	uint32_t value;
 
 	value = REG_READ(SPI_CTRL(spi_channel));
 
@@ -253,9 +255,9 @@ static void spi_txint_mode(UINT8 val)
 	REG_WRITE(SPI_CTRL(spi_channel), value);
 }
 
-static void spi_slave_set_cs_finish_interrupt(UINT32 enable)
+static void spi_slave_set_cs_finish_interrupt(uint32_t enable)
 {
-	UINT32 value;
+	uint32_t value;
 
 	value = REG_READ(SPI_CTRL(spi_channel));
 	if (enable)
@@ -272,7 +274,7 @@ static void spi_slave_set_cs_finish_interrupt(UINT32 enable)
 
 static void spi_gpio_configuration(void)
 {
-	UINT32 val;
+	uint32_t val;
 	if (spi_channel == 0)
 		val = GFUNC_MODE_SPI1;
 	else if (spi_channel == 1)
@@ -282,9 +284,9 @@ static void spi_gpio_configuration(void)
 	sddev_control(GPIO_DEV_NAME, CMD_GPIO_ENABLE_SECOND, &val);
 }
 
-static void spi_icu_configuration(UINT32 enable)
+static void spi_icu_configuration(uint32_t enable)
 {
-	UINT32 param, val;
+	uint32_t param, val;
 
 	if (spi_channel == 0) {
 		param = PWD_SPI1_CLK_BIT;
@@ -307,9 +309,9 @@ static void spi_icu_configuration(UINT32 enable)
 }
 
 
-static void spi_lsb_enbale(UINT8 val)
+static void spi_lsb_enbale(uint8_t val)
 {
-	UINT32 value;
+	uint32_t value;
 
 	value = REG_READ(SPI_CTRL(spi_channel));
 	if (val == 0)
@@ -320,9 +322,9 @@ static void spi_lsb_enbale(UINT8 val)
 }
 
 
-static void spi_tx_enbale(UINT8 val)
+static void spi_tx_enbale(uint8_t val)
 {
-	UINT32 value;
+	uint32_t value;
 
 	value = REG_READ(SPI_CONFIG(spi_channel));
 	if (val == 0)
@@ -332,9 +334,9 @@ static void spi_tx_enbale(UINT8 val)
 	REG_WRITE(SPI_CONFIG(spi_channel), value);
 }
 
-static void spi_rx_enbale(UINT8 val)
+static void spi_rx_enbale(uint8_t val)
 {
-	UINT32 value;
+	uint32_t value;
 
 	value = REG_READ(SPI_CONFIG(spi_channel));
 	if (val == 0)
@@ -344,9 +346,9 @@ static void spi_rx_enbale(UINT8 val)
 	REG_WRITE(SPI_CONFIG(spi_channel), value);
 }
 
-static void spi_txfinish_enbale(UINT8 val)
+static void spi_txfinish_enbale(uint8_t val)
 {
-	UINT32 value;
+	uint32_t value;
 
 	value = REG_READ(SPI_CONFIG(spi_channel));
 	if (val == 0)
@@ -357,9 +359,9 @@ static void spi_txfinish_enbale(UINT8 val)
 
 }
 
-static void spi_rxfinish_enbale(UINT8 val)
+static void spi_rxfinish_enbale(uint8_t val)
 {
-	UINT32 value;
+	uint32_t value;
 
 	value = REG_READ(SPI_CONFIG(spi_channel));
 	if (val == 0)
@@ -370,9 +372,9 @@ static void spi_rxfinish_enbale(UINT8 val)
 
 }
 
-static void set_txtrans_len(UINT32 val)
+static void set_txtrans_len(uint32_t val)
 {
-	UINT32 value;
+	uint32_t value;
 
 	value = REG_READ(SPI_CONFIG(spi_channel));
 
@@ -382,10 +384,10 @@ static void set_txtrans_len(UINT32 val)
 	REG_WRITE(SPI_CONFIG(spi_channel), value);
 }
 
-__maybe_unused static void set_rxtrans_len(UINT32 val);
-static void set_rxtrans_len(UINT32 val)
+__maybe_unused static void set_rxtrans_len(uint32_t val);
+static void set_rxtrans_len(uint32_t val)
 {
-	UINT32 value;
+	uint32_t value;
 
 	value = REG_READ(SPI_CONFIG(spi_channel));
 
@@ -395,10 +397,10 @@ static void set_rxtrans_len(UINT32 val)
 	REG_WRITE(SPI_CONFIG(spi_channel), value);
 }
 
-static void spi_init_msten(UINT8 param)
+static void spi_init_msten(uint8_t param)
 {
-	UINT32 value = 0;
-	UINT8 msten = (param & 0x0F);
+	uint32_t value = 0;
+	uint8_t msten = (param & 0x0F);
 
 	value = REG_READ(SPI_CTRL(spi_channel));
 	value &= ~((TXINT_MODE_MASK << TXINT_MODE_POSI) | (RXINT_MODE_MASK << RXINT_MODE_POSI));
@@ -420,7 +422,7 @@ static void spi_init_msten(UINT8 param)
 
 static void spi_deinit_msten(void)
 {
-	UINT32 status;
+	uint32_t status;
 
 	spi_icu_configuration(0);
 
@@ -432,7 +434,7 @@ static void spi_deinit_msten(void)
 
 static void spi_rxfifo_clr(void)
 {
-	UINT32 value;
+	uint32_t value;
 
 	value = REG_READ(SPI_STAT(spi_channel));
 
@@ -442,9 +444,9 @@ static void spi_rxfifo_clr(void)
 	}
 }
 
-UINT32 spi_read_rxfifo(UINT8 *data)
+uint32_t spi_read_rxfifo(uint8_t *data)
 {
-	UINT32 value;
+	uint32_t value;
 
 	value = REG_READ(SPI_STAT(spi_channel));
 
@@ -463,9 +465,9 @@ UINT32 spi_read_rxfifo(UINT8 *data)
 }
 
 
-UINT32 spi_write_txfifo(UINT8 data)
+uint32_t spi_write_txfifo(uint8_t data)
 {
-	UINT32 value;
+	uint32_t value;
 
 	value = REG_READ(SPI_STAT(spi_channel));
 
@@ -532,57 +534,57 @@ void spi3_exit(void)
 	sddev_unregister_dev(SPI3_DEV_NAME);
 }
 
-UINT32 spi_ctrl(UINT32 cmd, void *param)
+uint32_t spi_ctrl(uint32_t cmd, void *param)
 {
-	UINT32 ret = SPI_SUCCESS;
+	uint32_t ret = SPI_SUCCESS;
 
 	peri_busy_count_add();
 
 	switch (cmd) {
 	case CMD_SPI_UNIT_ENABLE:
-		spi_active(*(UINT8 *)param);
+		spi_active(*(uint8_t *)param);
 		break;
 	case CMD_SPI_SET_MSTEN:
-		spi_set_msten(*(UINT8 *)param);
+		spi_set_msten(*(uint8_t *)param);
 		break;
 	case CMD_SPI_SET_CKPHA:
-		spi_set_ckpha(*(UINT8 *)param);
+		spi_set_ckpha(*(uint8_t *)param);
 		break;
 	case CMD_SPI_SET_CKPOL:
-		spi_set_skpol(*(UINT8 *)param);
+		spi_set_skpol(*(uint8_t *)param);
 		break;
 	case CMD_SPI_SET_BITWIDTH:
-		spi_set_bit_wdth(*(UINT8 *)param);
+		spi_set_bit_wdth(*(uint8_t *)param);
 		break;
 	case CMD_SPI_SET_NSSMD:
-		spi_set_nssmd(*(UINT8 *)param);
+		spi_set_nssmd(*(uint8_t *)param);
 		break;
 	case CMD_SPI_SET_CKR:
-		spi_set_clock(*(UINT32 *)param);
+		spi_set_clock(*(uint32_t *)param);
 		break;
 	case CMD_SPI_RXINT_EN:
-		spi_rxint_enable(*(UINT8 *)param);
+		spi_rxint_enable(*(uint8_t *)param);
 		break;
 	case CMD_SPI_TXINT_EN:
-		spi_txint_enable(*(UINT8 *)param);
+		spi_txint_enable(*(uint8_t *)param);
 		break;
 	case CMD_SPI_RXOVR_EN:
-		spi_rxovr_enable(*(UINT8 *)param);
+		spi_rxovr_enable(*(uint8_t *)param);
 		break;
 	case CMD_SPI_TXOVR_EN:
-		spi_txovr_enable(*(UINT8 *)param);
+		spi_txovr_enable(*(uint8_t *)param);
 		break;
 	case CMD_SPI_RXFIFO_CLR:
 		spi_rxfifo_clr();
 		break;
 	case CMD_SPI_RXINT_MODE:
-		spi_rxint_mode(*(UINT8 *)param);
+		spi_rxint_mode(*(uint8_t *)param);
 		break;
 	case CMD_SPI_TXINT_MODE:
-		spi_txint_mode(*(UINT8 *)param);
+		spi_txint_mode(*(uint8_t *)param);
 		break;
 	case CMD_SPI_INIT_MSTEN:
-		spi_init_msten(*(UINT8 *)param);
+		spi_init_msten(*(uint8_t *)param);
 		break;
 	case CMD_SPI_GET_BUSY:
 		break;
@@ -605,28 +607,28 @@ UINT32 spi_ctrl(UINT32 cmd, void *param)
 		spi_deinit_msten();
 		break;
 	case CMD_SPI_LSB_EN:
-		spi_lsb_enbale(*(UINT8 *)param);
+		spi_lsb_enbale(*(uint8_t *)param);
 		break;
 	case CMD_SPI_TX_EN:
-		spi_tx_enbale(*(UINT8 *)param);
+		spi_tx_enbale(*(uint8_t *)param);
 		break;
 	case CMD_SPI_RX_EN:
-		spi_rx_enbale(*(UINT8 *)param);
+		spi_rx_enbale(*(uint8_t *)param);
 		break;
 	case CMD_SPI_TXFINISH_EN:
-		spi_txfinish_enbale(*(UINT8 *)param);
+		spi_txfinish_enbale(*(uint8_t *)param);
 		break;
 	case CMD_SPI_RXFINISH_EN:
-		spi_rxfinish_enbale(*(UINT8 *)param);
+		spi_rxfinish_enbale(*(uint8_t *)param);
 		break;
 	case CMD_SPI_TXTRANS_EN:
-		set_txtrans_len(*(UINT32 *)param);
+		set_txtrans_len(*(uint32_t *)param);
 		break;
 	case CMD_SPI_RXTRANS_EN:
-		set_txtrans_len(*(UINT32 *)param);
+		set_txtrans_len(*(uint32_t *)param);
 		break;
 	case CMD_SPI_CS_EN:
-		spi_slave_set_cs_finish_interrupt(*(UINT32 *)param);
+		spi_slave_set_cs_finish_interrupt(*(uint32_t *)param);
 		break;
 	default:
 		ret = SPI_FAILURE;
@@ -640,7 +642,7 @@ UINT32 spi_ctrl(UINT32 cmd, void *param)
 
 void spi_isr(void)
 {
-	UINT32 status;
+	uint32_t status;
 
 	status = REG_READ(SPI_STAT(spi_channel));
 	REG_WRITE(SPI_STAT(spi_channel), status);
@@ -703,7 +705,7 @@ void spi_isr(void)
 }
 void spi2_isr(void)
 {
-	UINT32 status;
+	uint32_t status;
 
 	status = REG_READ(SPI_STAT(spi_channel));
 	REG_WRITE(SPI_STAT(spi_channel), status);
@@ -767,7 +769,7 @@ void spi2_isr(void)
 
 void spi3_isr(void)
 {
-	UINT32 status;
+	uint32_t status;
 
 	status = REG_READ(SPI_STAT(spi_channel));
 	REG_WRITE(SPI_STAT(spi_channel), status);

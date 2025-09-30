@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "uart_pub.h"
 #include "fusb_pub.h"
@@ -57,11 +58,11 @@ static void usb_host_test_udisk_thread_main( void *arg )
 }
 #endif
 
-UINT32 fusb_init(void)
+uint32_t fusb_init(void)
 {
-    UINT32 ret;
-    UINT32 status;
-    UINT32 op_flag;
+    uint32_t ret;
+    uint32_t status;
+    uint32_t op_flag;
     DD_HANDLE usb_handler;
 #if CFG_USE_USB_DEVICE_CARD_READER
     DD_HANDLE sdcard_handler;
@@ -121,11 +122,11 @@ UINT32 fusb_init(void)
 #define FIRST_BLOCK             1
 #define BLOCK_COUNT             1
 
-UINT8 test_buff[TEST_BUFFER_SIZE] = {0};
+uint8_t test_buff[TEST_BUFFER_SIZE] = {0};
 
 void fmsc_test_init(void)
 {
-    UINT32 status;
+    uint32_t status;
     void *parameter;
     DD_HANDLE usb_hdl;
 
@@ -158,12 +159,12 @@ void fmsc_fiddle_process(void)
 #define TEST_BUFFER_SIZE        1024 * 16
 #endif
 
-UINT8 test_buff[TEST_BUFFER_SIZE] = {0};
+uint8_t test_buff[TEST_BUFFER_SIZE] = {0};
 
 void fuvc_test_init( uint8_t LinkType )
 {
-    UINT32 param;
-    UINT32 status;
+    uint32_t param;
+    uint32_t status;
     void *parameter;
     DD_HANDLE usb_hdl;
 
@@ -209,7 +210,7 @@ void fuvc_fiddle_rx_vs(void)
 
 PROCESS_THREAD(fuvc_test, ev, data)
 {
-    UINT32 status;
+    uint32_t status;
     static DD_HANDLE usb_hdl;
 
     PROCESS_BEGIN();
@@ -224,7 +225,7 @@ PROCESS_THREAD(fuvc_test, ev, data)
         if(PROCESS_EVENT_MSG == ev)
         {
 #ifdef UVC_DEMO_SUPPORT102
-            UINT32 param;
+            uint32_t param;
 
             ddev_control(usb_hdl, UCMD_UVC_ENABLE_H264, 0);
             param = UVC_MUX_PARAM(UVC_FRAME_640_480, FPS_30);

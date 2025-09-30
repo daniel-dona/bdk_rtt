@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /**
  ****************************************************************************************
  *
@@ -435,8 +437,8 @@ __INLINE uint8_t get_user_pos(struct txdesc * txdesc)
 
 #endif // NX_EMB
 
-struct txdesc *tx_txdesc_prepare(UINT32 ac);
-void tx_txdesc_obtain(struct txdesc *desc, UINT32 ac);
+struct txdesc *tx_txdesc_prepare(uint32_t ac);
+void tx_txdesc_obtain(struct txdesc *desc, uint32_t ac);
 
 /// @}
 /// @}

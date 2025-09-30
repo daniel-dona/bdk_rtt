@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * hostapd / AP table
  * Copyright (c) 2002-2003, Jouni Malinen <j@w1.fi>
@@ -18,8 +19,8 @@ struct ap_info {
 	struct ap_info *next; /* next entry in AP list */
 	struct ap_info *prev; /* previous entry in AP list */
 	struct ap_info *hnext; /* next entry in hash table list */
-	u8 addr[6];
-	u8 supported_rates[WLAN_SUPP_RATES_MAX];
+	uint8_t addr[6];
+	uint8_t supported_rates[WLAN_SUPP_RATES_MAX];
 	int erp; /* ERP Info or -1 if ERP info element not present */
 
 	int channel;

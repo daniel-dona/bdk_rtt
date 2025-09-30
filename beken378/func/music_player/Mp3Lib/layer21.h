@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _LAYER21_H
 #define _LAYER21_H
 

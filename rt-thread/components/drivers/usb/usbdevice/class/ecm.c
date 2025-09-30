@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : ecm.c
  * This file is part of RT-Thread RTOS
@@ -37,11 +38,11 @@ struct rt_ecm_eth
     struct ufunction *      func;
     struct cdc_eps          eps;
     /* interface address info */
-    rt_uint8_t              host_addr[MAX_ADDR_LEN];
-    rt_uint8_t              dev_addr[MAX_ADDR_LEN];
+    uint8_t              host_addr[MAX_ADDR_LEN];
+    uint8_t              dev_addr[MAX_ADDR_LEN];
 
     ALIGN(4)
-    rt_uint8_t              rx_pool[512];
+    uint8_t              rx_pool[512];
     ALIGN(4)
     rt_size_t               rx_size;
     ALIGN(4)
@@ -184,7 +185,7 @@ static struct usb_qualifier_descriptor dev_qualifier =
     0,
 };
 
-static rt_err_t _cdc_send_notifi(ufunction_t func,ucdc_notification_code_t notifi,rt_uint16_t wValue,rt_uint16_t wLength)
+static rt_err_t _cdc_send_notifi(ufunction_t func,ucdc_notification_code_t notifi,uint16_t wValue,uint16_t wLength)
 {
     static struct ucdc_management_element_notifications _notifi;
     cdc_eps_t eps;
@@ -289,7 +290,7 @@ static rt_err_t rt_ecm_eth_init(rt_device_t dev)
     return RT_EOK;
 }
 
-static rt_err_t rt_ecm_eth_open(rt_device_t dev, rt_uint16_t oflag)
+static rt_err_t rt_ecm_eth_open(rt_device_t dev, uint16_t oflag)
 {
     return RT_EOK;
 }
@@ -343,7 +344,7 @@ const static struct rt_device_ops ecm_device_ops =
 struct pbuf *rt_ecm_eth_rx(rt_device_t dev)
 {
     struct pbuf* p = RT_NULL;
-    rt_uint32_t offset = 0;
+    uint32_t offset = 0;
     rt_ecm_eth_t ecm_eth_dev = (rt_ecm_eth_t)dev;
     if(ecm_eth_dev->rx_size != 0)
     {
@@ -357,7 +358,7 @@ struct pbuf *rt_ecm_eth_rx(rt_device_t dev)
             {
                 /* Copy the received frame into buffer from memory pointed by the current ETHERNET DMA Rx descriptor */
                 rt_memcpy(q->payload,
-                        (rt_uint8_t *)((ecm_eth_dev->rx_buffer) + offset),
+                        (uint8_t *)((ecm_eth_dev->rx_buffer) + offset),
                         q->len);
                 offset += q->len;
             }
@@ -488,7 +489,7 @@ static struct ufunction_ops ops =
  *
  * @return RT_EOK on successful.
  */
-static rt_err_t _cdc_descriptor_config(ucdc_comm_desc_t comm, rt_uint8_t cintf_nr, ucdc_data_desc_t data, rt_uint8_t dintf_nr, rt_uint8_t device_is_hs)
+static rt_err_t _cdc_descriptor_config(ucdc_comm_desc_t comm, uint8_t cintf_nr, ucdc_data_desc_t data, uint8_t dintf_nr, uint8_t device_is_hs)
 {
     comm->call_mgmt_desc.data_interface = dintf_nr;
     comm->union_desc.master_interface = cintf_nr;
@@ -587,17 +588,17 @@ ufunction_t rt_usbd_function_ecm_create(udevice_t device)
     _ecm_eth->dev_addr[1] = 0x97;
     _ecm_eth->dev_addr[2] = 0xF6;
     /* generate random MAC. */
-    _ecm_eth->dev_addr[3] = 0x94;//*(const rt_uint8_t *)(0x1fff7a10);
-    _ecm_eth->dev_addr[4] = 0xEC;//*(const rt_uint8_t *)(0x1fff7a14);
-    _ecm_eth->dev_addr[5] = 0xAC;//(const rt_uint8_t *)(0x1fff7a18);
+    _ecm_eth->dev_addr[3] = 0x94;//*(const uint8_t *)(0x1fff7a10);
+    _ecm_eth->dev_addr[4] = 0xEC;//*(const uint8_t *)(0x1fff7a14);
+    _ecm_eth->dev_addr[5] = 0xAC;//(const uint8_t *)(0x1fff7a18);
     /* OUI 00-00-00, only for test. */
     _ecm_eth->host_addr[0] = 0x34;
     _ecm_eth->host_addr[1] = 0x97;
     _ecm_eth->host_addr[2] = 0xF6;
     /* generate random MAC. */
-    _ecm_eth->host_addr[3] = 0x94;//*(const rt_uint8_t *)(0x1fff7a10);
-    _ecm_eth->host_addr[4] = 0xEC;//*(const rt_uint8_t *)(0x1fff7a14);
-    _ecm_eth->host_addr[5] = 0xAB;//*(const rt_uint8_t *)(0x1fff7a18);
+    _ecm_eth->host_addr[3] = 0x94;//*(const uint8_t *)(0x1fff7a10);
+    _ecm_eth->host_addr[4] = 0xEC;//*(const uint8_t *)(0x1fff7a14);
+    _ecm_eth->host_addr[5] = 0xAB;//*(const uint8_t *)(0x1fff7a18);
 
     _ecm_eth->parent.parent.init       = rt_ecm_eth_init;
     _ecm_eth->parent.parent.open       = rt_ecm_eth_open;

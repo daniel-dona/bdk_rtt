@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef __CAMERA_INTF_PUB_H__
 #define __CAMERA_INTF_PUB_H__
 
@@ -20,13 +21,13 @@ struct camera_sensor_t{
 
 };
 
-//void camera_flip(UINT8 n);
+//void camera_flip(uint8_t n);
 void camera_intfer_init(void *ejpeg_data, camera_sensor_t *sensor);
 void camera_intfer_deinit(camera_sensor_t *sensor);
 
 camera_sensor_t* camera_detect(void);
 
-//UINT32 camera_intfer_set_video_param(UINT32 ppi_type, UINT32 pfs_type);
+//uint32_t camera_intfer_set_video_param(uint32_t ppi_type, uint32_t pfs_type);
 
 #endif // __CAMERA_INTF_PUB_H__
 

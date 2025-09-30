@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 
 #if (CFG_USE_APP_DEMO_VIDEO_TRANSFER)
@@ -22,10 +23,10 @@
 
 typedef struct vbuf_hdr_st
 {
-    UINT8 id;
-    UINT8 is_eof;
-    UINT8 pkt_cnt;
-    UINT8 pkt_seq;
+    uint8_t id;
+    uint8_t is_eof;
+    uint8_t pkt_cnt;
+    uint8_t pkt_seq;
 } VB_HDR_ST, *VB_HDR_PTR;
 
 #define BUF_STA_DONE        0
@@ -36,26 +37,26 @@ typedef struct video_buffer_st
 {
     beken_semaphore_t aready_semaphore;
 
-    UINT8 *buf_base;  // handler in usr thread
-    UINT32 buf_len;
+    uint8_t *buf_base;  // handler in usr thread
+    uint32_t buf_len;
 
-    UINT32 frame_id;
-    UINT32 frame_pkt_cnt;
+    uint32_t frame_id;
+    uint32_t frame_pkt_cnt;
 
-    UINT8 *buf_ptr;
-    UINT32 frame_len;
-    UINT32 start_buf;
+    uint8_t *buf_ptr;
+    uint32_t frame_len;
+    uint32_t start_buf;
 } VBUF_ST, *VBUF_PTR;
 
 VBUF_PTR g_vbuf = NULL;
-static UINT32 g_pkt_seq = 0;
+static uint32_t g_pkt_seq = 0;
 
 static void video_buffer_add_pkt_header(TV_HDR_PARAM_PTR param)
 {
     VB_HDR_PTR elem_tvhdr = (VB_HDR_PTR)param->ptk_ptr;
 
     g_pkt_seq++;
-    elem_tvhdr->id = (UINT8)param->frame_id;
+    elem_tvhdr->id = (uint8_t)param->frame_id;
     elem_tvhdr->is_eof = param->is_eof;
     elem_tvhdr->pkt_cnt = param->frame_len;
     elem_tvhdr->pkt_seq = g_pkt_seq;
@@ -69,12 +70,12 @@ static void video_buffer_add_pkt_header(TV_HDR_PARAM_PTR param)
     }
 }
 
-static int video_buffer_recv_video_data(UINT8 *data, UINT32 len)
+static int video_buffer_recv_video_data(uint8_t *data, uint32_t len)
 {
     if (g_vbuf->buf_base)
     {
         VB_HDR_PTR hdr = (VB_HDR_PTR)data;
-        UINT32 org_len, left_len;
+        uint32_t org_len, left_len;
         GLOBAL_INT_DECLARATION();
 
         if (len < sizeof(VB_HDR_ST))
@@ -123,8 +124,8 @@ static int video_buffer_recv_video_data(UINT8 *data, UINT32 len)
 
                 if (hdr->is_eof == 1)
                 {
-                    UINT8 *sof_ptr, *eof_ptr, *crc_ptr;
-                    UINT32 p_len, right_image = 0;
+                    uint8_t *sof_ptr, *eof_ptr, *crc_ptr;
+                    uint32_t p_len, right_image = 0;
 
                     sof_ptr = g_vbuf->buf_base;
                     eof_ptr = g_vbuf->buf_base + (g_vbuf->frame_len - 7);
@@ -273,9 +274,9 @@ int video_buffer_close(void)
     return 0;
 }
 
-UINT32 video_buffer_read_frame(UINT8 *buf, UINT32 buf_len)
+uint32_t video_buffer_read_frame(uint8_t *buf, uint32_t buf_len)
 {
-    UINT32 frame_len = 0;
+    uint32_t frame_len = 0;
     GLOBAL_INT_DECLARATION();
 
     if ((buf == NULL) || (buf_len == 0))
@@ -286,7 +287,7 @@ UINT32 video_buffer_read_frame(UINT8 *buf, UINT32 buf_len)
     if (g_vbuf && (g_vbuf->buf_base == NULL))
     {
         int ret;
-        UINT32 timeout;
+        uint32_t timeout;
 
         // try to get semaphore, clear send by the previous frame
         while (rtos_get_semaphore(&g_vbuf->aready_semaphore, 0) == kNoErr);

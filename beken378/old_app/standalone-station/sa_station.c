@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "schedule_pub.h"
 #include "sa_station.h"

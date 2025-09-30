@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  *  VIA PadLock support functions
  *

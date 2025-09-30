@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef __AUDIO_PUB_H__
 #define __AUDIO_PUB_H__
 
@@ -19,15 +20,15 @@ enum CODEC_STATE
 
 typedef struct aud_dac_cfg_st
 {
-    UINT8 *buf;
-    UINT16 buf_len;
-    UINT16 freq;
-    UINT16 channels;
-    UINT16 dma_mode;
-    UINT16 mute_pin;
-    UINT16 def_volume;
+    uint8_t *buf;
+    uint16_t buf_len;
+    uint16_t freq;
+    uint16_t channels;
+    uint16_t dma_mode;
+    uint16_t mute_pin;
+    uint16_t def_volume;
     #if CFG_GENERAL_DMA
-    void (*buf_finish_cb)(UINT8 *buf, void *usr_data);
+    void (*buf_finish_cb)(uint8_t *buf, void *usr_data);
     void *usr_data;
     #endif
     
@@ -67,12 +68,12 @@ enum
 #define AUD_ADC_CMD_MAGIC            (0x2EBC0000)
 typedef struct aud_adc_cfg_st
 {
-    UINT8 *buf;
-    UINT16 buf_len;
-    UINT16 freq;
-    UINT16 channels;
-    UINT16 mode;
-    UINT32 linein_detect_pin;
+    uint8_t *buf;
+    uint16_t buf_len;
+    uint16_t freq;
+    uint16_t channels;
+    uint16_t mode;
+    uint32_t linein_detect_pin;
 } AUD_ADC_CFG_ST, *AUD_ADC_CFG_PTR;
 
 enum
@@ -97,33 +98,33 @@ enum
 #define AUD_ADC_MAX_THRED                   (0x10)
 #define AUD_ADC_MAX_VOLUME                  (124)
 
-void audio_adc_set_enable_bit(UINT32 enable);
-void audio_adc_set_int_enable_bit(UINT32 enable);
-void audio_adc_get_l_sample(INT16 *left);
-void audio_adc_get_l_and_r_samples(INT16 *left, INT16 *right);
-void audio_adc_set_hpf2_bypass_bit(UINT32 enable);
-void audio_adc_set_gain(UINT32 gain);
-void audio_adc_set_write_thred_bit(UINT32 thred);
-void audio_adc_set_sample_rate(UINT32 sample_rate);
-void audio_adc_set_dma(UINT32 enable);
-void audio_adc_set_volume(UINT32 volume);
+void audio_adc_set_enable_bit(uint32_t enable);
+void audio_adc_set_int_enable_bit(uint32_t enable);
+void audio_adc_get_l_sample(int16_t *left);
+void audio_adc_get_l_and_r_samples(int16_t *left, int16_t *right);
+void audio_adc_set_hpf2_bypass_bit(uint32_t enable);
+void audio_adc_set_gain(uint32_t gain);
+void audio_adc_set_write_thred_bit(uint32_t thred);
+void audio_adc_set_sample_rate(uint32_t sample_rate);
+void audio_adc_set_dma(uint32_t enable);
+void audio_adc_set_volume(uint32_t volume);
 
 /* DAC Interface */
-void audio_dac_set_enable_bit(UINT32 enable);
-void audio_dac_set_int_enable_bit(UINT32 enable);
-void audio_dac_set_read_thred_bit(UINT32 thred);
-void audio_dac_set_gain(UINT32 gain);
-void audio_dac_set_hpf1_bit(UINT32 enable);
-void audio_dac_set_hpf2_bit(UINT32 enable);
-void audio_dac_set_sample_rate(UINT32 sample_rate);
-void audio_dac_set_sample(INT16 left, INT16 right);
+void audio_dac_set_enable_bit(uint32_t enable);
+void audio_dac_set_int_enable_bit(uint32_t enable);
+void audio_dac_set_read_thred_bit(uint32_t thred);
+void audio_dac_set_gain(uint32_t gain);
+void audio_dac_set_hpf1_bit(uint32_t enable);
+void audio_dac_set_hpf2_bit(uint32_t enable);
+void audio_dac_set_sample_rate(uint32_t sample_rate);
+void audio_dac_set_sample(int16_t left, int16_t right);
 void audio_dac_open_analog_regs(void);
 void audio_dac_close_analog_regs(void);
-void audio_dac_set_analog_mute(UINT32 enable);
+void audio_dac_set_analog_mute(uint32_t enable);
 void audio_dac_init_mute_pin(void);
-void audio_dac_eable_mute(UINT32 enable);
-UINT32 audio_dac_is_mute(void);
-void audio_dac_set_volume(UINT32 percent);
+void audio_dac_eable_mute(uint32_t enable);
+uint32_t audio_dac_is_mute(void);
+void audio_dac_set_volume(uint32_t percent);
 void audio_dac_volume_use_single_port(void);
 void audio_dac_volume_diff_port(void);
 

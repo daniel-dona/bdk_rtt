@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _MAC_PHY_BYPASSH_
 #define _MAC_PHY_BYPASS_H_
 
@@ -6,256 +7,256 @@
 typedef union
 {
 	struct {
-		VU32 bypass_en:1;
-		VU32 resv0:3;
-		VU32 mode:2;
-		VU32 resv1:2;
-		VU32 single_txen:1;
-		VU32 resv2:23;		
+		volatile uint32_t bypass_en:1;
+		volatile uint32_t resv0:3;
+		volatile uint32_t mode:2;
+		volatile uint32_t resv1:2;
+		volatile uint32_t single_txen:1;
+		volatile uint32_t resv2:23;		
 	}bits;
 	
-	VU32 value;
+	volatile uint32_t value;
 }MPB_REG0x0_TypeDef;
 
 typedef union
 {
 	struct {
-		VU32 pre_rxdelay:20;
-		VU32 resv2:12;		
+		volatile uint32_t pre_rxdelay:20;
+		volatile uint32_t resv2:12;		
 	}bits;
 	
-	VU32 value;
+	volatile uint32_t value;
 }MPB_REG0x1_TypeDef;
 
 typedef union
 {
 	struct {
-		VU32 rxdelay:20;
-		VU32 resv2:12;		
+		volatile uint32_t rxdelay:20;
+		volatile uint32_t resv2:12;		
 	}bits;
 	
-	VU32 value;
+	volatile uint32_t value;
 }MPB_REG0x2_TypeDef;
 
 typedef union
 {
 	struct {
-		VU32 pre_txdelay:20;
-		VU32 resv2:12;		
+		volatile uint32_t pre_txdelay:20;
+		volatile uint32_t resv2:12;		
 	}bits;
 	
-	VU32 value;
+	volatile uint32_t value;
 }MPB_REG0x3_TypeDef;
 
 typedef union
 {
 	struct {
-		VU32 txdelay:20;
-		VU32 resv2:12;		
+		volatile uint32_t txdelay:20;
+		volatile uint32_t resv2:12;		
 	}bits;
 	
-	VU32 value;
+	volatile uint32_t value;
 }MPB_REG0x4_TypeDef;
 
 typedef union
 {
 	struct {
-		VU32 rxstat:20;
-		VU32 resv2:12;		
+		volatile uint32_t rxstat:20;
+		volatile uint32_t resv2:12;		
 	}bits;
 	
-	VU32 value;
+	volatile uint32_t value;
 }MPB_REG0x8_TypeDef;
 
 typedef union
 {
 	struct {
-		VU32 txstat:20;
-		VU32 resv2:12;		
+		volatile uint32_t txstat:20;
+		volatile uint32_t resv2:12;		
 	}bits;
 	
-	VU32 value;
+	volatile uint32_t value;
 }MPB_REG0x9_TypeDef;
 
 typedef union
 {
 	struct {
-		VU32 rxerrstat:20;
-		VU32 resv2:12;		
+		volatile uint32_t rxerrstat:20;
+		volatile uint32_t resv2:12;		
 	}bits;
 	
-	VU32 value;
+	volatile uint32_t value;
 }MPB_REG0xA_TypeDef;
 
 typedef union
 {
 	struct {
-		VU32 txerrstat:20;
-		VU32 resv2:12;		
+		volatile uint32_t txerrstat:20;
+		volatile uint32_t resv2:12;		
 	}bits;
 	
-	VU32 value;
+	volatile uint32_t value;
 }MPB_REG0xB_TypeDef;
 
 
 typedef union
 {
 	struct {
-		VU32 txvector0:8;
-		VU32 resv1:24;		
+		volatile uint32_t txvector0:8;
+		volatile uint32_t resv1:24;		
 	}bits;
 	
-	VU32 value;
+	volatile uint32_t value;
 }MPB_REG0x80_TypeDef;
 
 typedef union
 {
 	struct {
-		VU32 txvector1:8;
-		VU32 resv1:24;		
+		volatile uint32_t txvector1:8;
+		volatile uint32_t resv1:24;		
 	}bits;
 	
-	VU32 value;
+	volatile uint32_t value;
 }MPB_REG0x81_TypeDef;
 
 typedef union
 {
 	struct {
-		VU32 txvector2:8;
-		VU32 resv1:24;		
+		volatile uint32_t txvector2:8;
+		volatile uint32_t resv1:24;		
 	}bits;
 	
-	VU32 value;
+	volatile uint32_t value;
 }MPB_REG0x82_TypeDef;
 
 typedef union
 {
 	struct {
-		VU32 txvector3:8;
-		VU32 resv1:24;		
+		volatile uint32_t txvector3:8;
+		volatile uint32_t resv1:24;		
 	}bits;
 	
-	VU32 value;
+	volatile uint32_t value;
 }MPB_REG0x83_TypeDef;
 
 typedef union
 {
 	struct {
-		VU32 txvector4:8;
-		VU32 resv1:24;		
+		volatile uint32_t txvector4:8;
+		volatile uint32_t resv1:24;		
 	}bits;
 	
-	VU32 value;
+	volatile uint32_t value;
 }MPB_REG0x84_TypeDef;
 
 typedef union
 {
 	struct {
-		VU32 txvector5:8;
-		VU32 resv1:24;		
+		volatile uint32_t txvector5:8;
+		volatile uint32_t resv1:24;		
 	}bits;
 	
-	VU32 value;
+	volatile uint32_t value;
 }MPB_REG0x85_TypeDef;
 
 typedef union
 {
 	struct {
-		VU32 txvector6:8;
-		VU32 resv1:24;		
+		volatile uint32_t txvector6:8;
+		volatile uint32_t resv1:24;		
 	}bits;
 	
-	VU32 value;
+	volatile uint32_t value;
 }MPB_REG0x86_TypeDef;
 
 typedef union
 {
 	struct {
-		VU32 txvector7:8;
-		VU32 resv1:24;		
+		volatile uint32_t txvector7:8;
+		volatile uint32_t resv1:24;		
 	}bits;
 	
-	VU32 value;
+	volatile uint32_t value;
 }MPB_REG0x87_TypeDef;
 
 typedef union
 {
 	struct {
-		VU32 txvector8:8;
-		VU32 resv1:24;		
+		volatile uint32_t txvector8:8;
+		volatile uint32_t resv1:24;		
 	}bits;
 	
-	VU32 value;
+	volatile uint32_t value;
 }MPB_REG0x88_TypeDef;
 
 typedef union
 {
 	struct {
-		VU32 txvector9:8;
-		VU32 resv1:24;		
+		volatile uint32_t txvector9:8;
+		volatile uint32_t resv1:24;		
 	}bits;
 	
-	VU32 value;
+	volatile uint32_t value;
 }MPB_REG0x89_TypeDef;
 
 typedef union
 {
 	struct {
-		VU32 txvector10:8;
-		VU32 resv1:24;		
+		volatile uint32_t txvector10:8;
+		volatile uint32_t resv1:24;		
 	}bits;
 	
-	VU32 value;
+	volatile uint32_t value;
 }MPB_REG0x8A_TypeDef;
 
 typedef union
 {
 	struct {
-		VU32 txvector11:8;
-		VU32 resv1:24;		
+		volatile uint32_t txvector11:8;
+		volatile uint32_t resv1:24;		
 	}bits;
 	
-	VU32 value;
+	volatile uint32_t value;
 }MPB_REG0x8B_TypeDef;
 
 typedef union
 {
 	struct {
-		VU32 txvector12:8;
-		VU32 resv1:24;		
+		volatile uint32_t txvector12:8;
+		volatile uint32_t resv1:24;		
 	}bits;
 	
-	VU32 value;
+	volatile uint32_t value;
 }MPB_REG0x8C_TypeDef;
 
 typedef union
 {
 	struct {
-		VU32 txvector13:8;
-		VU32 resv1:24;		
+		volatile uint32_t txvector13:8;
+		volatile uint32_t resv1:24;		
 	}bits;
 	
-	VU32 value;
+	volatile uint32_t value;
 }MPB_REG0x8D_TypeDef;
 
 typedef union
 {
 	struct {
-		VU32 txvector14:8;
-		VU32 resv1:24;		
+		volatile uint32_t txvector14:8;
+		volatile uint32_t resv1:24;		
 	}bits;
 	
-	VU32 value;
+	volatile uint32_t value;
 }MPB_REG0x8E_TypeDef;
 
 typedef union
 {
 	struct {
-		VU32 txvector15:8;
-		VU32 resv1:24;		
+		volatile uint32_t txvector15:8;
+		volatile uint32_t resv1:24;		
 	}bits;
 	
-	VU32 value;
+	volatile uint32_t value;
 }MPB_REG0x8F_TypeDef;
 
 struct MPB_TypeDef {
@@ -287,7 +288,7 @@ struct MPB_TypeDef {
     volatile MPB_REG0x8F_TypeDef  *r143;
 };
 
-extern UINT32 mpb_ctrl(UINT32 cmd, void *param);
+extern uint32_t mpb_ctrl(uint32_t cmd, void *param);
 #endif // _MAC_PHY_BYPASS_H_
 
 // eof

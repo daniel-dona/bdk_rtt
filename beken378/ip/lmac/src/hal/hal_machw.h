@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /**
  ****************************************************************************************
  *
@@ -47,7 +49,7 @@
 #define KEY_ENTRY_MIN_ID		 24
 #define KEY_ENTRY_MAX_ID		 63
 
-#define MONITOR_FAILURE         ((UINT32)-1)
+#define MONITOR_FAILURE         ((uint32_t)-1)
 #define MONITOR_SUCCESS         (0)
 
 /// Duration between AP TBTT and Beacon Transmission (in us, should be a multiple of 128us)
@@ -187,7 +189,7 @@ typedef struct
 #ifdef CFG_RWTL
 extern uint32_t tl_diff;
 #endif
-extern UINT32 last_rw_time;
+extern uint32_t last_rw_time;
 
 /**
  ****************************************************************************************

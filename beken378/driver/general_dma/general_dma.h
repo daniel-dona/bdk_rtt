@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef __GENER_DMA_H__
 #define __GENER_DMA_H__
 
@@ -256,7 +257,7 @@
 
 #endif // (CFG_SOC_NAME == SOC_BK7231)
 
-UINT32 gdma_ctrl(UINT32 cmd, void *param);
+uint32_t gdma_ctrl(uint32_t cmd, void *param);
 
 #endif // CFG_GENERAL_DMA
 

@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
   This file is part of UFFS, the Ultra-low-cost Flash File System.
   
@@ -62,7 +63,7 @@ struct uffs_PageSpareSt {
 struct uffs_BlockInfoSt {
 	struct uffs_BlockInfoSt *next;
 	struct uffs_BlockInfoSt *prev;
-	u16 block;							//!< block number
+	uint16_t block;							//!< block number
 	struct uffs_PageSpareSt *spares;	//!< page spare info array
 	int expired_count;					//!< how many pages expired in this block ? 
 	int ref_count;						//!< reference counter, it's safe to reuse this block memory when the counter is 0.

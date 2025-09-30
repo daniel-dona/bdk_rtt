@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <rtthread.h>
 #include <lwip/api.h>
 #include <lwip/sockets.h>
@@ -37,12 +38,12 @@ struct telnet_session
     rt_mutex_t tx_ringbuffer_lock;
 
     struct rt_device device;
-    rt_int32_t server_fd;
-    rt_int32_t client_fd;
+    int32_t server_fd;
+    int32_t client_fd;
 
     /* telnet protocol */
-    rt_uint8_t state;
-    rt_uint8_t echo_mode;
+    uint8_t state;
+    uint8_t echo_mode;
 
 };
 
@@ -52,7 +53,7 @@ static struct telnet_session* telnet;
 static void send_to_client(struct telnet_session* telnet)
 {
     rt_size_t length;
-    rt_uint8_t tx_buffer[32];
+    uint8_t tx_buffer[32];
 
     while (1)
     {
@@ -72,9 +73,9 @@ static void send_to_client(struct telnet_session* telnet)
 }
 
 /* send telnet option to remote */
-static void send_option_to_client(struct telnet_session* telnet, rt_uint8_t option, rt_uint8_t value)
+static void send_option_to_client(struct telnet_session* telnet, uint8_t option, uint8_t value)
 {
-    rt_uint8_t optbuf[4];
+    uint8_t optbuf[4];
 
     optbuf[0] = TELNET_IAC;
     optbuf[1] = option;
@@ -89,7 +90,7 @@ static void send_option_to_client(struct telnet_session* telnet, rt_uint8_t opti
 }
 
 /* process rx data */
-static void process_rx(struct telnet_session* telnet, rt_uint8_t *data, rt_size_t length)
+static void process_rx(struct telnet_session* telnet, uint8_t *data, rt_size_t length)
 {
     rt_size_t rx_length, index;
 
@@ -185,7 +186,7 @@ static rt_err_t telnet_init(rt_device_t dev)
     return RT_EOK;
 }
 
-static rt_err_t telnet_open(rt_device_t dev, rt_uint16_t oflag)
+static rt_err_t telnet_open(rt_device_t dev, uint16_t oflag)
 {
     return RT_EOK;
 }
@@ -209,9 +210,9 @@ static rt_size_t telnet_read(rt_device_t dev, rt_off_t pos, void* buffer, rt_siz
 
 static rt_size_t telnet_write (rt_device_t dev, rt_off_t pos, const void* buffer, rt_size_t size)
 {
-    const rt_uint8_t *ptr;
+    const uint8_t *ptr;
 
-    ptr = (rt_uint8_t*) buffer;
+    ptr = (uint8_t*) buffer;
 
     rt_mutex_take(telnet->tx_ringbuffer_lock, RT_WAITING_FOREVER);
     while (size)
@@ -229,7 +230,7 @@ static rt_size_t telnet_write (rt_device_t dev, rt_off_t pos, const void* buffer
     /* send data to telnet client */
     send_to_client(telnet);
 
-    return (rt_uint32_t) ptr - (rt_uint32_t) buffer;
+    return (uint32_t) ptr - (uint32_t) buffer;
 }
 
 static rt_err_t telnet_control(rt_device_t dev, int cmd, void *args)
@@ -244,8 +245,8 @@ static void telnet_thread(void* parameter)
 
     struct sockaddr_in addr;
     socklen_t addr_size;
-    rt_uint8_t recv_buf[RECV_BUF_LEN];
-    rt_int32_t recv_len = 0;
+    uint8_t recv_buf[RECV_BUF_LEN];
+    int32_t recv_len = 0;
 
     if ((telnet->server_fd = socket(AF_INET, SOCK_STREAM, 0)) == -1)
     {
@@ -337,7 +338,7 @@ void telnet_srv(void)
 
     if (telnet == RT_NULL)
     {
-        rt_uint8_t *ptr;
+        uint8_t *ptr;
 
         telnet = rt_malloc(sizeof(struct telnet_session));
         if (telnet == RT_NULL)

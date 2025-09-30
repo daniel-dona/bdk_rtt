@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <rtthread.h>
 #include <rthw.h>
 #include <rtdevice.h>
@@ -27,7 +28,7 @@
 #define AUDIO_ADC_DEF_VOLUME          (80)
 
 /* sample numbers */
-#define AUDIO_ADC_FIFO_SIZE           (AUD_ADC_MAX_THRED*4) // MAX_THRED * sizeof(int16) * channel
+#define AUDIO_ADC_FIFO_SIZE           (AUD_ADC_MAX_THRED*4) // MAX_THRED * sizeof(int16_t) * channel
 
 #define BEKEN_AUDIO_ADC_DMA           1
 
@@ -35,11 +36,11 @@ struct audio_mic_device
 {
     /* inherit from rt_device */
     struct rt_device parent;
-    rt_uint16_t *recv_fifo;
-    rt_uint16_t *cur_ptr;
-    rt_uint32_t recv_fifo_len;
-    rt_uint32_t n_channel;
-    rt_uint32_t stat;
+    uint16_t *recv_fifo;
+    uint16_t *cur_ptr;
+    uint32_t recv_fifo_len;
+    uint32_t n_channel;
+    uint32_t stat;
     struct rt_audio_pipe record_pipe;
 };
 
@@ -63,7 +64,7 @@ static rt_err_t audio_adc_init(rt_device_t dev)
     return RT_EOK;
 }
 
-static rt_err_t audio_adc_open(rt_device_t dev, rt_uint16_t oflag)
+static rt_err_t audio_adc_open(rt_device_t dev, uint16_t oflag)
 {
     struct audio_mic_device *audio_adc = RT_NULL;
 
@@ -120,7 +121,7 @@ static rt_err_t audio_adc_control(rt_device_t dev, int cmd, void *args)
             audio_adc_set_enable_bit(0);
             audio_adc_set_int_enable_bit(0);
 
-            audio->n_channel = *(rt_uint32_t *)args;
+            audio->n_channel = *(uint32_t *)args;
             
             adc_dma_init(audio);
 
@@ -133,14 +134,14 @@ static rt_err_t audio_adc_control(rt_device_t dev, int cmd, void *args)
         }
         else 
         {
-            audio->n_channel = *(rt_uint32_t *)args;
+            audio->n_channel = *(uint32_t *)args;
         }
         rt_kprintf("set adc channel %d \n", audio->n_channel);
         break;
         
     case CODEC_CMD_SET_VOLUME:
     {
-        rt_uint32_t volume = *(rt_uint32_t *)args;
+        uint32_t volume = *(uint32_t *)args;
 
         dbg_log(DBG_INFO, "set adc volume %d \n", volume);
 
@@ -150,7 +151,7 @@ static rt_err_t audio_adc_control(rt_device_t dev, int cmd, void *args)
 
     case CODEC_CMD_SAMPLERATE:
     {
-        rt_uint32_t freq = *(rt_uint32_t *)args;
+        uint32_t freq = *(uint32_t *)args;
         if ((audio->stat & ADC_IS_OPENED))
         {
             audio_adc_set_enable_bit(0);
@@ -181,7 +182,7 @@ static rt_err_t audio_adc_control(rt_device_t dev, int cmd, void *args)
 static rt_err_t audio_adc_close(rt_device_t dev)
 {
     struct audio_mic_device *audio_adc = RT_NULL;
-    rt_uint32_t stat;
+    uint32_t stat;
 
     audio_adc = (struct audio_mic_device *)dev;
     stat = audio_adc->stat;
@@ -210,12 +211,12 @@ static rt_err_t audio_adc_close(rt_device_t dev)
 	return 0;
 }
 
-void audio_adc_irq_handler(UINT32 arg)
+void audio_adc_irq_handler(uint32_t arg)
 {
-	rt_uint32_t status, cnt;
+	uint32_t status, cnt;
 	struct audio_mic_device *audio_adc = RT_NULL;
-	INT16 *left = 0;
-	INT16 *right = 0;
+	int16_t *left = 0;
+	int16_t *right = 0;
 
 	audio_adc = &_g_audio_mic;
 
@@ -225,10 +226,10 @@ void audio_adc_irq_handler(UINT32 arg)
 		while (!(status & (ADC_FIFO_EMPTY))) {
 
 			if (audio_adc->n_channel == 1) {
-				audio_adc_get_l_sample((INT16*)&audio_adc->recv_fifo[cnt++]);
+				audio_adc_get_l_sample((int16_t*)&audio_adc->recv_fifo[cnt++]);
 			} else {
-				left = (INT16*)&audio_adc->recv_fifo[cnt++];
-				right = (INT16*)&audio_adc->recv_fifo[cnt++];
+				left = (int16_t*)&audio_adc->recv_fifo[cnt++];
+				right = (int16_t*)&audio_adc->recv_fifo[cnt++];
 				audio_adc_get_l_and_r_samples(left, right);
 			}
 
@@ -241,34 +242,34 @@ void audio_adc_irq_handler(UINT32 arg)
 	}
 }
 
-void adc_dma_half_handler(UINT32 flag)
+void adc_dma_half_handler(uint32_t flag)
 {
 }
 
-void adc_dma_finish_handler(UINT32 flag)
+void adc_dma_finish_handler(uint32_t flag)
 {
     struct audio_mic_device *audio_adc = RT_NULL;
-    rt_uint8_t *adc_buf_ptr, *end_buf;
+    uint8_t *adc_buf_ptr, *end_buf;
 
     audio_adc = &_g_audio_mic;
-    adc_buf_ptr = (rt_uint8_t *)audio_adc->cur_ptr;
-    end_buf = ((rt_uint8_t *)audio_adc->recv_fifo) + audio_adc->recv_fifo_len;
+    adc_buf_ptr = (uint8_t *)audio_adc->cur_ptr;
+    end_buf = ((uint8_t *)audio_adc->recv_fifo) + audio_adc->recv_fifo_len;
 
     if(adc_buf_ptr) 
 	{	
 		GDMA_CFG_ST en_cfg; 
-		rt_uint8_t *write_ptr, *write_ptr_bak; 
+		uint8_t *write_ptr, *write_ptr_bak; 
 
 		en_cfg.channel = AUD_ADC_DEF_DMA_CHANNEL; 
-		write_ptr_bak = write_ptr = (rt_uint8_t *)sddev_control(GDMA_DEV_NAME, CMD_GDMA_GET_DST_WRITE_ADDR, &en_cfg); 
+		write_ptr_bak = write_ptr = (uint8_t *)sddev_control(GDMA_DEV_NAME, CMD_GDMA_GET_DST_WRITE_ADDR, &en_cfg); 
 
 		if(write_ptr < adc_buf_ptr) 
-			write_ptr = (end_buf - (rt_size_t)adc_buf_ptr) + (rt_size_t)(write_ptr - (rt_size_t)((rt_uint8_t *)audio_adc->recv_fifo)); 
+			write_ptr = (end_buf - (rt_size_t)adc_buf_ptr) + (rt_size_t)(write_ptr - (rt_size_t)((uint8_t *)audio_adc->recv_fifo)); 
 		else 
 			write_ptr -= (rt_size_t)adc_buf_ptr; 
 		// copy(actually only need change write ptr of pipe) 
 		rt_device_write(&audio_adc->record_pipe.parent, 0, 	adc_buf_ptr, (rt_size_t)write_ptr); 
-		audio_adc->cur_ptr = (rt_uint16_t *)write_ptr_bak; 
+		audio_adc->cur_ptr = (uint16_t *)write_ptr_bak; 
 	} 
 }
 
@@ -277,9 +278,9 @@ void adc_dma_init(struct audio_mic_device *audio_adc)
     GDMACFG_TPYES_ST cfg;
     GDMA_CFG_ST en_cfg;
 
-    rt_uint8_t *adc_buf_ptr = (rt_uint8_t *)audio_adc->recv_fifo;
+    uint8_t *adc_buf_ptr = (uint8_t *)audio_adc->recv_fifo;
     int adc_buf_len = audio_adc->recv_fifo_len;
-    rt_uint32_t n_channel = audio_adc->n_channel;
+    uint32_t n_channel = audio_adc->n_channel;
 
     rt_kprintf("adc-buf:%p, adc-buf-len:%d, ch:%d\r\n", adc_buf_ptr, adc_buf_len, n_channel);
     if(!adc_buf_ptr)
@@ -365,7 +366,7 @@ int rt_audio_adc_hw_init(void)
 
     {
         rt_size_t size = AUDIO_RECV_BUFFER_LEN * AUDIO_RECV_BUFFER_CNT;
-        rt_uint8_t *buf = sdram_malloc(size);
+        uint8_t *buf = sdram_malloc(size);
         if(buf == RT_NULL)
         {
             rt_device_unregister(&audio_adc->parent);
@@ -382,8 +383,8 @@ int rt_audio_adc_hw_init(void)
 
         // set the rx fifo which used by dma same as record pipe, save memery
         audio_adc->recv_fifo_len = size;
-        audio_adc->recv_fifo = (rt_uint16_t*)buf;
-        audio_adc->cur_ptr = (rt_uint16_t*)buf;
+        audio_adc->recv_fifo = (uint16_t*)buf;
+        audio_adc->cur_ptr = (uint16_t*)buf;
     }
 
     return RT_EOK;

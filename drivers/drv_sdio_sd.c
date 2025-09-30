@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <rtthread.h>
 #include <rthw.h>
 
@@ -18,11 +19,11 @@
 
 #if CFG_USE_SDCARD_HOST
 extern SDIO_Error sdcard_initialize(void);
-extern SDIO_Error sdcard_read_single_block(UINT8 *readbuff, UINT32 readaddr, UINT32 blocksize);
-extern SDIO_Error sdcard_write_single_block(UINT8 *writebuff, UINT32 writeaddr);
+extern SDIO_Error sdcard_read_single_block(uint8_t *readbuff, uint32_t readaddr, uint32_t blocksize);
+extern SDIO_Error sdcard_write_single_block(uint8_t *writebuff, uint32_t writeaddr);
 
-extern SDIO_Error sdcard_read_multi_block(UINT8 *read_buff, int first_block, int block_num);
-extern SDIO_Error sdcard_write_multi_block(UINT8 *write_buff, UINT32 first_block, UINT32 block_num);
+extern SDIO_Error sdcard_read_multi_block(uint8_t *read_buff, int first_block, int block_num);
+extern SDIO_Error sdcard_write_multi_block(uint8_t *write_buff, uint32_t first_block, uint32_t block_num);
 
 /* RT-Thread Device Driver Interface */
 static struct rt_device sdcard_device;
@@ -33,7 +34,7 @@ static rt_err_t rt_sdcard_init(rt_device_t dev)
     return RT_EOK;
 }
 
-static rt_err_t rt_sdcard_open(rt_device_t dev, rt_uint16_t oflag)
+static rt_err_t rt_sdcard_open(rt_device_t dev, uint16_t oflag)
 {
     rt_err_t ret;
     rt_mutex_take(&sdcard_mutex, RT_WAITING_FOREVER);
@@ -54,13 +55,13 @@ static rt_err_t rt_sdcard_close(rt_device_t dev)
 //static uint32_t sdio_buffer[SD_DEFAULT_BLOCK_SIZE/sizeof(uint32_t)];
 static rt_size_t rt_sdcard_read(rt_device_t dev, rt_off_t pos, void* buffer, rt_size_t size)
 {
-    UINT32 start_blk_addr;
-    UINT8  read_blk_num;
-    UINT8* read_data_buf;
+    uint32_t start_blk_addr;
+    uint8_t  read_blk_num;
+    uint8_t* read_data_buf;
     rt_mutex_take(&sdcard_mutex, RT_WAITING_FOREVER);
     start_blk_addr = pos;
     read_blk_num = size;
-    read_data_buf = (UINT8*)buffer;
+    read_data_buf = (uint8_t*)buffer;
 
 #if 0 
     for(num=0; num<read_blk_num; num++)
@@ -89,13 +90,13 @@ static rt_size_t rt_sdcard_read(rt_device_t dev, rt_off_t pos, void* buffer, rt_
 
 static rt_size_t rt_sdcard_write (rt_device_t dev, rt_off_t pos, const void* buffer, rt_size_t size)
 {
-    UINT32 start_blk_addr;
-    UINT8* write_data_buf;	
+    uint32_t start_blk_addr;
+    uint8_t* write_data_buf;	
 
     //	rt_kprintf("===rt write start addr=%x,size=%x====\r\n",pos,size);
     rt_mutex_take(&sdcard_mutex, RT_WAITING_FOREVER);
     start_blk_addr = pos;
-    write_data_buf = (rt_uint8_t *)buffer;
+    write_data_buf = (uint8_t *)buffer;
 #if 0
 	if(1 == size)
 	{

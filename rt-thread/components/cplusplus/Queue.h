@@ -1,3 +1,4 @@
+#include <stdbool.h>
 /*
  * File      : Queue.h
  * This file is part of RT-Thread RTOS
@@ -69,7 +70,7 @@ public:
     */
     bool get(T& data, int32_t millisec = WAIT_FOREVER)
     {
-        rt_int32_t tick;
+        int32_t tick;
 
         if (millisec < 0)
             tick = -1;

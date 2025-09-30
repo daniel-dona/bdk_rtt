@@ -46,8 +46,8 @@ void cgi_led_handler(struct webnet_session* session)
 
         if(led_no_str != RT_NULL && value_str != RT_NULL)
         {
-            rt_uint8_t led_no = atoi(led_no_str);
-            rt_uint8_t led_value = atoi(value_str);
+            uint8_t led_no = atoi(led_no_str);
+            uint8_t led_value = atoi(value_str);
 
             if(led_no < LED_COUNT)
 			{
@@ -58,8 +58,8 @@ void cgi_led_handler(struct webnet_session* session)
 
     /**< output led status */
     {
-        rt_uint32_t led_no = LED_COUNT;
-        rt_uint32_t index;
+        uint32_t led_no = LED_COUNT;
+        uint32_t index;
 
         /**< json begin */
         webnet_session_printf(session, "{");
@@ -67,7 +67,7 @@ void cgi_led_handler(struct webnet_session* session)
 
         for(index=0; index<led_no; index++)
         {
-            rt_uint8_t led_value = led_value_buffer[index];
+            uint8_t led_value = led_value_buffer[index];
 			led_value = rt_pin_read(index);
 			
 			if(led_value == 0)

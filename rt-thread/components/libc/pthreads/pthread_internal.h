@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : pthread_internal.h
  * This file is part of RT-Thread RTOS
@@ -47,7 +48,7 @@ typedef struct _pthread_key_data _pthread_key_data_t;
 #define PTHREAD_MAGIC   0x70746873
 struct _pthread_data
 {
-    rt_uint32_t magic;
+    uint32_t magic;
     pthread_attr_t attr;
     rt_thread_t tid;
 
@@ -61,9 +62,9 @@ struct _pthread_data
     rt_sem_t joinable_sem;
 
     /* cancel state and type */
-    rt_uint8_t cancelstate;
-    volatile rt_uint8_t canceltype;
-    volatile rt_uint8_t canceled;
+    uint8_t cancelstate;
+    volatile uint8_t canceltype;
+    volatile uint8_t canceled;
 
     _pthread_cleanup_t *cleanup;
     void** tls; /* thread-local storage area */

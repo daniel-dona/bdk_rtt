@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _SPI_PUB_H_
 #define _SPI_PUB_H_
 
@@ -86,17 +87,17 @@ enum
 struct spi_message
 {
 #if (CFG_SOC_NAME != SOC_BK7231N) && (CFG_SOC_NAME != SOC_BK7236)
-    UINT8 *send_buf;
-    UINT32 send_len;
+    uint8_t *send_buf;
+    uint32_t send_len;
 
-    UINT8 *recv_buf;
-    UINT32 recv_len;
+    uint8_t *recv_buf;
+    uint32_t recv_len;
 #else
-    UINT8*send_buf;
-    UINT32 send_len;
+    uint8_t*send_buf;
+    uint32_t send_len;
 
-    UINT8*recv_buf;
-    UINT32 recv_len;
+    uint8_t*recv_buf;
+    uint32_t recv_len;
 
 #endif
 };
@@ -106,10 +107,10 @@ struct spi_message
  */
 struct spi_configuration
 {
-    UINT8 mode;
-    UINT8 data_width;
-    UINT16 reserved;
-    UINT32 max_hz;
+    uint8_t mode;
+    uint8_t data_width;
+    uint16_t reserved;
+    uint32_t max_hz;
 };
 
 typedef void (*spi_callback)(int port, void *param);
@@ -122,15 +123,15 @@ struct spi_callback_des
 /*******************************************************************************
 * Function Declarations
 *******************************************************************************/
-UINT32 spi_read_rxfifo(UINT8 *data);
-UINT32 spi_write_txfifo(UINT8 data);
+uint32_t spi_read_rxfifo(uint8_t *data);
+uint32_t spi_write_txfifo(uint8_t data);
 
 void spi_init(void);
 void spi_exit(void);
 void spi_isr(void);
 
 #if (CFG_SOC_NAME == SOC_BK7271)
-void spi_channel_set(UINT8 channel );
+void spi_channel_set(uint8_t channel );
 void spi2_init(void);
 void spi2_exit(void);
 void spi2_isr(void);
@@ -140,22 +141,22 @@ void spi3_isr(void);
 #endif
 
 /*slave api*/
-int bk_spi_slave_init(UINT32 rate, UINT32 mode);
+int bk_spi_slave_init(uint32_t rate, uint32_t mode);
 int bk_spi_slave_xfer(struct spi_message *msg);
 int bk_spi_slave_deinit(void);
 
 /*master api*/
-int bk_spi_master_init(UINT32 rate,UINT32 mode);
+int bk_spi_master_init(uint32_t rate,uint32_t mode);
 int bk_spi_master_xfer(struct spi_message *msg);
 int bk_spi_master_deinit(void);
 
 #if CFG_USE_SPI_DMA
-int bk_spi_slave_dma_init(UINT32 mode, UINT32 rate, struct spi_message *spi_msg);
+int bk_spi_slave_dma_init(uint32_t mode, uint32_t rate, struct spi_message *spi_msg);
 int bk_spi_slave_dma_transfer(struct spi_message*spi_msg );
-int bk_spi_dma_init(UINT32 mode, UINT32 rate, struct spi_message *spi_msg);
-int bk_spi_dma_transfer(UINT32 mode, struct spi_message *spi_msg);
+int bk_spi_dma_init(uint32_t mode, uint32_t rate, struct spi_message *spi_msg);
+int bk_spi_dma_transfer(uint32_t mode, struct spi_message *spi_msg);
 int bk_spi_slave_dma_send(struct spi_message *spi_msg);
-int bk_spi_slave_dma_tx_init(UINT32 mode, UINT32 rate, struct spi_message *spi_msg);
+int bk_spi_slave_dma_tx_init(uint32_t mode, uint32_t rate, struct spi_message *spi_msg);
 
 
 #endif

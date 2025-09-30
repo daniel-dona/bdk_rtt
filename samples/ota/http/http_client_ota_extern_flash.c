@@ -90,11 +90,11 @@ static int spi_flash_partition_init(const struct fal_partition *part)
 int http_ota_extern_flash_download(const char *uri)
 {
     int res, length, total_length = 0;
-    rt_uint8_t need_reboot = 0;
+    uint8_t need_reboot = 0;
     int resp_status = (-1);
 
-    rt_uint8_t *buffer_read = RT_NULL;
-    rt_uint8_t *buffer_swap = RT_NULL;
+    uint8_t *buffer_read = RT_NULL;
+    uint8_t *buffer_swap = RT_NULL;
 
     struct webclient_session *session = RT_NULL;
     const struct fal_partition *dl_part = RT_NULL;
@@ -215,7 +215,7 @@ int http_ota_extern_flash_download(const char *uri)
                 char desc_part_name[16] = {0}; 
 
                 // Gets the original size of the OTA file
-                rt_uint32_t raw_size = (buffer_read[84] + (buffer_read[85] << 8) + (buffer_read[86] << 16) + (buffer_read[87] << 24));
+                uint32_t raw_size = (buffer_read[84] + (buffer_read[85] << 8) + (buffer_read[86] << 16) + (buffer_read[87] << 24));
                 log_i("OTA file raw size %d bytes.", raw_size); 
 
                 // Gets the describe partition name of the OTA file

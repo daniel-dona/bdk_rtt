@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : init.c
  * This file is part of RT-Thread RTOS
@@ -179,7 +180,7 @@ int entry(void)
 #ifndef RT_USING_HEAP
 /* if there is not enable heap, we should use static thread and stack. */
 ALIGN(8)
-static rt_uint8_t main_stack[RT_MAIN_THREAD_STACK_SIZE];
+static uint8_t main_stack[RT_MAIN_THREAD_STACK_SIZE];
 struct rt_thread main_thread;
 #endif
 

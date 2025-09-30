@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * wpa_supplicant/hostapd / Debug prints
  * Copyright (c) 2002-2013, Jouni Malinen <j@w1.fi>
@@ -284,10 +285,10 @@ void wpa_msg_register_ifname_cb(wpa_msg_get_ifname_func func);
 #define hostapd_logger(args...) do { } while (0)
 #define hostapd_logger_register_cb(f) do { } while (0)
 #else /* CONFIG_NO_HOSTAPD_LOGGER */
-void hostapd_logger(void *ctx, const u8 *addr, unsigned int module, int level,
+void hostapd_logger(void *ctx, const uint8_t *addr, unsigned int module, int level,
 		    const char *fmt, ...) PRINTF_FORMAT(5, 6);
 
-typedef void (*hostapd_logger_cb_func)(void *ctx, const u8 *addr,
+typedef void (*hostapd_logger_cb_func)(void *ctx, const uint8_t *addr,
 				       unsigned int module, int level,
 				       const char *txt, size_t len);
 

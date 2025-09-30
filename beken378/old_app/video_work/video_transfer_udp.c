@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 
 #if (CFG_USE_APP_DEMO_VIDEO_TRANSFER)
@@ -43,12 +44,12 @@ struct sockaddr_in *app_demo_remote = NULL;
 
 typedef struct tvideo_hdr_st
 {
-    UINT8 id;
-    UINT8 is_eof;
-    UINT8 pkt_cnt;
-    UINT8 size;
+    uint8_t id;
+    uint8_t is_eof;
+    uint8_t pkt_cnt;
+    uint8_t size;
     #if SUPPORT_TIANZHIHENG_DRONE
-    UINT32 unused;
+    uint32_t unused;
     #endif
 } HDR_ST, *HDR_PTR;
 
@@ -56,7 +57,7 @@ void app_demo_add_pkt_header(TV_HDR_PARAM_PTR param)
 {
     HDR_PTR elem_tvhdr = (HDR_PTR)param->ptk_ptr;
 
-    elem_tvhdr->id = (UINT8)param->frame_id;
+    elem_tvhdr->id = (uint8_t)param->frame_id;
     elem_tvhdr->is_eof = param->is_eof;
     elem_tvhdr->pkt_cnt = param->frame_len;
     elem_tvhdr->size = 0;
@@ -66,7 +67,7 @@ void app_demo_add_pkt_header(TV_HDR_PARAM_PTR param)
     #endif
 }
 
-static void app_demo_udp_handle_cmd_data(UINT8 *data, UINT16 len)
+static void app_demo_udp_handle_cmd_data(uint8_t *data, uint16_t len)
 {
     uint8_t crc_cal;
 
@@ -92,7 +93,7 @@ static void app_demo_udp_handle_cmd_data(UINT8 *data, UINT16 len)
     }
 
     {
-        extern void bk_send_byte(UINT8 uport, UINT8 data);
+        extern void bk_send_byte(uint8_t uport, uint8_t data);
         for (int i = 0; i < len; i++)
         {
             bk_send_byte(UART1_PORT, data[i]);
@@ -123,14 +124,14 @@ static void app_demo_udp_http_ota_handle(char *rev_data)
     //{
     // to do
     //
-    //app_demo_softap_send_msg(DAP_START_OTA, (u32)&ota_param);
+    //app_demo_softap_send_msg(DAP_START_OTA, (uint32_t)&ota_param);
 
     //os_memset(&ota_param, 0, sizeof(TV_OTA_ST));
     //}
 }
 #endif
 
-static void app_demo_udp_receiver(UINT8 *data, UINT32 len, struct sockaddr_in *app_demo_remote)
+static void app_demo_udp_receiver(uint8_t *data, uint32_t len, struct sockaddr_in *app_demo_remote)
 {
     GLOBAL_INT_DECLARATION();
 
@@ -144,7 +145,7 @@ static void app_demo_udp_receiver(UINT8 *data, UINT32 len, struct sockaddr_in *a
         if (data[1] == CMD_START_IMG)
         {
 
-            UINT8 *src_ipaddr = (UINT8 *)&app_demo_remote->sin_addr.s_addr;
+            uint8_t *src_ipaddr = (uint8_t *)&app_demo_remote->sin_addr.s_addr;
             APP_DEMO_UDP_PRT("src_ipaddr: %d.%d.%d.%d\r\n", src_ipaddr[0], src_ipaddr[1],
                              src_ipaddr[2], src_ipaddr[3]);
             APP_DEMO_UDP_PRT("udp connect to new port:%d\r\n", app_demo_remote->sin_port);
@@ -191,7 +192,7 @@ static void app_demo_udp_receiver(UINT8 *data, UINT32 len, struct sockaddr_in *a
 }
 
 #if APP_DEMO_EN_VOICE_TRANSFER
-static void app_demo_udp_voice_receiver(UINT8 *data, UINT32 len, struct sockaddr_in *udp_remote)
+static void app_demo_udp_voice_receiver(uint8_t *data, uint32_t len, struct sockaddr_in *udp_remote)
 {
     GLOBAL_INT_DECLARATION();
 
@@ -204,7 +205,7 @@ static void app_demo_udp_voice_receiver(UINT8 *data, UINT32 len, struct sockaddr
     {
         if (data[1] == CMD_VOICE_START)
         {
-            UINT8 *src_ipaddr = (char *)&udp_remote->sin_addr.s_addr;
+            uint8_t *src_ipaddr = (char *)&udp_remote->sin_addr.s_addr;
             APP_DEMO_UDP_PRT("voice transfer start\r\n");
             APP_DEMO_UDP_PRT("src_ipaddr: %d.%d.%d.%d\r\n", src_ipaddr[0], src_ipaddr[1],
                              src_ipaddr[2], src_ipaddr[3]);
@@ -236,12 +237,12 @@ static void app_demo_udp_main(beken_thread_arg_t data)
     socklen_t srvaddr_len = 0;
     fd_set watchfd;
     struct timeval timeout;
-    u8 *rcv_buf = NULL;
+    uint8_t *rcv_buf = NULL;
 
     APP_DEMO_UDP_FATAL("app_demo_udp_main entry\r\n");
     (void)(data);
 
-    rcv_buf = (u8 *) os_malloc((APP_DEMO_UDP_RCV_BUF_LEN + 1) * sizeof(u8));
+    rcv_buf = (uint8_t *) os_malloc((APP_DEMO_UDP_RCV_BUF_LEN + 1) * sizeof(uint8_t));
     if (!rcv_buf)
     {
         APP_DEMO_UDP_PRT("udp os_malloc failed\r\n");
@@ -472,7 +473,7 @@ app_udp_exit:
     rtos_delete_thread(NULL);
 }
 
-UINT32 app_demo_udp_init(void)
+uint32_t app_demo_udp_init(void)
 {
     int ret;
 
@@ -495,7 +496,7 @@ UINT32 app_demo_udp_init(void)
     return kNoErr;
 }
 
-int app_demo_udp_send_packet(UINT8 *data, UINT32 len)
+int app_demo_udp_send_packet(uint8_t *data, uint32_t len)
 {
     int send_byte = 0;
 
@@ -518,7 +519,7 @@ int app_demo_udp_send_packet(UINT8 *data, UINT32 len)
 }
 
 #if APP_DEMO_EN_VOICE_TRANSFER
-int app_demo_udp_voice_send_packet(UINT8 *data, UINT32 len)
+int app_demo_udp_voice_send_packet(uint8_t *data, uint32_t len)
 {
     int send_byte = 0;
 

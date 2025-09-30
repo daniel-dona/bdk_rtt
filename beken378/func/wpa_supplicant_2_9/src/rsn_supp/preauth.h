@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * wpa_supplicant - WPA2/RSN pre-authentication functions
  * Copyright (c) 2003-2009, Jouni Malinen <j@w1.fi>
@@ -14,13 +15,13 @@ struct wpa_scan_results;
 #if defined(IEEE8021X_EAPOL) && !defined(CONFIG_NO_WPA)
 
 void pmksa_candidate_free(struct wpa_sm *sm);
-int rsn_preauth_init(struct wpa_sm *sm, const u8 *dst,
+int rsn_preauth_init(struct wpa_sm *sm, const uint8_t *dst,
 		     struct eap_peer_config *eap_conf);
 void rsn_preauth_deinit(struct wpa_sm *sm);
 int rsn_preauth_scan_results(struct wpa_sm *sm);
-void rsn_preauth_scan_result(struct wpa_sm *sm, const u8 *bssid,
-			     const u8 *ssid, const u8 *rsn);
-void pmksa_candidate_add(struct wpa_sm *sm, const u8 *bssid,
+void rsn_preauth_scan_result(struct wpa_sm *sm, const uint8_t *bssid,
+			     const uint8_t *ssid, const uint8_t *rsn);
+void pmksa_candidate_add(struct wpa_sm *sm, const uint8_t *bssid,
 			 int prio, int preauth);
 void rsn_preauth_candidate_process(struct wpa_sm *sm);
 int rsn_preauth_get_status(struct wpa_sm *sm, char *buf, size_t buflen,
@@ -37,7 +38,7 @@ static inline void rsn_preauth_candidate_process(struct wpa_sm *sm)
 {
 }
 
-static inline int rsn_preauth_init(struct wpa_sm *sm, const u8 *dst,
+static inline int rsn_preauth_init(struct wpa_sm *sm, const uint8_t *dst,
 				   struct eap_peer_config *eap_conf)
 {
 	return -1;
@@ -52,13 +53,13 @@ static inline int rsn_preauth_scan_results(struct wpa_sm *sm)
 	return -1;
 }
 
-static inline void rsn_preauth_scan_result(struct wpa_sm *sm, const u8 *bssid,
-					   const u8 *ssid, const u8 *rsn)
+static inline void rsn_preauth_scan_result(struct wpa_sm *sm, const uint8_t *bssid,
+					   const uint8_t *ssid, const uint8_t *rsn)
 {
 }
 
 static inline void pmksa_candidate_add(struct wpa_sm *sm,
-				       const u8 *bssid,
+				       const uint8_t *bssid,
 				       int prio, int preauth)
 {
 }

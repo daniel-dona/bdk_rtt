@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  *  NIST SP800-38D compliant GCM implementation
  *

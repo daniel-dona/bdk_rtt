@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 
@@ -55,11 +56,11 @@
 #define CMD_WRITE_ENABLE          0x06
 #define CMD_WRITE_DISABLE         0x04
 
-__maybe_unused static UINT16 spi_flash_read_status(void);
+__maybe_unused static uint16_t spi_flash_read_status(void);
 
-static void spi_flash_send_command(UINT8 cmd)
+static void spi_flash_send_command(uint8_t cmd)
 {
-    UINT8 ucmd = cmd;
+    uint8_t ucmd = cmd;
     struct spi_message msg;
 
     os_memset(&msg, 0, sizeof(struct spi_message));
@@ -71,11 +72,11 @@ static void spi_flash_send_command(UINT8 cmd)
     bk_spi_master_xfer(&msg);
 }
 
-static UINT16 spi_flash_read_status(void)
+static uint16_t spi_flash_read_status(void)
 {
-    UINT16 ustatus = 0;
-    UINT8 ustatus_buf[READ_STATUS_LEN] = {0};
-    UINT8 ustatus_cmd[] = {CMD_READ_STATUS_S7_0};
+    uint16_t ustatus = 0;
+    uint8_t ustatus_buf[READ_STATUS_LEN] = {0};
+    uint8_t ustatus_cmd[] = {CMD_READ_STATUS_S7_0};
     struct spi_message msg;
 
     os_memset(&msg, 0, sizeof(struct spi_message));
@@ -96,10 +97,10 @@ static UINT16 spi_flash_read_status(void)
     return ustatus;
 }
 
-static UINT32 spi_flash_is_busy(void)
+static uint32_t spi_flash_is_busy(void)
 {
-    UINT8 ustatus_buf[READ_STATUS_LEN] = {0};
-    UINT8 ustatus_cmd[] = {CMD_READ_STATUS_S7_0};
+    uint8_t ustatus_buf[READ_STATUS_LEN] = {0};
+    uint8_t ustatus_cmd[] = {CMD_READ_STATUS_S7_0};
     struct spi_message msg;
 
     os_memset(&msg, 0, sizeof(struct spi_message));
@@ -112,9 +113,9 @@ static UINT32 spi_flash_is_busy(void)
     return (ustatus_buf[0] & FLASH_STATUS_WIP_BIT);
 }
 
-static void spi_flash_write_status(UINT16 ustatus)
+static void spi_flash_write_status(uint16_t ustatus)
 {
-    UINT8 ustatus_cmd[] = {CMD_WRITE_STATUS, 0x00, 0x00};
+    uint8_t ustatus_cmd[] = {CMD_WRITE_STATUS, 0x00, 0x00};
     struct spi_message msg;
 
     os_memset(&msg, 0, sizeof(struct spi_message));
@@ -141,11 +142,11 @@ static void spi_flash_write_status(UINT16 ustatus)
     bk_spi_master_xfer(&msg);
 }
 
-static void spi_flash_earse(UINT32 addr, UINT32 mode)
+static void spi_flash_earse(uint32_t addr, uint32_t mode)
 {
     struct spi_message msg;
-    UINT8 ucmd[] = {0x00, 0x00, 0x00, 0x00};
-    UINT32 send_len;
+    uint8_t ucmd[] = {0x00, 0x00, 0x00, 0x00};
+    uint32_t send_len;
 
     os_memset(&msg, 0, sizeof(struct spi_message));
 
@@ -201,10 +202,10 @@ static void spi_flash_earse(UINT32 addr, UINT32 mode)
     bk_spi_master_xfer(&msg);
 }
 
-static int spi_flash_read_page(UINT32 addr, UINT32 size, UINT8 *dst)
+static int spi_flash_read_page(uint32_t addr, uint32_t size, uint8_t *dst)
 {
     struct spi_message msg;
-    UINT8 ucmd[] = {CMD_READ_DATA, 0x00, 0x00, 0x00};
+    uint8_t ucmd[] = {CMD_READ_DATA, 0x00, 0x00, 0x00};
 
     if(dst == NULL)
         return 1;
@@ -236,10 +237,10 @@ static int spi_flash_read_page(UINT32 addr, UINT32 size, UINT8 *dst)
     return 0;
 }
 
-static int spi_flash_program_page(UINT32 addr, UINT32 size, UINT8 *src)
+static int spi_flash_program_page(uint32_t addr, uint32_t size, uint8_t *src)
 {
     struct spi_message msg;
-    UINT8 *ucmd;
+    uint8_t *ucmd;
 
     if(src == NULL)
         return 1;
@@ -298,7 +299,7 @@ static void spi_flash_init_extral_gpio(void)
 
 static void spi_flash_enable_voltage(void)
 {
-    UINT32 param;
+    uint32_t param;
 
     param = BLK_BIT_MIC_QSPI_RAM_OR_FLASH;
     sddev_control(SCTRL_DEV_NAME, CMD_SCTRL_BLK_ENABLE, &param);
@@ -312,7 +313,7 @@ static void spi_flash_enable_voltage(void)
 
 static void spi_flash_disable_voltage(void)
 {
-    UINT32 param;
+    uint32_t param;
 
     param = BLK_BIT_MIC_QSPI_RAM_OR_FLASH;
     sddev_control(SCTRL_DEV_NAME, CMD_SCTRL_BLK_DISABLE, &param);
@@ -334,11 +335,11 @@ void spi_flash_deinit(void)
     bk_spi_master_deinit();
 }
 
-UINT32 spi_flash_read_id(void)
+uint32_t spi_flash_read_id(void)
 {
-    UINT32 uid = 0;
-    UINT8 uid_buf[READ_ID_RESPONE_LEN] = {0};
-    UINT8 uid_cmd[] = {CMD_READ_ID};
+    uint32_t uid = 0;
+    uint8_t uid_buf[READ_ID_RESPONE_LEN] = {0};
+    uint8_t uid_cmd[] = {CMD_READ_ID};
     struct spi_message msg;
 
     os_memset(&msg, 0, sizeof(struct spi_message));
@@ -356,7 +357,7 @@ UINT32 spi_flash_read_id(void)
     return uid;
 }
 
-int spi_flash_read(UINT32 addr, UINT32 size, UINT8 *dst)
+int spi_flash_read(uint32_t addr, uint32_t size, uint8_t *dst)
 {
     if(dst == NULL)
         return 1;
@@ -369,7 +370,7 @@ int spi_flash_read(UINT32 addr, UINT32 size, UINT8 *dst)
     for(int i=0; i<size; )
     {
         int ret;
-        UINT32 dsize;
+        uint32_t dsize;
 
         if((size - i) >= FLASH_PHY_PAGE_SIZE)
             dsize = FLASH_PHY_PAGE_SIZE;
@@ -391,7 +392,7 @@ int spi_flash_read(UINT32 addr, UINT32 size, UINT8 *dst)
     return 0;
 }
 
-int spi_flash_write(UINT32 addr, UINT32 size, UINT8 *src)
+int spi_flash_write(uint32_t addr, uint32_t size, uint8_t *src)
 {
     if(src == NULL)
         return 1;
@@ -404,7 +405,7 @@ int spi_flash_write(UINT32 addr, UINT32 size, UINT8 *src)
     for(int i=0; i<size; )
     {
         int ret;
-        UINT32 dsize;
+        uint32_t dsize;
 
         if((size - i) >= FLASH_PHY_PAGE_SIZE)
             dsize = FLASH_PHY_PAGE_SIZE;
@@ -426,13 +427,13 @@ int spi_flash_write(UINT32 addr, UINT32 size, UINT8 *src)
     return 0;
 }
 
-int spi_flash_erase(UINT32 addr, UINT32 size)
+int spi_flash_erase(uint32_t addr, uint32_t size)
 {
     int left_size = (int)size;
 
     while (left_size > 0)
     {
-        UINT32 erase_size = 0, erase_mode;
+        uint32_t erase_size = 0, erase_mode;
 
         if(left_size <= 4 * 1024)
         {

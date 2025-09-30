@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : dfs_fs.h
  * This file is part of Device File System in RT-Thread RTOS

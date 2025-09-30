@@ -41,7 +41,7 @@ beken_thread_t ble_thread_handle = NULL;
 uint8_t ble_system_mode;
 uint8_t tx_pwr_idx;
 
-extern void intc_service_change_handler(UINT8 int_num, FUNCPTR isr);
+extern void intc_service_change_handler(uint8_t int_num, FUNCPTR isr);
 
 enum {
 	DUT_IDLE,
@@ -92,7 +92,7 @@ void platform_reset(uint32_t error)
 	bk_reboot();
 }
 
-void ble_set_power_up(uint32 up)
+void ble_set_power_up(uint32_t up)
 {
 	if (up) {
 		sddev_control(SCTRL_DEV_NAME, CMD_SCTRL_BLE_POWERUP, NULL);
@@ -126,9 +126,9 @@ uint8_t ble_get_sys_mode(void)
 	return ble_system_mode;
 }
 
-void ble_clk_power_up(uint32 up)
+void ble_clk_power_up(uint32_t up)
 {
-	UINT32 param;
+	uint32_t param;
 	param = PWD_BLE_CLK_BIT;
 	
 	if (up) {
@@ -181,7 +181,7 @@ void ble_exit(void)
 
 }
 
-void ble_send_msg(UINT32 data)
+void ble_send_msg(uint32_t data)
 {
 	BLE_MSG_T msg;
 
@@ -192,7 +192,7 @@ void ble_send_msg(UINT32 data)
 }
 
 extern int bk7011_reduce_vdddig_for_rx(int reduce);
-extern void intc_service_change_handler(UINT8 int_num, FUNCPTR isr);
+extern void intc_service_change_handler(uint8_t int_num, FUNCPTR isr);
 #define		BLE_DUT_DIVISION			(8)
 
 void enter_dut_fcc_mode(void)
@@ -409,10 +409,10 @@ void ble_entry(void)
     }
 }
 
-UINT32 ble_ctrl( UINT32 cmd, void *param )
+uint32_t ble_ctrl( uint32_t cmd, void *param )
 {
-	UINT32 reg;
-	UINT32 ret = ERR_SUCCESS;
+	uint32_t reg;
+	uint32_t ret = ERR_SUCCESS;
 
 	switch (cmd) {
 	case CMD_BLE_REG_INIT:
@@ -424,7 +424,7 @@ UINT32 ble_ctrl( UINT32 cmd, void *param )
 	case CMD_BLE_SET_CHANNEL:
 		reg = REG_READ(BLE_XVR_REG24);
 		reg &= ~(BLE_XVR_CHAN_MASK << BLE_XVR_CHAN_POST);
-		reg |= (*(UINT32 *)param) << BLE_XVR_CHAN_POST;
+		reg |= (*(uint32_t *)param) << BLE_XVR_CHAN_POST;
 		REG_WRITE(BLE_XVR_REG24, reg);
 		break;
 
@@ -432,9 +432,9 @@ UINT32 ble_ctrl( UINT32 cmd, void *param )
 		reg = REG_READ(BLE_XVR_REG24);
 		reg &= ~(BLE_XVR_AUTO_CHAN_MASK << BLE_XVR_AUTO_CHAN_POST);
 		REG_WRITE(BLE_XVR_REG24, reg);
-		if ((*(UINT8 *)param) == 0x00) {
+		if ((*(uint8_t *)param) == 0x00) {
 			reg = 0x3800;
-		} else if ((*(UINT8 *)param) == 0x01) {
+		} else if ((*(uint8_t *)param) == 0x01) {
 			reg = 0x3100;
 		} else {
 			bk_printf("unknow ble test mode\r\n");
@@ -463,7 +463,7 @@ void ble_dut_start(void)
 	ble_send_msg(BLE_DUT_START);
 }
 
-UINT32 ble_in_dut_mode(void)
+uint32_t ble_in_dut_mode(void)
 {
 	return (ble_dut_status == DUT_IDLE) ? 0 : 1;
 }

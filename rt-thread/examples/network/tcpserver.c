@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 #include <rtthread.h>
 
 #include <sys/socket.h> /* 使用BSD socket，需要包含socket.h头文件 */

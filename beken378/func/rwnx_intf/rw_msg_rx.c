@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "rw_msg_rx.h"
 #include "rw_pub.h"
@@ -54,27 +55,27 @@ IND_CALLBACK_T wlan_connect_user_cb = {0};
 
 extern FUNC_1PARAM_PTR bk_wlan_get_status_cb(void);
 extern void app_set_sema(void);
-extern int get_security_type_from_ie(u8 *, int, u16);
-extern void rwnx_cal_set_txpwr(UINT32 pwr_gain, UINT32 grate);
+extern int get_security_type_from_ie(uint8_t *, int, uint16_t);
+extern void rwnx_cal_set_txpwr(uint32_t pwr_gain, uint32_t grate);
 extern void bk7011_default_rxsens_setting(void);
 
 /* scan result malloc item */
-UINT8 *sr_malloc_result_item(UINT32 vies_len)
+uint8_t *sr_malloc_result_item(uint32_t vies_len)
 {
     return os_zalloc(vies_len + sizeof(struct sta_scan_res));
 }
 
 /* free scan result item */
-void sr_free_result_item(UINT8 *item_ptr)
+void sr_free_result_item(uint8_t *item_ptr)
 {
     os_free(item_ptr);
 }
 
-UINT8 *sr_malloc_shell(void)
+uint8_t *sr_malloc_shell(void)
 {
-    UINT8 *ptr;
-    UINT32 layer1_space_len;
-    UINT32 layer2_space_len;
+    uint8_t *ptr;
+    uint32_t layer1_space_len;
+    uint32_t layer2_space_len;
 
     layer1_space_len = sizeof(SCAN_RST_UPLOAD_T);
     layer2_space_len = MAX_BSS_LIST * sizeof(struct sta_scan_res *);
@@ -91,24 +92,24 @@ UINT8 *sr_malloc_shell(void)
 	}
 }
 
-void sr_free_shell(UINT8 *shell_ptr)
+void sr_free_shell(uint8_t *shell_ptr)
 {
     os_free(shell_ptr);
 }
 
 void sr_free_all(SCAN_RST_UPLOAD_T *scan_rst)
 {
-    UINT32 i;
+    uint32_t i;
 
     for(i = 0; i < scan_rst->scanu_num; i ++)
     {
-        sr_free_result_item((UINT8 *)scan_rst->res[i]);
+        sr_free_result_item((uint8_t *)scan_rst->res[i]);
         scan_rst->res[i] = 0;
     }
     scan_rst->scanu_num = 0;
 	scan_rst->ref = 0;
 
-    sr_free_shell((UINT8 *)scan_rst);
+    sr_free_shell((uint8_t *)scan_rst);
 }
 
 uint32_t sr_get_scan_number(void)
@@ -191,7 +192,7 @@ void mr_kmsg_init(void)
     co_list_init(&rw_msg_rx_head);
 }
 
-UINT32 mr_kmsg_fwd(struct ke_msg *msg)
+uint32_t mr_kmsg_fwd(struct ke_msg *msg)
 {
     GLOBAL_INT_DECLARATION();
 
@@ -209,9 +210,9 @@ void mr_kmsg_flush(void)
     while(mr_kmsg_fuzzy_handle());
 }
 
-UINT32 mr_kmsg_fuzzy_handle(void)
+uint32_t mr_kmsg_fuzzy_handle(void)
 {
-    UINT32 ret = 0;
+    uint32_t ret = 0;
     struct ke_msg *msg;
     struct co_list_hdr *node;
 
@@ -232,9 +233,9 @@ UINT32 mr_kmsg_fuzzy_handle(void)
     return ret;
 }
 
-UINT32 mr_kmsg_exact_handle(UINT16 rsp)
+uint32_t mr_kmsg_exact_handle(uint16_t rsp)
 {
-    UINT32 ret = 0;
+    uint32_t ret = 0;
     struct ke_msg *msg;
     struct co_list_hdr *node;
 
@@ -428,7 +429,7 @@ void mhdr_disconnect_ind(void *msg)
 
 #ifdef CONFIG_SME
 /* SM_ASSOCIATE_IND handler */
-void mhdr_assoc_ind(void *msg, UINT32 len)
+void mhdr_assoc_ind(void *msg, uint32_t len)
 {
 	struct ke_msg *msg_ptr;
 	struct sm_assoc_indication *ind;
@@ -451,12 +452,12 @@ void mhdr_assoc_ind(void *msg, UINT32 len)
 
 	mcu_prevent_clear(MCU_PS_CONNECT);
 
-    UINT32 reg = RF_HOLD_BY_CONNECT_BIT;
+    uint32_t reg = RF_HOLD_BY_CONNECT_BIT;
     sddev_control(SCTRL_DEV_NAME, CMD_RF_HOLD_BIT_CLR, &reg);
 }
 
 /* SM_AUTH_IND handler, send it to wpa_s */
-void mhdr_auth_ind(void *msg, UINT32 len)
+void mhdr_auth_ind(void *msg, uint32_t len)
 {
     struct ke_msg *msg_ptr;
     struct sm_auth_indication *ind;
@@ -469,7 +470,7 @@ void mhdr_auth_ind(void *msg, UINT32 len)
 
 
 #else /* !CONFIG_SME */
-void mhdr_connect_ind(void *msg, UINT32 len)
+void mhdr_connect_ind(void *msg, uint32_t len)
 {
 	struct ke_msg *msg_ptr;
 	struct sm_connect_ind *conn_ind_ptr;
@@ -508,14 +509,14 @@ void mhdr_connect_ind(void *msg, UINT32 len)
 #endif
 
 	mcu_prevent_clear(MCU_PS_CONNECT);
-	UINT32 reg = RF_HOLD_BY_CONNECT_BIT;
+	uint32_t reg = RF_HOLD_BY_CONNECT_BIT;
 	sddev_control(SCTRL_DEV_NAME, CMD_RF_HOLD_BIT_CLR, &reg);
 }
 
 #endif
 
 /* RXU_MGT_IND handler, send it to wpa_s */
-void mhdr_mgmt_ind(void *msg, UINT32 len)
+void mhdr_mgmt_ind(void *msg, uint32_t len)
 {
     struct ke_msg *msg_ptr = (struct ke_msg *)msg;
     struct rxu_mgt_ind *ind = (struct rxu_mgt_ind *)msg_ptr->param;
@@ -529,7 +530,7 @@ void mhdr_mgmt_ind(void *msg, UINT32 len)
 
 	os_memset(&data, 0, sizeof(data));
 	data.rx_mgmt.ssi_signal = ind->rssi;
-	data.rx_mgmt.frame = (u8 *)ind->payload;
+	data.rx_mgmt.frame = (uint8_t *)ind->payload;
 	data.rx_mgmt.frame_len = ind->length;
 	data.rx_mgmt.freq = ind->center_freq;
 
@@ -580,7 +581,7 @@ static void sort_scan_result(SCAN_RST_UPLOAD_T *ap_list)
     }
 }
 
-UINT32 mhdr_scanu_start_cfm(void *msg, SCAN_RST_UPLOAD_T *ap_list)
+uint32_t mhdr_scanu_start_cfm(void *msg, SCAN_RST_UPLOAD_T *ap_list)
 {
     struct scanu_start_cfm *cfm;
     struct ke_msg *msg_ptr;
@@ -599,12 +600,12 @@ UINT32 mhdr_scanu_start_cfm(void *msg, SCAN_RST_UPLOAD_T *ap_list)
 }
 
 
-UINT32 mhdr_scanu_result_ind(SCAN_RST_UPLOAD_T *scan_rst, void *msg, UINT32 len)
+uint32_t mhdr_scanu_result_ind(SCAN_RST_UPLOAD_T *scan_rst, void *msg, uint32_t len)
 {
-    UINT32 ret, chann;
-    UINT8 *elmt_addr;
-    UINT32 vies_len, i;
-    UINT8 *var_part_addr;
+    uint32_t ret, chann;
+    uint8_t *elmt_addr;
+    uint32_t vies_len, i;
+    uint8_t *var_part_addr;
     struct ke_msg *msg_ptr;
     SCAN_RST_ITEM_PTR item;
     SCAN_RST_UPLOAD_PTR result_ptr;
@@ -625,19 +626,19 @@ UINT32 mhdr_scanu_result_ind(SCAN_RST_UPLOAD_T *scan_rst, void *msg, UINT32 len)
     vies_len = scanu_ret_ptr->length - MAC_BEACON_VARIABLE_PART_OFT;
     var_part_addr = probe_rsp_ieee80211_ptr->rsp.variable;
 
-    elmt_addr = (UINT8 *)mac_ie_find((UINT32)var_part_addr, (UINT16)vies_len, MAC_ELTID_DS);
+    elmt_addr = (uint8_t *)mac_ie_find((uint32_t)var_part_addr, (uint16_t)vies_len, MAC_ELTID_DS);
     if(elmt_addr) // adjust channel
     {
         chann = *(elmt_addr + MAC_DS_CHANNEL_OFT);
         if(rw_ieee80211_is_scan_rst_in_countrycode(chann) == 0)
         {
-            elmt_addr = (UINT8 *)mac_ie_find((UINT32)var_part_addr,
-                                             (UINT16)vies_len,
+            elmt_addr = (uint8_t *)mac_ie_find((uint32_t)var_part_addr,
+                                             (uint16_t)vies_len,
                                              MAC_ELTID_SSID);
             if(elmt_addr)
             {
-                UINT8 ssid_b[MAC_SSID_LEN];
-                UINT8 ssid_len = *(elmt_addr + MAC_SSID_LEN_OFT);
+                uint8_t ssid_b[MAC_SSID_LEN];
+                uint8_t ssid_len = *(elmt_addr + MAC_SSID_LEN_OFT);
 
                 if (ssid_len > MAC_SSID_LEN)
                     ssid_len = MAC_SSID_LEN;
@@ -686,12 +687,12 @@ UINT32 mhdr_scanu_result_ind(SCAN_RST_UPLOAD_T *scan_rst, void *msg, UINT32 len)
     if (item == NULL)
         goto scan_rst_exit;
 
-    elmt_addr = (UINT8 *)mac_ie_find((UINT32)var_part_addr,
-                                     (UINT16)vies_len,
+    elmt_addr = (uint8_t *)mac_ie_find((uint32_t)var_part_addr,
+                                     (uint16_t)vies_len,
                                      MAC_ELTID_SSID);
     if(elmt_addr)
     {
-        UINT8 ssid_len = *(elmt_addr + MAC_SSID_LEN_OFT);
+        uint8_t ssid_len = *(elmt_addr + MAC_SSID_LEN_OFT);
 
         if (ssid_len > MAC_SSID_LEN)
             ssid_len = MAC_SSID_LEN;
@@ -715,11 +716,11 @@ UINT32 mhdr_scanu_result_ind(SCAN_RST_UPLOAD_T *scan_rst, void *msg, UINT32 len)
     item->ie_len = vies_len;
     os_memcpy(item + 1, var_part_addr, vies_len);
 
-    item->security = get_security_type_from_ie((u8 *)var_part_addr, vies_len, item->caps);
+    item->security = get_security_type_from_ie((uint8_t *)var_part_addr, vies_len, item->caps);
 
     if (replace_index >= 0)
     {
-        sr_free_result_item((UINT8 *)result_ptr->res[replace_index]);
+        sr_free_result_item((uint8_t *)result_ptr->res[replace_index]);
         result_ptr->res[replace_index] = item;
     }
     else
@@ -754,7 +755,7 @@ void rwnx_handle_recv_msg(struct ke_msg *rx_msg)
 		}
 
 		mhdr_scanu_start_cfm(rx_msg, scan_rst_set_ptr);
-        UINT32 reg = RF_HOLD_BY_SCAN_BIT;
+        uint32_t reg = RF_HOLD_BY_SCAN_BIT;
         sddev_control(SCTRL_DEV_NAME, CMD_RF_HOLD_BIT_CLR, &reg);
 		break;
 
@@ -824,7 +825,7 @@ void rwnx_handle_recv_msg(struct ke_msg *rx_msg)
 		/* disconnect indication */
 		os_printf("SM_DISCONNECT_IND\r\n");
 		mhdr_disconnect_ind(rx_msg);
-		extern UINT32 rwnx_sys_is_enable_hw_tpc(void);
+		extern uint32_t rwnx_sys_is_enable_hw_tpc(void);
 		if (rwnx_sys_is_enable_hw_tpc() == 0)
 			rwnx_cal_set_txpwr(20, 11);
 

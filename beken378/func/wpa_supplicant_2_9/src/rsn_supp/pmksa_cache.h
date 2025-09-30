@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * wpa_supplicant - WPA2/RSN PMKSA cache functions
  * Copyright (c) 2003-2009, 2011-2012, Jouni Malinen <j@w1.fi>
@@ -14,19 +15,19 @@
  */
 struct rsn_pmksa_cache_entry {
 	struct rsn_pmksa_cache_entry *next;
-	u8 pmkid[PMKID_LEN];
-	u8 pmk[PMK_LEN_MAX];
+	uint8_t pmkid[PMKID_LEN];
+	uint8_t pmk[PMK_LEN_MAX];
 	size_t pmk_len;
 	os_time_t expiration;
 	int akmp; /* WPA_KEY_MGMT_* */
-	u8 aa[ETH_ALEN];
+	uint8_t aa[ETH_ALEN];
 
 	/*
 	 * If FILS Cache Identifier is included (fils_cache_id_set), this PMKSA
 	 * cache entry is applicable to all BSSs (any BSSID/aa[]) that
 	 * advertise the same FILS Cache Identifier within the same ESS.
 	 */
-	u8 fils_cache_id[2];
+	uint8_t fils_cache_id[2];
 	unsigned int fils_cache_id_set:1;
 
 	os_time_t reauth_time;
@@ -60,30 +61,30 @@ pmksa_cache_init(void (*free_cb)(struct rsn_pmksa_cache_entry *entry,
 		 void *ctx, struct wpa_sm *sm);
 void pmksa_cache_deinit(struct rsn_pmksa_cache *pmksa);
 struct rsn_pmksa_cache_entry * pmksa_cache_get(struct rsn_pmksa_cache *pmksa,
-					       const u8 *aa, const u8 *pmkid,
+					       const uint8_t *aa, const uint8_t *pmkid,
 					       const void *network_ctx,
 					       int akmp);
 int pmksa_cache_list(struct rsn_pmksa_cache *pmksa, char *buf, size_t len);
 struct rsn_pmksa_cache_entry * pmksa_cache_head(struct rsn_pmksa_cache *pmksa);
 struct rsn_pmksa_cache_entry *
-pmksa_cache_add(struct rsn_pmksa_cache *pmksa, const u8 *pmk, size_t pmk_len,
-		const u8 *pmkid, const u8 *kck, size_t kck_len,
-		const u8 *aa, const u8 *spa, void *network_ctx, int akmp,
-		const u8 *cache_id);
+pmksa_cache_add(struct rsn_pmksa_cache *pmksa, const uint8_t *pmk, size_t pmk_len,
+		const uint8_t *pmkid, const uint8_t *kck, size_t kck_len,
+		const uint8_t *aa, const uint8_t *spa, void *network_ctx, int akmp,
+		const uint8_t *cache_id);
 struct rsn_pmksa_cache_entry *
 pmksa_cache_add_entry(struct rsn_pmksa_cache *pmksa,
 		      struct rsn_pmksa_cache_entry *entry);
 struct rsn_pmksa_cache_entry * pmksa_cache_get_current(struct wpa_sm *sm);
 void pmksa_cache_clear_current(struct wpa_sm *sm);
-int pmksa_cache_set_current(struct wpa_sm *sm, const u8 *pmkid,
-			    const u8 *bssid, void *network_ctx,
-			    int try_opportunistic, const u8 *fils_cache_id,
+int pmksa_cache_set_current(struct wpa_sm *sm, const uint8_t *pmkid,
+			    const uint8_t *bssid, void *network_ctx,
+			    int try_opportunistic, const uint8_t *fils_cache_id,
 			    int akmp);
 struct rsn_pmksa_cache_entry *
 pmksa_cache_get_opportunistic(struct rsn_pmksa_cache *pmksa,
-			      void *network_ctx, const u8 *aa, int akmp);
+			      void *network_ctx, const uint8_t *aa, int akmp);
 void pmksa_cache_flush(struct rsn_pmksa_cache *pmksa, void *network_ctx,
-		       const u8 *pmk, size_t pmk_len);
+		       const uint8_t *pmk, size_t pmk_len);
 
 #else /* IEEE8021X_EAPOL */
 
@@ -100,7 +101,7 @@ static inline void pmksa_cache_deinit(struct rsn_pmksa_cache *pmksa)
 }
 
 static inline struct rsn_pmksa_cache_entry *
-pmksa_cache_get(struct rsn_pmksa_cache *pmksa, const u8 *aa, const u8 *pmkid,
+pmksa_cache_get(struct rsn_pmksa_cache *pmksa, const uint8_t *aa, const uint8_t *pmkid,
 		const void *network_ctx, int akmp)
 {
 	return NULL;
@@ -132,10 +133,10 @@ pmksa_cache_add_entry(struct rsn_pmksa_cache *pmksa,
 }
 
 static inline struct rsn_pmksa_cache_entry *
-pmksa_cache_add(struct rsn_pmksa_cache *pmksa, const u8 *pmk, size_t pmk_len,
-		const u8 *pmkid, const u8 *kck, size_t kck_len,
-		const u8 *aa, const u8 *spa, void *network_ctx, int akmp,
-		const u8 *cache_id)
+pmksa_cache_add(struct rsn_pmksa_cache *pmksa, const uint8_t *pmk, size_t pmk_len,
+		const uint8_t *pmkid, const uint8_t *kck, size_t kck_len,
+		const uint8_t *aa, const uint8_t *spa, void *network_ctx, int akmp,
+		const uint8_t *cache_id)
 {
 	return NULL;
 }
@@ -144,11 +145,11 @@ static inline void pmksa_cache_clear_current(struct wpa_sm *sm)
 {
 }
 
-static inline int pmksa_cache_set_current(struct wpa_sm *sm, const u8 *pmkid,
-					  const u8 *bssid,
+static inline int pmksa_cache_set_current(struct wpa_sm *sm, const uint8_t *pmkid,
+					  const uint8_t *bssid,
 					  void *network_ctx,
 					  int try_opportunistic,
-					  const u8 *fils_cache_id,
+					  const uint8_t *fils_cache_id,
 					  int akmp)
 {
 	return -1;
@@ -156,7 +157,7 @@ static inline int pmksa_cache_set_current(struct wpa_sm *sm, const u8 *pmkid,
 
 static inline void pmksa_cache_flush(struct rsn_pmksa_cache *pmksa,
 				     void *network_ctx,
-				     const u8 *pmk, size_t pmk_len)
+				     const uint8_t *pmk, size_t pmk_len)
 {
 }
 

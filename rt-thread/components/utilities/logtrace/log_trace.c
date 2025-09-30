@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : log_trace.c
  * This file is part of RT-Thread RTOS
@@ -44,7 +45,7 @@ static rt_device_t _traceout_device = RT_NULL;
 static struct log_trace_session _def_session = {{"\0"}, LOG_TRACE_LEVEL_DEFAULT};
 static const struct log_trace_session *_the_sessions[LOG_TRACE_MAX_SESSION] = {&_def_session};
 /* there is a default session at least */
-static rt_uint16_t _the_sess_nr = 1;
+static uint16_t _the_sess_nr = 1;
 
 rt_inline int _idname_len(log_trace_idnum_t id)
 {
@@ -61,7 +62,7 @@ rt_inline int _idname_len(log_trace_idnum_t id)
     return 4;
 #else
     {
-        rt_uint32_t id2 = id >> 32;
+        uint32_t id2 = id >> 32;
         if ((id2 & 0x000000FF) == 0)
             return 4;
         if ((id2 & 0x0000FF00) == 0)
@@ -84,7 +85,7 @@ rt_inline int _idname_len(log_trace_idnum_t id)
 static struct log_trace_session* _lg_lookup_session(log_trace_idnum_t num)
 {
     static const struct log_trace_session *_cache = &_def_session;
-    rt_uint16_t first, last;
+    uint16_t first, last;
 
     if (_cache->id.num == num)
         return (struct log_trace_session *)_cache;
@@ -167,13 +168,13 @@ struct log_trace_session* log_trace_session_find(const char *name)
     return _lg_lookup_session(idp->num);
 }
 
-void log_trace_set_level(rt_uint8_t level)
+void log_trace_set_level(uint8_t level)
 {
     _def_session.lvl = level;
 }
 FINSH_FUNCTION_EXPORT_ALIAS(log_trace_set_level, log_level, set the filter level of log trace);
 
-void log_trace_session_set_level(struct log_trace_session *sess, rt_uint8_t level)
+void log_trace_session_set_level(struct log_trace_session *sess, uint8_t level)
 {
     RT_ASSERT(sess);
     sess->lvl = level;

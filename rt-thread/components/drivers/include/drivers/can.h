@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : can.h
  * This file is part of RT-Thread RTOS
@@ -58,14 +59,14 @@ enum CANBAUD
 
 struct rt_can_filter_item
 {
-    rt_uint32_t id  : 29;
-    rt_uint32_t ide : 1;
-    rt_uint32_t rtr : 1;
-    rt_uint32_t mode : 1;
-    rt_uint32_t mask;
-    rt_int32_t hdr;
+    uint32_t id  : 29;
+    uint32_t ide : 1;
+    uint32_t rtr : 1;
+    uint32_t mode : 1;
+    uint32_t mask;
+    int32_t hdr;
 #ifdef RT_CAN_USING_HDR
-    rt_err_t (*ind)(rt_device_t dev, void *args , rt_int32_t hdr, rt_size_t size);
+    rt_err_t (*ind)(rt_device_t dev, void *args , int32_t hdr, rt_size_t size);
     void *args;
 #endif /*RT_CAN_USING_HDR*/
 };
@@ -105,22 +106,22 @@ struct rt_can_filter_item
 
 struct rt_can_filter_config
 {
-    rt_uint32_t count;
-    rt_uint32_t actived;
+    uint32_t count;
+    uint32_t actived;
     struct rt_can_filter_item *items;
 };
 
 struct can_configure
 {
-    rt_uint32_t baud_rate;
-    rt_uint32_t msgboxsz;
-    rt_uint32_t sndboxnumber;
-    rt_uint32_t mode      : 8;
-    rt_uint32_t privmode  : 8;
-    rt_uint32_t reserved  : 16;
-    rt_uint32_t ticks;
+    uint32_t baud_rate;
+    uint32_t msgboxsz;
+    uint32_t sndboxnumber;
+    uint32_t mode      : 8;
+    uint32_t privmode  : 8;
+    uint32_t reserved  : 16;
+    uint32_t ticks;
 #ifdef RT_CAN_USING_HDR
-    rt_uint32_t maxhdr;
+    uint32_t maxhdr;
 #endif
 };
 
@@ -163,28 +164,28 @@ enum RT_CAN_BUS_ERR
 
 struct rt_can_status
 {
-    rt_uint32_t rcverrcnt;
-    rt_uint32_t snderrcnt;
-    rt_uint32_t errcode;
-    rt_uint32_t rcvpkg;
-    rt_uint32_t dropedrcvpkg;
-    rt_uint32_t sndpkg;
-    rt_uint32_t dropedsndpkg;
-    rt_uint32_t bitpaderrcnt;
-    rt_uint32_t formaterrcnt;
-    rt_uint32_t ackerrcnt;
-    rt_uint32_t biterrcnt;
-    rt_uint32_t crcerrcnt;
-    rt_uint32_t rcvchange;
-    rt_uint32_t sndchange;
-    rt_uint32_t lasterrtype;
+    uint32_t rcverrcnt;
+    uint32_t snderrcnt;
+    uint32_t errcode;
+    uint32_t rcvpkg;
+    uint32_t dropedrcvpkg;
+    uint32_t sndpkg;
+    uint32_t dropedsndpkg;
+    uint32_t bitpaderrcnt;
+    uint32_t formaterrcnt;
+    uint32_t ackerrcnt;
+    uint32_t biterrcnt;
+    uint32_t crcerrcnt;
+    uint32_t rcvchange;
+    uint32_t sndchange;
+    uint32_t lasterrtype;
 };
 
 #ifdef RT_CAN_USING_HDR
 struct rt_can_hdr
 {
-    rt_uint32_t connected;
-    rt_uint32_t msgs;
+    uint32_t connected;
+    uint32_t msgs;
     struct rt_can_filter_item filter;
     struct rt_list_node list;
 };
@@ -205,7 +206,7 @@ struct rt_can_device
     struct can_configure config;
     struct rt_can_status status;
 
-    rt_uint32_t timerinitflag;
+    uint32_t timerinitflag;
     struct rt_timer timer;
 
     struct rt_can_status_ind_type status_indicate;
@@ -229,15 +230,15 @@ typedef struct rt_can_device *rt_can_t;
 typedef struct rt_can_status *rt_can_status_t;
 struct rt_can_msg
 {
-    rt_uint32_t id  : 29;
-    rt_uint32_t ide : 1;
-    rt_uint32_t rtr : 1;
-    rt_uint32_t rsv : 1;
-    rt_uint32_t len : 8;
-    rt_uint32_t priv : 8;
-    rt_uint32_t hdr : 8;
-    rt_uint32_t reserved : 8;
-    rt_uint8_t data[8];
+    uint32_t id  : 29;
+    uint32_t ide : 1;
+    uint32_t rtr : 1;
+    uint32_t rsv : 1;
+    uint32_t len : 8;
+    uint32_t priv : 8;
+    uint32_t hdr : 8;
+    uint32_t reserved : 8;
+    uint8_t data[8];
 };
 typedef struct rt_can_msg *rt_can_msg_t;
 
@@ -255,7 +256,7 @@ struct rt_can_rx_fifo
 {
     /* software fifo */
     struct rt_can_msg_list *buffer;
-    rt_uint32_t freenumbers;
+    uint32_t freenumbers;
     struct rt_list_node freelist;
     struct rt_list_node uselist;
 };
@@ -274,7 +275,7 @@ struct rt_can_sndbxinx_list
 {
     struct rt_list_node list;
     struct rt_completion completion;
-    rt_uint32_t result;
+    uint32_t result;
 };
 
 struct rt_can_tx_fifo
@@ -288,8 +289,8 @@ struct rt_can_ops
 {
     rt_err_t (*configure)(struct rt_can_device *can, struct can_configure *cfg);
     rt_err_t (*control)(struct rt_can_device *can, int cmd, void *arg);
-    int (*sendmsg)(struct rt_can_device *can, const void *buf, rt_uint32_t boxno);
-    int (*recvmsg)(struct rt_can_device *can, void *buf, rt_uint32_t boxno);
+    int (*sendmsg)(struct rt_can_device *can, const void *buf, uint32_t boxno);
+    int (*recvmsg)(struct rt_can_device *can, void *buf, uint32_t boxno);
 };
 
 rt_err_t rt_hw_can_register(struct rt_can_device *can,

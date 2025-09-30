@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : fal_rtt.c
  * This file is part of FAL (Flash Abstraction Layer) package
@@ -40,7 +41,7 @@ struct fal_blk_device
 #if RTTHREAD_VERSION >= 30000
 static rt_err_t blk_dev_control(rt_device_t dev, int cmd, void *args)
 #else
-static rt_err_t blk_dev_control(rt_device_t dev, rt_uint8_t cmd, void *args)
+static rt_err_t blk_dev_control(rt_device_t dev, uint8_t cmd, void *args)
 #endif
 {
     struct fal_blk_device *part = (struct fal_blk_device*) dev;
@@ -61,7 +62,7 @@ static rt_err_t blk_dev_control(rt_device_t dev, rt_uint8_t cmd, void *args)
     }
     else if (cmd == RT_DEVICE_CTRL_BLK_ERASE)
     {
-        rt_uint32_t *addrs = (rt_uint32_t *) args, start_addr = addrs[0], end_addr = addrs[1], phy_start_addr;
+        uint32_t *addrs = (uint32_t *) args, start_addr = addrs[0], end_addr = addrs[1], phy_start_addr;
         rt_size_t phy_size;
 
         if (addrs == RT_NULL || start_addr > end_addr)
@@ -223,7 +224,7 @@ struct fal_mtd_nor_device
     const struct fal_partition     *fal_part;
 };
 
-static rt_size_t mtd_nor_dev_read(struct rt_mtd_nor_device* device, rt_off_t offset, rt_uint8_t* data, rt_uint32_t length)
+static rt_size_t mtd_nor_dev_read(struct rt_mtd_nor_device* device, rt_off_t offset, uint8_t* data, uint32_t length)
 {
     int ret = 0;
     struct fal_mtd_nor_device *part = (struct fal_mtd_nor_device*) device;
@@ -244,7 +245,7 @@ static rt_size_t mtd_nor_dev_read(struct rt_mtd_nor_device* device, rt_off_t off
     return ret;
 }
 
-static rt_size_t mtd_nor_dev_write(struct rt_mtd_nor_device* device, rt_off_t offset, const rt_uint8_t* data, rt_uint32_t length)
+static rt_size_t mtd_nor_dev_write(struct rt_mtd_nor_device* device, rt_off_t offset, const uint8_t* data, uint32_t length)
 {
     int ret = 0;
     struct fal_mtd_nor_device *part;
@@ -266,7 +267,7 @@ static rt_size_t mtd_nor_dev_write(struct rt_mtd_nor_device* device, rt_off_t of
     return ret;
 }
 
-static rt_err_t mtd_nor_dev_erase(struct rt_mtd_nor_device* device, rt_off_t offset, rt_uint32_t length)
+static rt_err_t mtd_nor_dev_erase(struct rt_mtd_nor_device* device, rt_off_t offset, uint32_t length)
 {
     int ret = 0;
     struct fal_mtd_nor_device *part;

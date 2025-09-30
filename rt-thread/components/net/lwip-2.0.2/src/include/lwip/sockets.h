@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /**
  * @file
  * Socket API (to be used from non-TCPIP threads)

@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "lfs_util.h"
 
 // Software CRC implementation with small lookup table

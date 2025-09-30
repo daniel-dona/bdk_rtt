@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File: netstream_buffer.h
  * 

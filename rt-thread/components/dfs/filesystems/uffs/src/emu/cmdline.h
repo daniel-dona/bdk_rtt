@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
   This file is part of UFFS, the Ultra-low-cost Flash File System.
   
@@ -34,8 +36,8 @@
 #ifndef _UFFS_CLI_H_
 #define _UFFS_CLI_H_
 
-#ifndef BOOL
-#define BOOL int
+#ifndef bool
+#define bool int
 #endif
 
 #ifndef TRUE

@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  * File      : dfs.c
  * This file is part of Device File System in RT-Thread RTOS

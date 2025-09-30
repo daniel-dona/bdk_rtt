@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 
@@ -20,7 +21,7 @@ uint8_t *testbuf;
 
 static SDIO_Error sdcard_test_open(void)
 {   
-    UINT32 status;
+    uint32_t status;
 
     sdcard_hdl = ddev_open(SDCARD_DEV_NAME, &status, 0);
     if(DD_HANDLE_UNVALID == sdcard_hdl){
@@ -34,10 +35,10 @@ static void sdcard_test_close(void)
     ddev_close(sdcard_hdl);
 }
 
-UINT32 sdcard_intf_test(void)
+uint32_t sdcard_intf_test(void)
 {
     SDIO_Error ret = SD_OK;
-    UINT32 err = SDCARD_SUCCESS;
+    uint32_t err = SDCARD_SUCCESS;
     
     ret = sdcard_test_open();
     if(ret != SD_OK){
@@ -53,9 +54,9 @@ err_out:
         
 }
 
-UINT32 test_sdcard_read(UINT32 blk)
+uint32_t test_sdcard_read(uint32_t blk)
 {
-	UINT32 ret;
+	uint32_t ret;
 	if(sdcard_hdl == DD_HANDLE_UNVALID)
 	{
 		os_printf("no init err\r\n");
@@ -77,11 +78,11 @@ UINT32 test_sdcard_read(UINT32 blk)
 	return ret;
 }
 
-UINT32 test_sdcard_write(UINT32 blk)
+uint32_t test_sdcard_write(uint32_t blk)
 {
-	UINT32 ret;
+	uint32_t ret;
 
-	UINT32 i;
+	uint32_t i;
 	if(sdcard_hdl == DD_HANDLE_UNVALID)
 	{
 		os_printf("no init err\r\n");

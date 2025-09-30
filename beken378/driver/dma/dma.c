@@ -1,3 +1,4 @@
+#include <stdint.h>
 /**
  ****************************************************************************************
  *
@@ -52,10 +53,10 @@ uint32_t dma_push(struct dma_desc *first, struct dma_desc *last, uint32_t channe
     uint32_t push_len = 0;
     evt_field_t event = 0;
     uint32_t go_on_flag = 1;
-    UINT32 access_category = 0;
+    uint32_t access_category = 0;
     struct dma_desc *ddesc;
-	UINT32 extra = 0;
-	UINT32 channel_idx;
+	uint32_t extra = 0;
+	uint32_t channel_idx;
 
     ddesc = first;
     while(go_on_flag && ddesc)

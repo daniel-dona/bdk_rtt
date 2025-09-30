@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : log_trace.h
  * This file is part of RT-Thread RTOS
@@ -81,7 +82,7 @@
 #ifdef LOG_TRACE_USE_LONGNAME
 typedef rt_uint64_t log_trace_idnum_t;
 #else
-typedef rt_uint32_t log_trace_idnum_t;
+typedef uint32_t log_trace_idnum_t;
 #endif
 
 /* use a integer to represent a string to avoid strcmp. Even 4 chars
@@ -97,7 +98,7 @@ union log_trace_id {
 struct log_trace_session
 {
     union log_trace_id id;
-    rt_uint8_t lvl;
+    uint8_t lvl;
 };
 
 /** initialize the log_trace system */
@@ -118,11 +119,11 @@ rt_err_t log_trace_register_session(const struct log_trace_session *session);
 struct log_trace_session* log_trace_session_find(const char *name);
 
 /** set the log level of the default session. */
-void log_trace_set_level(rt_uint8_t level);
+void log_trace_set_level(uint8_t level);
 
 /** set the log level of the session */
 void log_trace_session_set_level(
-        struct log_trace_session *session, rt_uint8_t level);
+        struct log_trace_session *session, uint8_t level);
 
 /** log according to the format
  *

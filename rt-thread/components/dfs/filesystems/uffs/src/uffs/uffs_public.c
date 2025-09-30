@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
   This file is part of UFFS, the Ultra-low-cost Flash File System.
   
@@ -91,7 +92,7 @@ UBOOL uffs_IsSrcNewerThanObj(int src, int obj)
  * \return the better page number, could be the same with the given page.
  *         if the given page does not have good tag, return UFFS_INVALID_PAGE.
  */
-u16 uffs_FindBestPageInBlock(uffs_Device *dev, uffs_BlockInfo *bc, u16 page)
+uint16_t uffs_FindBestPageInBlock(uffs_Device *dev, uffs_BlockInfo *bc, uint16_t page)
 {
 	int i;
 	uffs_Tags *tag, *tag_old;
@@ -132,10 +133,10 @@ u16 uffs_FindBestPageInBlock(uffs_Device *dev, uffs_BlockInfo *bc, u16 page)
  * \retval >=0 page number
  * \retval UFFS_INVALID_PAGE page not found
  */
-u16 uffs_FindPageInBlockWithPageId(uffs_Device *dev,
-								   uffs_BlockInfo *bc, u16 page_id)
+uint16_t uffs_FindPageInBlockWithPageId(uffs_Device *dev,
+								   uffs_BlockInfo *bc, uint16_t page_id)
 {
-	u16 page;
+	uint16_t page;
 	uffs_Tags *tag;
 
 	//Indeed, the page which has page_id, should ahead of page_id ...
@@ -206,10 +207,10 @@ int uffs_GetBlockTimeStamp(uffs_Device *dev, uffs_BlockInfo *bc)
  * \retval UFFS_INVALID_PAGE no free page found
  * \retval >=0 the first free page number
  */
-u16 uffs_FindFirstFreePage(uffs_Device *dev,
-						   uffs_BlockInfo *bc, u16 pageFrom)
+uint16_t uffs_FindFirstFreePage(uffs_Device *dev,
+						   uffs_BlockInfo *bc, uint16_t pageFrom)
 {
-	u16 i;
+	uint16_t i;
 
 	for (i = pageFrom; i < dev->attr->pages_per_block; i++) {
 		uffs_BlockInfoLoad(dev, bc, i);
@@ -227,7 +228,7 @@ u16 uffs_FindFirstFreePage(uffs_Device *dev,
  * \param[in] len length of data
  * \return return sum of data, 8bit
  */
-u8 uffs_MakeSum8(const void *p, int len)
+uint8_t uffs_MakeSum8(const void *p, int len)
 {
 	return uffs_crc16sum(p, len) & 0xFF;
 }
@@ -238,7 +239,7 @@ u8 uffs_MakeSum8(const void *p, int len)
  * \param[in] len length of data
  * \return return sum of data, 16bit
  */
-u16 uffs_MakeSum16(const void *p, int len)
+uint16_t uffs_MakeSum16(const void *p, int len)
 {
 	return uffs_crc16sum(p, len);
 }
@@ -254,7 +255,7 @@ u16 uffs_MakeSum16(const void *p, int len)
  *		 and all information in fi should be filled well before.
  */
 URET uffs_CreateNewFile(uffs_Device *dev,
-						u16 parent, u16 serial,
+						uint16_t parent, uint16_t serial,
 						uffs_BlockInfo *bc, uffs_FileInfo *fi)
 {
 	uffs_Tags *tag;
@@ -285,14 +286,14 @@ URET uffs_CreateNewFile(uffs_Device *dev,
  * \param[in] dev uffs device
  * \param[in] bc block info
  */
-int uffs_GetBlockFileDataLength(uffs_Device *dev, uffs_BlockInfo *bc, u8 type)
+int uffs_GetBlockFileDataLength(uffs_Device *dev, uffs_BlockInfo *bc, uint8_t type)
 {
-	u16 page_id;
-	u16 i;
+	uint16_t page_id;
+	uint16_t i;
 	uffs_Tags *tag;
 	int size = 0;
-	u16 page;
-	u16 lastPage = dev->attr->pages_per_block - 1;
+	uint16_t page;
+	uint16_t lastPage = dev->attr->pages_per_block - 1;
 
 	uffs_BlockInfoLoad(dev, bc, lastPage);
 	tag = GET_TAG(bc, lastPage);
@@ -357,7 +358,7 @@ int uffs_GetFreePagesCount(uffs_Device *dev, uffs_BlockInfo *bc)
 	// search from the last page ... to first page
 	for (i = dev->attr->pages_per_block - 1; i >= 0; i--) {
 		uffs_BlockInfoLoad(dev, bc, i);
-		if (uffs_IsPageErased(dev, bc, (u16)i) == U_TRUE) {
+		if (uffs_IsPageErased(dev, bc, (uint16_t)i) == U_TRUE) {
 			count++;
 		}
 		else {
@@ -376,7 +377,7 @@ int uffs_GetFreePagesCount(uffs_Device *dev, uffs_BlockInfo *bc)
  * \retval U_TRUE block is erased, ready to use
  * \retval U_FALSE block is dirty, maybe use by file
  */
-UBOOL uffs_IsPageErased(uffs_Device *dev, uffs_BlockInfo *bc, u16 page)
+UBOOL uffs_IsPageErased(uffs_Device *dev, uffs_BlockInfo *bc, uint16_t page)
 {
 	uffs_Tags *tag;
 
@@ -428,17 +429,17 @@ int uffs_GetDeviceTotal(uffs_Device *dev)
  * load mini hader from flash
  */
 URET uffs_LoadMiniHeader(uffs_Device *dev,
-						 int block, u16 page, struct uffs_MiniHeaderSt *header)
+						 int block, uint16_t page, struct uffs_MiniHeaderSt *header)
 {
 	int ret;
 	struct uffs_FlashOpsSt *ops = dev->ops;
 
 	if (ops->ReadPageWithLayout) {
-		ret = ops->ReadPageWithLayout(dev, block, page, (u8 *)header, 
+		ret = ops->ReadPageWithLayout(dev, block, page, (uint8_t *)header, 
 										sizeof(struct uffs_MiniHeaderSt), NULL, NULL, NULL);
 	}
 	else {
-		ret = ops->ReadPage(dev, block, page, (u8 *)header, sizeof(struct uffs_MiniHeaderSt), NULL, NULL, 0);
+		ret = ops->ReadPage(dev, block, page, (uint8_t *)header, sizeof(struct uffs_MiniHeaderSt), NULL, NULL, 0);
 	}
 
 	dev->st.page_header_read_count++;

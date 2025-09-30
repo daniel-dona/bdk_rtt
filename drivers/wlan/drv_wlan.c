@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 
 #include "lwip/opt.h"
@@ -64,7 +65,7 @@
 
 extern void *net_get_sta_handle(void);
 extern void *net_get_uap_handle(void);
-extern void wifi_get_mac_address(char *mac, u8 type);
+extern void wifi_get_mac_address(char *mac, uint8_t type);
 extern void *net_get_netif_handle(uint8_t iface);
 
 extern int bmsg_tx_sender(struct pbuf *p, uint32_t vif_idx);
@@ -77,8 +78,8 @@ extern int bmsg_tx_sender(struct pbuf *p, uint32_t vif_idx);
 static void packet_dump(const char *msg, const struct pbuf *p)
 {
     const struct pbuf *q;
-    rt_uint32_t i, j;
-    rt_uint8_t *ptr;
+    uint32_t i, j;
+    uint8_t *ptr;
 
     rt_kprintf("%s %d byte\n", msg, p->tot_len);
 
@@ -916,7 +917,7 @@ static rt_err_t beken_wlan_init(rt_device_t dev)
     return RT_EOK;
 }
 
-static rt_err_t beken_wlan_open(rt_device_t dev, rt_uint16_t oflag)
+static rt_err_t beken_wlan_open(rt_device_t dev, uint16_t oflag)
 {
     return RT_EOK;
 }
@@ -947,8 +948,8 @@ static void beken_wlan_control_scan(struct rt_wlan_device *wlan_dev,
 	bk_wlan_scan_ap_reg_cb(scan_ap_callback);
 
 	if (wifi_info->ssid && (rt_strlen(wifi_info->ssid) > 0)) {
-		UINT8 *ssid_array[1];
-		ssid_array[0] = (UINT8*)wifi_info->ssid;
+		uint8_t *ssid_array[1];
+		ssid_array[0] = (uint8_t*)wifi_info->ssid;
 		bk_wlan_start_assign_scan(ssid_array, 1);
         } else {
 		bk_wlan_start_scan();

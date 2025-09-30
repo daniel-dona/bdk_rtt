@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*****************************************************************************
 * ppp.h - Network Point to Point Protocol header file.
 *

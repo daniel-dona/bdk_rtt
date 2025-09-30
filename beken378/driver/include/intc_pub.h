@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _INTC_PUB_H_
 #define _INTC_PUB_H_
 
@@ -150,7 +151,7 @@
 
 #endif 
 
-extern void intc_service_register(UINT8 int_num, UINT8 int_pri, FUNCPTR isr);
+extern void intc_service_register(uint8_t int_num, uint8_t int_pri, FUNCPTR isr);
 extern void intc_spurious(void);
 extern void intc_enable(int index);
 extern void intc_disable(int index);

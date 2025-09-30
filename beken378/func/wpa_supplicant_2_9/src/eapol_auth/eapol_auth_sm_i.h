@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * IEEE 802.1X-2004 Authenticator - EAPOL state machine (internal definitions)
  * Copyright (c) 2002-2009, Jouni Malinen <j@w1.fi>
@@ -28,8 +29,8 @@ struct eapol_authenticator {
 	struct eapol_auth_config conf;
 	struct eapol_auth_cb cb;
 
-	u8 *default_wep_key;
-	u8 default_wep_key_idx;
+	uint8_t *default_wep_key;
+	uint8_t default_wep_key_idx;
 };
 
 
@@ -141,7 +142,7 @@ struct eapol_state_machine {
 	Counter dot1xAuthLastEapolFrameVersion;
 
 	/* Other variables - not defined in IEEE 802.1X */
-	u8 addr[ETH_ALEN]; /* Supplicant address */
+	uint8_t addr[ETH_ALEN]; /* Supplicant address */
 	int flags; /* EAPOL_SM_* */
 
 	/* EAPOL/AAA <-> EAP full authenticator interface */
@@ -150,12 +151,12 @@ struct eapol_state_machine {
 	int radius_identifier;
 	/* TODO: check when the last messages can be released */
 	struct radius_msg *last_recv_radius;
-	u8 last_eap_id; /* last used EAP Identifier */
-	u8 *identity;
+	uint8_t last_eap_id; /* last used EAP Identifier */
+	uint8_t *identity;
 	size_t identity_len;
-	u8 eap_type_authsrv; /* EAP type of the last EAP packet from
+	uint8_t eap_type_authsrv; /* EAP type of the last EAP packet from
 			      * Authentication server */
-	u8 eap_type_supp; /* EAP type of the last EAP packet from Supplicant */
+	uint8_t eap_type_supp; /* EAP type of the last EAP packet from Supplicant */
 	//struct radius_class_data radius_class;
 	struct wpabuf *radius_cui; /* Chargeable-User-Identity */
 
@@ -170,7 +171,7 @@ struct eapol_state_machine {
 
 	int remediation;
 
-	u64 acct_multi_session_id;
+	uint64_t acct_multi_session_id;
 };
 
 #endif /* EAPOL_AUTH_SM_I_H */

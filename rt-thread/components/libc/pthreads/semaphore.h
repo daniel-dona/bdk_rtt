@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : semaphore.h
  * This file is part of RT-Thread RTOS
@@ -31,9 +32,9 @@
 struct posix_sem
 {
     /* reference count and unlinked */
-    rt_uint16_t refcount;
-    rt_uint8_t unlinked;
-    rt_uint8_t unamed;
+    uint16_t refcount;
+    uint8_t unlinked;
+    uint8_t unamed;
 
     /* RT-Thread semaphore */
     rt_sem_t sem;

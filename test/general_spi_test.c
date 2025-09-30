@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <rtthread.h>
 #include <rthw.h>
 #include <rtdevice.h>
@@ -52,7 +53,7 @@ int gspi_test(int argc, char** argv)
 
     if(strcmp(argv[2], "tx") == 0)
     {
-        rt_uint8_t *buf;
+        uint8_t *buf;
         int tx_len;
 
         if(argc < 4)
@@ -62,7 +63,7 @@ int gspi_test(int argc, char** argv)
 
         rt_kprintf("spi init tx_len:%d\n", tx_len);
 
-        buf = rt_malloc(tx_len * sizeof(rt_uint8_t));
+        buf = rt_malloc(tx_len * sizeof(uint8_t));
 
         if(buf)
         {
@@ -87,7 +88,7 @@ int gspi_test(int argc, char** argv)
     }
     else if(strcmp(argv[2], "rx") == 0)
     {
-        rt_uint8_t *buf;
+        uint8_t *buf;
         int rx_len;
 
         if(argc < 4)
@@ -97,7 +98,7 @@ int gspi_test(int argc, char** argv)
 
         rt_kprintf("spi init rx_len:%d\n", rx_len);
 
-        buf = rt_malloc(rx_len * sizeof(rt_uint8_t));
+        buf = rt_malloc(rx_len * sizeof(uint8_t));
 
         if(buf)
         {

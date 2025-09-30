@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  * File      : msd.c
  * SPI mode SD Card Driver
@@ -48,7 +50,7 @@ static void MSD_release_cs(struct rt_spi_device *device);
 static rt_err_t _wait_token(struct rt_spi_device *device, uint8_t token);
 static rt_err_t _wait_ready(struct rt_spi_device *device);
 static rt_err_t  rt_msd_init(rt_device_t dev);
-static rt_err_t  rt_msd_open(rt_device_t dev, rt_uint16_t oflag);
+static rt_err_t  rt_msd_open(rt_device_t dev, uint16_t oflag);
 static rt_err_t  rt_msd_close(rt_device_t dev);
 static rt_size_t rt_msd_write(rt_device_t dev, rt_off_t pos, const void *buffer, rt_size_t size);
 static rt_size_t rt_msd_read(rt_device_t dev, rt_off_t pos, void *buffer, rt_size_t size);
@@ -1229,7 +1231,7 @@ _exit:
     return result;
 }
 
-static rt_err_t rt_msd_open(rt_device_t dev, rt_uint16_t oflag)
+static rt_err_t rt_msd_open(rt_device_t dev, uint16_t oflag)
 {
 //    struct msd_device * msd = (struct msd_device *)dev;
     return RT_EOK;

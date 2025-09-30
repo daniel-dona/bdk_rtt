@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "sys_config.h"
 
 #if CFG_USE_SPI_MST_FLASH

@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 #include "rwip_config.h"             // SW configuration
 
 #if (BLE_APP_PRESENT && (BLE_CENTRAL) && (BLE_SDP_CLIENT))

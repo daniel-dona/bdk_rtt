@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * JFFS2 -- Journalling Flash File System, Version 2.
  *
@@ -127,7 +128,7 @@ jffs2_garbage_collect_thread(unsigned long data)
 }
 #endif 
 
-rt_uint32_t cyg_current_time(void)
+uint32_t cyg_current_time(void)
 {
 	return 0;
 }
@@ -187,7 +188,7 @@ jffs2_stop_garbage_collect_thread(struct jffs2_sb_info *c)
 {
      struct super_block *sb=OFNI_BS_2SFFJ(c);
      cyg_mtab_entry *mte;
-	 rt_uint32_t  e;
+	 uint32_t  e;
 	 
      //RT_ASSERT(sb->s_gc_thread_handle);
 
@@ -217,7 +218,7 @@ jffs2_garbage_collect_thread(unsigned long data)
      struct jffs2_sb_info *c=(struct jffs2_sb_info *)data;
      struct super_block *sb=OFNI_BS_2SFFJ(c);
      cyg_mtab_entry *mte;
-     rt_uint32_t flag = 0;
+     uint32_t flag = 0;
 	 
      D1(printk("jffs2_garbage_collect_thread START\n"));
 

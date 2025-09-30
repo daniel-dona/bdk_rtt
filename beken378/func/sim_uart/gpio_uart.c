@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <stdio.h>
 #include "include.h"
 #include "arm_arch.h"
@@ -33,7 +34,7 @@ void gu_delay(uint32_t usec)
 #ifdef CONFIG_GPIO_SIMU_UART_TX
 void gpio_uart_send_init(void)
 {
-    UINT32 param;
+    uint32_t param;
 	
     param = GPIO_CFG_PARAM(SIMU_UART_GPIONUM, GMODE_OUTPUT);
 	sddev_control(GPIO_DEV_NAME, CMD_GPIO_CFG, &param);
@@ -42,7 +43,7 @@ void gpio_uart_send_init(void)
 void gpio_uart_send_byte(unsigned char *buff, unsigned int len)
 {
     volatile unsigned char c, n, loops;
-    UINT32 param;
+    uint32_t param;
 
     GLOBAL_INT_DECLARATION();
     GLOBAL_INT_DISABLE();
@@ -90,7 +91,7 @@ int guart_fputc(int ch, FILE *f)
 #ifdef CONFIG_GPIO_SIMU_UART_TX
 void GPIO_Simu_Isr(unsigned char ucChannel)
 {
-    UINT8 c = 0, n, loops;
+    uint8_t c = 0, n, loops;
 
     if(ucChannel == SIMU_UART_GPIO_RX)
     {
@@ -113,7 +114,7 @@ void GPIO_Simu_Isr(unsigned char ucChannel)
 
 void gpio_uart_recv_init(void)
 {
-    UINT32 param;
+    uint32_t param;
 	GPIO_INT_ST int_param;
 	
     param = GPIO_CFG_PARAM(SIMU_UART_GPIO_RX, GMODE_INPUT_PULLUP);

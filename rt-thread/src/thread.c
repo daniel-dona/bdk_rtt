@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : thread.c
  * This file is part of RT-Thread RTOS
@@ -134,9 +135,9 @@ static rt_err_t _rt_thread_init(struct rt_thread *thread,
                                 void (*entry)(void *parameter),
                                 void             *parameter,
                                 void             *stack_start,
-                                rt_uint32_t       stack_size,
-                                rt_uint8_t        priority,
-                                rt_uint32_t       tick)
+                                uint32_t       stack_size,
+                                uint8_t        priority,
+                                uint32_t       tick)
 {
     /* init thread list */
     rt_list_init(&(thread->tlist));
@@ -230,9 +231,9 @@ rt_err_t rt_thread_init(struct rt_thread *thread,
                         void (*entry)(void *parameter),
                         void             *parameter,
                         void             *stack_start,
-                        rt_uint32_t       stack_size,
-                        rt_uint8_t        priority,
-                        rt_uint32_t       tick)
+                        uint32_t       stack_size,
+                        uint8_t        priority,
+                        uint32_t       tick)
 {
     /* thread check */
     RT_ASSERT(thread != RT_NULL);
@@ -368,9 +369,9 @@ RTM_EXPORT(rt_thread_detach);
 rt_thread_t rt_thread_create(const char *name,
                              void (*entry)(void *parameter),
                              void       *parameter,
-                             rt_uint32_t stack_size,
-                             rt_uint8_t  priority,
-                             rt_uint32_t tick)
+                             uint32_t stack_size,
+                             uint8_t  priority,
+                             uint32_t tick)
 {
     struct rt_thread *thread;
     void *stack_start;
@@ -544,7 +545,7 @@ RTM_EXPORT(rt_thread_delay);
  *
  * @return RT_EOK
  */
-rt_err_t rt_thread_mdelay(rt_int32_t ms)
+rt_err_t rt_thread_mdelay(int32_t ms)
 {
     rt_tick_t tick;
 
@@ -586,7 +587,7 @@ rt_err_t rt_thread_control(rt_thread_t thread, int cmd, void *arg)
             rt_schedule_remove_thread(thread);
 
             /* change thread priority */
-            thread->current_priority = *(rt_uint8_t *)arg;
+            thread->current_priority = *(uint8_t *)arg;
 
             /* recalculate priority attribute */
 #if RT_THREAD_PRIORITY_MAX > 32
@@ -602,7 +603,7 @@ rt_err_t rt_thread_control(rt_thread_t thread, int cmd, void *arg)
         }
         else
         {
-            thread->current_priority = *(rt_uint8_t *)arg;
+            thread->current_priority = *(uint8_t *)arg;
 
             /* recalculate priority attribute */
 #if RT_THREAD_PRIORITY_MAX > 32

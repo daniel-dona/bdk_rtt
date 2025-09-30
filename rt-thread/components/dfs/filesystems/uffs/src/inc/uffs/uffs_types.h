@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
   This file is part of UFFS, the Ultra-low-cost Flash File System.
   
@@ -58,10 +60,10 @@ extern "C"{
  */
 typedef char i8;
 
-/** \typedef u8 
+/** \typedef uint8_t 
  * \brief 8 bit unsigned integer
  */
-typedef unsigned char u8;
+typedef unsigned char uint8_t;
 
 /** \typedef i16 
  * \brief 16 bit integer
@@ -69,10 +71,10 @@ typedef unsigned char u8;
 typedef short int i16;
 
 
-/** \typedef u16
+/** \typedef uint16_t
  * \brief 16 bit unsigned integer
  */
-typedef unsigned short int u16;
+typedef unsigned short int uint16_t;
 
 
 /** \typedef i32
@@ -80,10 +82,10 @@ typedef unsigned short int u16;
  */
 typedef int i32;
 
-/** \typedef u32 
+/** \typedef uint32_t 
  * \brief 32 bit unsigned integer
  */
-typedef unsigned int u32;
+typedef unsigned int uint32_t;
 
 
 #ifndef _UBASE_

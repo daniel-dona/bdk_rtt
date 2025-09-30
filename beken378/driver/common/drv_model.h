@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _DRV_MODEL_H_
 #define _DRV_MODEL_H_
 
@@ -20,7 +21,7 @@ typedef enum _dd_state_
 typedef struct _drv_dev_
 {
     char *name;
-    UINT32 use_cnt;
+    uint32_t use_cnt;
 
     DD_STATE state;
     DD_OPERATIONS *op;
@@ -32,7 +33,7 @@ typedef struct _drv_dev_
 typedef struct _drv_sdev_
 {
     char *name;
-    UINT32 use_cnt;
+    uint32_t use_cnt;
 
     DD_STATE state;
     SDD_OPERATIONS *op;

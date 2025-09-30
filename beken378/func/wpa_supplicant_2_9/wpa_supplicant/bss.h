@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * BSS table
  * Copyright (c) 2009-2019, Jouni Malinen <j@w1.fi>
@@ -21,7 +22,7 @@ struct wpa_scan_res;
 
 struct wpa_bss_anqp_elem {
 	struct dl_list list;
-	u16 infoid;
+	uint16_t infoid;
 	struct wpabuf *payload;
 };
 
@@ -75,21 +76,21 @@ struct wpa_bss {
 	/** Information flags about the BSS/IBSS (WPA_BSS_*) */
 	unsigned int flags;
 	/** BSSID */
-	u8 bssid[ETH_ALEN];
+	uint8_t bssid[ETH_ALEN];
 #ifdef CONFIG_INTERWORKING
 	/** HESSID */
-	u8 hessid[ETH_ALEN];
+	uint8_t hessid[ETH_ALEN];
 #endif
 	/** SSID */
-	u8 ssid[SSID_MAX_LEN];
+	uint8_t ssid[SSID_MAX_LEN];
 	/** Length of SSID */
 	size_t ssid_len;
 	/** Frequency of the channel in MHz (e.g., 2412 = channel 1) */
 	int freq;
 	/** Beacon interval in TUs (host byte order) */
-	u16 beacon_int;
+	uint16_t beacon_int;
 	/** Capability information field in host byte order */
-	u16 caps;
+	uint16_t caps;
 	/** Signal quality */
 	int qual;
 	/** Noise level */
@@ -97,7 +98,7 @@ struct wpa_bss {
 	/** Signal level */
 	int level;
 	/** Timestamp of last Beacon/Probe Response frame */
-	u64 tsf;
+	uint64_t tsf;
 	/** Time of the last update (i.e., Beacon or Probe Response RX) */
 	struct os_reltime last_update;
 	/** Estimated throughput in kbps */
@@ -126,30 +127,30 @@ int wpa_bss_init(struct wpa_supplicant *wpa_s);
 void wpa_bss_deinit(struct wpa_supplicant *wpa_s);
 void wpa_bss_flush(struct wpa_supplicant *wpa_s);
 void wpa_bss_flush_by_age(struct wpa_supplicant *wpa_s, int age);
-struct wpa_bss * wpa_bss_get(struct wpa_supplicant *wpa_s, const u8 *bssid,
-			     const u8 *ssid, size_t ssid_len);
+struct wpa_bss * wpa_bss_get(struct wpa_supplicant *wpa_s, const uint8_t *bssid,
+			     const uint8_t *ssid, size_t ssid_len);
 struct wpa_bss * wpa_bss_get_bssid(struct wpa_supplicant *wpa_s,
-				   const u8 *bssid);
+				   const uint8_t *bssid);
 struct wpa_bss * wpa_bss_get_bssid_latest(struct wpa_supplicant *wpa_s,
-					  const u8 *bssid);
+					  const uint8_t *bssid);
 struct wpa_bss * wpa_bss_get_p2p_dev_addr(struct wpa_supplicant *wpa_s,
-					  const u8 *dev_addr);
+					  const uint8_t *dev_addr);
 struct wpa_bss * wpa_bss_get_id(struct wpa_supplicant *wpa_s, unsigned int id);
 struct wpa_bss * wpa_bss_get_id_range(struct wpa_supplicant *wpa_s,
 				      unsigned int idf, unsigned int idl);
-const u8 * wpa_bss_get_ie(const struct wpa_bss *bss, u8 ie);
-const u8 * wpa_bss_get_vendor_ie(const struct wpa_bss *bss, u32 vendor_type);
-const u8 * wpa_bss_get_vendor_ie_beacon(const struct wpa_bss *bss,
-					u32 vendor_type);
+const uint8_t * wpa_bss_get_ie(const struct wpa_bss *bss, uint8_t ie);
+const uint8_t * wpa_bss_get_vendor_ie(const struct wpa_bss *bss, uint32_t vendor_type);
+const uint8_t * wpa_bss_get_vendor_ie_beacon(const struct wpa_bss *bss,
+					uint32_t vendor_type);
 struct wpabuf * wpa_bss_get_vendor_ie_multi(const struct wpa_bss *bss,
-					    u32 vendor_type);
+					    uint32_t vendor_type);
 struct wpabuf * wpa_bss_get_vendor_ie_multi_beacon(const struct wpa_bss *bss,
-						   u32 vendor_type);
+						   uint32_t vendor_type);
 int wpa_bss_get_max_rate(const struct wpa_bss *bss);
-int wpa_bss_get_bit_rates(const struct wpa_bss *bss, u8 **rates);
+int wpa_bss_get_bit_rates(const struct wpa_bss *bss, uint8_t **rates);
 struct wpa_bss_anqp * wpa_bss_anqp_alloc(void);
 int wpa_bss_anqp_unshare_alloc(struct wpa_bss *bss);
-const u8 * wpa_bss_get_fils_cache_id(struct wpa_bss *bss);
+const uint8_t * wpa_bss_get_fils_cache_id(struct wpa_bss *bss);
 int wpa_bss_ext_capab(const struct wpa_bss *bss, unsigned int capab);
 
 static inline int bss_is_dmg(const struct wpa_bss *bss)

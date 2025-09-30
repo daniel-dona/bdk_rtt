@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  * ipv6cp.c - PPP IPV6 Control Protocol.
  *

@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _I2S_H_
 #define _I2S_H_
 
@@ -118,8 +119,8 @@
 /*******************************************************************************
 * Function Declarations
 *******************************************************************************/
-UINT32 i2s_configure(UINT32 fifo_level, UINT32 sample_rate, UINT32 bits_per_sample, UINT32 mode);
+uint32_t i2s_configure(uint32_t fifo_level, uint32_t sample_rate, uint32_t bits_per_sample, uint32_t mode);
 
-UINT32 i2s_transfer(UINT32 *i2s_send_buf , UINT32 *i2s_recv_buf, UINT32 count , UINT32 param );
+uint32_t i2s_transfer(uint32_t *i2s_send_buf , uint32_t *i2s_recv_buf, uint32_t count , uint32_t param );
 
 #endif //_I2S_H_

@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : spi_wifi_rw009.c
  * This file is part of RT-Thread RTOS
@@ -66,8 +67,8 @@ struct rw009_wifi
     struct rt_spi_device *rt_spi_device;
 
     /* interface address info. */
-    rt_uint8_t  dev_addr[MAX_ADDR_LEN];         /* hw address   */
-    rt_uint8_t  active;
+    uint8_t  dev_addr[MAX_ADDR_LEN];         /* hw address   */
+    uint8_t  active;
 
     struct rt_mempool spi_tx_mp;
     struct rt_mempool spi_rx_mp;
@@ -83,9 +84,9 @@ struct rw009_wifi
     uint32_t last_cmd;
 
     ALIGN(4)
-    rt_uint8_t spi_tx_mempool[(sizeof(struct spi_data_packet) + 4) * SPI_TX_POOL_SIZE];
+    uint8_t spi_tx_mempool[(sizeof(struct spi_data_packet) + 4) * SPI_TX_POOL_SIZE];
     ALIGN(4)
-    rt_uint8_t spi_rx_mempool[(sizeof(struct spi_data_packet) + 4) * SPI_RX_POOL_SIZE];
+    uint8_t spi_rx_mempool[(sizeof(struct spi_data_packet) + 4) * SPI_RX_POOL_SIZE];
 
     ALIGN(4)
     uint8_t spi_hw_rx_buffer[MAX_SPI_BUFFER_SIZE];
@@ -225,7 +226,7 @@ static void resp_handler(struct rw009_wifi *wifi_device, struct rw009_resp *resp
 
     if(resp->cmd == wifi_device->last_cmd)
     {
-        rt_mb_send(&wifi_device->rw009_cmd_mb, (rt_uint32_t)resp_return);
+        rt_mb_send(&wifi_device->rw009_cmd_mb, (uint32_t)resp_return);
         return;
     }
     else
@@ -237,7 +238,7 @@ static void resp_handler(struct rw009_wifi *wifi_device, struct rw009_resp *resp
 static rt_err_t rw009_cmd(struct rw009_wifi *wifi_device, uint32_t cmd, void *args)
 {
     rt_err_t result = RT_EOK;
-    rt_int32_t timeout = RW009_CMD_TIMEOUT;
+    int32_t timeout = RW009_CMD_TIMEOUT;
 
     struct spi_data_packet *data_packet;
     struct rw009_cmd *wifi_cmd = RT_NULL;
@@ -303,11 +304,11 @@ static rt_err_t rw009_cmd(struct rw009_wifi *wifi_device, uint32_t cmd, void *ar
     data_packet->data_type = data_type_cmd;
     data_packet->data_len = member_offset(struct rw009_cmd, params) + wifi_cmd->len;
 
-    rt_mb_send(&wifi_device->spi_tx_mb, (rt_uint32_t)data_packet);
+    rt_mb_send(&wifi_device->spi_tx_mb, (uint32_t)data_packet);
     rt_event_send(&spi_wifi_data_event, 1);
 
     result = rt_mb_recv(&wifi_device->rw009_cmd_mb,
-                        (rt_uint32_t *)&resp,
+                        (uint32_t *)&resp,
                         timeout);
 
     if ( result != RT_EOK )
@@ -347,7 +348,7 @@ static rt_err_t spi_wifi_transfer(struct rw009_wifi *dev)
     cmd.flag |= CMD_FLAG_MRDY;
 
     result = rt_mb_recv(&wifi_device->spi_tx_mb,
-                        (rt_uint32_t *)&data_packet,
+                        (uint32_t *)&data_packet,
                         0);
     if ((result == RT_EOK) && (data_packet != RT_NULL) && (data_packet->data_len > 0))
     {
@@ -433,9 +434,9 @@ _bad_resp_magic:
                 if (wifi_device->active)
                 {
                     p = pbuf_alloc(PBUF_LINK, data_packet->data_len, PBUF_RAM);
-                    pbuf_take(p, (rt_uint8_t *)data_packet->buffer, data_packet->data_len);
+                    pbuf_take(p, (uint8_t *)data_packet->buffer, data_packet->data_len);
 
-                    rt_mb_send(&wifi_device->eth_rx_mb, (rt_uint32_t)p);
+                    rt_mb_send(&wifi_device->eth_rx_mb, (uint32_t)p);
                     eth_device_ready((struct eth_device *)dev);
                 }
                 else
@@ -472,8 +473,8 @@ _bad_resp_magic:
 static void packet_dump(const char *msg, const struct pbuf *p)
 {
     const struct pbuf* q;
-    rt_uint32_t i,j;
-    rt_uint8_t *ptr = p->payload;
+    uint32_t i,j;
+    uint8_t *ptr = p->payload;
 
     rt_kprintf("%s %d byte\n", msg, p->tot_len);
 
@@ -508,7 +509,7 @@ static rt_err_t rw009_wifi_init(rt_device_t dev)
     return RT_EOK;
 }
 
-static rt_err_t rw009_wifi_open(rt_device_t dev, rt_uint16_t oflag)
+static rt_err_t rw009_wifi_open(rt_device_t dev, uint16_t oflag)
 {
     return RT_EOK;
 }
@@ -569,7 +570,7 @@ rt_err_t rw009_wifi_tx(rt_device_t dev, struct pbuf *p)
 
         pbuf_copy_partial(p, data_packet->buffer, data_packet->data_len, 0);
 
-        rt_mb_send(&wifi_device->spi_tx_mb, (rt_uint32_t)data_packet);
+        rt_mb_send(&wifi_device->spi_tx_mb, (uint32_t)data_packet);
         rt_event_send(&spi_wifi_data_event, 1);
     }
     else
@@ -589,7 +590,7 @@ struct pbuf *rw009_wifi_rx(rt_device_t dev)
     struct pbuf *p = RT_NULL;
     struct rw009_wifi *wifi_device = (struct rw009_wifi *)dev;
 
-    if (rt_mb_recv(&wifi_device->eth_rx_mb, (rt_uint32_t *)&p, 0) != RT_EOK)
+    if (rt_mb_recv(&wifi_device->eth_rx_mb, (uint32_t *)&p, 0) != RT_EOK)
     {
         return RT_NULL;
     }
@@ -605,7 +606,7 @@ struct pbuf *rw009_wifi_rx(rt_device_t dev)
 
 static void spi_wifi_data_thread_entry(void *parameter)
 {
-    rt_uint32_t e;
+    uint32_t e;
     rt_err_t result;
 
     while (1)

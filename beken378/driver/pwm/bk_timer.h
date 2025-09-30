@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _BK_TIMER_H_
 #define _BK_TIMER_H_
 #include "pwm.h"
@@ -68,7 +69,7 @@
 
 #define TIMER_CHANNEL_NO                                  6
 #endif
-UINT32 bk_timer_ctrl(UINT32 cmd, void *param);
+uint32_t bk_timer_ctrl(uint32_t cmd, void *param);
 
 #endif //_TIMER_H_
 

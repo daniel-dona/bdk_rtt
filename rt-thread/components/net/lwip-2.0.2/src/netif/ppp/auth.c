@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  * auth.c - PPP authentication and phase control.
  *

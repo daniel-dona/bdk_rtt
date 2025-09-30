@@ -1,3 +1,4 @@
+#include <stdint.h>
 /* tls13.c
  *
  * Copyright (C) 2006-2019 wolfSSL Inc.

@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _ATE_APP_H_
 #define _ATE_APP_H_
 

@@ -1,3 +1,4 @@
+#include <stdint.h>
 /**
  ****************************************************************************************
  *
@@ -228,7 +229,7 @@ ble_err_t app_ble_create_advertising(uint8_t actv_idx,
 	return ret;
 }
 
-ble_err_t app_ble_start_advertising(uint8_t actv_idx, uint16 duration)
+ble_err_t app_ble_start_advertising(uint8_t actv_idx, uint16_t duration)
 {
 	ble_err_t ret = ERR_SUCCESS;
 
@@ -874,7 +875,7 @@ void ble_ps_enable_clear(void)
     GLOBAL_INT_RESTORE();
 }
 
-UINT32 ble_ps_enabled(void )
+uint32_t ble_ps_enabled(void )
 {
     uint32_t value = 0;
     GLOBAL_INT_DECLARATION();

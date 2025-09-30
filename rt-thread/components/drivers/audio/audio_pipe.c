@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : pipe.c
  * This file is part of RT-Thread RTOS
@@ -53,7 +54,7 @@ static rt_size_t rt_pipe_read(rt_device_t dev,
                               void       *buffer,
                               rt_size_t   size)
 {
-    rt_uint32_t level;
+    uint32_t level;
     rt_thread_t thread;
     struct rt_audio_pipe *pipe;
     rt_size_t read_nbytes;
@@ -133,7 +134,7 @@ static rt_size_t rt_pipe_write(rt_device_t dev,
                                const void *buffer,
                                rt_size_t   size)
 {
-    rt_uint32_t level;
+    uint32_t level;
     rt_thread_t thread;
     struct rt_audio_pipe *pipe;
     rt_size_t write_nbytes;
@@ -228,7 +229,7 @@ const static struct rt_device_ops audio_pipe_ops =
 rt_err_t rt_audio_pipe_init(struct rt_audio_pipe *pipe,
                       const char *name,
                       enum rt_audio_pipe_flag flag,
-                      rt_uint8_t *buf,
+                      uint8_t *buf,
                       rt_size_t size)
 {
     RT_ASSERT(pipe);
@@ -274,7 +275,7 @@ rt_err_t rt_audio_pipe_detach(struct rt_audio_pipe *pipe)
 #ifdef RT_USING_HEAP
 rt_err_t rt_audio_pipe_create(const char *name, enum rt_audio_pipe_flag flag, rt_size_t size)
 {
-    rt_uint8_t *rb_memptr = RT_NULL;
+    uint8_t *rb_memptr = RT_NULL;
     struct rt_audio_pipe *pipe = RT_NULL;
 
     /* get aligned size */

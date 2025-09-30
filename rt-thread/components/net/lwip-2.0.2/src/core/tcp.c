@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /**
  * @file 
  * Transmission Control Protocol for IP

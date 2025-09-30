@@ -1,3 +1,4 @@
+#include <stdint.h>
 /**
  * RTOS测试用例
  */ 
@@ -31,7 +32,7 @@ static beken_thread_t queue_thread_send;
 
 static void thread_queue_recive_entry(void* parameter)
 {
-    rt_uint8_t buf[MSG_SIZE];
+    uint8_t buf[MSG_SIZE];
 
     while(1)
     {
@@ -50,7 +51,7 @@ static void thread_queue_recive_entry(void* parameter)
 
 static void thread_queue_send_entry(void* parameter)
 {
-    rt_uint8_t buf[MSG_SIZE];
+    uint8_t buf[MSG_SIZE];
 
     while(1)
     {

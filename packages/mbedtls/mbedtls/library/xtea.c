@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  *  An 32-bit implementation of the XTEA algorithm
  *

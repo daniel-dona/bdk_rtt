@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "ate_app.h"
 #if ATE_APP_FUN
 
@@ -64,7 +65,7 @@ uint32_t get_ate_mode_state(void)
 static void do_single_wave_test(void)
 {
     uint32_t cmd_len = os_strlen(CMD_SINGLE_WAVE) + 1;
-    uint8 *cmd_buf = os_malloc(cmd_len);
+    uint8_t *cmd_buf = os_malloc(cmd_len);
     if (cmd_buf) {
         extern void bk_test_cmd_handle_input(char *inbuf, int len);
 

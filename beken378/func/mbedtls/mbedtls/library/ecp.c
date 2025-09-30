@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  *  Elliptic curves over GF(p): generic functions
  *

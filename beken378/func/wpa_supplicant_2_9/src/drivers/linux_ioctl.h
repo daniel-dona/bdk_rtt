@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * Linux ioctl helper functions for driver wrappers
  * Copyright (c) 2002-2010, Jouni Malinen <j@w1.fi>
@@ -11,8 +12,8 @@
 
 int linux_set_iface_flags(int sock, const char *ifname, int dev_up);
 int linux_iface_up(int sock, const char *ifname);
-int linux_get_ifhwaddr(int sock, const char *ifname, u8 *addr);
-int linux_set_ifhwaddr(int sock, const char *ifname, const u8 *addr);
+int linux_get_ifhwaddr(int sock, const char *ifname, uint8_t *addr);
+int linux_set_ifhwaddr(int sock, const char *ifname, const uint8_t *addr);
 int linux_br_add(int sock, const char *brname);
 int linux_br_del(int sock, const char *brname);
 int linux_br_add_if(int sock, const char *brname, const char *ifname);

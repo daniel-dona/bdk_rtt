@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <rtthread.h>
 #include "sys_config.h"
 #if defined(CHECK_SD_PLAY_TEST) && CFG_USE_SDCARD_HOST
@@ -17,7 +18,7 @@
 #include "sys_ctrl_pub.h"
 #include "saradc_intf.h"
 #include "gpio.h"
-#define REG_WRITE(addr, _data) 	(*((volatile UINT32 *)(addr)) = (_data))
+#define REG_WRITE(addr, _data) 	(*((volatile uint32_t *)(addr)) = (_data))
 
 #define CHECK_SD_PLAY_TEST
 
@@ -224,12 +225,12 @@ static int get_dir(PLAY_DIRECTION prev_next)
 /*
 full disk scan: get mp3 total number and DIRs' pathname which have .mp3 files
 */
-static void scan_files(char *path,rt_uint8_t recu_level)
+static void scan_files(char *path,uint8_t recu_level)
 {
     struct dirent  *ent  = NULL;
 	DIR *pDir = NULL;
 	short filecnt = 0;
-	rt_uint8_t tmp;
+	uint8_t tmp;
 
 	pDir = opendir(path);
 	if(NULL != pDir)
@@ -465,7 +466,7 @@ static uint8_t get_sd_check_pin_status(void)
 
 static void sd_check_handle_timer_callback( void * arg )  
 {
-	static uint16 cnt_online = 0;	
+	static uint16_t cnt_online = 0;	
 	if(get_sd_check_pin_status() == SD_INSTER_STATUS_CHECK_PIN_LEVEL)
 	{				
 		if(OFFLINE_STATUS == sd_status)
@@ -691,13 +692,13 @@ void sd_test_write(int argc, char *argv[])
 #else
 {
 	unsigned char *pbuf;
-	UINT8 *read_buf;
-	UINT8 *write_buf;
+	uint8_t *read_buf;
+	uint8_t *write_buf;
 	unsigned char path_name[]="sd/test1.txt";
 	long   fds; 
 	int i,j,ret,count=0;
 	int mode;
-	uint8 m = 0;
+	uint8_t m = 0;
 	if(argc != 2)
 		return;
 	

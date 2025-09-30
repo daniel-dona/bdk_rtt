@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 #include "driver_audio_if.h"
 #include "mem_pub.h"
 #include "i2s_pub.h"
@@ -14,14 +16,14 @@ typedef struct _driver_audio_codec_option_s
     void (*codec_configure)(unsigned int, unsigned char);
     void (*codec_close)();
     void (*codec_volume_control)(unsigned char volume);
-    void (*codec_mute_control)(BOOL enable);
+    void (*codec_mute_control)(bool enable);
 }driver_audio_codec_option;
 
 
 typedef struct driver_iis_global_setting_s
 {
-    UINT8 datawidth; 
-    UINT8 volume;
+    uint8_t datawidth; 
+    uint8_t volume;
     driver_audio_codec_option codec_ops; 
 }driver_iis_global_setting_t;
 
@@ -204,7 +206,7 @@ void aud_initial(uint32_t freq, uint32_t channels, uint32_t bits_per_sample)
 int32_t aud_hw_init(void)
 {
 //output 26M clk to dac MCLK
-	UINT32 	param = GFUNC_MODE_CLK26M;
+	uint32_t 	param = GFUNC_MODE_CLK26M;
 	sddev_control(GPIO_DEV_NAME, CMD_GPIO_ENABLE_SECOND, &param);
 	
 	vTaskDelay(10);
@@ -233,7 +235,7 @@ int32_t aud_hw_init(void)
 
 void aud_open( void )
 {
- 	UINT8 enable = 1;
+ 	uint8_t enable = 1;
  	DRIVER_AUDIO_PRT("aud open\r\n");
     sddev_control(I2S_DEV_NAME, I2S_CMD_ACTIVE, (void *)&enable);
 	iis_global_setting.codec_ops.codec_mute_control(0);
@@ -241,7 +243,7 @@ void aud_open( void )
 
 void aud_close(void)
 {
-	UINT8 enable = 0;
+	uint8_t enable = 0;
 	DRIVER_AUDIO_PRT("aud close\r\n");
 	iis_global_setting.codec_ops.codec_mute_control(1);
     sddev_control(I2S_DEV_NAME, I2S_CMD_ACTIVE, (void *)&enable);

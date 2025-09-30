@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _SK_INTF_H_
 #define _SK_INTF_H_
 
@@ -19,9 +20,9 @@ extern int ws_mgmt_peek_rxed_next_payload_size(int flag);
 extern int ws_get_mgmt_packet(unsigned char *buf, int len, int flag);
 extern int ws_data_peek_rxed_next_payload_size(int flag);
 extern int ws_get_data_packet(unsigned char *buf, int len, int flag);
-extern SOCKET mgmt_get_socket_num(u8 vif_idx);
-extern SOCKET data_get_socket_num(u8 vif_idx);
-extern SOCKET ioctl_get_socket_num(u8 vif_idx);
+extern SOCKET mgmt_get_socket_num(uint8_t vif_idx);
+extern SOCKET data_get_socket_num(uint8_t vif_idx);
+extern SOCKET ioctl_get_socket_num(uint8_t vif_idx);
 #endif
 // eof
 

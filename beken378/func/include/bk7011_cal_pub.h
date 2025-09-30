@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _BK7011_CAL_PUB_H_
 #define _BK7011_CAL_PUB_H_
 
@@ -104,18 +105,18 @@ typedef struct tmp_pwr_st {
 } TMP_PWR_ST, *TMP_PWR_PTR;
 #else
 typedef struct tmp_pwr_st {
-    UINT8 mod;
-    UINT8 pa;
-	UINT16 pwr_idx_shift;
+    uint8_t mod;
+    uint8_t pa;
+	uint16_t pwr_idx_shift;
 } TMP_PWR_ST, *TMP_PWR_PTR;
 #endif
 
 struct temp_cal_pwr_st {
-    UINT8 idx;
-    UINT8 mode;
-    INT16 shift;
-    INT16 shift_g;
-    INT16 shift_ble;
+    uint8_t idx;
+    uint8_t mode;
+    int16_t shift;
+    int16_t shift_g;
+    int16_t shift_ble;
 };
 
 typedef enum
@@ -131,50 +132,50 @@ extern void manual_cal_load_bandgap_calm(void);
 void bk7011_cal_vdddig_by_temperature(temperature_type new_temperature_type);
 
 extern void calibration_main(void);
-extern INT32 rwnx_cal_load_trx_rcbekn_reg_val(void);
-extern void rwnx_cal_set_txpwr_by_rate(INT32 rate, UINT32 test_mode);
-extern void rwnx_cal_set_txpwr_by_channel(UINT32 channel);
-extern INT32 rwnx_cal_save_trx_rcbekn_reg_val(void);
+extern int32_t rwnx_cal_load_trx_rcbekn_reg_val(void);
+extern void rwnx_cal_set_txpwr_by_rate(int32_t rate, uint32_t test_mode);
+extern void rwnx_cal_set_txpwr_by_channel(uint32_t channel);
+extern int32_t rwnx_cal_save_trx_rcbekn_reg_val(void);
 extern void do_calibration_in_temp_dect(void);
 extern void bk7011_cal_bias(void);
-extern void bk7011_cal_bias_low_temprature(UINT8 low_temprature);
-extern void bk7011_cal_bias_high_temprature(UINT8 high_temprature);
+extern void bk7011_cal_bias_low_temprature(uint8_t low_temprature);
+extern void bk7011_cal_bias_high_temprature(uint8_t high_temprature);
 extern void bk7011_cal_dpll(void);
-extern void rwnx_cal_set_txpwr(UINT32 pwr_gain, UINT32 grate);
-extern UINT32 manual_cal_get_pwr_idx_shift(UINT32 rate, UINT32 bandwidth, UINT32 *pwr_gain);
-extern int manual_cal_get_txpwr(UINT32 rate, UINT32 channel, UINT32 bandwidth, UINT32 *pwr_gain);
-extern void manual_cal_save_txpwr(UINT32 rate, UINT32 channel, UINT32 pwr_gain);
+extern void rwnx_cal_set_txpwr(uint32_t pwr_gain, uint32_t grate);
+extern uint32_t manual_cal_get_pwr_idx_shift(uint32_t rate, uint32_t bandwidth, uint32_t *pwr_gain);
+extern int manual_cal_get_txpwr(uint32_t rate, uint32_t channel, uint32_t bandwidth, uint32_t *pwr_gain);
+extern void manual_cal_save_txpwr(uint32_t rate, uint32_t channel, uint32_t pwr_gain);
 #if (CFG_SOC_NAME != SOC_BK7231)
 extern void manual_cal_11b_2_ble(void);
 #endif
-extern UINT32 manual_cal_fitting_txpwr_tab(void);
+extern uint32_t manual_cal_fitting_txpwr_tab(void);
 extern void manual_cal_show_txpwr_tab(void);
-extern UINT32 manual_cal_load_txpwr_tab_flash(void);
+extern uint32_t manual_cal_load_txpwr_tab_flash(void);
 extern int manual_cal_save_txpwr_tab_to_flash(void);
 extern int manual_cal_save_chipinfo_tab_to_flash(void);
-extern UINT8 manual_cal_wirte_otp_flash(UINT32 addr, UINT32 len, UINT8 *buf);
-extern UINT8 manual_cal_read_otp_flash(UINT32 addr, UINT32 len, UINT8 *buf);
-extern UINT32 manual_cal_load_default_txpwr_tab(UINT32 is_ready_flash);
-extern void manual_cal_set_dif_g_n40(UINT32 diff);
-extern void manual_cal_set_dif_g_n20(UINT32 diff);
+extern uint8_t manual_cal_wirte_otp_flash(uint32_t addr, uint32_t len, uint8_t *buf);
+extern uint8_t manual_cal_read_otp_flash(uint32_t addr, uint32_t len, uint8_t *buf);
+extern uint32_t manual_cal_load_default_txpwr_tab(uint32_t is_ready_flash);
+extern void manual_cal_set_dif_g_n40(uint32_t diff);
+extern void manual_cal_set_dif_g_n20(uint32_t diff);
 extern void manual_cal_set_dif_g_ble(int dif_ch0, int dif_ch19, int dif_ch39);
-extern void manual_cal_set_dif_ble(UINT32 diff);
+extern void manual_cal_set_dif_ble(uint32_t diff);
 extern void manual_cal_get_current_temperature(void);
-extern int manual_cal_write_macaddr_to_flash(UINT8 *mac_ptr);
-extern int manual_cal_get_macaddr_from_flash(UINT8 *mac_ptr);
-extern int manual_cal_set_rfcali_status_inflash(UINT32 rf_status);
-extern int manual_cal_get_rfcali_status_inflash(UINT32 *rf_status);
+extern int manual_cal_write_macaddr_to_flash(uint8_t *mac_ptr);
+extern int manual_cal_get_macaddr_from_flash(uint8_t *mac_ptr);
+extern int manual_cal_set_rfcali_status_inflash(uint32_t rf_status);
+extern int manual_cal_get_rfcali_status_inflash(uint32_t *rf_status);
 extern void manual_cal_show_otp_flash(void);
 extern void manual_cal_clear_otp_flash(void);
-extern void manual_cal_set_xtal(UINT32 xtal);
-extern void manual_cal_set_lpf_iq(UINT32 lpf_i, UINT32 lpf_q);
+extern void manual_cal_set_xtal(uint32_t xtal);
+extern void manual_cal_set_lpf_iq(uint32_t lpf_i, uint32_t lpf_q);
 extern void manual_cal_load_lpf_iq_tag_flash(void);
 extern void manual_cal_load_xtal_tag_flash(void);
-extern void manual_cal_do_xtal_temp_delta_set(INT8 shift);
-extern void manual_cal_do_xtal_cali(UINT16 cur_val, UINT16 *last, UINT16 thre, UINT16 init_val);
-extern UINT32 manual_cal_get_xtal(void);
-extern INT8 manual_cal_get_dbm_by_rate(UINT32 rate, UINT32 bandwidth);
-extern INT8 manual_cal_get_cur_txpwr_dbm(void);
+extern void manual_cal_do_xtal_temp_delta_set(int8_t shift);
+extern void manual_cal_do_xtal_cali(uint16_t cur_val, uint16_t *last, uint16_t thre, uint16_t init_val);
+extern uint32_t manual_cal_get_xtal(void);
+extern int8_t manual_cal_get_dbm_by_rate(uint32_t rate, uint32_t bandwidth);
+extern int8_t manual_cal_get_cur_txpwr_dbm(void);
 extern int manual_cal_load_temp_tag_from_flash(void);
 extern int manual_cal_load_xtal_tag_from_flash(void);
 extern void manual_cal_load_differ_tag_from_flash(void);
@@ -182,23 +183,23 @@ extern void manual_cal_load_differ_tag_from_flash(void);
 extern void bk7011_micopwr_config_tssi_read_prepare(void);
 extern void bk7011_micopwr_tssi_read(void);
 extern void bk7011_micopwr_tssi_show(void);
-extern void rwnx_cal_set_reg_adda_ldo(UINT32 val);
+extern void rwnx_cal_set_reg_adda_ldo(uint32_t val);
 extern void rwnx_cal_set_reg_rx_ldo(void);
 
-extern void manual_cal_tmp_pwr_init(UINT16 init_temp, UINT16 init_thre, UINT16 init_dist);
-extern void manual_cal_tmp_pwr_init_reg(UINT16 reg_mod, UINT16 reg_pa);
+extern void manual_cal_tmp_pwr_init(uint16_t init_temp, uint16_t init_thre, uint16_t init_dist);
+extern void manual_cal_tmp_pwr_init_reg(uint16_t reg_mod, uint16_t reg_pa);
 extern void manual_cal_temp_pwr_unint(void);
-extern void manual_cal_set_tmp_pwr_flag(UINT8 flag);
-extern TMP_PWR_PTR manual_cal_set_tmp_pwr(UINT16 cur_val, UINT16 thre, UINT16 *last);
-extern UINT32 manual_cal_load_temp_tag_flash(void);
-extern UINT32 manual_cal_load_adc_cali_flash(void);
+extern void manual_cal_set_tmp_pwr_flag(uint8_t flag);
+extern TMP_PWR_PTR manual_cal_set_tmp_pwr(uint16_t cur_val, uint16_t thre, uint16_t *last);
+extern uint32_t manual_cal_load_temp_tag_flash(void);
+extern uint32_t manual_cal_load_adc_cali_flash(void);
 extern void manual_cal_do_single_temperature(void);
 extern void manual_cal_set_rate_dist_for_txpwr(int dist_b, int dist_g, int dist_n40, int dist_ble);
 
-extern void rwnx_cal_set_reg_mod_pa(UINT16 reg_mod, UINT16 reg_pa);
-extern void rwnx_cal_do_temp_detect(UINT16 cur_val, UINT16 thre, UINT16 *last);
-extern void rwnx_cal_set_lpfcap_iq(UINT32 lpfcap_i, UINT32 lpfcap_q);
-extern void rwnx_cal_set_40M_extra_setting(UINT8 val);
+extern void rwnx_cal_set_reg_mod_pa(uint16_t reg_mod, uint16_t reg_pa);
+extern void rwnx_cal_do_temp_detect(uint16_t cur_val, uint16_t thre, uint16_t *last);
+extern void rwnx_cal_set_lpfcap_iq(uint32_t lpfcap_i, uint32_t lpfcap_q);
+extern void rwnx_cal_set_40M_extra_setting(uint8_t val);
 extern void rwnx_cal_set_40M_setting(void);
 extern void rwnx_cal_set_20M_setting(void);
 
@@ -212,22 +213,22 @@ extern void rwnx_cal_recover_wifi_setting(void);
 #endif
 extern void rwnx_cal_initial_calibration(void);
 
-extern UINT32 rwnx_tpc_pwr_idx_translate(UINT32 pwr_gain, UINT32 rate, UINT32 print_log );
-extern UINT32 rwnx_tpc_get_pwridx_by_rate(UINT32 rate, UINT32 print_log);
+extern uint32_t rwnx_tpc_pwr_idx_translate(uint32_t pwr_gain, uint32_t rate, uint32_t print_log );
+extern uint32_t rwnx_tpc_get_pwridx_by_rate(uint32_t rate, uint32_t print_log);
 extern void rwnx_use_tpc_set_pwr(void);
 extern void rwnx_no_use_tpc_set_pwr(void);
-extern UINT32 rwnx_is_tpc_bit_on(void);
-extern UINT32 rwnx_sys_is_enable_hw_tpc(void);
+extern uint32_t rwnx_is_tpc_bit_on(void);
+extern uint32_t rwnx_sys_is_enable_hw_tpc(void);
 extern void bk7011_set_rf_config_tssithred(int tssi_thred);
 extern int bk7011_is_rfcali_mode_auto(void);
 extern void bk7011_set_rfcali_mode(int mode);
 extern void bk7011_cal_dcormod_show(void);
-extern void bk7011_get_tx_filter_corner(INT32 *tx_ifilter_corner, INT32 *tx_qfilter_corner);
-extern void bk7011_get_tx_dc_comp(INT32 *tx_i_dc_comp, INT32 *tx_q_dc_comp);
-extern void bk7011_get_tx_gain_comp(INT32 *tx_i_gain_comp, INT32 *tx_q_gain_comp);
-extern void bk7011_get_tx_phase(INT32 *tx_phase_comp, INT32 *tx_phase_ty2);
-extern void bk7011_get_rx_err_wr(INT32 *rx_amp_err_wr, INT32 *rx_phase_err_wr, INT32 *rx_dc_gain_tab);
-extern void bk7011_get_tx_tssi_thred(INT32 *tx_tssi_thred_b, INT32 *tx_tssi_thred_g);
+extern void bk7011_get_tx_filter_corner(int32_t *tx_ifilter_corner, int32_t *tx_qfilter_corner);
+extern void bk7011_get_tx_dc_comp(int32_t *tx_i_dc_comp, int32_t *tx_q_dc_comp);
+extern void bk7011_get_tx_gain_comp(int32_t *tx_i_gain_comp, int32_t *tx_q_gain_comp);
+extern void bk7011_get_tx_phase(int32_t *tx_phase_comp, int32_t *tx_phase_ty2);
+extern void bk7011_get_rx_err_wr(int32_t *rx_amp_err_wr, int32_t *rx_phase_err_wr, int32_t *rx_dc_gain_tab);
+extern void bk7011_get_tx_tssi_thred(int32_t *tx_tssi_thred_b, int32_t *tx_tssi_thred_g);
 
 extern void rwnx_cal_ble_set_rfconfig(void);
 extern void rwnx_cal_ble_recover_rfconfig(void);
@@ -238,26 +239,26 @@ extern void manual_cal_clear_setp(void);
 extern void manual_cal_set_rfcal_step0(void);
 extern int manual_cal_rfcali_status(void);
 extern int manual_cal_updata_rfcali_status(void);
-extern UINT32 manual_cal_check_pwr_idx(UINT32 *level);
-extern UINT32 manual_cal_is_in_rftest_mode(void);
+extern uint32_t manual_cal_check_pwr_idx(uint32_t *level);
+extern uint32_t manual_cal_is_in_rftest_mode(void);
 
 extern void rwnx_cal_en_extra_txpa(void);
 extern void rwnx_cal_dis_extra_txpa(void);
 
 extern int manual_cal_save_cailmain_tx_tab_to_flash(void);
 extern int manual_cal_save_cailmain_rx_tab_to_flash(void);
-extern int manual_cal_load_calimain_tag_from_flash(UINT32 tag, int *tag_addr, int tag_size);
+extern int manual_cal_load_calimain_tag_from_flash(uint32_t tag, int *tag_addr, int tag_size);
 extern int manual_cal_need_load_cmtag_from_flash(void);
-extern void manual_set_cmtag(UINT32 status);
+extern void manual_set_cmtag(uint32_t status);
 extern void do_all_calibration(void);
 
-extern UINT32 manual_cal_is_tlv_tag_in_flash(void);
-extern UINT32 manual_cal_txpwr_tab_ready_in_flash(void);
+extern uint32_t manual_cal_is_tlv_tag_in_flash(void);
+extern uint32_t manual_cal_txpwr_tab_ready_in_flash(void);
 
-extern UINT32 rwnx_cal_load_user_rfcali_mode(int *rfcali_mode) __attribute__ ((weak));
-extern UINT32 rwnx_cal_load_user_g_tssi_threshold(int *tssi_g) __attribute__ ((weak));
-extern UINT32 rwnx_cal_load_user_b_tssi_threshold(int *tssi_b) __attribute__ ((weak));
-extern UINT32 rwnx_cal_is_auto_rfcali_printf_on(void) __attribute__ ((weak));
+extern uint32_t rwnx_cal_load_user_rfcali_mode(int *rfcali_mode) __attribute__ ((weak));
+extern uint32_t rwnx_cal_load_user_g_tssi_threshold(int *tssi_g) __attribute__ ((weak));
+extern uint32_t rwnx_cal_load_user_b_tssi_threshold(int *tssi_b) __attribute__ ((weak));
+extern uint32_t rwnx_cal_is_auto_rfcali_printf_on(void) __attribute__ ((weak));
 
 extern void cmd_rfcali_cfg_mode(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv);
 extern void cmd_rfcali_cfg_rate_dist(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv);

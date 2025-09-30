@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  * File      : ethernetif.c
  * This file is part of RT-Thread RTOS
@@ -134,7 +136,7 @@ static err_t ethernetif_linkoutput(struct netif *netif, struct pbuf *p)
     /* send a message to eth tx thread */
     msg.netif = netif;
     msg.buf   = p;
-    if (rt_mb_send(&eth_tx_thread_mb, (rt_uint32_t) &msg) == RT_EOK)
+    if (rt_mb_send(&eth_tx_thread_mb, (uint32_t) &msg) == RT_EOK)
     {
         /* waiting for ack */
         rt_sem_take(&(enetif->tx_ack), RT_WAITING_FOREVER);
@@ -222,7 +224,7 @@ static err_t eth_netif_device_init(struct netif *netif)
 }
 
 /* Keep old drivers compatible in RT-Thread */
-rt_err_t eth_device_init_with_flag(struct eth_device *dev, char *name, rt_uint16_t flags)
+rt_err_t eth_device_init_with_flag(struct eth_device *dev, char *name, uint16_t flags)
 {
     struct netif* netif;
 
@@ -288,7 +290,7 @@ rt_err_t eth_device_init_with_flag(struct eth_device *dev, char *name, rt_uint16
 
 rt_err_t eth_device_init(struct eth_device * dev, char *name)
 {
-    rt_uint16_t flags = NETIF_FLAG_BROADCAST | NETIF_FLAG_ETHARP;
+    uint16_t flags = NETIF_FLAG_BROADCAST | NETIF_FLAG_ETHARP;
 
 #if LWIP_IGMP
     /* IGMP support */
@@ -303,14 +305,14 @@ rt_err_t eth_device_ready(struct eth_device* dev)
 {
     if (dev->netif)
         /* post message to Ethernet thread */
-        return rt_mb_send(&eth_rx_thread_mb, (rt_uint32_t)dev);
+        return rt_mb_send(&eth_rx_thread_mb, (uint32_t)dev);
     else
         return ERR_OK; /* netif is not initialized yet, just return. */
 }
 
 rt_err_t eth_device_linkchange(struct eth_device* dev, rt_bool_t up)
 {
-    rt_uint32_t level;
+    uint32_t level;
 
     RT_ASSERT(dev != RT_NULL);
 
@@ -323,7 +325,7 @@ rt_err_t eth_device_linkchange(struct eth_device* dev, rt_bool_t up)
     rt_hw_interrupt_enable(level);
 
     /* post message to ethernet thread */
-    return rt_mb_send(&eth_rx_thread_mb, (rt_uint32_t)dev);
+    return rt_mb_send(&eth_rx_thread_mb, (uint32_t)dev);
 }
 #else
 /* NOTE: please not use it in interrupt when no RxThread exist */
@@ -346,7 +348,7 @@ static void eth_tx_thread_entry(void* parameter)
 
     while (1)
     {
-        if (rt_mb_recv(&eth_tx_thread_mb, (rt_uint32_t*)&msg, RT_WAITING_FOREVER) == RT_EOK)
+        if (rt_mb_recv(&eth_tx_thread_mb, (uint32_t*)&msg, RT_WAITING_FOREVER) == RT_EOK)
         {
             struct eth_device* enetif;
 
@@ -378,7 +380,7 @@ static void eth_rx_thread_entry(void* parameter)
 
     while (1)
     {
-        if (rt_mb_recv(&eth_rx_thread_mb, (rt_uint32_t*)&device, RT_WAITING_FOREVER) == RT_EOK)
+        if (rt_mb_recv(&eth_rx_thread_mb, (uint32_t*)&device, RT_WAITING_FOREVER) == RT_EOK)
         {
             struct pbuf *p;
 
@@ -386,7 +388,7 @@ static void eth_rx_thread_entry(void* parameter)
             if (device->link_changed)
             {
                 int status;
-                rt_uint32_t level;
+                uint32_t level;
 
                 level = rt_hw_interrupt_disable();
                 status = device->link_status;
@@ -618,7 +620,7 @@ FINSH_FUNCTION_EXPORT(list_if, list network interface information);
 
 void list_tcps(void)
 {
-    rt_uint32_t num = 0;
+    uint32_t num = 0;
     struct tcp_pcb *pcb;
     char local_ip_str[16];
     char remote_ip_str[16];
@@ -680,7 +682,7 @@ FINSH_FUNCTION_EXPORT(list_tcps, list all of tcp connections);
 void list_udps(void)
 {
     struct udp_pcb *pcb;
-    rt_uint32_t num = 0;
+    uint32_t num = 0;
     char local_ip_str[16];
     char remote_ip_str[16];
 

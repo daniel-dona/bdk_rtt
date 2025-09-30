@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _RW_MSG_RX_H_
 #define _RW_MSG_RX_H_
 

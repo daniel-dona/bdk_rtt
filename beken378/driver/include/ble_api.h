@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _BLE_API_H_
 #define _BLE_API_H_
 

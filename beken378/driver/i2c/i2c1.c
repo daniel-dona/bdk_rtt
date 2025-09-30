@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 
@@ -12,15 +13,15 @@
 #include "mem_pub.h"
 
 typedef struct i2c1_msg {
-	UINT8 TxMode;		//0: Read;  1: Write
-	UINT16 RegAddr;
-    UINT16 RemainNum;
-	UINT8 *pData;
-	UINT8 SalveID;
-	UINT8 AddrFlag;
-	UINT8 TransDone;
-	UINT8 ErrorNO;
-	UINT8 AddrWidth;
+	uint8_t TxMode;		//0: Read;  1: Write
+	uint16_t RegAddr;
+    uint16_t RemainNum;
+	uint8_t *pData;
+	uint8_t SalveID;
+	uint8_t AddrFlag;
+	uint8_t TransDone;
+	uint8_t ErrorNO;
+	uint8_t AddrWidth;
 } I2C1_MSG_ST, *I2C1_MSG_PTR;
 
 static DD_OPERATIONS i2c1_op =
@@ -34,10 +35,10 @@ static DD_OPERATIONS i2c1_op =
 
 volatile I2C1_MSG_ST gi2c1;
 
-static void i2c1_set_ensmb(UINT32 enable)
+static void i2c1_set_ensmb(uint32_t enable)
 {
-    UINT32 reg_addr = REG_I2C1_CONFIG;
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = REG_I2C1_CONFIG;
+    uint32_t reg_val = REG_READ(reg_addr);
 
     if(enable)
         reg_val |= I2C1_ENSMB;
@@ -46,10 +47,10 @@ static void i2c1_set_ensmb(UINT32 enable)
     REG_WRITE(reg_addr, reg_val);
 }
 
-static void i2c1_set_smbus_sta(UINT32 enable)
+static void i2c1_set_smbus_sta(uint32_t enable)
 {
-    UINT32 reg_addr = REG_I2C1_CONFIG;
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = REG_I2C1_CONFIG;
+    uint32_t reg_val = REG_READ(reg_addr);
 
     if(enable)
         reg_val |= I2C1_STA;
@@ -58,10 +59,10 @@ static void i2c1_set_smbus_sta(UINT32 enable)
     REG_WRITE(reg_addr, reg_val);
 }
 
-static void i2c1_set_smbus_stop(UINT32 enable)
+static void i2c1_set_smbus_stop(uint32_t enable)
 {
-    UINT32 reg_addr = REG_I2C1_CONFIG;
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = REG_I2C1_CONFIG;
+    uint32_t reg_val = REG_READ(reg_addr);
 
     if(enable)
         reg_val |= I2C1_STO;
@@ -70,10 +71,10 @@ static void i2c1_set_smbus_stop(UINT32 enable)
     REG_WRITE(reg_addr, reg_val);
 }
 
-static void i2c1_set_smbus_ack_tx(UINT32 enable)
+static void i2c1_set_smbus_ack_tx(uint32_t enable)
 {
-    UINT32 reg_addr = REG_I2C1_CONFIG;
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = REG_I2C1_CONFIG;
+    uint32_t reg_val = REG_READ(reg_addr);
 
     if(enable)
         reg_val |= I2C1_ACK_TX;
@@ -82,10 +83,10 @@ static void i2c1_set_smbus_ack_tx(UINT32 enable)
     REG_WRITE(reg_addr, reg_val);
 }
 
-static void i2c1_set_smbus_tx_mode(UINT32 enable)
+static void i2c1_set_smbus_tx_mode(uint32_t enable)
 {
-    UINT32 reg_addr = REG_I2C1_CONFIG;
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = REG_I2C1_CONFIG;
+    uint32_t reg_val = REG_READ(reg_addr);
 
     if(enable)
         reg_val |= I2C1_TX_MODE;
@@ -94,54 +95,54 @@ static void i2c1_set_smbus_tx_mode(UINT32 enable)
     REG_WRITE(reg_addr, reg_val);
 }
 
-static void i2c1_set_freq_div(UINT32 div)
+static void i2c1_set_freq_div(uint32_t div)
 {
-    UINT32 reg_addr = REG_I2C1_CONFIG;
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = REG_I2C1_CONFIG;
+    uint32_t reg_val = REG_READ(reg_addr);
 
     reg_val = (reg_val & ~(I2C1_FREQ_DIV_MASK << I2C1_FREQ_DIV_POSI))
         | ((div & I2C1_FREQ_DIV_MASK) << I2C1_FREQ_DIV_POSI);
     REG_WRITE(reg_addr, reg_val);
 }
 
-static UINT32 i2c1_get_smbus_interrupt(void)
+static uint32_t i2c1_get_smbus_interrupt(void)
 {
-    UINT32 reg_addr = REG_I2C1_CONFIG;
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = REG_I2C1_CONFIG;
+    uint32_t reg_val = REG_READ(reg_addr);
 
     return (reg_val & I2C1_SI)? 1: 0;
 }
 
 static void i2c1_clear_smbus_interrupt(void)
 {
-    UINT32 reg_addr = REG_I2C1_CONFIG;
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = REG_I2C1_CONFIG;
+    uint32_t reg_val = REG_READ(reg_addr);
 
     reg_val |= I2C1_SI;
 
     REG_WRITE(reg_addr, reg_val);
 }
 
-static UINT32 i2c1_get_ack_rx(void)
+static uint32_t i2c1_get_ack_rx(void)
 {
-    UINT32 reg_addr = REG_I2C1_CONFIG;
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = REG_I2C1_CONFIG;
+    uint32_t reg_val = REG_READ(reg_addr);
 
     return (reg_val & I2C1_ACK_RX)? 1: 0;
 }
 
-static UINT32 i2c1_get_ack_req(void)
+static uint32_t i2c1_get_ack_req(void)
 {
-    UINT32 reg_addr = REG_I2C1_CONFIG;
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = REG_I2C1_CONFIG;
+    uint32_t reg_val = REG_READ(reg_addr);
 
     return (reg_val & I2C1_ACK_REQ)? 1: 0;
 }
 
-static UINT32 i2c1_get_smbus_busy(void)
+static uint32_t i2c1_get_smbus_busy(void)
 {
-    UINT32 reg_addr = REG_I2C1_CONFIG;
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = REG_I2C1_CONFIG;
+    uint32_t reg_val = REG_READ(reg_addr);
 
     return (reg_val & I2C1_BUSY)? 1: 0;
 }
@@ -149,7 +150,7 @@ static UINT32 i2c1_get_smbus_busy(void)
 ////////////////////////////////////////////////////////////////////////////////
 static void i2c1_gpio_config(void)
 {
-    UINT32 param;
+    uint32_t param;
 
     param = GFUNC_MODE_I2C1;
     sddev_control(GPIO_DEV_NAME, CMD_GPIO_ENABLE_SECOND, &param);
@@ -157,28 +158,28 @@ static void i2c1_gpio_config(void)
 
 static void i2c1_power_up(void)
 {
-    UINT32 param;
+    uint32_t param;
     param = PWD_I2C1_CLK_BIT;
 	sddev_control(ICU_DEV_NAME, CMD_CLK_PWR_UP, &param);
 }
 
 static void i2c1_power_down(void)
 {
-    UINT32 param;
+    uint32_t param;
     param = PWD_I2C1_CLK_BIT;
 	sddev_control(ICU_DEV_NAME, CMD_CLK_PWR_DOWN, &param);
 }
 
 static void i2c1_enable_interrupt(void)
 {
-    UINT32 param;
+    uint32_t param;
     param = (IRQ_I2C1_BIT);
     sddev_control(ICU_DEV_NAME, CMD_ICU_INT_ENABLE, &param);
 }
 
 static void i2c1_disable_interrupt(void)
 {
-    UINT32 param;
+    uint32_t param;
     param = (IRQ_I2C1_BIT);
     sddev_control(ICU_DEV_NAME, CMD_ICU_INT_DISABLE, &param);
 }
@@ -362,9 +363,9 @@ void i2c1_exit(void)
     ddev_unregister_dev(I2C1_DEV_NAME);
 }
 
-static UINT32 i2c1_open(UINT32 op_flag)
+static uint32_t i2c1_open(uint32_t op_flag)
 {
-   // UINT32 reg;
+   // uint32_t reg;
     os_printf("i2c1_open\r\n");
     if(op_flag) {
         i2c1_set_freq_div(op_flag);
@@ -381,7 +382,7 @@ static UINT32 i2c1_open(UINT32 op_flag)
     return I2C1_SUCCESS;
 }
 
-static UINT32 i2c1_close(void)
+static uint32_t i2c1_close(void)
 {
     os_printf("i2c1_close\r\n");
     i2c1_set_ensmb(0);
@@ -391,9 +392,9 @@ static UINT32 i2c1_close(void)
     return I2C1_SUCCESS;
 }
 
-static UINT32 i2c1_read(char *user_buf, UINT32 count, UINT32 op_flag)
+static uint32_t i2c1_read(char *user_buf, uint32_t count, uint32_t op_flag)
 {
-    UINT32 reg;
+    uint32_t reg;
     I2C_OP_PTR i2c_op;
     GLOBAL_INT_DECLARATION();
 
@@ -418,7 +419,7 @@ static UINT32 i2c1_read(char *user_buf, UINT32 count, UINT32 op_flag)
     gi2c1.TxMode = 0;
     gi2c1.RegAddr = i2c_op->op_addr;
     gi2c1.RemainNum = count;
-    gi2c1.pData = (UINT8 *)user_buf;
+    gi2c1.pData = (uint8_t *)user_buf;
     gi2c1.SalveID = i2c_op->salve_id;
     gi2c1.AddrFlag = 0;
     gi2c1.TransDone = 0;
@@ -446,9 +447,9 @@ static UINT32 i2c1_read(char *user_buf, UINT32 count, UINT32 op_flag)
     return gi2c1.ErrorNO;
 }
 
-static UINT32 i2c1_write(char *user_buf, UINT32 count, UINT32 op_flag)
+static uint32_t i2c1_write(char *user_buf, uint32_t count, uint32_t op_flag)
 {
-    UINT32 reg;
+    uint32_t reg;
     I2C_OP_PTR i2c_op;
     GLOBAL_INT_DECLARATION();
 
@@ -472,7 +473,7 @@ static UINT32 i2c1_write(char *user_buf, UINT32 count, UINT32 op_flag)
     gi2c1.TxMode = 1;
     gi2c1.RegAddr = i2c_op->op_addr;
     gi2c1.RemainNum = count;
-    gi2c1.pData = (UINT8 *)user_buf;
+    gi2c1.pData = (uint8_t *)user_buf;
     gi2c1.SalveID = i2c_op->salve_id;
     gi2c1.AddrFlag = 0;
     gi2c1.TransDone = 0;
@@ -500,29 +501,29 @@ static UINT32 i2c1_write(char *user_buf, UINT32 count, UINT32 op_flag)
     return gi2c1.ErrorNO;
 }
 
-static UINT32 i2c1_ctrl(UINT32 cmd, void *param)
+static uint32_t i2c1_ctrl(uint32_t cmd, void *param)
 {
-    UINT32 ret = I2C1_SUCCESS;
+    uint32_t ret = I2C1_SUCCESS;
 
     switch(cmd)
     {
     case I2C1_CMD_SET_ENSMB:
-        i2c1_set_ensmb(*((UINT32 *)param));
+        i2c1_set_ensmb(*((uint32_t *)param));
         break;
     case I2C1_CMD_SET_SMBUS_STA:
-        i2c1_set_smbus_sta(*((UINT32 *)param));
+        i2c1_set_smbus_sta(*((uint32_t *)param));
         break;
     case I2C1_CMD_SET_SMBUS_STOP:
-        i2c1_set_smbus_stop(*((UINT32 *)param));
+        i2c1_set_smbus_stop(*((uint32_t *)param));
         break;
     case I2C1_CMD_SET_SMBUS_ACK_TX:
-        i2c1_set_smbus_ack_tx(*((UINT32 *)param));
+        i2c1_set_smbus_ack_tx(*((uint32_t *)param));
         break;
     case I2C1_CMD_SET_SMBUS_TX_MODE:
-        i2c1_set_smbus_tx_mode(*((UINT32 *)param));
+        i2c1_set_smbus_tx_mode(*((uint32_t *)param));
         break;
     case I2C1_CMD_SET_FREQ_DIV:
-        i2c1_set_freq_div(*((UINT32 *)param));
+        i2c1_set_freq_div(*((uint32_t *)param));
         break;
     case I2C1_CMD_GET_SMBUS_INTERRUPT:
         ret = i2c1_get_smbus_interrupt();

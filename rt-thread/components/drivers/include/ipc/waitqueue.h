@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef WAITQUEUE_H__
 #define WAITQUEUE_H__
 
@@ -14,7 +15,7 @@ struct rt_wqueue_node
 	rt_list_t   list;
 
 	rt_wqueue_func_t wakeup;
-	rt_uint32_t key;
+	uint32_t key;
 };
 typedef struct rt_wqueue_node rt_wqueue_node_t;
 

@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * hostapd / WMM (Wi-Fi Multimedia)
  * Copyright 2002-2003, Instant802 Networks, Inc.
@@ -13,8 +14,8 @@
 struct ieee80211_mgmt;
 struct wmm_tspec_element;
 
-u8 * hostapd_eid_wmm(struct hostapd_data *hapd, u8 *eid);
-int hostapd_eid_wmm_valid(struct hostapd_data *hapd, const u8 *eid,
+uint8_t * hostapd_eid_wmm(struct hostapd_data *hapd, uint8_t *eid);
+int hostapd_eid_wmm_valid(struct hostapd_data *hapd, const uint8_t *eid,
 			  size_t len);
 void hostapd_wmm_action(struct hostapd_data *hapd,
 			const struct ieee80211_mgmt *mgmt, size_t len);

@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef __WPA_PSK_CACHE_H_
 #define __WPA_PSK_CACHE_H_
 
@@ -24,8 +25,8 @@ struct wpa_psk_cache_item {
 	char *ssid;
 	size_t ssid_len;
 	char *passphrase;
-	u8 psk[32];
-	u8 flags;
+	uint8_t psk[32];
+	uint8_t flags;
 };
 
 /**
@@ -43,8 +44,8 @@ struct wpa_psk_cache {
 
 void wpa_psk_cache_init();
 int wpa_get_psk_from_cache(struct wpa_ssid *ssid);
-int __wpa_get_psk_from_cache(u8 *ssid, size_t ssid_len, char *passphrase, u8 *psk, size_t psk_len);
-int wpa_psk_request(u8 *ssid, size_t ssid_len, char *passphrase, u8 *psk, size_t psk_len);
+int __wpa_get_psk_from_cache(uint8_t *ssid, size_t ssid_len, char *passphrase, uint8_t *psk, size_t psk_len);
+int wpa_psk_request(uint8_t *ssid, size_t ssid_len, char *passphrase, uint8_t *psk, size_t psk_len);
 void start_wpa_psk_cal_thread();
 
 #else /* !CONFIG_WPA_PSK_CACHE */
@@ -57,7 +58,7 @@ static inline int wpa_get_psk_from_cache(struct wpa_ssid *ssid)
 	return -1;
 }
 
-static inline int wpa_psk_request(u8 *ssid, size_t ssid_len, char *passphrase, u8 *psk, size_t psk_len)
+static inline int wpa_psk_request(uint8_t *ssid, size_t ssid_len, char *passphrase, uint8_t *psk, size_t psk_len)
 {
 	return -1;
 }

@@ -107,7 +107,7 @@ void ble_ps_enable_clear(void)
     GLOBAL_INT_RESTORE();
 }
 
-UINT32 ble_ps_enabled(void )
+uint32_t ble_ps_enabled(void )
 {
     uint32_t value = 0;
     GLOBAL_INT_DECLARATION();
@@ -225,7 +225,7 @@ void bk_ble_sleep_check(void)
             ble_deep_sleep = 1;
             PS_DEBUG_RX_TRIGER;
                 
-            UINT32 reg = RF_HOLD_BY_BLE_BIT;
+            uint32_t reg = RF_HOLD_BY_BLE_BIT;
             sddev_control(SCTRL_DEV_NAME, CMD_RF_HOLD_BIT_CLR, &reg);
             //ble_switch_rf_to_wifi();
 
@@ -340,7 +340,7 @@ void rw_main(void)
                         ble_dut_flag = 0;
                         extern void uart2_isr(void);
                         extern void uart1_isr(void);
-                        extern void intc_service_change_handler(UINT8 int_num, FUNCPTR isr);
+                        extern void intc_service_change_handler(uint8_t int_num, FUNCPTR isr);
 
                         #if (BLE_DUT_UART_PORT == PORT_UART2)
                         intc_service_change_handler(IRQ_UART2, uart2_isr);
@@ -375,7 +375,7 @@ ble_main_exit:
     {
         GLOBAL_INT_DIS();
         #if CFG_USE_BLE_PS
-        UINT32 reg = RF_HOLD_BY_BLE_BIT;
+        uint32_t reg = RF_HOLD_BY_BLE_BIT;
         sddev_control(SCTRL_DEV_NAME, CMD_RF_HOLD_BIT_SET, &reg);
         ble_switch_rf_to_wifi();
         #endif
@@ -475,8 +475,8 @@ void ble_globel_prevent_sleep_clr(void)
 }
 
 static BLE_PS_FORBID_STATUS ble_ps_forbid_code = 0;
-static UINT16 ble_ps_forbid_count = 0;
-UINT16 ble_ps_forbid_trace(BLE_PS_FORBID_STATUS forbid)
+static uint16_t ble_ps_forbid_count = 0;
+uint16_t ble_ps_forbid_trace(BLE_PS_FORBID_STATUS forbid)
 {
     ble_ps_forbid_count ++;
 

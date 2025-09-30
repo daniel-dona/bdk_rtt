@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <rtthread.h>
 #include "vc_config.h"
 
@@ -202,7 +203,7 @@ int voice_changer_handler(void)
 		return 0;
 	}
 	
-	vc_out_len = voice_changer_data_handle((uint8*)vcbuff, len, &vc_out);
+	vc_out_len = voice_changer_data_handle((uint8_t*)vcbuff, len, &vc_out);
     if(vc_out_len == 0) 
 	{
         // no enough data for vc, so vc return 0, no need do sm_playing

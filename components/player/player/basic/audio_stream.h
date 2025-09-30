@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File: audio_stream.h
  * 

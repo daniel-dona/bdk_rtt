@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <rtthread.h>
 #include <rthw.h>
 #include <rtdevice.h>
@@ -51,12 +52,12 @@ struct audio_codec_device
     struct rt_data_node_list *node_list;
 
     char *send_fifo;
-    rt_uint32_t stat;
-    rt_uint32_t dma_irq_cnt;
-    rt_uint32_t volume;
-	rt_uint32_t paused;
-	rt_uint32_t fill_pos;
-	rt_uint32_t fill_size;
+    uint32_t stat;
+    uint32_t dma_irq_cnt;
+    uint32_t volume;
+	uint32_t paused;
+	uint32_t fill_pos;
+	uint32_t fill_size;
 };
 
 static struct audio_codec_device _g_audio_codec;
@@ -65,7 +66,7 @@ static struct audio_codec_device _g_audio_codec;
 /**
  * RT-Thread Audio utils
  */
-int rt_data_node_init(struct rt_data_node_list **node_list, rt_uint32_t size)
+int rt_data_node_init(struct rt_data_node_list **node_list, uint32_t size)
 {
     int result = RT_EOK;
     struct rt_data_node_list *list = RT_NULL;
@@ -111,7 +112,7 @@ __exit:
 
 int rt_data_node_is_empty(struct rt_data_node_list *node_list)
 {
-    rt_uint32_t read_index, write_index;
+    uint32_t read_index, write_index;
     rt_base_t level;
 
     level = rt_hw_interrupt_disable();
@@ -135,10 +136,10 @@ void wait_node_free(struct rt_data_node_list *node_list)
         rt_thread_delay(5);
 }
 
-int rt_data_node_write(struct rt_data_node_list *node_list, void *buffer, rt_uint32_t size)
+int rt_data_node_write(struct rt_data_node_list *node_list, void *buffer, uint32_t size)
 {
     struct rt_data_node *node = RT_NULL;
-    rt_uint32_t read_index, write_index, next_index;
+    uint32_t read_index, write_index, next_index;
     rt_base_t level;
 
     level = rt_hw_interrupt_disable();
@@ -167,14 +168,14 @@ int rt_data_node_write(struct rt_data_node_list *node_list, void *buffer, rt_uin
     return size;
 }
 
-int rt_data_node_read(struct rt_data_node_list *node_list, void *buffer, rt_uint32_t size)
+int rt_data_node_read(struct rt_data_node_list *node_list, void *buffer, uint32_t size)
 {
     struct rt_data_node *node = RT_NULL;
-    rt_uint32_t read_index, write_index, next_index;
-    rt_int32_t remain_len, copy_size;
-    rt_uint32_t read_offset, data_offset;
+    uint32_t read_index, write_index, next_index;
+    int32_t remain_len, copy_size;
+    uint32_t read_offset, data_offset;
     rt_base_t level;
-    rt_uint32_t result = size;
+    uint32_t result = size;
 
     level = rt_hw_interrupt_disable();
     read_index = node_list->read_index;
@@ -266,10 +267,10 @@ void rt_data_node_empty(struct rt_data_node_list *node_list)
 /**
  * RT-Thread Audio Driver Interface
  */
-__maybe_unused static void dac_speaker_enable(rt_uint32_t enable);
-static void dac_speaker_enable(rt_uint32_t enable)
+__maybe_unused static void dac_speaker_enable(uint32_t enable);
+static void dac_speaker_enable(uint32_t enable)
 {
-    UINT32 param;
+    uint32_t param;
 
     param =  GPIO_CFG_PARAM(GPIO9, GMODE_OUTPUT);
     sddev_control(GPIO_DEV_NAME, CMD_GPIO_CFG, &param);
@@ -298,7 +299,7 @@ static void dac_dma_addr_reset(void)
 }
 
 #ifdef PAUSE_EN
-static void dac_dma_pause_addr_set(UINT32 addr)
+static void dac_dma_pause_addr_set(uint32_t addr)
 {
     GDMA_CFG_ST en_cfg;
 
@@ -311,7 +312,7 @@ static void dac_dma_pause_addr_set(UINT32 addr)
 #endif
 
 
-static void dac_dma_enable(rt_uint32_t enable)
+static void dac_dma_enable(uint32_t enable)
 {
     GDMA_CFG_ST en_cfg;
 
@@ -349,7 +350,7 @@ static rt_err_t audio_codec_init(rt_device_t dev)
     return RT_EOK;
 }
 
-static rt_err_t audio_codec_open(rt_device_t dev, rt_uint16_t oflag)
+static rt_err_t audio_codec_open(rt_device_t dev, uint16_t oflag)
 {
 #define AVOID_POP_NOISE 1
 
@@ -392,7 +393,7 @@ static rt_size_t audio_codec_write(rt_device_t dev, rt_off_t pos,
 {
     int ret;
     struct audio_codec_device *audio = RT_NULL;
-	rt_uint32_t result;
+	uint32_t result;
 
     audio = (struct audio_codec_device *)dev;
     ret = rt_data_node_write(audio->node_list, (void *)buffer, size);
@@ -427,7 +428,7 @@ static rt_err_t audio_codec_control(rt_device_t dev, int cmd, void *args)
     {
     case CODEC_CMD_SET_VOLUME:
     {
-        rt_uint32_t volume = *(rt_uint32_t *)args;
+        uint32_t volume = *(uint32_t *)args;
 
         rt_kprintf("set_volume %d-%d\n", volume, audio->volume);
         if(audio->volume != volume)
@@ -440,8 +441,8 @@ static rt_err_t audio_codec_control(rt_device_t dev, int cmd, void *args)
 
     case CODEC_CMD_SAMPLERATE:
     {
-        rt_uint32_t freq = *(rt_uint32_t *)args;
-		static rt_uint32_t freq_back = AUDIO_DAC_DEF_SAMPLE_RATE;
+        uint32_t freq = *(uint32_t *)args;
+		static uint32_t freq_back = AUDIO_DAC_DEF_SAMPLE_RATE;
 		if(freq != freq_back)
 		{
 			freq_back = freq;
@@ -495,7 +496,7 @@ static rt_err_t audio_codec_control(rt_device_t dev, int cmd, void *args)
 static rt_err_t audio_codec_close(rt_device_t dev)
 {
     struct audio_codec_device *audio = RT_NULL;
-    rt_uint32_t stat;
+    uint32_t stat;
 
     audio = (struct audio_codec_device *)dev;
     stat = audio->stat;
@@ -538,7 +539,7 @@ static void data_node_read_complete(struct rt_data_node *node, void *user_data)
 }
 
 static int print_cnt = 0;
-void dac_dma_half_handler(UINT32 flag)
+void dac_dma_half_handler(uint32_t flag)
 {
     int result;
     struct audio_codec_device *audio = RT_NULL;
@@ -548,9 +549,9 @@ void dac_dma_half_handler(UINT32 flag)
     if (result)
     {
     #ifdef PAUSE_EN
-        dac_dma_pause_addr_set((UINT32)audio->send_fifo + (AUDIO_SEND_BUFFER_SIZE -4));
+        dac_dma_pause_addr_set((uint32_t)audio->send_fifo + (AUDIO_SEND_BUFFER_SIZE -4));
 		audio->paused = 1;
-		audio->fill_pos = (UINT32)audio->send_fifo;
+		audio->fill_pos = (uint32_t)audio->send_fifo;
 		audio->fill_size = AUDIO_SEND_BUFFER_SIZE / 2;
 	#endif
 		
@@ -572,16 +573,16 @@ void dac_dma_half_handler(UINT32 flag)
      #ifdef PAUSE_EN
 		if (result < (AUDIO_SEND_BUFFER_SIZE / 2))
 		{
-			dac_dma_pause_addr_set((UINT32)audio->send_fifo + (AUDIO_SEND_BUFFER_SIZE -4));
+			dac_dma_pause_addr_set((uint32_t)audio->send_fifo + (AUDIO_SEND_BUFFER_SIZE -4));
 			audio->paused = 1;
-		    audio->fill_pos = (UINT32)audio->send_fifo + result;
+		    audio->fill_pos = (uint32_t)audio->send_fifo + result;
 		    audio->fill_size = AUDIO_SEND_BUFFER_SIZE / 2 - result;
 		}
 	#endif
     }
 }
 
-void dac_dma_finish_handler(UINT32 flag)
+void dac_dma_finish_handler(uint32_t flag)
 {
     int result;
     struct audio_codec_device *audio = RT_NULL;
@@ -592,9 +593,9 @@ void dac_dma_finish_handler(UINT32 flag)
     if (result)
     {
     #ifdef PAUSE_EN
-        dac_dma_pause_addr_set((UINT32)audio->send_fifo + (AUDIO_SEND_BUFFER_SIZE / 2 -4));
+        dac_dma_pause_addr_set((uint32_t)audio->send_fifo + (AUDIO_SEND_BUFFER_SIZE / 2 -4));
 		audio->paused = 1;
-		audio->fill_pos = (UINT32)audio->send_fifo + AUDIO_SEND_BUFFER_SIZE / 2;
+		audio->fill_pos = (uint32_t)audio->send_fifo + AUDIO_SEND_BUFFER_SIZE / 2;
 		audio->fill_size = AUDIO_SEND_BUFFER_SIZE / 2;
 	#endif
         //rt_kprintf("* ");
@@ -607,9 +608,9 @@ void dac_dma_finish_handler(UINT32 flag)
 	#ifdef PAUSE_EN
 		if (result < (AUDIO_SEND_BUFFER_SIZE / 2))
 		{
-			dac_dma_pause_addr_set((UINT32)audio->send_fifo + (AUDIO_SEND_BUFFER_SIZE / 2 -4));
+			dac_dma_pause_addr_set((uint32_t)audio->send_fifo + (AUDIO_SEND_BUFFER_SIZE / 2 -4));
 			audio->paused = 1;
-		    audio->fill_pos = (UINT32)audio->send_fifo + AUDIO_SEND_BUFFER_SIZE / 2 + result;
+		    audio->fill_pos = (uint32_t)audio->send_fifo + AUDIO_SEND_BUFFER_SIZE / 2 + result;
 		    audio->fill_size = AUDIO_SEND_BUFFER_SIZE / 2 - result;
 		}
 	#endif
@@ -686,7 +687,7 @@ int rt_audio_codec_hw_init(void)
     //audio_dac_volume_use_single_port();
     
     audio->send_fifo = sdram_malloc(AUDIO_SEND_BUFFER_SIZE);
-    if ((UINT32)audio->send_fifo == RT_NULL)
+    if ((uint32_t)audio->send_fifo == RT_NULL)
     {
         result = -RT_ENOMEM;
         goto __exit;

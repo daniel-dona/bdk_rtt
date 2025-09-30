@@ -1,15 +1,16 @@
+#include <stdint.h>
 #include "rtthread.h"
 #include "include.h"
 #include "sound_delay.h"
 #include "mixer_ctrl.h"
 
 #if (CONFIG_SOUND_MIXER && defined(CFG_CONTROL_MIXER_PARAMETER_BY_SARADC))
-static uint8 g_saradc_step_status = 0;
+static uint8_t g_saradc_step_status = 0;
 
 static void sdly_change_decay_value_byadc(int32_t val)
 {
     SDELAY_ST *mixer_ptr;
-    uint32 tmp_value = val >> 4;
+    uint32_t tmp_value = val >> 4;
 
     if(0 == sdly_is_valid_mixer_entity())
     {
@@ -30,9 +31,9 @@ static void sdly_change_decay_value_byadc(int32_t val)
     SDLY_PRINTF("g_sound_mixer decay:%d,adc_val:%d\r\n", mixer_ptr->decay_value, val);
 }
 
-static void sdly_change_vol_byadc(uint16_t val, uint8 mode)
+static void sdly_change_vol_byadc(uint16_t val, uint8_t mode)
 {
-    uint16 tmp_vol;
+    uint16_t tmp_vol;
     SDELAY_ST *mixer_ptr;
 
     if(0 == sdly_is_valid_mixer_entity())
@@ -65,10 +66,10 @@ static void sdly_change_vol_byadc(uint16_t val, uint8 mode)
     }
 }
 
-static void sdly_change_mic_param_byadc(int32_t val, uint8 mode)
+static void sdly_change_mic_param_byadc(int32_t val, uint8_t mode)
 {
     SDELAY_ST *mixer_ptr;
-    uint8 tmp_value = val >> 5;
+    uint8_t tmp_value = val >> 5;
 
     if(0 == sdly_is_valid_mixer_entity())
     {

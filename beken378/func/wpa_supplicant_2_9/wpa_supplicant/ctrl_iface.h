@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * WPA Supplicant / UNIX domain socket -based control interface
  * Copyright (c) 2004-2005, Jouni Malinen <j@w1.fi>

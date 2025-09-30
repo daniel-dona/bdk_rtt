@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef __AUDIO_PUB_H__
 #define __AUDIO_PUB_H__
 
@@ -9,15 +10,15 @@
 
 typedef struct aud_dac_cfg_st
 {
-    UINT8 *buf;
-    UINT16 buf_len;
-    UINT16 freq;
-    UINT16 channels;     
-    UINT16 dma_mode;
-    UINT16 mute_pin;
-    UINT16 def_volume;
+    uint8_t *buf;
+    uint16_t buf_len;
+    uint16_t freq;
+    uint16_t channels;     
+    uint16_t dma_mode;
+    uint16_t mute_pin;
+    uint16_t def_volume;
     #if CFG_GENERAL_DMA
-    void (*buf_finish_cb)(UINT8 *buf, void *usr_data);
+    void (*buf_finish_cb)(uint8_t *buf, void *usr_data);
     void *usr_data;
     #endif
     
@@ -52,12 +53,12 @@ enum
 #define AUD_ADC_CMD_MAGIC            (0x2EBC0000)
 typedef struct aud_adc_cfg_st
 {
-    UINT8 *buf;
-    UINT16 buf_len;
-    UINT16 freq;
-    UINT16 channels;
-    UINT16 mode;
-    UINT32 linein_detect_pin;
+    uint8_t *buf;
+    uint16_t buf_len;
+    uint16_t freq;
+    uint16_t channels;
+    uint16_t mode;
+    uint32_t linein_detect_pin;
 } AUD_ADC_CFG_ST, *AUD_ADC_CFG_PTR;
 
 enum

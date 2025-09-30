@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -433,7 +435,7 @@ static void httpserver_msg_thread_entry(void *parameter)
 
 int httpserver_msg_init(void)
 {
-    mq_httpserver_msg = rt_mq_create("httpserver_msg", sizeof(rt_uint8_t), 6, RT_IPC_FLAG_FIFO);
+    mq_httpserver_msg = rt_mq_create("httpserver_msg", sizeof(uint8_t), 6, RT_IPC_FLAG_FIFO);
     create_httpbody_sem = rt_sem_create("create_httpbody_sem", 0, RT_IPC_FLAG_FIFO);
 
     if (!create_httpbody_sem)
@@ -484,7 +486,7 @@ static void cgi_web_ap_config_handler(struct webnet_session* session)
     session->request->result_code = 200;
     webnet_session_set_header(session, mimetype, 200, "Ok", -1);
 
-    webnet_session_write(session, (const rt_uint8_t*)header, rt_strlen(header));
+    webnet_session_write(session, (const uint8_t*)header, rt_strlen(header));
     if (request->query_counter)
     {
         const char *ssid_value, *password_value;

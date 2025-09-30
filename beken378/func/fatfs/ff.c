@@ -1,3 +1,4 @@
+#include <stdint.h>
 
 #include "diskio.h"		/* Declarations of disk I/O functions */
 #include "ff.h"			/* Declarations of API */
@@ -15,7 +16,7 @@ FATFS *FatFs[_VOLUMES];	/* Pointer to the file system objects (logical drives) *
 #endif
 
 static
-uint16 Fsid;				/* File system mount ID */
+uint16_t Fsid;				/* File system mount ID */
 
 #define	ExFatContiguousClus	0x03
 /*-----------------------------------------------------------------------*/
@@ -24,20 +25,20 @@ uint16 Fsid;				/* File system mount ID */
 
 /* Copy memory to memory */
 //static
-void mem_cpy (void *dst, const void *src, uint32 cnt)
+void mem_cpy (void *dst, const void *src, uint32_t cnt)
 {
-    uint8 *d = (uint8 *)dst;
-    const uint8 *s = (const uint8 *)src;
+    uint8_t *d = (uint8_t *)dst;
+    const uint8_t *s = (const uint8_t *)src;
     while (cnt--)
         *d++ = *s++;
 }
 
 /* Fill memory */
-void mem_set (void *dst, int val, uint32 cnt)
+void mem_set (void *dst, int val, uint32_t cnt)
 {
-    uint8 *d = (uint8 *)dst;
+    uint8_t *d = (uint8_t *)dst;
     while (cnt--)
-        *d++ = (uint8)val;
+        *d++ = (uint8_t)val;
 }
 
 /*-----------------------------------------------------------------------*/
@@ -45,10 +46,10 @@ void mem_set (void *dst, int val, uint32 cnt)
 /*-----------------------------------------------------------------------*/
 FRESULT move_window (
     FATFS *fs,		/* File system object */
-    uint32 sector	/* Sector number to make apperance in the fs->win[] */
+    uint32_t sector	/* Sector number to make apperance in the fs->win[] */
 )					/* Move to zero only writes back dirty window */
 {
-    uint32 wsect;
+    uint32_t wsect;
     wsect = fs->winsect;
     if (wsect != sector)  	/* Changed current window */
     {
@@ -66,7 +67,7 @@ FRESULT move_window (
 /*-----------------------------------------------------------------------*/
 /* Get sector# from cluster#                                             */
 /*-----------------------------------------------------------------------*/
-static uint32 clust2sect (	FATFS *fs, uint32 clst)
+static uint32_t clust2sect (	FATFS *fs, uint32_t clst)
 {
     clst -= 2;
     if (clst >= (fs->max_clust - 2))
@@ -78,13 +79,13 @@ static uint32 clust2sect (	FATFS *fs, uint32 clst)
 /*-----------------------------------------------------------------------*/
 /* FAT access - Read value of a FAT entry                                */
 /*-----------------------------------------------------------------------*/
-uint32 get_fat (	/* 0xFFFFFFFF:Disk error, 1:Internal error, Else:Cluster status */
+uint32_t get_fat (	/* 0xFFFFFFFF:Disk error, 1:Internal error, Else:Cluster status */
     FATFS *fs,	/* File system object */
-    uint32 clst	/* Cluster# to get the link information */
+    uint32_t clst	/* Cluster# to get the link information */
 )
 {
-    uint32 wc, bc;
-    uint8 *p;
+    uint32_t wc, bc;
+    uint8_t *p;
 
     if (clst < 2 || clst >= fs->max_clust)	/* Check range */
         return 1;
@@ -92,7 +93,7 @@ uint32 get_fat (	/* 0xFFFFFFFF:Disk error, 1:Internal error, Else:Cluster status
     switch (fs->fs_type)
     {
     case FS_FAT12 :
-        bc = (uint32)clst;
+        bc = (uint32_t)clst;
         bc += bc / 2;
         if (move_window(fs, fs->fatbase + (bc / SS(fs)))) break;
         wc = fs->win[bc % SS(fs)];
@@ -135,11 +136,11 @@ FRESULT validate (FATFS *fs)
 /*-----------------------------------------------------------------------*/
 FRESULT f_lseek (
     FIL *fp,		/* Pointer to the file object */
-    uint32 ofs		/* File pointer from top of file */
+    uint32_t ofs		/* File pointer from top of file */
 )
 {
     FRESULT res;
-    uint32 clst, bcs, nsect, ifptr;
+    uint32_t clst, bcs, nsect, ifptr;
 
 
     res = validate(fp->fs);		/* Check validity of the object */
@@ -155,7 +156,7 @@ FRESULT f_lseek (
 
     if (ofs > 0)
     {
-        bcs = (uint32)fp->fs->csize * SS(fp->fs);	/* Cluster size (byte) */
+        bcs = (uint32_t)fp->fs->csize * SS(fp->fs);	/* Cluster size (byte) */
         if (ifptr > 0 && (ofs - 1) / bcs >= (ifptr - 1) / bcs)
         {
             /* When seek to same or following cluster, */
@@ -188,7 +189,7 @@ FRESULT f_lseek (
                 ofs -= bcs;
             }
             fp->fptr += ofs;
-            fp->csect = (uint8)(ofs / SS(fp->fs));	/* Sector offset in the cluster */
+            fp->csect = (uint8_t)(ofs / SS(fp->fs));	/* Sector offset in the cluster */
             if (ofs % SS(fp->fs))
             {
                 nsect = clust2sect(fp->fs, clst);	/* Current sector */
@@ -215,11 +216,11 @@ FRESULT f_lseek (
 //static
 FRESULT dir_seek (
     DIR *dj,		/* Pointer to directory object */
-    uint16 idx		/* Directory index number */
+    uint16_t idx		/* Directory index number */
 )
 {
-    uint32 clst;
-    uint16 ic;
+    uint32_t clst;
+    uint16_t ic;
 
     dj->index = idx;
 
@@ -280,7 +281,7 @@ FRESULT dir_seek (
    		   4-Disk error			*/
 /*-----------------------------------------------------------------------*/
 static
-uint8 check_fs (FATFS *fs, uint32 sect)
+uint8_t check_fs (FATFS *fs, uint32_t sect)
 {
     if (disk_read(fs->drive, fs->win, sect, 1) != RES_OK)
         return 4;
@@ -302,14 +303,14 @@ uint8 check_fs (FATFS *fs, uint32 sect)
 FRESULT f_read (
     FIL *fp, 		/* Pointer to the file object */
     void *buff,		/* Pointer to data buffer */
-    uint32 btr,		/* Number of bytes to read */
-    uint32 *br		/* Pointer to number of bytes read */
+    uint32_t btr,		/* Number of bytes to read */
+    uint32_t *br		/* Pointer to number of bytes read */
 )
 {
     FRESULT res;
-    uint32 clst, sect, remain;
-    uint32 rcnt = 0, cc;
-    uint8 *rbuff = buff;
+    uint32_t clst, sect, remain;
+    uint32_t rcnt = 0, cc;
+    uint8_t *rbuff = buff;
 
     *br = 0;	/* Initialize bytes read */
     res = validate(fp->fs);	/* Check validity of the object */
@@ -320,7 +321,7 @@ FRESULT f_read (
 
     remain = fp->fsize - fp->fptr;
     if (btr > remain)
-        btr = (uint32)remain;/* Truncate btr by remaining bytes */
+        btr = (uint32_t)remain;/* Truncate btr by remaining bytes */
 
     for ( ; btr; rbuff += rcnt, fp->fptr += rcnt, *br += rcnt, btr -= rcnt)
     {
@@ -353,9 +354,9 @@ FRESULT f_read (
                 /* Read maximum contiguous sectors directly */
                 if (fp->csect + cc > fp->fs->csize)	/* Clip at cluster boundary */
                     cc = fp->fs->csize - fp->csect;
-                if (disk_read(fp->fs->drive, rbuff, sect, (uint8)cc) != RES_OK)
+                if (disk_read(fp->fs->drive, rbuff, sect, (uint8_t)cc) != RES_OK)
                     return FR_DISK_ERR;
-                fp->csect += (uint8)cc;	/* Next sector address in the cluster */
+                fp->csect += (uint8_t)cc;	/* Next sector address in the cluster */
                 rcnt = SS(fp->fs) * cc;	/* Number of bytes transferred */
                 continue;
             }
@@ -390,11 +391,11 @@ FRESULT f_close ( FIL *fp)
 }
 
 /* FR_OK(0): successful, !=0: any error occured */
-FRESULT chk_mounted_con (FATFS *rfs, uint8 type)
+FRESULT chk_mounted_con (FATFS *rfs, uint8_t type)
 {
-    uint8 fmt, *tbl;
+    uint8_t fmt, *tbl;
     DSTATUS stat;
-    uint32 bsect, fsize, tsect, mclst;
+    uint32_t bsect, fsize, tsect, mclst;
     FATFS *fs;
 
 	FAT_PRT("chk_mounted_con\r\n");
@@ -519,7 +520,7 @@ FRESULT f_EOF(FIL *fp )
 /* Mount/Unmount a Logical Drive                                         */
 /*-----------------------------------------------------------------------*/
 FRESULT f_mount (
-    uint8 vol,    /* Logical drive number to be mounted/unmounted */
+    uint8_t vol,    /* Logical drive number to be mounted/unmounted */
     FATFS *fs	/* Pointer to the file system object (NULL:unmount)*/
 )
 {
@@ -561,7 +562,7 @@ FRESULT f_close (
 
 FRESULT f_getcwd (
     TCHAR *buff,	/* Pointer to the directory path */
-    uint32 len		/* Size of path */
+    uint32_t len		/* Size of path */
 )
 {
     return FR_OK;
@@ -570,7 +571,7 @@ FRESULT f_getcwd (
 FRESULT f_open (
     FIL *fp,			/* Pointer to the blank file object */
     const TCHAR *path,	/* Pointer to the file name */
-    uint8 mode			/* Access mode and file open mode flags */
+    uint8_t mode			/* Access mode and file open mode flags */
 )
 {
     return FR_OK;
@@ -587,8 +588,8 @@ FRESULT f_opendir (
 FRESULT f_read (
     FIL *fp, 	/* Pointer to the file object */
     void *buff,	/* Pointer to data buffer */
-    uint32 btr,	/* Number of bytes to read */
-    uint32 *br	/* Pointer to number of bytes read */
+    uint32_t btr,	/* Number of bytes to read */
+    uint32_t *br	/* Pointer to number of bytes read */
 )
 {
     return FR_OK;
@@ -613,8 +614,8 @@ FRESULT f_stat (
 FRESULT f_write (
     FIL *fp,			/* Pointer to the file object */
     const void *buff,	/* Pointer to the data to be written */
-    uint32 btw,			/* Number of bytes to write */
-    uint32 *bw			/* Pointer to number of bytes written */
+    uint32_t btw,			/* Number of bytes to write */
+    uint32_t *bw			/* Pointer to number of bytes written */
 )
 {
     return FR_OK;
@@ -7802,21 +7803,21 @@ int f_printf (
 #define FS_EXFAT	4
 
 /* Multi-byte word access macros  */				/* Use byte-by-byte access to the FAT structure */
-#define	LD_WORD(ptr)		(uint16)(((uint16)*((uint8*)(ptr)+1)<<8)|(uint16)*(uint8*)(ptr))
-#define	LD_DWORD(ptr)		(uint32)(((uint32)*((uint8*)(ptr)+3)<<24)|((uint32)*((uint8*)(ptr)+2)<<16)|((uint16)*((uint8*)(ptr)+1)<<8)|*(uint8*)(ptr))
-#define	ST_WORD(ptr,val)	*(uint8*)(ptr)=(uint8)(val); *((uint8*)(ptr)+1)=(uint8)((uint16)(val)>>8)
-#define	ST_DWORD(ptr,val)	*(uint8*)(ptr)=(uint8)(val); *((uint8*)(ptr)+1)=(uint8)((uint16)(val)>>8); *((uint8*)(ptr)+2)=(uint8)((uint32)(val)>>16); *((uint8*)(ptr)+3)=(uint8)((uint32)(val)>>24)
+#define	LD_WORD(ptr)		(uint16_t)(((uint16_t)*((uint8_t*)(ptr)+1)<<8)|(uint16_t)*(uint8_t*)(ptr))
+#define	LD_DWORD(ptr)		(uint32_t)(((uint32_t)*((uint8_t*)(ptr)+3)<<24)|((uint32_t)*((uint8_t*)(ptr)+2)<<16)|((uint16_t)*((uint8_t*)(ptr)+1)<<8)|*(uint8_t*)(ptr))
+#define	ST_WORD(ptr,val)	*(uint8_t*)(ptr)=(uint8_t)(val); *((uint8_t*)(ptr)+1)=(uint8_t)((uint16_t)(val)>>8)
+#define	ST_DWORD(ptr,val)	*(uint8_t*)(ptr)=(uint8_t)(val); *((uint8_t*)(ptr)+1)=(uint8_t)((uint16_t)(val)>>8); *((uint8_t*)(ptr)+2)=(uint8_t)((uint32_t)(val)>>16); *((uint8_t*)(ptr)+3)=(uint8_t)((uint32_t)(val)>>24)
 
 
 
 
-FRESULT chk_mounted_con (FATFS *rfs, uint8 type)
+FRESULT chk_mounted_con (FATFS *rfs, uint8_t type)
 {
-    uint8 fmt, *tbl, drv;
+    uint8_t fmt, *tbl, drv;
     DSTATUS stat;
-    uint32 bsect, fsize, tsect, mclst;
+    uint32_t bsect, fsize, tsect, mclst;
     FATFS *fs;
-    uint8 vol = 0;
+    uint8_t vol = 0;
     fs = rfs;
     drv = 0;
     if (!fs)
@@ -7924,11 +7925,11 @@ FRESULT chk_mounted_con (FATFS *rfs, uint8 type)
 //static
 FRESULT dir_seek (
     DIR *dj,		/* Pointer to directory object */
-    uint16 idx		/* Directory index number */
+    uint16_t idx		/* Directory index number */
 )
 {
-    uint32 clst;
-    uint16 ic;
+    uint32_t clst;
+    uint16_t ic;
 
     dj->dptr = idx;
 

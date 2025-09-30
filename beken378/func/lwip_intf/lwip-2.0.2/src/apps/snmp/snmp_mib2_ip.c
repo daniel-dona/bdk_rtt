@@ -1,3 +1,4 @@
+#include <stdint.h>
 /**
  * @file
  * Management Information Base II (RFC1213) IP objects and functions.
@@ -213,18 +214,18 @@ ip_AddrTable_get_cell_value_core(struct netif *netif, const u32_t* column, union
 
   switch (*column) {
   case 1: /* ipAdEntAddr */
-    value->u32 = netif_ip4_addr(netif)->addr;
+    value->uint32_t = netif_ip4_addr(netif)->addr;
     break;
   case 2: /* ipAdEntIfIndex */
-    value->u32 = netif_to_num(netif);
+    value->uint32_t = netif_to_num(netif);
     break;
   case 3: /* ipAdEntNetMask */
-    value->u32 = netif_ip4_netmask(netif)->addr;
+    value->uint32_t = netif_ip4_netmask(netif)->addr;
     break;
   case 4: /* ipAdEntBcastAddr */
     /* lwIP oddity, there's no broadcast
        address in the netif we can rely on */
-    value->u32 = IPADDR_BROADCAST & 1;
+    value->uint32_t = IPADDR_BROADCAST & 1;
     break;
   case 5: /* ipAdEntReasmMaxSize */
 #if IP_REASSEMBLY
@@ -232,12 +233,12 @@ ip_AddrTable_get_cell_value_core(struct netif *netif, const u32_t* column, union
      * but only if receiving one fragmented packet at a time.
      * The current solution is to calculate for 2 simultaneous packets...
      */
-    value->u32 = (IP_HLEN + ((IP_REASS_MAX_PBUFS/2) *
+    value->uint32_t = (IP_HLEN + ((IP_REASS_MAX_PBUFS/2) *
         (PBUF_POOL_BUFSIZE - PBUF_LINK_ENCAPSULATION_HLEN - PBUF_LINK_HLEN - IP_HLEN)));
 #else
     /** @todo returning MTU would be a bad thing and
         returning a wild guess like '576' isn't good either */
-    value->u32 = 0;
+    value->uint32_t = 0;
 #endif
     break;
   default:
@@ -326,66 +327,66 @@ ip_RouteTable_get_cell_value_core(struct netif *netif, u8_t default_route, const
   case 1: /* ipRouteDest */
     if (default_route) {
        /* default rte has 0.0.0.0 dest */
-      value->u32 = IP4_ADDR_ANY4->addr;
+      value->uint32_t = IP4_ADDR_ANY4->addr;
     } else {
       /* netifs have netaddress dest */
       ip4_addr_t tmp;
       ip4_addr_get_network(&tmp, netif_ip4_addr(netif), netif_ip4_netmask(netif));
-      value->u32 = tmp.addr;
+      value->uint32_t = tmp.addr;
     }
     break;
   case 2: /* ipRouteIfIndex */
-    value->u32 = netif_to_num(netif);
+    value->uint32_t = netif_to_num(netif);
     break;
   case 3: /* ipRouteMetric1 */
     if (default_route) {
-      value->s32 = 1; /* default */
+      value->int32_t = 1; /* default */
     } else {
-      value->s32 = 0; /* normal */
+      value->int32_t = 0; /* normal */
     }
     break;
   case 4: /* ipRouteMetric2 */
   case 5: /* ipRouteMetric3 */
   case 6: /* ipRouteMetric4 */
-    value->s32 = -1; /* none */
+    value->int32_t = -1; /* none */
     break;
   case 7: /* ipRouteNextHop */
     if (default_route) {
       /* default rte: gateway */
-      value->u32 = netif_ip4_gw(netif)->addr;
+      value->uint32_t = netif_ip4_gw(netif)->addr;
     } else {
       /* other rtes: netif ip_addr  */
-      value->u32 = netif_ip4_addr(netif)->addr;
+      value->uint32_t = netif_ip4_addr(netif)->addr;
     }
     break;
   case 8: /* ipRouteType */
     if (default_route) {
       /* default rte is indirect */
-      value->u32 = 4; /* indirect */
+      value->uint32_t = 4; /* indirect */
     } else {
       /* other rtes are direct */
-      value->u32 = 3; /* direct */
+      value->uint32_t = 3; /* direct */
     }
     break;
   case 9: /* ipRouteProto */
     /* locally defined routes */
-    value->u32 = 2; /* local */
+    value->uint32_t = 2; /* local */
     break;
   case 10: /* ipRouteAge */
     /* @todo (sysuptime - timestamp last change) / 100 */
-    value->u32 = 0;
+    value->uint32_t = 0;
     break;
   case 11: /* ipRouteMask */
     if (default_route) {
       /* default rte use 0.0.0.0 mask */
-      value->u32 = IP4_ADDR_ANY4->addr;
+      value->uint32_t = IP4_ADDR_ANY4->addr;
     } else {
       /* other rtes use netmask */
-      value->u32 = netif_ip4_netmask(netif)->addr;
+      value->uint32_t = netif_ip4_netmask(netif)->addr;
     }
     break;
   case 12: /* ipRouteMetric5 */
-    value->s32 = -1; /* none */
+    value->int32_t = -1; /* none */
     break;
   case 13: /* ipRouteInfo */
     value->const_ptr = snmp_zero_dot_zero.id;
@@ -505,17 +506,17 @@ ip_NetToMediaTable_get_cell_value_core(u8_t arp_table_index, const u32_t* column
   /* value */
   switch (*column) {
   case 1: /* atIfIndex / ipNetToMediaIfIndex */
-    value->u32 = netif_to_num(netif);
+    value->uint32_t = netif_to_num(netif);
     break;
   case 2: /* atPhysAddress / ipNetToMediaPhysAddress */
     value->ptr = ethaddr;
     *value_len = sizeof(*ethaddr);
     break;
   case 3: /* atNetAddress / ipNetToMediaNetAddress */
-    value->u32 = ip->addr;
+    value->uint32_t = ip->addr;
     break;
   case 4: /* ipNetToMediaType */
-    value->u32 = 3; /* dynamic*/
+    value->uint32_t = 3; /* dynamic*/
     break;
   default:
     return SNMP_ERR_NOSUCHINSTANCE;

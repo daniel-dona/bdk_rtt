@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File: tts_player.h
  * COPYRIGHT (C) 2012-2018, Shanghai Real-Thread Technology Co., Ltd
@@ -21,7 +22,7 @@
  * @return == RT_EOK: play success
  *         ==-RT_EINVAL: invalid parameter
  */
-extern rt_err_t tts_player_block(char *files[], rt_uint8_t num); 
+extern rt_err_t tts_player_block(char *files[], uint8_t num); 
 
 /**
  * play tts file list with Break mode, break and does not resume the previous playback
@@ -32,6 +33,6 @@ extern rt_err_t tts_player_block(char *files[], rt_uint8_t num);
  * @return == RT_EOK: play success
  *         ==-RT_EINVAL: invalid parameter
  */
-extern rt_err_t tts_player_break(char *files[], rt_uint8_t num); 
+extern rt_err_t tts_player_break(char *files[], uint8_t num); 
 
 #endif

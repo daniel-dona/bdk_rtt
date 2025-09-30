@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * 程序清单：挂起线程
  *
@@ -12,7 +13,7 @@ static rt_thread_t tid2 = RT_NULL;
 /* 线程1入口 */
 static void thread1_entry(void* parameter)
 {
-    rt_uint32_t count = 0;
+    uint32_t count = 0;
 
     while (1)
     {

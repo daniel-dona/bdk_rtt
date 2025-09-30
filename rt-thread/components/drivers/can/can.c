@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : can.c
  * This file is part of RT-Thread RTOS
@@ -67,7 +68,7 @@ rt_inline int _can_int_rx(struct rt_can_device *can, struct rt_can_msg *data, in
     {
         rt_base_t level;
 #ifdef RT_CAN_USING_HDR
-        rt_int32_t hdr;
+        int32_t hdr;
 #endif /*RT_CAN_USING_HDR*/
         struct rt_can_msg_list *listmsg = RT_NULL;
 
@@ -150,8 +151,8 @@ rt_inline int _can_int_tx(struct rt_can_device *can, const struct rt_can_msg *da
     while (msgs)
     {
         rt_base_t level;
-        rt_uint32_t no;
-        rt_uint32_t result;
+        uint32_t no;
+        uint32_t result;
         struct rt_can_sndbxinx_list *tx_tosnd = RT_NULL;
 
         rt_sem_take(&(tx_fifo->sem), RT_WAITING_FOREVER);
@@ -161,7 +162,7 @@ rt_inline int _can_int_tx(struct rt_can_device *can, const struct rt_can_msg *da
         rt_list_remove(&tx_tosnd->list);
         rt_hw_interrupt_enable(level);
 
-        no = ((rt_uint32_t)tx_tosnd - (rt_uint32_t)tx_fifo->buffer) / sizeof(struct rt_can_sndbxinx_list);
+        no = ((uint32_t)tx_tosnd - (uint32_t)tx_fifo->buffer) / sizeof(struct rt_can_sndbxinx_list);
         tx_tosnd->result = RT_CAN_SND_RESULT_WAIT;
         if (can->ops->sendmsg(can, data, no) != RT_EOK)
         {
@@ -212,7 +213,7 @@ rt_inline int _can_int_tx_priv(struct rt_can_device *can, const struct rt_can_ms
 {
     int size;
     rt_base_t level;
-    rt_uint32_t no, result;
+    uint32_t no, result;
     struct rt_can_tx_fifo *tx_fifo;
 
     RT_ASSERT(can != RT_NULL);
@@ -269,7 +270,7 @@ rt_inline int _can_int_tx_priv(struct rt_can_device *can, const struct rt_can_ms
     return (size - msgs);
 }
 
-static rt_err_t rt_can_open(struct rt_device *dev, rt_uint16_t oflag)
+static rt_err_t rt_can_open(struct rt_device *dev, uint16_t oflag)
 {
     struct rt_can_device *can;
     char tmpname[16];
@@ -517,7 +518,7 @@ static rt_err_t rt_can_control(struct rt_device *dev,
         break;
     case RT_CAN_CMD_SET_PRIV:
         /* configure device */
-        if ((rt_uint32_t)args != can->config.privmode)
+        if ((uint32_t)args != can->config.privmode)
         {
             int i;
             rt_base_t level;
@@ -576,7 +577,7 @@ static rt_err_t rt_can_control(struct rt_device *dev,
         {
             struct rt_can_filter_config *pfilter;
             struct rt_can_filter_item *pitem;
-            rt_uint32_t count;
+            uint32_t count;
             rt_base_t level;
 
             pfilter = (struct rt_can_filter_config *)args;
@@ -772,11 +773,11 @@ void rt_hw_can_isr(struct rt_can_device *can, int event)
         struct rt_can_rx_fifo *rx_fifo;
         struct rt_can_msg_list *listmsg = RT_NULL;
 #ifdef RT_CAN_USING_HDR
-        rt_int32_t hdr;
+        int32_t hdr;
 #endif
         int ch = -1;
         rt_base_t level;
-        rt_uint32_t no;
+        uint32_t no;
 
         rx_fifo = (struct rt_can_rx_fifo *)can->can_rx;
         RT_ASSERT(rx_fifo != RT_NULL);
@@ -879,7 +880,7 @@ void rt_hw_can_isr(struct rt_can_device *can, int event)
     case RT_CAN_EVENT_TX_FAIL:
     {
         struct rt_can_tx_fifo *tx_fifo;
-        rt_uint32_t no;
+        uint32_t no;
         no = event >> 8;
         tx_fifo = (struct rt_can_tx_fifo *) can->can_tx;
         RT_ASSERT(tx_fifo != RT_NULL);

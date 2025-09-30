@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 #ifndef _POWER_SAVE_PUB_H_
 #define _POWER_SAVE_PUB_H_
 
@@ -96,17 +98,17 @@ typedef enum {
 		os_printf("lr:%x\r\n", value);          \
 	}
 
-extern UINT8 power_save_if_ps_can_sleep ( void );
-extern UINT16 power_save_forbid_trace ( PS_FORBID_STATUS forbid );
-extern UINT16 power_save_beacon_len_get ( void );
+extern uint8_t power_save_if_ps_can_sleep ( void );
+extern uint16_t power_save_forbid_trace ( PS_FORBID_STATUS forbid );
+extern uint16_t power_save_beacon_len_get ( void );
 extern void power_save_dump ( void );
-extern UINT8 power_save_if_rf_sleep();
-extern UINT16 power_save_radio_wkup_get ( void );
-extern void power_save_radio_wkup_set ( UINT16 );
-extern UINT8 power_save_set_dtim_multi ( UINT8 );
-extern UINT8 power_save_sm_set_all_bcmc ( UINT8 );
-extern void power_save_wkup_event_set ( UINT32 );
-extern UINT8 power_save_if_ps_rf_dtim_enabled ( void );
+extern uint8_t power_save_if_rf_sleep();
+extern uint16_t power_save_radio_wkup_get ( void );
+extern void power_save_radio_wkup_set ( uint16_t );
+extern uint8_t power_save_set_dtim_multi ( uint8_t );
+extern uint8_t power_save_sm_set_all_bcmc ( uint8_t );
+extern void power_save_wkup_event_set ( uint32_t );
+extern uint8_t power_save_if_ps_rf_dtim_enabled ( void );
 extern int power_save_dtim_enable();
 extern int power_save_dtim_disable();
 extern void power_save_rf_dtim_manual_do_wakeup ( void );
@@ -121,14 +123,14 @@ extern void txl_cntrl_dec_pck_cnt ( void );
 extern void txl_cntrl_inc_pck_cnt ( void );
 extern int bmsg_is_empty ( void );
 extern int net_if_is_up ( void );
-extern void power_save_beacon_len_set ( UINT16 );
+extern void power_save_beacon_len_set ( uint16_t );
 extern void power_save_beacon_state_update ( void );
-extern void power_save_cal_bcn_liston_int ( UINT16 );
+extern void power_save_cal_bcn_liston_int ( uint16_t );
 extern void power_save_delay_sleep_check ( void );
 extern int power_save_dtim_disable_handler ( void );
 extern int power_save_dtim_enable_handler ( void );
-extern INT8 power_save_if_sleep_at_first ( void );
-extern UINT8 power_save_if_sleep_first ( void );
+extern int8_t power_save_if_sleep_at_first ( void );
+extern uint8_t power_save_if_sleep_first ( void );
 extern PS_MODE_STATUS power_save_ps_mode_get ( void );
 extern void power_save_ps_mode_set ( PS_MODE_STATUS );
 extern void power_save_rf_ps_wkup_semlist_init ( void );
@@ -141,40 +143,40 @@ extern void power_save_set_temp_use_rf_flag(void);
 extern void power_save_clr_temp_use_rf_flag(void);
 
 
-extern void power_save_set_dtim_count ( UINT8 );
-extern void power_save_set_dtim_period ( UINT8 );
+extern void power_save_set_dtim_count ( uint8_t );
+extern void power_save_set_dtim_period ( uint8_t );
 extern void power_save_sleep_status_set ( void );
 extern bool  power_save_sleep ( void );
-extern void power_save_wkup_event_clear ( UINT32 );
-extern void power_save_wkup_event_set ( UINT32 );
-extern UINT32 power_save_wkup_event_get ( void );
-extern UINT8 power_save_get_liston_int ( void );
+extern void power_save_wkup_event_clear ( uint32_t );
+extern void power_save_wkup_event_set ( uint32_t );
+extern uint32_t power_save_wkup_event_get ( void );
+extern uint8_t power_save_get_liston_int ( void );
 extern int power_save_get_wkup_less_time();
-extern void power_save_set_linger_time ( UINT32 );
-extern void power_save_dtim_wake ( UINT32 );
-extern UINT32 power_save_use_pwm0_isr ( void );
+extern void power_save_set_linger_time ( uint32_t );
+extern void power_save_dtim_wake ( uint32_t );
+extern uint32_t power_save_use_pwm0_isr ( void );
 extern void power_save_td_ck_timer_set ( void );
-extern void power_save_pwm0_isr ( UINT8 param );
+extern void power_save_pwm0_isr ( uint8_t param );
 extern void power_save_keep_timer_set ( void );
 extern void power_save_keep_timer_real_handler();
 extern void power_save_td_ck_timer_real_handler();
 extern void power_save_keep_timer_stop ( void );
-extern UINT32 power_save_get_sleep_count ( void );
+extern uint32_t power_save_get_sleep_count ( void );
 extern void power_save_set_reseted_flag ( void );
-extern UINT32 power_save_get_rf_ps_dtim_time ( void );
+extern uint32_t power_save_get_rf_ps_dtim_time ( void );
 extern uint8_t ble_switch_mac_sleeped;
-extern void power_save_set_keep_timer_time ( UINT32 );
+extern void power_save_set_keep_timer_time ( uint32_t );
 extern void power_save_wake_mac_rf_end_clr_flag(void);
 
 extern void ps_set_rf_prevent(void);
 extern void ps_clear_rf_prevent(void);
 
 void ps_set_td_timer(void);
-UINT32 bk_unconditional_sleep_mode_get ( void );
+uint32_t bk_unconditional_sleep_mode_get ( void );
 void ps_set_mac_reset_prevent(void);
 void ps_clear_mac_reset_prevent(void);
-UINT8 power_save_low_latency_get ( void );
-void power_save_set_low_latency ( UINT8 );
+uint8_t power_save_low_latency_get ( void );
+void power_save_set_low_latency ( uint8_t );
 
 /***************************************************************************/
 extern void power_save_wake_rf_if_in_sleep(void);

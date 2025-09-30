@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  *  RT-Thread Wi-Fi Device
  *
@@ -244,7 +245,7 @@ int rt_wlan_get_rssi(struct rt_wlan_device *device)
     return result;
 }
 
-int rt_wlan_get_mac(struct rt_wlan_device *device, rt_uint8_t hwaddr[6])
+int rt_wlan_get_mac(struct rt_wlan_device *device, uint8_t hwaddr[6])
 {
     int result;
     if (device == RT_NULL) return 0;
@@ -252,7 +253,7 @@ int rt_wlan_get_mac(struct rt_wlan_device *device, rt_uint8_t hwaddr[6])
     return result;
 }
 
-int rt_wlan_set_mac(struct rt_wlan_device *device, rt_uint8_t hwaddr[6])
+int rt_wlan_set_mac(struct rt_wlan_device *device, uint8_t hwaddr[6])
 {
     int result;
     if (device == RT_NULL) return 0;

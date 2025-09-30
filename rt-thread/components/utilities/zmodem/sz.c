@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : sz.c
  * the implemention of sending files to the remote computers  
@@ -17,17 +18,17 @@
 #include "zdef.h"
 
 
-static rt_uint8_t TX_BUFFER[TX_BUFFER_SIZE];	     /* sender buffer */
-static rt_uint8_t file_cnt = 0;		                 /* count of number of files opened */
-static rt_uint8_t Rxflags  = 0;	                  	 /* rx parameter flags */
-static rt_uint8_t ZF2_OP;		                  	 /* file transfer option */ 
+static uint8_t TX_BUFFER[TX_BUFFER_SIZE];	     /* sender buffer */
+static uint8_t file_cnt = 0;		                 /* count of number of files opened */
+static uint8_t Rxflags  = 0;	                  	 /* rx parameter flags */
+static uint8_t ZF2_OP;		                  	 /* file transfer option */ 
 
 void zs_start(char *path);
 static void zsend_init(void);
 static rt_err_t zsend_files(struct zfile *zf);
-static rt_err_t zsend_file(struct zfile *zf, rt_uint8_t *buf, rt_uint16_t len);
+static rt_err_t zsend_file(struct zfile *zf, uint8_t *buf, uint16_t len);
 static rt_err_t zsend_file_data(struct zfile *zf);
-static rt_uint16_t zfill_buffer(struct zfile *zf, rt_uint8_t *buf, rt_uint16_t size);
+static uint16_t zfill_buffer(struct zfile *zf, uint8_t *buf, uint16_t size);
 static rt_err_t zget_sync(void);
 static void zsay_bibi(void);
 
@@ -162,9 +163,9 @@ static rt_err_t zsend_files(struct zfile *zf)
 }
 
 /* send file name and related info */
-static rt_err_t zsend_file(struct zfile *zf, rt_uint8_t *buf, rt_uint16_t len)
+static rt_err_t zsend_file(struct zfile *zf, uint8_t *buf, uint16_t len)
 {
-	rt_uint8_t cnt;
+	uint8_t cnt;
 	rt_err_t res = -RT_ERROR;
 
 	for (cnt=0;cnt<5;cnt++) 
@@ -216,8 +217,8 @@ loop:
 /* send the file data */
 static rt_err_t zsend_file_data(struct zfile *zf)
 {
-	rt_int16_t cnt;
-	rt_uint8_t cmd;
+	int16_t cnt;
+	uint8_t cmd;
 	rt_err_t res = -RT_ERROR;	
 	/* send ZDATA packet, start to send data */
 start_send:
@@ -262,7 +263,7 @@ get_syn1:
 }
 
 /* fill file data to buffer*/
-static rt_uint16_t zfill_buffer(struct zfile *zf, rt_uint8_t *buf, rt_uint16_t size)
+static uint16_t zfill_buffer(struct zfile *zf, uint8_t *buf, uint16_t size)
 {
 	return (read(zf->fd,buf,size));
 }

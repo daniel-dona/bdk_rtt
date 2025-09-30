@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : block_dev.c
  * This file is part of RT-Thread RTOS
@@ -42,15 +43,15 @@ struct mmcsd_blk_device
 #define RT_MMCSD_MAX_PARTITION 16
 #endif
 
-rt_int32_t mmcsd_num_wr_blocks(struct rt_mmcsd_card *card)
+int32_t mmcsd_num_wr_blocks(struct rt_mmcsd_card *card)
 {
-    rt_int32_t err;
-    rt_uint32_t blocks;
+    int32_t err;
+    uint32_t blocks;
 
     struct rt_mmcsd_req req;
     struct rt_mmcsd_cmd cmd;
     struct rt_mmcsd_data data;
-    rt_uint32_t timeout_us;
+    uint32_t timeout_us;
 
     rt_memset(&cmd, 0, sizeof(struct rt_mmcsd_cmd));
 
@@ -104,16 +105,16 @@ rt_int32_t mmcsd_num_wr_blocks(struct rt_mmcsd_card *card)
 }
 
 static rt_err_t rt_mmcsd_req_blk(struct rt_mmcsd_card *card,
-                                 rt_uint32_t           sector,
+                                 uint32_t           sector,
                                  void                 *buf,
                                  rt_size_t             blks,
-                                 rt_uint8_t            dir)
+                                 uint8_t            dir)
 {
     struct rt_mmcsd_cmd  cmd, stop;
     struct rt_mmcsd_data  data;
     struct rt_mmcsd_req  req;
     struct rt_mmcsd_host *host = card->host;
-    rt_uint32_t r_cmd, w_cmd;
+    uint32_t r_cmd, w_cmd;
 
     mmcsd_host_lock(host);
     rt_memset(&req, 0, sizeof(struct rt_mmcsd_req));
@@ -171,7 +172,7 @@ static rt_err_t rt_mmcsd_req_blk(struct rt_mmcsd_card *card,
     {
         do 
         {
-            rt_int32_t err;
+            int32_t err;
 
             cmd.cmd_code = SEND_STATUS;
             cmd.arg = card->rca << 16;
@@ -210,7 +211,7 @@ static rt_err_t rt_mmcsd_init(rt_device_t dev)
     return RT_EOK;
 }
 
-static rt_err_t rt_mmcsd_open(rt_device_t dev, rt_uint16_t oflag)
+static rt_err_t rt_mmcsd_open(rt_device_t dev, uint16_t oflag)
 {
     return RT_EOK;
 }
@@ -293,7 +294,7 @@ static rt_size_t rt_mmcsd_write(rt_device_t dev,
     return size;
 }
 
-static rt_int32_t mmcsd_set_blksize(struct rt_mmcsd_card *card)
+static int32_t mmcsd_set_blksize(struct rt_mmcsd_card *card)
 {
     struct rt_mmcsd_cmd cmd;
     int err;
@@ -331,11 +332,11 @@ const static struct rt_device_ops mmcsd_blk_ops =
 };
 #endif
 
-rt_int32_t rt_mmcsd_blk_probe(struct rt_mmcsd_card *card)
+int32_t rt_mmcsd_blk_probe(struct rt_mmcsd_card *card)
 {
-    rt_int32_t err = 0;
-    rt_uint8_t i, status;
-    rt_uint8_t *sector;
+    int32_t err = 0;
+    uint8_t i, status;
+    uint8_t *sector;
     char dname[4];
     char sname[8];
     struct mmcsd_blk_device *blk_dev = RT_NULL;
@@ -349,7 +350,7 @@ rt_int32_t rt_mmcsd_blk_probe(struct rt_mmcsd_card *card)
     rt_kprintf("probe mmcsd block device!\n");
 
     /* get the first sector to read partition table */
-    sector = (rt_uint8_t *)rt_malloc(SECTOR_SIZE);
+    sector = (uint8_t *)rt_malloc(SECTOR_SIZE);
     if (sector == RT_NULL)
     {
         rt_kprintf("allocate partition sector buffer failed\n");

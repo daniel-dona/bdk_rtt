@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _SEC_PUB_H_
 #define _SEC_PUB_H_
 
@@ -59,21 +60,21 @@ void * hal_sha1_init(void);
   * @param key: the aes key len,must be 32,24,16.
   * @retval ctx
   */
-void *hal_aes_init(const u8 *key, size_t key_size);
+void *hal_aes_init(const uint8_t *key, size_t key_size);
 
 /* @brief aes_encrypt
   * @param ctx: from hal_aes_init
   * @param plain: plain data which is need to be encrypt.
   * @param cipher: cipher data which is store the encrpyted data.
   */
-void hal_aes_encrypt(void *ctx, const u8 *plain, u8 *cipher);
+void hal_aes_encrypt(void *ctx, const uint8_t *plain, uint8_t *cipher);
 
 /* @brief aes_decrypt
   * @param ctx: from hal_aes_init
   * @param cipher: cipher data which is needed to be decrypted.
   * @param plain: plain data which store the decrypted data.
   */
-void hal_aes_decrypt(void *ctx, const u8 *cipher, u8 *plain);
+void hal_aes_decrypt(void *ctx, const uint8_t *cipher, uint8_t *plain);
 
 /* @brief deinit free ctx
   * @param ctx: from hal_aes_init

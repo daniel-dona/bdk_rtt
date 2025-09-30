@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : adk.c
  * This file is part of RT-Thread RTOS
@@ -65,7 +66,7 @@ RTM_EXPORT(rt_usbh_adk_set_string);
  *
  * @return the error code, RT_EOK on successfully.
 */
-static rt_err_t rt_usbh_adk_get_protocol(struct uintf* intf, rt_uint16_t *protocol)
+static rt_err_t rt_usbh_adk_get_protocol(struct uintf* intf, uint16_t *protocol)
 {
     struct urequest setup;
     uinst_t device;
@@ -98,7 +99,7 @@ static rt_err_t rt_usbh_adk_get_protocol(struct uintf* intf, rt_uint16_t *protoc
  *
  * @return the error code, RT_EOK on successfully.
 */
-static rt_err_t rt_usbh_adk_send_string(struct uintf* intf, rt_uint16_t index,
+static rt_err_t rt_usbh_adk_send_string(struct uintf* intf, uint16_t index,
     const char* str)
 {
     struct urequest setup;
@@ -235,7 +236,7 @@ static rt_err_t rt_usbh_adk_enable(void* arg)
     uadk_t adk;
     struct uintf* intf = (struct uintf*)arg;
     udev_desc_t dev_desc;
-    rt_uint16_t protocol;
+    uint16_t protocol;
     rt_err_t ret;
 
     /* parameter check */

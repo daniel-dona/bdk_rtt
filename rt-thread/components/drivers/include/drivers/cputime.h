@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : cputime.h
  * This file is part of RT-Thread RTOS

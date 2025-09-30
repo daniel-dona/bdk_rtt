@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <rtthread.h>
 #include "tc_comm.h"
 
@@ -6,8 +7,8 @@ static struct rt_thread thread2;
 static char thread1_stack[THREAD_STACK_SIZE];
 static char thread2_stack[THREAD_STACK_SIZE];
 
-volatile static rt_uint32_t t1_count = 0;
-volatile static rt_uint32_t t2_count = 0;
+volatile static uint32_t t1_count = 0;
+volatile static uint32_t t2_count = 0;
 static void thread1_entry(void* parameter)
 {
     while (1)

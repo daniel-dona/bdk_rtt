@@ -1,3 +1,4 @@
+#include <stdint.h>
 /**
  * @file
  * SNMP table support implementation.
@@ -321,7 +322,7 @@ s16_t
 snmp_table_extract_value_from_s32ref(struct snmp_node_instance* instance, void* value)
 {
   s32_t *dst = (s32_t*)value;
-  *dst = instance->reference.s32;
+  *dst = instance->reference.int32_t;
   return sizeof(*dst);
 }
 
@@ -329,7 +330,7 @@ s16_t
 snmp_table_extract_value_from_u32ref(struct snmp_node_instance* instance, void* value)
 {
   u32_t *dst = (u32_t*)value;
-  *dst = instance->reference.u32;
+  *dst = instance->reference.uint32_t;
   return sizeof(*dst);
 }
 

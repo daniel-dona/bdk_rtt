@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : hid.h
  * This file is part of RT-Thread RTOS
@@ -20,7 +21,7 @@
 struct uhid
 {
     upipe_t pipe_in;
-    rt_uint8_t buffer[8];
+    uint8_t buffer[8];
     uprotocal_t protocal;
 };    
 typedef struct uhid uhid_t;
@@ -36,10 +37,10 @@ typedef struct uhid uhid_t;
 #define USB_HID_MOUSE            2
 
 rt_err_t rt_usbh_hid_set_idle(struct uintf* intf, int duration, int report_id);
-rt_err_t rt_usbh_hid_get_report(struct uintf* intf, rt_uint8_t type, rt_uint8_t id, rt_uint8_t *buffer, rt_size_t size);
-rt_err_t rt_usbh_hid_set_report(struct uintf* intf, rt_uint8_t *buffer, rt_size_t size);
+rt_err_t rt_usbh_hid_get_report(struct uintf* intf, uint8_t type, uint8_t id, uint8_t *buffer, rt_size_t size);
+rt_err_t rt_usbh_hid_set_report(struct uintf* intf, uint8_t *buffer, rt_size_t size);
 rt_err_t rt_usbh_hid_set_protocal(struct uintf* intf, int protocol);
-rt_err_t rt_usbh_hid_get_report_descriptor(struct uintf* intf, rt_uint8_t *buffer, rt_size_t size);
+rt_err_t rt_usbh_hid_get_report_descriptor(struct uintf* intf, uint8_t *buffer, rt_size_t size);
 rt_err_t rt_usbh_hid_protocal_register(uprotocal_t protocal);
 
 #endif

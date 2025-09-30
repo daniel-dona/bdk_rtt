@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * IEEE 802.11 Frame type definitions
  * Copyright (c) 2002-2019, Jouni Malinen <j@w1.fi>
@@ -841,11 +842,11 @@ enum lci_req_subelem {
 struct ieee80211_hdr {
 	le16 frame_control;
 	le16 duration_id;
-	u8 addr1[6];
-	u8 addr2[6];
-	u8 addr3[6];
+	uint8_t addr1[6];
+	uint8_t addr2[6];
+	uint8_t addr3[6];
 	le16 seq_ctrl;
-	/* followed by 'u8 addr4[6];' if ToDS and FromDS is set in data frame
+	/* followed by 'uint8_t addr4[6];' if ToDS and FromDS is set in data frame
 	 */
 } STRUCT_PACKED;
 
@@ -860,9 +861,9 @@ struct ieee80211_hdr {
 struct ieee80211_mgmt {
 	le16 frame_control;
 	le16 duration;
-	u8 da[6];
-	u8 sa[6];
-	u8 bssid[6];
+	uint8_t da[6];
+	uint8_t sa[6];
+	uint8_t bssid[6];
 	le16 seq_ctrl;
 	union {
 		struct {
@@ -870,166 +871,166 @@ struct ieee80211_mgmt {
 			le16 auth_transaction;
 			le16 status_code;
 			/* possibly followed by Challenge text */
-			u8 variable[];
+			uint8_t variable[];
 		} STRUCT_PACKED auth;
 		struct {
 			le16 reason_code;
-			u8 variable[];
+			uint8_t variable[];
 		} STRUCT_PACKED deauth;
 		struct {
 			le16 capab_info;
 			le16 listen_interval;
 			/* followed by SSID and Supported rates */
-			u8 variable[];
+			uint8_t variable[];
 		} STRUCT_PACKED assoc_req;
 		struct {
 			le16 capab_info;
 			le16 status_code;
 			le16 aid;
 			/* followed by Supported rates */
-			u8 variable[];
+			uint8_t variable[];
 		} STRUCT_PACKED assoc_resp, reassoc_resp;
 		struct {
 			le16 capab_info;
 			le16 listen_interval;
-			u8 current_ap[6];
+			uint8_t current_ap[6];
 			/* followed by SSID and Supported rates */
-			u8 variable[];
+			uint8_t variable[];
 		} STRUCT_PACKED reassoc_req;
 		struct {
 			le16 reason_code;
-			u8 variable[];
+			uint8_t variable[];
 		} STRUCT_PACKED disassoc;
 		struct {
-			u8 timestamp[8];
+			uint8_t timestamp[8];
 			le16 beacon_int;
 			le16 capab_info;
 			/* followed by some of SSID, Supported rates,
 			 * FH Params, DS Params, CF Params, IBSS Params, TIM */
-			u8 variable[];
+			uint8_t variable[];
 		} STRUCT_PACKED beacon;
 		/* probe_req: only variable items: SSID, Supported rates */
 		struct {
-			u8 timestamp[8];
+			uint8_t timestamp[8];
 			le16 beacon_int;
 			le16 capab_info;
 			/* followed by some of SSID, Supported rates,
 			 * FH Params, DS Params, CF Params, IBSS Params */
-			u8 variable[];
+			uint8_t variable[];
 		} STRUCT_PACKED probe_resp;
 		struct {
-			u8 category;
+			uint8_t category;
 			union {
 				struct {
-					u8 action_code;
-					u8 dialog_token;
-					u8 status_code;
-					u8 variable[];
+					uint8_t action_code;
+					uint8_t dialog_token;
+					uint8_t status_code;
+					uint8_t variable[];
 				} STRUCT_PACKED wmm_action;
 				struct{
-					u8 action_code;
-					u8 element_id;
-					u8 length;
-					u8 switch_mode;
-					u8 new_chan;
-					u8 switch_count;
+					uint8_t action_code;
+					uint8_t element_id;
+					uint8_t length;
+					uint8_t switch_mode;
+					uint8_t new_chan;
+					uint8_t switch_count;
 				} STRUCT_PACKED chan_switch;
 				struct {
-					u8 action;
-					u8 sta_addr[ETH_ALEN];
-					u8 target_ap_addr[ETH_ALEN];
-					u8 variable[]; /* FT Request */
+					uint8_t action;
+					uint8_t sta_addr[ETH_ALEN];
+					uint8_t target_ap_addr[ETH_ALEN];
+					uint8_t variable[]; /* FT Request */
 				} STRUCT_PACKED ft_action_req;
 				struct {
-					u8 action;
-					u8 sta_addr[ETH_ALEN];
-					u8 target_ap_addr[ETH_ALEN];
+					uint8_t action;
+					uint8_t sta_addr[ETH_ALEN];
+					uint8_t target_ap_addr[ETH_ALEN];
 					le16 status_code;
-					u8 variable[]; /* FT Request */
+					uint8_t variable[]; /* FT Request */
 				} STRUCT_PACKED ft_action_resp;
 				struct {
-					u8 action;
-					u8 trans_id[WLAN_SA_QUERY_TR_ID_LEN];
-					u8 variable[]; /* OCI element */
+					uint8_t action;
+					uint8_t trans_id[WLAN_SA_QUERY_TR_ID_LEN];
+					uint8_t variable[]; /* OCI element */
 				} STRUCT_PACKED sa_query_req;
 				struct {
-					u8 action; /* */
-					u8 trans_id[WLAN_SA_QUERY_TR_ID_LEN];
-					u8 variable[]; /* OCI element */
+					uint8_t action; /* */
+					uint8_t trans_id[WLAN_SA_QUERY_TR_ID_LEN];
+					uint8_t variable[]; /* OCI element */
 				} STRUCT_PACKED sa_query_resp;
 				struct {
-					u8 action;
-					u8 dialogtoken;
-					u8 variable[];
+					uint8_t action;
+					uint8_t dialogtoken;
+					uint8_t variable[];
 				} STRUCT_PACKED wnm_sleep_req;
 				struct {
-					u8 action;
-					u8 dialogtoken;
+					uint8_t action;
+					uint8_t dialogtoken;
 					le16 keydata_len;
-					u8 variable[];
+					uint8_t variable[];
 				} STRUCT_PACKED wnm_sleep_resp;
 				struct {
-					u8 action;
-					u8 variable[];
+					uint8_t action;
+					uint8_t variable[];
 				} STRUCT_PACKED public_action;
 				struct {
-					u8 action; /* 9 */
-					u8 oui[3];
+					uint8_t action; /* 9 */
+					uint8_t oui[3];
 					/* Vendor-specific content */
-					u8 variable[];
+					uint8_t variable[];
 				} STRUCT_PACKED vs_public_action;
 				struct {
-					u8 action; /* 7 */
-					u8 dialog_token;
-					u8 req_mode;
+					uint8_t action; /* 7 */
+					uint8_t dialog_token;
+					uint8_t req_mode;
 					le16 disassoc_timer;
-					u8 validity_interval;
+					uint8_t validity_interval;
 					/* BSS Termination Duration (optional),
 					 * Session Information URL (optional),
 					 * BSS Transition Candidate List
 					 * Entries */
-					u8 variable[];
+					uint8_t variable[];
 				} STRUCT_PACKED bss_tm_req;
 				struct {
-					u8 action; /* 8 */
-					u8 dialog_token;
-					u8 status_code;
-					u8 bss_termination_delay;
+					uint8_t action; /* 8 */
+					uint8_t dialog_token;
+					uint8_t status_code;
+					uint8_t bss_termination_delay;
 					/* Target BSSID (optional),
 					 * BSS Transition Candidate List
 					 * Entries (optional) */
-					u8 variable[];
+					uint8_t variable[];
 				} STRUCT_PACKED bss_tm_resp;
 				struct {
-					u8 action; /* 6 */
-					u8 dialog_token;
-					u8 query_reason;
+					uint8_t action; /* 6 */
+					uint8_t dialog_token;
+					uint8_t query_reason;
 					/* BSS Transition Candidate List
 					 * Entries (optional) */
-					u8 variable[];
+					uint8_t variable[];
 				} STRUCT_PACKED bss_tm_query;
 				struct {
-					u8 action; /* 11 */
-					u8 dialog_token;
-					u8 req_info;
+					uint8_t action; /* 11 */
+					uint8_t dialog_token;
+					uint8_t req_info;
 				} STRUCT_PACKED coloc_intf_req;
 				struct {
-					u8 action; /* 12 */
-					u8 dialog_token;
-					u8 variable[];
+					uint8_t action; /* 12 */
+					uint8_t dialog_token;
+					uint8_t variable[];
 				} STRUCT_PACKED coloc_intf_report;
 				struct {
-					u8 action; /* 15 */
-					u8 variable[];
+					uint8_t action; /* 15 */
+					uint8_t variable[];
 				} STRUCT_PACKED slf_prot_action;
 				struct {
-					u8 action;
-					u8 variable[];
+					uint8_t action;
+					uint8_t variable[];
 				} STRUCT_PACKED fst_action;
 				struct {
-					u8 action;
-					u8 dialog_token;
-					u8 variable[];
+					uint8_t action;
+					uint8_t dialog_token;
+					uint8_t variable[];
 				} STRUCT_PACKED rrm;
 			} u;
 		} STRUCT_PACKED action;
@@ -1045,24 +1046,24 @@ struct ieee80211_mgmt {
 /* HT Capabilities element */
 struct ieee80211_ht_capabilities {
 	le16 ht_capabilities_info;
-	u8 a_mpdu_params; /* Maximum A-MPDU Length Exponent B0..B1
+	uint8_t a_mpdu_params; /* Maximum A-MPDU Length Exponent B0..B1
 			   * Minimum MPDU Start Spacing B2..B4
 			   * Reserved B5..B7 */
-	u8 supported_mcs_set[16];
+	uint8_t supported_mcs_set[16];
 	le16 ht_extended_capabilities;
 	le32 tx_bf_capability_info;
-	u8 asel_capabilities;
+	uint8_t asel_capabilities;
 } STRUCT_PACKED;
 
 
 /* HT Operation element */
 struct ieee80211_ht_operation {
-	u8 primary_chan;
+	uint8_t primary_chan;
 	/* Five octets of HT Operation Information */
-	u8 ht_param; /* B0..B7 */
+	uint8_t ht_param; /* B0..B7 */
 	le16 operation_mode; /* B8..B23 */
 	le16 param; /* B24..B39 */
-	u8 basic_mcs_set[16];
+	uint8_t basic_mcs_set[16];
 } STRUCT_PACKED;
 
 
@@ -1088,16 +1089,16 @@ struct ieee80211_vht_capabilities {
 } STRUCT_PACKED;
 
 struct ieee80211_vht_operation {
-	u8 vht_op_info_chwidth;
-	u8 vht_op_info_chan_center_freq_seg0_idx;
-	u8 vht_op_info_chan_center_freq_seg1_idx;
+	uint8_t vht_op_info_chwidth;
+	uint8_t vht_op_info_chan_center_freq_seg0_idx;
+	uint8_t vht_op_info_chan_center_freq_seg1_idx;
 	le16 vht_basic_mcs_set;
 } STRUCT_PACKED;
 
 struct ieee80211_ampe_ie {
-	u8 selected_pairwise_suite[4];
-	u8 local_nonce[32];
-	u8 peer_nonce[32];
+	uint8_t selected_pairwise_suite[4];
+	uint8_t local_nonce[32];
+	uint8_t peer_nonce[32];
 	/* Followed by
 	 * Key Replay Counter[8] (optional)
 	 *	(only in Mesh Group Key Inform/Acknowledge frames)
@@ -1119,51 +1120,51 @@ struct ieee80211_ampe_ie {
 #define OVERLAPPING_BSS_TRANS_DELAY_FACTOR 5
 
 /* HT Capabilities Info field within HT Capabilities element */
-#define HT_CAP_INFO_LDPC_CODING_CAP		((u16) BIT(0))
-#define HT_CAP_INFO_SUPP_CHANNEL_WIDTH_SET	((u16) BIT(1))
-#define HT_CAP_INFO_SMPS_MASK			((u16) (BIT(2) | BIT(3)))
-#define HT_CAP_INFO_SMPS_STATIC			((u16) 0)
-#define HT_CAP_INFO_SMPS_DYNAMIC		((u16) BIT(2))
-#define HT_CAP_INFO_SMPS_DISABLED		((u16) (BIT(2) | BIT(3)))
-#define HT_CAP_INFO_GREEN_FIELD			((u16) BIT(4))
-#define HT_CAP_INFO_SHORT_GI20MHZ		((u16) BIT(5))
-#define HT_CAP_INFO_SHORT_GI40MHZ		((u16) BIT(6))
-#define HT_CAP_INFO_TX_STBC			((u16) BIT(7))
-#define HT_CAP_INFO_RX_STBC_MASK		((u16) (BIT(8) | BIT(9)))
-#define HT_CAP_INFO_RX_STBC_1			((u16) BIT(8))
-#define HT_CAP_INFO_RX_STBC_12			((u16) BIT(9))
-#define HT_CAP_INFO_RX_STBC_123			((u16) (BIT(8) | BIT(9)))
-#define HT_CAP_INFO_DELAYED_BA			((u16) BIT(10))
-#define HT_CAP_INFO_MAX_AMSDU_SIZE		((u16) BIT(11))
-#define HT_CAP_INFO_DSSS_CCK40MHZ		((u16) BIT(12))
+#define HT_CAP_INFO_LDPC_CODING_CAP		((uint16_t) BIT(0))
+#define HT_CAP_INFO_SUPP_CHANNEL_WIDTH_SET	((uint16_t) BIT(1))
+#define HT_CAP_INFO_SMPS_MASK			((uint16_t) (BIT(2) | BIT(3)))
+#define HT_CAP_INFO_SMPS_STATIC			((uint16_t) 0)
+#define HT_CAP_INFO_SMPS_DYNAMIC		((uint16_t) BIT(2))
+#define HT_CAP_INFO_SMPS_DISABLED		((uint16_t) (BIT(2) | BIT(3)))
+#define HT_CAP_INFO_GREEN_FIELD			((uint16_t) BIT(4))
+#define HT_CAP_INFO_SHORT_GI20MHZ		((uint16_t) BIT(5))
+#define HT_CAP_INFO_SHORT_GI40MHZ		((uint16_t) BIT(6))
+#define HT_CAP_INFO_TX_STBC			((uint16_t) BIT(7))
+#define HT_CAP_INFO_RX_STBC_MASK		((uint16_t) (BIT(8) | BIT(9)))
+#define HT_CAP_INFO_RX_STBC_1			((uint16_t) BIT(8))
+#define HT_CAP_INFO_RX_STBC_12			((uint16_t) BIT(9))
+#define HT_CAP_INFO_RX_STBC_123			((uint16_t) (BIT(8) | BIT(9)))
+#define HT_CAP_INFO_DELAYED_BA			((uint16_t) BIT(10))
+#define HT_CAP_INFO_MAX_AMSDU_SIZE		((uint16_t) BIT(11))
+#define HT_CAP_INFO_DSSS_CCK40MHZ		((uint16_t) BIT(12))
 /* B13 - Reserved (was PSMP support during P802.11n development) */
-#define HT_CAP_INFO_40MHZ_INTOLERANT		((u16) BIT(14))
-#define HT_CAP_INFO_LSIG_TXOP_PROTECT_SUPPORT	((u16) BIT(15))
+#define HT_CAP_INFO_40MHZ_INTOLERANT		((uint16_t) BIT(14))
+#define HT_CAP_INFO_LSIG_TXOP_PROTECT_SUPPORT	((uint16_t) BIT(15))
 
 /* HT Extended Capabilities field within HT Capabilities element */
-#define EXT_HT_CAP_INFO_PCO			((u16) BIT(0))
-#define EXT_HT_CAP_INFO_PCO_TRANS_TIME_MASK	((u16) (BIT(1) | BIT(2)))
+#define EXT_HT_CAP_INFO_PCO			((uint16_t) BIT(0))
+#define EXT_HT_CAP_INFO_PCO_TRANS_TIME_MASK	((uint16_t) (BIT(1) | BIT(2)))
 #define EXT_HT_CAP_INFO_TRANS_TIME_OFFSET	1
 /* B3..B7 - Reserved */
-#define EXT_HT_CAP_INFO_MCS_FEEDBACK_MASK	((u16) (BIT(8) | BIT(9)))
+#define EXT_HT_CAP_INFO_MCS_FEEDBACK_MASK	((uint16_t) (BIT(8) | BIT(9)))
 #define EXT_HT_CAP_INFO_MCS_FEEDBACK_OFFSET	8
-#define EXT_HT_CAP_INFO_HTC_SUPPORT		((u16) BIT(10))
-#define EXT_HT_CAP_INFO_RD_RESPONDER		((u16) BIT(11))
+#define EXT_HT_CAP_INFO_HTC_SUPPORT		((uint16_t) BIT(10))
+#define EXT_HT_CAP_INFO_RD_RESPONDER		((uint16_t) BIT(11))
 /* B12..B15 - Reserved */
 
 /* Transmit Beanforming Capabilities within HT Capabilities element */
-#define TX_BF_CAP_IMPLICIT_TXBF_RX_CAP ((u32) BIT(0))
-#define TX_BF_CAP_RX_STAGGERED_SOUNDING_CAP ((u32) BIT(1))
-#define TX_BF_CAP_TX_STAGGERED_SOUNDING_CAP ((u32) BIT(2))
-#define TX_BF_CAP_RX_NDP_CAP ((u32) BIT(3))
-#define TX_BF_CAP_TX_NDP_CAP ((u32) BIT(4))
-#define TX_BF_CAP_IMPLICIT_TX_BF_CAP ((u32) BIT(5))
-#define TX_BF_CAP_CALIBRATION_MASK ((u32) (BIT(6) | BIT(7))
+#define TX_BF_CAP_IMPLICIT_TXBF_RX_CAP ((uint32_t) BIT(0))
+#define TX_BF_CAP_RX_STAGGERED_SOUNDING_CAP ((uint32_t) BIT(1))
+#define TX_BF_CAP_TX_STAGGERED_SOUNDING_CAP ((uint32_t) BIT(2))
+#define TX_BF_CAP_RX_NDP_CAP ((uint32_t) BIT(3))
+#define TX_BF_CAP_TX_NDP_CAP ((uint32_t) BIT(4))
+#define TX_BF_CAP_IMPLICIT_TX_BF_CAP ((uint32_t) BIT(5))
+#define TX_BF_CAP_CALIBRATION_MASK ((uint32_t) (BIT(6) | BIT(7))
 #define TX_BF_CAP_CALIB_OFFSET 6
-#define TX_BF_CAP_EXPLICIT_CSI_TXBF_CAP ((u32) BIT(8))
-#define TX_BF_CAP_EXPLICIT_NONCOMPR_STEERING_CAP ((u32) BIT(9))
-#define TX_BF_CAP_EXPLICIT_COMPR_STEERING_CAP ((u32) BIT(10))
-#define TX_BF_CAP_EXPLICIT_TX_BF_CSI_FEEDBACK_MASK ((u32) (BIT(10) | BIT(11)))
+#define TX_BF_CAP_EXPLICIT_CSI_TXBF_CAP ((uint32_t) BIT(8))
+#define TX_BF_CAP_EXPLICIT_NONCOMPR_STEERING_CAP ((uint32_t) BIT(9))
+#define TX_BF_CAP_EXPLICIT_COMPR_STEERING_CAP ((uint32_t) BIT(10))
+#define TX_BF_CAP_EXPLICIT_TX_BF_CSI_FEEDBACK_MASK ((uint32_t) (BIT(10) | BIT(11)))
 #define TX_BF_CAP_EXPLICIT_BF_CSI_FEEDBACK_OFFSET 11
 #define TX_BF_CAP_EXPLICIT_UNCOMPR_STEERING_MATRIX_FEEDBACK_OFFSET 13
 #define TX_BF_CAP_EXPLICIT_COMPRESSED_STEERING_MATRIX_FEEDBACK_OFFSET 15
@@ -1172,26 +1173,26 @@ struct ieee80211_ampe_ie {
 #define TX_BF_CAP_UNCOMPRESSED_STEERING_MATRIX_BEAMFORMER_ANT_OFFSET 21
 #define TX_BF_CAP_COMPRESSED_STEERING_MATRIX_BEAMFORMER_ANT_OFFSET 23
 #define TX_BF_CAP_SCI_MAX_OF_ROWS_BEANFORMER_SUPPORTED_OFFSET 25
-#define TX_BF_CAP_CHANNEL_ESTIMATION_CAP_MASK ((u32) (BIT(27) | BIT(28)))
+#define TX_BF_CAP_CHANNEL_ESTIMATION_CAP_MASK ((uint32_t) (BIT(27) | BIT(28)))
 #define TX_BF_CAP_CHANNEL_ESTIMATION_CAP_OFFSET 27
 /* B29..B31 - Reserved */
 
 /* ASEL Capability field within HT Capabilities element */
-#define ASEL_CAP_ASEL_CAPABLE ((u8) BIT(0))
-#define ASEL_CAP_EXPLICIT_CSI_FEEDBACK_BASED_TX_AS_CAP ((u8) BIT(1))
-#define ASEL_CAP_ANT_INDICES_FEEDBACK_BASED_TX_AS_CAP ((u8) BIT(2))
-#define ASEL_CAP_EXPLICIT_CSI_FEEDBACK_CAP ((u8) BIT(3))
-#define ASEL_CAP_ANT_INDICES_FEEDBACK_CAP ((u8) BIT(4))
-#define ASEL_CAP_RX_AS_CAP ((u8) BIT(5))
-#define ASEL_CAP_TX_SOUNDING_PPDUS_CAP ((u8) BIT(6))
+#define ASEL_CAP_ASEL_CAPABLE ((uint8_t) BIT(0))
+#define ASEL_CAP_EXPLICIT_CSI_FEEDBACK_BASED_TX_AS_CAP ((uint8_t) BIT(1))
+#define ASEL_CAP_ANT_INDICES_FEEDBACK_BASED_TX_AS_CAP ((uint8_t) BIT(2))
+#define ASEL_CAP_EXPLICIT_CSI_FEEDBACK_CAP ((uint8_t) BIT(3))
+#define ASEL_CAP_ANT_INDICES_FEEDBACK_CAP ((uint8_t) BIT(4))
+#define ASEL_CAP_RX_AS_CAP ((uint8_t) BIT(5))
+#define ASEL_CAP_TX_SOUNDING_PPDUS_CAP ((uint8_t) BIT(6))
 /* B7 - Reserved */
 
 /* First octet of HT Operation Information within HT Operation element */
-#define HT_INFO_HT_PARAM_SECONDARY_CHNL_OFF_MASK	((u8) BIT(0) | BIT(1))
-#define HT_INFO_HT_PARAM_SECONDARY_CHNL_ABOVE		((u8) BIT(0))
-#define HT_INFO_HT_PARAM_SECONDARY_CHNL_BELOW		((u8) BIT(0) | BIT(1))
-#define HT_INFO_HT_PARAM_STA_CHNL_WIDTH			((u8) BIT(2))
-#define HT_INFO_HT_PARAM_RIFS_MODE			((u8) BIT(3))
+#define HT_INFO_HT_PARAM_SECONDARY_CHNL_OFF_MASK	((uint8_t) BIT(0) | BIT(1))
+#define HT_INFO_HT_PARAM_SECONDARY_CHNL_ABOVE		((uint8_t) BIT(0))
+#define HT_INFO_HT_PARAM_SECONDARY_CHNL_BELOW		((uint8_t) BIT(0) | BIT(1))
+#define HT_INFO_HT_PARAM_STA_CHNL_WIDTH			((uint8_t) BIT(2))
+#define HT_INFO_HT_PARAM_RIFS_MODE			((uint8_t) BIT(3))
 /* B4..B7 - Reserved */
 
 /* HT Protection (B8..B9 of HT Operation Information) */
@@ -1201,76 +1202,76 @@ struct ieee80211_ampe_ie {
 #define HT_PROT_NON_HT_MIXED            3
 /* Bits within ieee80211_ht_operation::operation_mode (BIT(0) maps to B8 in
  * HT Operation Information) */
-#define HT_OPER_OP_MODE_HT_PROT_MASK ((u16) (BIT(0) | BIT(1))) /* B8..B9 */
-#define HT_OPER_OP_MODE_NON_GF_HT_STAS_PRESENT	((u16) BIT(2)) /* B10 */
+#define HT_OPER_OP_MODE_HT_PROT_MASK ((uint16_t) (BIT(0) | BIT(1))) /* B8..B9 */
+#define HT_OPER_OP_MODE_NON_GF_HT_STAS_PRESENT	((uint16_t) BIT(2)) /* B10 */
 /* BIT(3), i.e., B11 in HT Operation Information field - Reserved */
-#define HT_OPER_OP_MODE_OBSS_NON_HT_STAS_PRESENT	((u16) BIT(4)) /* B12 */
+#define HT_OPER_OP_MODE_OBSS_NON_HT_STAS_PRESENT	((uint16_t) BIT(4)) /* B12 */
 /* BIT(5)..BIT(15), i.e., B13..B23 - Reserved */
 
 /* Last two octets of HT Operation Information (BIT(0) = B24) */
 /* B24..B29 - Reserved */
-#define HT_OPER_PARAM_DUAL_BEACON			((u16) BIT(6))
-#define HT_OPER_PARAM_DUAL_CTS_PROTECTION		((u16) BIT(7))
-#define HT_OPER_PARAM_STBC_BEACON			((u16) BIT(8))
-#define HT_OPER_PARAM_LSIG_TXOP_PROT_FULL_SUPP		((u16) BIT(9))
-#define HT_OPER_PARAM_PCO_ACTIVE			((u16) BIT(10))
-#define HT_OPER_PARAM_PCO_PHASE				((u16) BIT(11))
+#define HT_OPER_PARAM_DUAL_BEACON			((uint16_t) BIT(6))
+#define HT_OPER_PARAM_DUAL_CTS_PROTECTION		((uint16_t) BIT(7))
+#define HT_OPER_PARAM_STBC_BEACON			((uint16_t) BIT(8))
+#define HT_OPER_PARAM_LSIG_TXOP_PROT_FULL_SUPP		((uint16_t) BIT(9))
+#define HT_OPER_PARAM_PCO_ACTIVE			((uint16_t) BIT(10))
+#define HT_OPER_PARAM_PCO_PHASE				((uint16_t) BIT(11))
 /* B36..B39 - Reserved */
 
 #define BSS_MEMBERSHIP_SELECTOR_VHT_PHY 126
 #define BSS_MEMBERSHIP_SELECTOR_HT_PHY 127
 
 /* VHT Defines */
-#define VHT_CAP_MAX_MPDU_LENGTH_7991                ((u32) BIT(0))
-#define VHT_CAP_MAX_MPDU_LENGTH_11454               ((u32) BIT(1))
-#define VHT_CAP_MAX_MPDU_LENGTH_MASK                ((u32) BIT(0) | BIT(1))
+#define VHT_CAP_MAX_MPDU_LENGTH_7991                ((uint32_t) BIT(0))
+#define VHT_CAP_MAX_MPDU_LENGTH_11454               ((uint32_t) BIT(1))
+#define VHT_CAP_MAX_MPDU_LENGTH_MASK                ((uint32_t) BIT(0) | BIT(1))
 #define VHT_CAP_MAX_MPDU_LENGTH_MASK_SHIFT          0
-#define VHT_CAP_SUPP_CHAN_WIDTH_160MHZ              ((u32) BIT(2))
-#define VHT_CAP_SUPP_CHAN_WIDTH_160_80PLUS80MHZ     ((u32) BIT(3))
-#define VHT_CAP_SUPP_CHAN_WIDTH_MASK                ((u32) BIT(2) | BIT(3))
+#define VHT_CAP_SUPP_CHAN_WIDTH_160MHZ              ((uint32_t) BIT(2))
+#define VHT_CAP_SUPP_CHAN_WIDTH_160_80PLUS80MHZ     ((uint32_t) BIT(3))
+#define VHT_CAP_SUPP_CHAN_WIDTH_MASK                ((uint32_t) BIT(2) | BIT(3))
 #define VHT_CAP_SUPP_CHAN_WIDTH_MASK_SHIFT          2
-#define VHT_CAP_RXLDPC                              ((u32) BIT(4))
-#define VHT_CAP_SHORT_GI_80                         ((u32) BIT(5))
-#define VHT_CAP_SHORT_GI_160                        ((u32) BIT(6))
-#define VHT_CAP_TXSTBC                              ((u32) BIT(7))
-#define VHT_CAP_RXSTBC_1                            ((u32) BIT(8))
-#define VHT_CAP_RXSTBC_2                            ((u32) BIT(9))
-#define VHT_CAP_RXSTBC_3                            ((u32) BIT(8) | BIT(9))
-#define VHT_CAP_RXSTBC_4                            ((u32) BIT(10))
-#define VHT_CAP_RXSTBC_MASK                         ((u32) BIT(8) | BIT(9) | \
+#define VHT_CAP_RXLDPC                              ((uint32_t) BIT(4))
+#define VHT_CAP_SHORT_GI_80                         ((uint32_t) BIT(5))
+#define VHT_CAP_SHORT_GI_160                        ((uint32_t) BIT(6))
+#define VHT_CAP_TXSTBC                              ((uint32_t) BIT(7))
+#define VHT_CAP_RXSTBC_1                            ((uint32_t) BIT(8))
+#define VHT_CAP_RXSTBC_2                            ((uint32_t) BIT(9))
+#define VHT_CAP_RXSTBC_3                            ((uint32_t) BIT(8) | BIT(9))
+#define VHT_CAP_RXSTBC_4                            ((uint32_t) BIT(10))
+#define VHT_CAP_RXSTBC_MASK                         ((uint32_t) BIT(8) | BIT(9) | \
 							   BIT(10))
 #define VHT_CAP_RXSTBC_MASK_SHIFT                   8
-#define VHT_CAP_SU_BEAMFORMER_CAPABLE               ((u32) BIT(11))
-#define VHT_CAP_SU_BEAMFORMEE_CAPABLE               ((u32) BIT(12))
-#define VHT_CAP_BEAMFORMEE_STS_MAX                  ((u32) BIT(13) | \
+#define VHT_CAP_SU_BEAMFORMER_CAPABLE               ((uint32_t) BIT(11))
+#define VHT_CAP_SU_BEAMFORMEE_CAPABLE               ((uint32_t) BIT(12))
+#define VHT_CAP_BEAMFORMEE_STS_MAX                  ((uint32_t) BIT(13) | \
 							   BIT(14) | BIT(15))
 #define VHT_CAP_BEAMFORMEE_STS_MAX_SHIFT            13
 #define VHT_CAP_BEAMFORMEE_STS_OFFSET               13
-#define VHT_CAP_SOUNDING_DIMENSION_MAX              ((u32) BIT(16) | \
+#define VHT_CAP_SOUNDING_DIMENSION_MAX              ((uint32_t) BIT(16) | \
 							   BIT(17) | BIT(18))
 #define VHT_CAP_SOUNDING_DIMENSION_MAX_SHIFT        16
 #define VHT_CAP_SOUNDING_DIMENSION_OFFSET           16
-#define VHT_CAP_MU_BEAMFORMER_CAPABLE               ((u32) BIT(19))
-#define VHT_CAP_MU_BEAMFORMEE_CAPABLE               ((u32) BIT(20))
-#define VHT_CAP_VHT_TXOP_PS                         ((u32) BIT(21))
-#define VHT_CAP_HTC_VHT                             ((u32) BIT(22))
+#define VHT_CAP_MU_BEAMFORMER_CAPABLE               ((uint32_t) BIT(19))
+#define VHT_CAP_MU_BEAMFORMEE_CAPABLE               ((uint32_t) BIT(20))
+#define VHT_CAP_VHT_TXOP_PS                         ((uint32_t) BIT(21))
+#define VHT_CAP_HTC_VHT                             ((uint32_t) BIT(22))
 
-#define VHT_CAP_MAX_A_MPDU_LENGTH_EXPONENT_1        ((u32) BIT(23))
-#define VHT_CAP_MAX_A_MPDU_LENGTH_EXPONENT_2        ((u32) BIT(24))
-#define VHT_CAP_MAX_A_MPDU_LENGTH_EXPONENT_3        ((u32) BIT(23) | BIT(24))
-#define VHT_CAP_MAX_A_MPDU_LENGTH_EXPONENT_4        ((u32) BIT(25))
-#define VHT_CAP_MAX_A_MPDU_LENGTH_EXPONENT_5        ((u32) BIT(23) | BIT(25))
-#define VHT_CAP_MAX_A_MPDU_LENGTH_EXPONENT_6        ((u32) BIT(24) | BIT(25))
-#define VHT_CAP_MAX_A_MPDU_LENGTH_EXPONENT_MAX      ((u32) BIT(23) | \
+#define VHT_CAP_MAX_A_MPDU_LENGTH_EXPONENT_1        ((uint32_t) BIT(23))
+#define VHT_CAP_MAX_A_MPDU_LENGTH_EXPONENT_2        ((uint32_t) BIT(24))
+#define VHT_CAP_MAX_A_MPDU_LENGTH_EXPONENT_3        ((uint32_t) BIT(23) | BIT(24))
+#define VHT_CAP_MAX_A_MPDU_LENGTH_EXPONENT_4        ((uint32_t) BIT(25))
+#define VHT_CAP_MAX_A_MPDU_LENGTH_EXPONENT_5        ((uint32_t) BIT(23) | BIT(25))
+#define VHT_CAP_MAX_A_MPDU_LENGTH_EXPONENT_6        ((uint32_t) BIT(24) | BIT(25))
+#define VHT_CAP_MAX_A_MPDU_LENGTH_EXPONENT_MAX      ((uint32_t) BIT(23) | \
 							   BIT(24) | BIT(25))
 #define VHT_CAP_MAX_A_MPDU_LENGTH_EXPONENT_MAX_SHIFT 23
-#define VHT_CAP_VHT_LINK_ADAPTATION_VHT_UNSOL_MFB   ((u32) BIT(27))
-#define VHT_CAP_VHT_LINK_ADAPTATION_VHT_MRQ_MFB     ((u32) BIT(26) | BIT(27))
-#define VHT_CAP_RX_ANTENNA_PATTERN                  ((u32) BIT(28))
-#define VHT_CAP_TX_ANTENNA_PATTERN                  ((u32) BIT(29))
+#define VHT_CAP_VHT_LINK_ADAPTATION_VHT_UNSOL_MFB   ((uint32_t) BIT(27))
+#define VHT_CAP_VHT_LINK_ADAPTATION_VHT_MRQ_MFB     ((uint32_t) BIT(26) | BIT(27))
+#define VHT_CAP_RX_ANTENNA_PATTERN                  ((uint32_t) BIT(28))
+#define VHT_CAP_TX_ANTENNA_PATTERN                  ((uint32_t) BIT(29))
 
-#define VHT_OPMODE_CHANNEL_WIDTH_MASK		    ((u8) BIT(0) | BIT(1))
-#define VHT_OPMODE_CHANNEL_RxNSS_MASK		    ((u8) BIT(4) | BIT(5) | \
+#define VHT_OPMODE_CHANNEL_WIDTH_MASK		    ((uint8_t) BIT(0) | BIT(1))
+#define VHT_OPMODE_CHANNEL_RxNSS_MASK		    ((uint8_t) BIT(4) | BIT(5) | \
 						     BIT(6))
 #define VHT_OPMODE_NOTIF_RX_NSS_SHIFT		    4
 
@@ -1338,11 +1339,11 @@ struct ieee80211_ampe_ie {
 struct wmm_information_element {
 	/* Element ID: 221 (0xdd); Length: 7 */
 	/* required fields for WMM version 1 */
-	u8 oui[3]; /* 00:50:f2 */
-	u8 oui_type; /* 2 */
-	u8 oui_subtype; /* 0 */
-	u8 version; /* 1 for WMM version 1.0 */
-	u8 qos_info; /* AP/STA specific QoS info */
+	uint8_t oui[3]; /* 00:50:f2 */
+	uint8_t oui_type; /* 2 */
+	uint8_t oui_subtype; /* 0 */
+	uint8_t version; /* 1 for WMM version 1.0 */
+	uint8_t qos_info; /* AP/STA specific QoS info */
 
 } STRUCT_PACKED;
 
@@ -1364,8 +1365,8 @@ struct wmm_information_element {
 #define WMM_AC_ECWMAX_SHIFT 4
 
 struct wmm_ac_parameter {
-	u8 aci_aifsn; /* AIFSN, ACM, ACI */
-	u8 cw; /* ECWmin, ECWmax (CW = 2^ECW - 1) */
+	uint8_t aci_aifsn; /* AIFSN, ACM, ACI */
+	uint8_t cw; /* ECWmin, ECWmax (CW = 2^ECW - 1) */
 	le16 txop_limit;
 }  STRUCT_PACKED;
 
@@ -1376,26 +1377,26 @@ struct wmm_ac_parameter {
 struct wmm_parameter_element {
 	/* Element ID: 221 (0xdd); Length: 24 */
 	/* required fields for WMM version 1 */
-	u8 oui[3]; /* 00:50:f2 */
-	u8 oui_type; /* 2 */
-	u8 oui_subtype; /* 1 */
-	u8 version; /* 1 for WMM version 1.0 */
-	u8 qos_info; /* AP/STA specific QoS info */
-	u8 reserved; /* 0 */
+	uint8_t oui[3]; /* 00:50:f2 */
+	uint8_t oui_type; /* 2 */
+	uint8_t oui_subtype; /* 1 */
+	uint8_t version; /* 1 for WMM version 1.0 */
+	uint8_t qos_info; /* AP/STA specific QoS info */
+	uint8_t reserved; /* 0 */
 	struct wmm_ac_parameter ac[4]; /* AC_BE, AC_BK, AC_VI, AC_VO */
 
 } STRUCT_PACKED;
 
 /* WMM TSPEC Element */
 struct wmm_tspec_element {
-	u8 eid; /* 221 = 0xdd */
-	u8 length; /* 6 + 55 = 61 */
-	u8 oui[3]; /* 00:50:f2 */
-	u8 oui_type; /* 2 */
-	u8 oui_subtype; /* 2 */
-	u8 version; /* 1 */
+	uint8_t eid; /* 221 = 0xdd */
+	uint8_t length; /* 6 + 55 = 61 */
+	uint8_t oui[3]; /* 00:50:f2 */
+	uint8_t oui_type; /* 2 */
+	uint8_t oui_subtype; /* 2 */
+	uint8_t version; /* 1 */
 	/* WMM TSPEC body (55 octets): */
-	u8 ts_info[3];
+	uint8_t ts_info[3];
 	le16 nominal_msdu_size;
 	le16 maximum_msdu_size;
 	le32 minimum_service_interval;
@@ -1615,8 +1616,8 @@ enum p2p_attr_id {
 #define P2PS_FEATURE_CAPAB_MAC_TRANSPORT BIT(1)
 
 struct p2ps_feature_capab {
-	u8 cpt;
-	u8 reserved;
+	uint8_t cpt;
+	uint8_t reserved;
 } STRUCT_PACKED;
 
 /* Invitation Flags */
@@ -1825,24 +1826,24 @@ enum qos_action {
 #define WLAN_20_40_BSS_COEX_OBSS_EXEMPT_GRNT    BIT(4)
 
 struct ieee80211_2040_bss_coex_ie {
-	u8 element_id;
-	u8 length;
-	u8 coex_param;
+	uint8_t element_id;
+	uint8_t length;
+	uint8_t coex_param;
 } STRUCT_PACKED;
 
 struct ieee80211_2040_intol_chan_report {
-	u8 element_id;
-	u8 length;
-	u8 op_class;
-	u8 variable[0];	/* Channel List */
+	uint8_t element_id;
+	uint8_t length;
+	uint8_t op_class;
+	uint8_t variable[0];	/* Channel List */
 } STRUCT_PACKED;
 
 /* IEEE 802.11v - WNM-Sleep Mode element */
 struct wnm_sleep_element {
-	u8 eid;     /* WLAN_EID_WNMSLEEP */
-	u8 len;
-	u8 action_type; /* WNM_SLEEP_ENTER/WNM_SLEEP_MODE_EXIT */
-	u8 status;
+	uint8_t eid;     /* WLAN_EID_WNMSLEEP */
+	uint8_t len;
+	uint8_t action_type; /* WNM_SLEEP_ENTER/WNM_SLEEP_MODE_EXIT */
+	uint8_t status;
 	le16 intval;
 } STRUCT_PACKED;
 
@@ -1869,41 +1870,41 @@ enum wnm_sleep_mode_subelement_id {
 #define CHAN_SWITCH_MODE_BLOCK_TX	1
 
 struct tpc_report {
-	u8 eid;
-	u8 len;
-	u8 tx_power;
-	u8 link_margin;
+	uint8_t eid;
+	uint8_t len;
+	uint8_t tx_power;
+	uint8_t link_margin;
 } STRUCT_PACKED;
 
 #define RRM_CAPABILITIES_IE_LEN 5
 
 /* IEEE Std 802.11-2012, 8.5.7.4 - Link Measurement Request frame format */
 struct rrm_link_measurement_request {
-	u8 dialog_token;
-	s8 tx_power;
-	s8 max_tp;
-	u8 variable[0];
+	uint8_t dialog_token;
+	int8_t tx_power;
+	int8_t max_tp;
+	uint8_t variable[0];
 } STRUCT_PACKED;
 
 /* IEEE Std 802.11-2012, 8.5.7.5 - Link Measurement Report frame format */
 struct rrm_link_measurement_report {
-	u8 dialog_token;
+	uint8_t dialog_token;
 	struct tpc_report tpc;
-	u8 rx_ant_id;
-	u8 tx_ant_id;
-	u8 rcpi;
-	u8 rsni;
-	u8 variable[0];
+	uint8_t rx_ant_id;
+	uint8_t tx_ant_id;
+	uint8_t rcpi;
+	uint8_t rsni;
+	uint8_t variable[0];
 } STRUCT_PACKED;
 
 /* IEEE Std 802.11-2016, 9.4.2.21 - Measurement Request element */
 struct rrm_measurement_request_element {
-	u8 eid; /* Element ID */
-	u8 len; /* Length */
-	u8 token; /* Measurement Token */
-	u8 mode; /* Measurement Request Mode */
-	u8 type; /* Measurement Type */
-	u8 variable[0]; /* Measurement Request */
+	uint8_t eid; /* Element ID */
+	uint8_t len; /* Length */
+	uint8_t token; /* Measurement Token */
+	uint8_t mode; /* Measurement Request Mode */
+	uint8_t type; /* Measurement Type */
+	uint8_t variable[0]; /* Measurement Request */
 } STRUCT_PACKED;
 
 /* IEEE Std 802.11-2016, Figure 9-148 - Measurement Request Mode field */
@@ -1915,13 +1916,13 @@ struct rrm_measurement_request_element {
 
 /* IEEE Std 802.11-2016, 9.4.2.21.7 - Beacon request */
 struct rrm_measurement_beacon_request {
-	u8 oper_class; /* Operating Class */
-	u8 channel; /* Channel Number */
+	uint8_t oper_class; /* Operating Class */
+	uint8_t channel; /* Channel Number */
 	le16 rand_interval; /* Randomization Interval (in TUs) */
 	le16 duration; /* Measurement Duration (in TUs) */
-	u8 mode; /* Measurement Mode */
-	u8 bssid[ETH_ALEN]; /* BSSID */
-	u8 variable[0]; /* Optional Subelements */
+	uint8_t mode; /* Measurement Mode */
+	uint8_t bssid[ETH_ALEN]; /* BSSID */
+	uint8_t variable[0]; /* Optional Subelements */
 } STRUCT_PACKED;
 
 /*
@@ -1961,12 +1962,12 @@ enum beacon_report_detail {
 
 /* IEEE Std 802.11-2016, 9.4.2.22 - Measurement Report element */
 struct rrm_measurement_report_element {
-	u8 eid; /* Element ID */
-	u8 len; /* Length */
-	u8 token; /* Measurement Token */
-	u8 mode; /* Measurement Report Mode */
-	u8 type; /* Measurement Type */
-	u8 variable[0]; /* Measurement Report */
+	uint8_t eid; /* Element ID */
+	uint8_t len; /* Length */
+	uint8_t token; /* Measurement Token */
+	uint8_t mode; /* Measurement Report Mode */
+	uint8_t type; /* Measurement Type */
+	uint8_t variable[0]; /* Measurement Report */
 } STRUCT_PACKED;
 
 /* IEEE Std 802.11-2016, Figure 9-192 - Measurement Report Mode field */
@@ -1977,18 +1978,18 @@ struct rrm_measurement_report_element {
 
 /* IEEE Std 802.11-2016, 9.4.2.22.7 - Beacon report */
 struct rrm_measurement_beacon_report {
-	u8 op_class; /* Operating Class */
-	u8 channel; /* Channel Number */
+	uint8_t op_class; /* Operating Class */
+	uint8_t channel; /* Channel Number */
 	le64 start_time; /* Actual Measurement Start Time
 			  * (in TSF of the BSS requesting the measurement) */
 	le16 duration; /* in TUs */
-	u8 report_info; /* Reported Frame Information */
-	u8 rcpi; /* RCPI */
-	u8 rsni; /* RSNI */
-	u8 bssid[ETH_ALEN]; /* BSSID */
-	u8 antenna_id; /* Antenna ID */
+	uint8_t report_info; /* Reported Frame Information */
+	uint8_t rcpi; /* RCPI */
+	uint8_t rsni; /* RSNI */
+	uint8_t bssid[ETH_ALEN]; /* BSSID */
+	uint8_t antenna_id; /* Antenna ID */
 	le32 parent_tsf; /* Parent TSF */
-	u8 variable[0]; /* Optional Subelements */
+	uint8_t variable[0]; /* Optional Subelements */
 } STRUCT_PACKED;
 
 /* IEEE Std 802.11-2016, Table 9-112 - Beacon report Subelement IDs */
@@ -2009,23 +2010,23 @@ struct rrm_measurement_beacon_report {
 
 /* IEEE Std 802.11ad-2012 - Multi-band element */
 struct multi_band_ie {
-	u8 eid; /* WLAN_EID_MULTI_BAND */
-	u8 len;
-	u8 mb_ctrl;
-	u8 band_id;
-	u8 op_class;
-	u8 chan;
-	u8 bssid[ETH_ALEN];
+	uint8_t eid; /* WLAN_EID_MULTI_BAND */
+	uint8_t len;
+	uint8_t mb_ctrl;
+	uint8_t band_id;
+	uint8_t op_class;
+	uint8_t chan;
+	uint8_t bssid[ETH_ALEN];
 	le16 beacon_int;
-	u8 tsf_offs[8];
-	u8 mb_connection_capability;
-	u8 fst_session_tmout;
+	uint8_t tsf_offs[8];
+	uint8_t mb_connection_capability;
+	uint8_t fst_session_tmout;
 	/* Optional:
 	 *   STA MAC Address
 	 *   Pairwise Cipher Suite Count
 	 *   Pairwise Cipher Suite List
 	 */
-	u8 variable[0];
+	uint8_t variable[0];
 } STRUCT_PACKED;
 
 enum mb_ctrl_sta_role {
@@ -2037,9 +2038,9 @@ enum mb_ctrl_sta_role {
 };
 
 #define MB_CTRL_ROLE_MASK (BIT(0) | BIT(1) | BIT(2))
-#define MB_CTRL_ROLE(ctrl) ((u8) ((ctrl) & MB_CTRL_ROLE_MASK))
-#define MB_CTRL_STA_MAC_PRESENT ((u8) (BIT(3)))
-#define MB_CTRL_PAIRWISE_CIPHER_SUITE_PRESENT ((u8) (BIT(4)))
+#define MB_CTRL_ROLE(ctrl) ((uint8_t) ((ctrl) & MB_CTRL_ROLE_MASK))
+#define MB_CTRL_STA_MAC_PRESENT ((uint8_t) (BIT(3)))
+#define MB_CTRL_PAIRWISE_CIPHER_SUITE_PRESENT ((uint8_t) (BIT(4)))
 
 enum mb_band_id {
 	MB_BAND_ID_WIFI_2_4GHZ = 2, /* 2.4 GHz */
@@ -2047,11 +2048,11 @@ enum mb_band_id {
 	MB_BAND_ID_WIFI_60GHZ = 5, /* 60 GHz */
 };
 
-#define MB_CONNECTION_CAPABILITY_AP ((u8) (BIT(0)))
-#define MB_CONNECTION_CAPABILITY_PCP ((u8) (BIT(1)))
-#define MB_CONNECTION_CAPABILITY_DLS ((u8) (BIT(2)))
-#define MB_CONNECTION_CAPABILITY_TDLS ((u8) (BIT(3)))
-#define MB_CONNECTION_CAPABILITY_IBSS ((u8) (BIT(4)))
+#define MB_CONNECTION_CAPABILITY_AP ((uint8_t) (BIT(0)))
+#define MB_CONNECTION_CAPABILITY_PCP ((uint8_t) (BIT(1)))
+#define MB_CONNECTION_CAPABILITY_DLS ((uint8_t) (BIT(2)))
+#define MB_CONNECTION_CAPABILITY_TDLS ((uint8_t) (BIT(3)))
+#define MB_CONNECTION_CAPABILITY_IBSS ((uint8_t) (BIT(4)))
 
 /* IEEE Std 802.11ad-2014 - FST Action field */
 enum fst_action {
@@ -2109,28 +2110,28 @@ enum nr_chan_width {
 };
 
 struct ieee80211_he_capabilities {
-	u8 he_mac_capab_info[6];
-	u8 he_phy_capab_info[11];
+	uint8_t he_mac_capab_info[6];
+	uint8_t he_phy_capab_info[11];
 	/* Followed by 4, 8, or 12 octets of Supported HE-MCS And NSS Set field
 	* and optional variable length PPE Thresholds field. */
-	u8 optional[];
+	uint8_t optional[];
 } STRUCT_PACKED;
 
 struct ieee80211_he_operation {
 	le32 he_oper_params; /* HE Operation Parameters[3] and
 			      * BSS Color Information[1] */
 	le16 he_mcs_nss_set;
-	u8 vht_op_info_chwidth;
-	u8 vht_op_info_chan_center_freq_seg0_idx;
-	u8 vht_op_info_chan_center_freq_seg1_idx;
-	/* Followed by conditional MaxBSSID Indicator subfield (u8) */
+	uint8_t vht_op_info_chwidth;
+	uint8_t vht_op_info_chan_center_freq_seg0_idx;
+	uint8_t vht_op_info_chan_center_freq_seg1_idx;
+	/* Followed by conditional MaxBSSID Indicator subfield (uint8_t) */
 } STRUCT_PACKED;
 
 /*
  * IEEE P802.11ax/D4.0, 9.4.2.246 Spatial Reuse Parameter Set element
  */
 struct ieee80211_spatial_reuse {
-	u8 sr_ctrl; /* SR Control */
+	uint8_t sr_ctrl; /* SR Control */
 	/* Up to 19 octets of parameters:
 	 * Non-SRG OBSS PD Max Offset[0 or 1]
 	 * SRG OBSS PD Min Offset[0 or 1]
@@ -2138,28 +2139,28 @@ struct ieee80211_spatial_reuse {
 	 * SRG BSS Color Bitmap[0 or 8]
 	 * SRG Partial BSSID Bitmap[0 or 8]
 	 */
-	u8 params[19];
+	uint8_t params[19];
 } STRUCT_PACKED;
 
 /* HE Capabilities Information defines */
 
 #define HE_PHYCAP_CHANNEL_WIDTH_SET_IDX		0
-#define HE_PHYCAP_CHANNEL_WIDTH_MASK		((u8) (BIT(1) | BIT(2) | \
+#define HE_PHYCAP_CHANNEL_WIDTH_MASK		((uint8_t) (BIT(1) | BIT(2) | \
 						      BIT(3) | BIT(4)))
-#define HE_PHYCAP_CHANNEL_WIDTH_SET_40MHZ_IN_2G         ((u8) BIT(1))
-#define HE_PHYCAP_CHANNEL_WIDTH_SET_40MHZ_80MHZ_IN_5G	((u8) BIT(2))
-#define HE_PHYCAP_CHANNEL_WIDTH_SET_160MHZ_IN_5G	((u8) BIT(3))
-#define HE_PHYCAP_CHANNEL_WIDTH_SET_80PLUS80MHZ_IN_5G	((u8) BIT(4))
+#define HE_PHYCAP_CHANNEL_WIDTH_SET_40MHZ_IN_2G         ((uint8_t) BIT(1))
+#define HE_PHYCAP_CHANNEL_WIDTH_SET_40MHZ_80MHZ_IN_5G	((uint8_t) BIT(2))
+#define HE_PHYCAP_CHANNEL_WIDTH_SET_160MHZ_IN_5G	((uint8_t) BIT(3))
+#define HE_PHYCAP_CHANNEL_WIDTH_SET_80PLUS80MHZ_IN_5G	((uint8_t) BIT(4))
 
 #define HE_PHYCAP_SU_BEAMFORMER_CAPAB_IDX	3
-#define HE_PHYCAP_SU_BEAMFORMER_CAPAB		((u8) BIT(7))
+#define HE_PHYCAP_SU_BEAMFORMER_CAPAB		((uint8_t) BIT(7))
 #define HE_PHYCAP_SU_BEAMFORMEE_CAPAB_IDX	4
-#define HE_PHYCAP_SU_BEAMFORMEE_CAPAB		((u8) BIT(0))
+#define HE_PHYCAP_SU_BEAMFORMEE_CAPAB		((uint8_t) BIT(0))
 #define HE_PHYCAP_MU_BEAMFORMER_CAPAB_IDX	4
-#define HE_PHYCAP_MU_BEAMFORMER_CAPAB		((u8) BIT(1))
+#define HE_PHYCAP_MU_BEAMFORMER_CAPAB		((uint8_t) BIT(1))
 
 #define HE_PHYCAP_PPE_THRESHOLD_PRESENT_IDX	6
-#define HE_PHYCAP_PPE_THRESHOLD_PRESENT		((u8) BIT(7))
+#define HE_PHYCAP_PPE_THRESHOLD_PRESENT		((uint8_t) BIT(7))
 
 /* HE PPE Threshold define */
 #define HE_PPE_THRES_RU_INDEX_BITMASK_MASK	0xf
@@ -2168,21 +2169,21 @@ struct ieee80211_spatial_reuse {
 
 /* HE Operation defines */
 /* HE Operation Parameters and BSS Color Information fields */
-#define HE_OPERATION_DFLT_PE_DURATION_MASK	((u32) (BIT(0) | BIT(1) | \
+#define HE_OPERATION_DFLT_PE_DURATION_MASK	((uint32_t) (BIT(0) | BIT(1) | \
 							BIT(2)))
 #define HE_OPERATION_DFLT_PE_DURATION_OFFSET	0
-#define HE_OPERATION_TWT_REQUIRED		((u32) BIT(3))
-#define HE_OPERATION_RTS_THRESHOLD_MASK	((u32) (BIT(4) | BIT(5) | \
+#define HE_OPERATION_TWT_REQUIRED		((uint32_t) BIT(3))
+#define HE_OPERATION_RTS_THRESHOLD_MASK	((uint32_t) (BIT(4) | BIT(5) | \
 						BIT(6) | BIT(7) | \
 						BIT(8) | BIT(9) | \
 						BIT(10) | BIT(11) | \
 						BIT(12) | BIT(13)))
 #define HE_OPERATION_RTS_THRESHOLD_OFFSET	4
-#define HE_OPERATION_BSS_COLOR_MASK		((u32) (BIT(24) | BIT(25) | \
+#define HE_OPERATION_BSS_COLOR_MASK		((uint32_t) (BIT(24) | BIT(25) | \
 							BIT(26) | BIT(27) | \
 							BIT(28) | BIT(29)))
-#define HE_OPERATION_PARTIAL_BSS_COLOR		((u32) BIT(30))
-#define HE_OPERATION_BSS_COLOR_DISABLED		((u32) BIT(31))
+#define HE_OPERATION_PARTIAL_BSS_COLOR		((uint32_t) BIT(30))
+#define HE_OPERATION_BSS_COLOR_DISABLED		((uint32_t) BIT(31))
 #define HE_OPERATION_BSS_COLOR_OFFSET		24
 
 /* Spatial Reuse defines */
@@ -2193,37 +2194,37 @@ struct ieee80211_spatial_reuse {
 #define SPATIAL_REUSE_HESIGA_SR_VAL15_ALLOWED	BIT(4)
 
 struct ieee80211_he_mu_edca_parameter_set {
-	u8 he_qos_info;
-	u8 he_mu_ac_be_param[3];
-	u8 he_mu_ac_bk_param[3];
-	u8 he_mu_ac_vi_param[3];
-	u8 he_mu_ac_vo_param[3];
+	uint8_t he_qos_info;
+	uint8_t he_mu_ac_be_param[3];
+	uint8_t he_mu_ac_bk_param[3];
+	uint8_t he_mu_ac_vi_param[3];
+	uint8_t he_mu_ac_vo_param[3];
 } STRUCT_PACKED;
 
 /* HE MU AC parameter record field format */
 /* ACI/AIFSN */
 #define HE_MU_AC_PARAM_ACI_IDX 0
-#define HE_MU_AC_PARAM_AIFSN ((u8) (BIT(0) | BIT(1) | BIT(2) | BIT(3)))
-#define HE_MU_AC_PARAM_ACM ((u8) BIT(4))
-#define HE_MU_AC_PARAM_ACI ((u8) (BIT(5) | BIT(6)))
+#define HE_MU_AC_PARAM_AIFSN ((uint8_t) (BIT(0) | BIT(1) | BIT(2) | BIT(3)))
+#define HE_MU_AC_PARAM_ACM ((uint8_t) BIT(4))
+#define HE_MU_AC_PARAM_ACI ((uint8_t) (BIT(5) | BIT(6)))
 /* B7: Reserved */
 
 /* ECWmin/ECWmax */
 #define HE_MU_AC_PARAM_ECW_IDX 1
-#define HE_MU_AC_PARAM_ECWMIN ((u8) (BIT(0) | BIT(1) | BIT(2) | BIT(3)))
-#define HE_MU_AC_PARAM_ECWMAX ((u8) (BIT(4) | BIT(5) | BIT(6) | BIT(7)))
+#define HE_MU_AC_PARAM_ECWMIN ((uint8_t) (BIT(0) | BIT(1) | BIT(2) | BIT(3)))
+#define HE_MU_AC_PARAM_ECWMAX ((uint8_t) (BIT(4) | BIT(5) | BIT(6) | BIT(7)))
 
 /* MU EDCA Timer */
 #define HE_MU_AC_PARAM_TIMER_IDX 2
 
 /* HE QoS Info field */
-#define HE_QOS_INFO_EDCA_PARAM_SET_COUNT ((u8) (BIT(0) | BIT(1) | \
+#define HE_QOS_INFO_EDCA_PARAM_SET_COUNT ((uint8_t) (BIT(0) | BIT(1) | \
 						BIT(2) | BIT(3)))
-#define HE_QOS_INFO_Q_ACK ((u8) (BIT(4)))
-#define HE_QOS_INFO_QUEUE_REQUEST ((u8) (BIT(5)))
-#define HE_QOS_INFO_TXOP_REQUEST ((u8) (BIT(6)))
+#define HE_QOS_INFO_Q_ACK ((uint8_t) (BIT(4)))
+#define HE_QOS_INFO_QUEUE_REQUEST ((uint8_t) (BIT(5)))
+#define HE_QOS_INFO_TXOP_REQUEST ((uint8_t) (BIT(6)))
 /* B7: Reserved if sent by an AP; More Data Ack if sent by a non-AP STA */
-#define HE_QOS_INFO_MORE_DATA_ACK ((u8) (BIT(7)))
+#define HE_QOS_INFO_MORE_DATA_ACK ((uint8_t) (BIT(7)))
 
 /* DPP Public Action frame identifiers - OUI_WFA */
 #define DPP_OUI_TYPE 0x1A

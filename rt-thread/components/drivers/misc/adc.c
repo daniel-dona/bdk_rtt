@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * Copyright (c) 2006-2018, RT-Thread Development Team
  *
@@ -26,7 +27,7 @@ static rt_size_t _adc_read(rt_device_t dev, rt_off_t pos, void *buffer, rt_size_
     rt_err_t result = RT_EOK;
     rt_size_t i;
     struct rt_adc_device *adc = (struct rt_adc_device *)dev;
-    rt_uint32_t *value = (rt_uint32_t *)buffer;
+    uint32_t *value = (uint32_t *)buffer;
 
     for (i = 0; i < size; i += sizeof(int))
     {
@@ -52,11 +53,11 @@ static rt_err_t _adc_control(rt_device_t dev, int cmd, void *args)
     }
     if (cmd == RT_ADC_CMD_ENABLE)
     {
-        result = adc->ops->enabled(adc, (rt_uint32_t)args, RT_TRUE);
+        result = adc->ops->enabled(adc, (uint32_t)args, RT_TRUE);
     }
     else if (cmd == RT_ADC_CMD_DISABLE)
     {
-        result = adc->ops->enabled(adc, (rt_uint32_t)args, RT_FALSE);
+        result = adc->ops->enabled(adc, (uint32_t)args, RT_FALSE);
     }
 
     return result;
@@ -85,9 +86,9 @@ rt_err_t rt_hw_adc_register(rt_adc_device_t device, const char *name, const stru
     return result;
 }
 
-rt_uint32_t rt_adc_read(rt_adc_device_t dev, rt_uint32_t channel)
+uint32_t rt_adc_read(rt_adc_device_t dev, uint32_t channel)
 {
-    rt_uint32_t value;
+    uint32_t value;
 
     RT_ASSERT(dev);
 
@@ -96,7 +97,7 @@ rt_uint32_t rt_adc_read(rt_adc_device_t dev, rt_uint32_t channel)
     return value;
 }
 
-rt_err_t rt_adc_enable(rt_adc_device_t dev, rt_uint32_t channel)
+rt_err_t rt_adc_enable(rt_adc_device_t dev, uint32_t channel)
 {
     rt_err_t result = RT_EOK;
 
@@ -113,7 +114,7 @@ rt_err_t rt_adc_enable(rt_adc_device_t dev, rt_uint32_t channel)
     return result;
 }
 
-rt_err_t rt_adc_disable(rt_adc_device_t dev, rt_uint32_t channel)
+rt_err_t rt_adc_disable(rt_adc_device_t dev, uint32_t channel)
 {
     rt_err_t result = RT_EOK;
 

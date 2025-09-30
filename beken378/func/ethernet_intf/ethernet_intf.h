@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef __ETHERNET_INTF_H__
 #define __ETHERNET_INTF_H__ 
 
@@ -7,6 +8,6 @@ extern char wireless_ip[4];
 extern char wireless_mask[4];
 extern char wireless_gw[4];
 
-extern int hwaddr_aton(const char *txt, u8 *addr);
+extern int hwaddr_aton(const char *txt, uint8_t *addr);
 
 #endif

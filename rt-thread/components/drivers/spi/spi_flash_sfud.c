@@ -1,3 +1,4 @@
+#include <stdbool.h>
 /*
  * File      : spi_flash_sfud.c
  * This file is part of RT-Thread RTOS
@@ -67,7 +68,7 @@ static rt_err_t rt_sfud_control(rt_device_t dev, int cmd, void *args) {
         break;
     }
     case RT_DEVICE_CTRL_BLK_ERASE: {
-        rt_uint32_t *addrs = (rt_uint32_t *) args, start_addr = addrs[0], end_addr = addrs[1], phy_start_addr;
+        uint32_t *addrs = (uint32_t *) args, start_addr = addrs[0], end_addr = addrs[1], phy_start_addr;
         struct spi_flash_device *rtt_dev = (struct spi_flash_device *) (dev->user_data);
         sfud_flash *sfud_dev = (sfud_flash *) (rtt_dev->user_data);
         rt_size_t phy_size;

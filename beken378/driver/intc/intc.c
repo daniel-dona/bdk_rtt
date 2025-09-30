@@ -1,3 +1,4 @@
+#include <stdint.h>
 /**
  ****************************************************************************************
  *
@@ -28,14 +29,14 @@
 #include "start_type_pub.h"
 
 ISR_T _isrs[INTC_MAX_COUNT] = {{{0, 0}},};
-static UINT32 isrs_mask = 0;
+static uint32_t isrs_mask = 0;
 static ISR_LIST_T isr_hdr = {{&isr_hdr.isr, &isr_hdr.isr},};
 
-void intc_hdl_entry(UINT32 int_status)
+void intc_hdl_entry(uint32_t int_status)
 {
-    UINT32 i;
+    uint32_t i;
     ISR_T *f;
-    UINT32 status;
+    uint32_t status;
     LIST_HEADER_T *n;
     LIST_HEADER_T *pos;
 
@@ -64,7 +65,7 @@ void intc_hdl_entry(UINT32 int_status)
     }
 }
 
-void intc_service_register(UINT8 int_num, UINT8 int_pri, FUNCPTR isr)
+void intc_service_register(uint8_t int_num, uint8_t int_pri, FUNCPTR isr)
 {
     LIST_HEADER_T *pos, *n;
     ISR_T *tmp_ptr, *cur_ptr;
@@ -125,12 +126,12 @@ error:
     return;
 }
 
-void intc_service_change_handler(UINT8 int_num, FUNCPTR isr)
+void intc_service_change_handler(uint8_t int_num, FUNCPTR isr)
 {
     LIST_HEADER_T *pos, *n;
     ISR_T *tmp_ptr, *cur_ptr;
     ISR_T buf_ele;
-    UINT8 int_pri;
+    uint8_t int_pri;
 
     GLOBAL_INT_DECLARATION();
 
@@ -180,7 +181,7 @@ void intc_spurious(void)
 
 void intc_enable(int index)
 {
-    UINT32 param;
+    uint32_t param;
 
     param = (1UL << index);
     sddev_control(ICU_DEV_NAME, CMD_ICU_INT_ENABLE, &param);
@@ -188,7 +189,7 @@ void intc_enable(int index)
 
 void intc_disable(int index)
 {
-    UINT32 param;
+    uint32_t param;
 
     param = (1UL << index);
     sddev_control(ICU_DEV_NAME, CMD_ICU_INT_DISABLE, &param);
@@ -197,7 +198,7 @@ void intc_disable(int index)
 void rf_ps_wakeup_isr_idle_int_cb(void)
 {
 #if ( CONFIG_APP_MP3PLAYER == 1 )
-    UINT32 irq_status;
+    uint32_t irq_status;
 
     irq_status = sddev_control(ICU_DEV_NAME, CMD_GET_INTR_STATUS, 0);
 
@@ -212,7 +213,7 @@ void rf_ps_wakeup_isr_idle_int_cb(void)
 
 void intc_irq(void)
 {
-    UINT32 irq_status;
+    uint32_t irq_status;
 	
     irq_status = icu_ctrl(CMD_GET_INTR_STATUS, 0);
     irq_status = irq_status & 0xFFFF;
@@ -230,7 +231,7 @@ void intc_irq(void)
 
 void intc_fiq(void)
 {
-    UINT32 fiq_status;
+    uint32_t fiq_status;
 
     fiq_status = icu_ctrl(CMD_GET_INTR_STATUS, 0);
     fiq_status = fiq_status & 0xFFFF0000;
@@ -248,15 +249,15 @@ void deafult_swi(void)
 
 void intc_init(void)
 {
-    UINT32 param;
+    uint32_t param;
 
-    *((volatile uint32 *)0x400000) = (uint32)&do_irq;
-    *((volatile uint32 *)0x400004) = (uint32)&do_fiq;
-    *((volatile uint32 *)0x400008) = (uint32)&do_swi;
-    *((volatile uint32 *)0x40000c) = (uint32)&do_undefined;
-    *((volatile uint32 *)0x400010) = (uint32)&do_pabort;
-    *((volatile uint32 *)0x400014) = (uint32)&do_dabort;
-    *((volatile uint32 *)0x400018) = (uint32)&do_reserved;
+    *((volatile uint32_t *)0x400000) = (uint32_t)&do_irq;
+    *((volatile uint32_t *)0x400004) = (uint32_t)&do_fiq;
+    *((volatile uint32_t *)0x400008) = (uint32_t)&do_swi;
+    *((volatile uint32_t *)0x40000c) = (uint32_t)&do_undefined;
+    *((volatile uint32_t *)0x400010) = (uint32_t)&do_pabort;
+    *((volatile uint32_t *)0x400014) = (uint32_t)&do_dabort;
+    *((volatile uint32_t *)0x400018) = (uint32_t)&do_reserved;
 
     intc_enable(FIQ_MAC_GENERAL);
     intc_enable(FIQ_MAC_PROT_TRIGGER);
@@ -277,7 +278,7 @@ void intc_init(void)
 
 void intc_deinit(void)
 {
-    UINT32 param;
+    uint32_t param;
 	
     for( int i = 0; i<=FIQ_DPLL_UNLOCK; i++)
 	{
@@ -374,7 +375,7 @@ void bk_trap_udef(struct arm_registers *regs)
 #if (CFG_SOC_NAME == SOC_BK7231N)
     *((volatile uint32_t *)START_TYPE_ADDR) = (uint32_t)(CRASH_UNDEFINED_VALUE & 0xffff);
 #else
-    *((volatile uint32 *)START_TYPE_ADDR) = (uint32)CRASH_UNDEFINED_VALUE;
+    *((volatile uint32_t *)START_TYPE_ADDR) = (uint32_t)CRASH_UNDEFINED_VALUE;
 #endif
     os_printf("undefined instruction\n");
     bk_show_register(regs);
@@ -386,7 +387,7 @@ void bk_trap_pabt(struct arm_registers *regs)
 #if (CFG_SOC_NAME == SOC_BK7231N)
     *((volatile uint32_t *)START_TYPE_ADDR) = (uint32_t)(CRASH_PREFETCH_ABORT_VALUE & 0xffff);
 #else
-    *((volatile uint32 *)START_TYPE_ADDR) = (uint32)CRASH_PREFETCH_ABORT_VALUE;
+    *((volatile uint32_t *)START_TYPE_ADDR) = (uint32_t)CRASH_PREFETCH_ABORT_VALUE;
 #endif
     os_printf("prefetch abort\n");
     bk_show_register(regs);
@@ -398,7 +399,7 @@ void bk_trap_dabt(struct arm_registers *regs)
 #if (CFG_SOC_NAME == SOC_BK7231N)
     *((volatile uint32_t *)START_TYPE_ADDR) = (uint32_t)(CRASH_DATA_ABORT_VALUE & 0xffff);
 #else
-    *((volatile uint32 *)START_TYPE_ADDR) = (uint32)CRASH_DATA_ABORT_VALUE;
+    *((volatile uint32_t *)START_TYPE_ADDR) = (uint32_t)CRASH_DATA_ABORT_VALUE;
 #endif
     os_printf("data abort\n");
     bk_show_register(regs);
@@ -410,7 +411,7 @@ void bk_trap_resv(struct arm_registers *regs)
 #if (CFG_SOC_NAME == SOC_BK7231N)
     *((volatile uint32_t *)START_TYPE_ADDR) = (uint32_t)(CRASH_UNUSED_VALUE & 0xffff);
 #else
-    *((volatile uint32 *)START_TYPE_ADDR) = (uint32)CRASH_UNUSED_VALUE;
+    *((volatile uint32_t *)START_TYPE_ADDR) = (uint32_t)CRASH_UNUSED_VALUE;
 #endif
     os_printf("not used\n");
     bk_show_register(regs);

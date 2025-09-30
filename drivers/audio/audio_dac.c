@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 #include "audio.h"
@@ -16,13 +17,13 @@
 #if CFG_USE_AUD_DAC
 typedef struct aud_volome_s
 {
-    UINT8 ana_gain;
-    UINT8 dig_gain;
+    uint8_t ana_gain;
+    uint8_t dig_gain;
 } AUD_VOL_ST, *AUD_VOL_PTR;
 
 #define AUD_DAC_DEF_DIGTAL_GAIN     (0x2D)  // 0dm
 
-extern UINT64 fclk_get_tick(void);
+extern uint64_t fclk_get_tick(void);
 
 #if 0//(AUD_USE_EXT_PA == 1)
 static const AUD_VOL_ST aud_vol_table[AUD_DAC_VOL_TABLE_LEN] =
@@ -76,10 +77,10 @@ static const AUD_VOL_ST aud_vol_table[AUD_DAC_VOL_TABLE_LEN] =
 };
 #endif
 
-void audio_dac_set_enable_bit(UINT32 enable)
+void audio_dac_set_enable_bit(uint32_t enable)
 {
-    UINT32 reg_addr = AUDIO_CONFIG;
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = AUDIO_CONFIG;
+    uint32_t reg_val = REG_READ(reg_addr);
 
     if (enable)
         reg_val |= DAC_ENABLE;
@@ -88,20 +89,20 @@ void audio_dac_set_enable_bit(UINT32 enable)
     REG_WRITE(reg_addr, reg_val);
 }
 
-UINT32 audio_dac_is_enable_bit(void)
+uint32_t audio_dac_is_enable_bit(void)
 {
-    UINT32 reg_addr = AUDIO_CONFIG;
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = AUDIO_CONFIG;
+    uint32_t reg_val = REG_READ(reg_addr);
 
     reg_val = (reg_val & DAC_ENABLE);
 
     return reg_val ? 1 : 0;
 }
 
-void audio_dac_set_int_enable_bit(UINT32 enable)
+void audio_dac_set_int_enable_bit(uint32_t enable)
 {
-    UINT32 reg_addr = AUD_FIFO_CONFIG;
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = AUD_FIFO_CONFIG;
+    uint32_t reg_val = REG_READ(reg_addr);
 
     if (enable)
         reg_val |= (DAC_R_INT_EN | DAC_L_INT_EN);
@@ -110,10 +111,10 @@ void audio_dac_set_int_enable_bit(UINT32 enable)
     REG_WRITE(reg_addr, reg_val);
 }
 
-void audio_dac_set_read_thred_bit(UINT32 thred)
+void audio_dac_set_read_thred_bit(uint32_t thred)
 {
-    UINT32 reg_addr = AUD_FIFO_CONFIG;
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = AUD_FIFO_CONFIG;
+    uint32_t reg_val = REG_READ(reg_addr);
 
     reg_val &= ~(DAC_R_RD_THRED_MASK << DAC_R_RD_THRED_POSI);
     reg_val &= ~(DAC_L_RD_THRED_MASK << DAC_L_RD_THRED_POSI);
@@ -124,10 +125,10 @@ void audio_dac_set_read_thred_bit(UINT32 thred)
     REG_WRITE(reg_addr, reg_val);
 }
 
-void audio_dac_set_hpf1_bit(UINT32 enable)
+void audio_dac_set_hpf1_bit(uint32_t enable)
 {
-    UINT32 reg_addr = AUD_DAC_CONFIG_0;
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = AUD_DAC_CONFIG_0;
+    uint32_t reg_val = REG_READ(reg_addr);
 
     if (enable)
         reg_val |= DAC_HPF1_BYPASS;
@@ -136,10 +137,10 @@ void audio_dac_set_hpf1_bit(UINT32 enable)
     REG_WRITE(reg_addr, reg_val);
 }
 
-void audio_dac_set_hpf2_bit(UINT32 enable)
+void audio_dac_set_hpf2_bit(uint32_t enable)
 {
-    UINT32 reg_addr = AUD_DAC_CONFIG_0;
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = AUD_DAC_CONFIG_0;
+    uint32_t reg_val = REG_READ(reg_addr);
 
     if (enable)
         reg_val |= DAC_HPF2_BYPASS;
@@ -148,10 +149,10 @@ void audio_dac_set_hpf2_bit(UINT32 enable)
     REG_WRITE(reg_addr, reg_val);
 }
 
-void audio_dac_set_gain(UINT32 gain)
+void audio_dac_set_gain(uint32_t gain)
 {
-    UINT32 reg_addr = AUD_DAC_CONFIG_0;
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = AUD_DAC_CONFIG_0;
+    uint32_t reg_val = REG_READ(reg_addr);
 
     if (gain > DAC_SET_GAIN_MASK)
         gain = DAC_SET_GAIN_MASK;
@@ -162,10 +163,10 @@ void audio_dac_set_gain(UINT32 gain)
     REG_WRITE(reg_addr, reg_val);
 }
 
-void audio_dac_set_sample(INT16 left, INT16 right)
+void audio_dac_set_sample(int16_t left, int16_t right)
 {
-    UINT32 reg_addr = AUD_DAC_FIFO_PORT;
-    UINT32 reg_val;
+    uint32_t reg_addr = AUD_DAC_FIFO_PORT;
+    uint32_t reg_val;
 
     reg_val = ((left & AD_DAC_L_FIFO_MASK) << AD_DAC_L_FIFO_POSI)
               | ((right & AD_DAC_R_FIFO_MASK) << AD_DAC_R_FIFO_POSI);
@@ -173,9 +174,9 @@ void audio_dac_set_sample(INT16 left, INT16 right)
     REG_WRITE(reg_addr, reg_val);
 }
 
-void audio_dac_set_sample_rate(UINT32 sample_rate)
+void audio_dac_set_sample_rate(uint32_t sample_rate)
 {
-    UINT32 reg;
+    uint32_t reg;
 
     /* disable dac handset bit again, to make sure this bit unset */
     reg = REG_READ(AUD_EXTEND_CFG);
@@ -279,13 +280,13 @@ void audio_dac_set_sample_rate(UINT32 sample_rate)
 }
 
 #if CFG_GENERAL_DMA
-void audio_dac_dma_handler(UINT32 param)
+void audio_dac_dma_handler(uint32_t param)
 {
 
 }
 
-__maybe_unused static void audio_dac_set_dma(UINT32 enable);
-static void audio_dac_set_dma(UINT32 enable)
+__maybe_unused static void audio_dac_set_dma(uint32_t enable);
+static void audio_dac_set_dma(uint32_t enable)
 {
     GDMA_CFG_ST en_cfg;
 
@@ -310,7 +311,7 @@ static void audio_dac_eixt_dma(void)
 
 void audio_dac_volume_use_single_port(void)
 {
-    UINT32 param;
+    uint32_t param;
 
     param = AUDIO_DAC_VOL_SINGLE_MODE;
     sddev_control(SCTRL_DEV_NAME, CMD_SCTRL_SET_VOLUME_PORT, 
@@ -321,7 +322,7 @@ void audio_dac_volume_diff_port(void)
 {
     // default mode is ready diff port
     // if use single port, call audio_dac_volume_use_single_port when initial dac
-    UINT32 param;
+    uint32_t param;
 
     param = AUDIO_DAC_VOL_DIFF_MODE;
     sddev_control(SCTRL_DEV_NAME, CMD_SCTRL_SET_VOLUME_PORT, 
@@ -338,9 +339,9 @@ void audio_dac_close_analog_regs(void)
     sddev_control(SCTRL_DEV_NAME, CMD_SCTRL_CLOSE_DAC_ANALOG, NULL);
 }
 
-void audio_dac_set_analog_mute(UINT32 enable)
+void audio_dac_set_analog_mute(uint32_t enable)
 {
-    UINT32 val = 0;
+    uint32_t val = 0;
     
     if (enable)
         val = AUDIO_DAC_ANALOG_MUTE;
@@ -353,7 +354,7 @@ void audio_dac_set_analog_mute(UINT32 enable)
 #if AUD_USE_EXT_PA
 void audio_dac_init_mute_pin(void)
 {
-    UINT32 param;
+    uint32_t param;
 
     ASSERT(AUD_DAC_MUTE_PIN < GPIONUM);
 
@@ -361,11 +362,11 @@ void audio_dac_init_mute_pin(void)
     sddev_control(GPIO_DEV_NAME, CMD_GPIO_CFG, &param);
 }
 
-void audio_dac_eable_mute(UINT32 enable)
+void audio_dac_eable_mute(uint32_t enable)
 {
 	static uint8_t mute_flg = 0xFF;
-	UINT32 param;
-	UINT32 cur_tick, delay_tick;
+	uint32_t param;
+	uint32_t cur_tick, delay_tick;
 
 	if (enable) {
 		if(mute_flg == 1) {
@@ -395,9 +396,9 @@ void audio_dac_eable_mute(UINT32 enable)
 }
 #endif
 
-void audio_dac_set_volume(UINT32 percent)
+void audio_dac_set_volume(uint32_t percent)
 {
-    UINT32 param = percent, idx;
+    uint32_t param = percent, idx;
     AUD_VOL_PTR vol;
 
     if (percent > 99)

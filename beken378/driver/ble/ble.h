@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _BLE_H_
 #define _BLE_H_
 
@@ -84,8 +85,8 @@ typedef struct ble_message
 
 typedef struct rf_time_s
 {
-    UINT32 ble_rf_time;
-    UINT32 wifi_rf_time;
+    uint32_t ble_rf_time;
+    uint32_t wifi_rf_time;
 } rf_time_t;
 
 typedef enum
@@ -113,19 +114,19 @@ extern uint8_t ble_deep_sleep;
 #define FLASH_SPACE_TYPE_MAIN					 0x7231
 #define FLASH_TYPE_EMBEN_BK7231        FLASH_SPACE_TYPE_MAIN
 
-extern UINT32 ble_ctrl( UINT32 cmd, void *param );
+extern uint32_t ble_ctrl( uint32_t cmd, void *param );
 extern void ble_isr(void);
 extern void ble_set_role_mode(ble_role_t role);
 extern ble_role_t ble_get_role_mode();
-extern void ble_send_msg(UINT32 msg);
+extern void ble_send_msg(uint32_t msg);
 extern void ble_intc_set(uint32_t enable);
 extern void ble_clk_power_up(void);
 extern void ble_clk_power_down(void);
 extern void ble_switch_rf_to_wifi(void);
 extern void ble_switch_rf_to_ble(void);
-extern void ble_set_power_up(uint32 up);
-extern UINT32 ble_ps_enabled(void );
-extern UINT16 ble_ps_forbid_trace(BLE_PS_FORBID_STATUS forbid);
+extern void ble_set_power_up(uint32_t up);
+extern uint32_t ble_ps_enabled(void );
+extern uint16_t ble_ps_forbid_trace(BLE_PS_FORBID_STATUS forbid);
 uint8_t ble_flash_read(uint8_t flash_space, uint32_t address, uint32_t len, uint8_t *buffer, void (*callback)(void));
 uint8_t ble_flash_write(uint8_t flash_space, uint32_t address, uint32_t len, uint8_t *buffer, void (*callback)(void));
 uint8_t ble_flash_erase(uint8_t flash_type, uint32_t address, uint32_t len, void (*callback)(void));

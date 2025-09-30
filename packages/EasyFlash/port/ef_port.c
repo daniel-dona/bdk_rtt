@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * This file is part of the EasyFlash Library.
  *

@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
   This file is part of UFFS, the Ultra-low-cost Flash File System.
   
@@ -100,8 +101,8 @@ void uffs_BadBlockRecover(uffs_Device *dev)
 {
 	TreeNode *good, *bad;
 	uffs_Buf *buf;
-	u16 i;
-	u16 page;
+	uint16_t i;
+	uint16_t page;
 	uffs_BlockInfo *bc = NULL;
 	uffs_Tags *tag;
 	uffs_Tags newTag;
@@ -109,7 +110,7 @@ void uffs_BadBlockRecover(uffs_Device *dev)
 	UBOOL goodBlockIsDirty = U_FALSE;
 	int ret;
 	int region;
-	u8 type;
+	uint8_t type;
 	
 	if (dev->bad.block == UFFS_INVALID_BLOCK)
 		return;

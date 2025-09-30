@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File: tts_player.c
  * COPYRIGHT (C) 2012-2018, Shanghai Real-Thread Technology Co., Ltd
@@ -25,9 +26,9 @@
  * @return == RT_EOK: play success
  *         ==-RT_EINVAL: invalid parameter
  */
-rt_err_t tts_player_block(char *files[], rt_uint8_t num)
+rt_err_t tts_player_block(char *files[], uint8_t num)
 {
-    rt_uint8_t index = 0;
+    uint8_t index = 0;
     static char buffer[2048] = {0}; 
      
     rt_kprintf("start tts play.\n"); 
@@ -110,9 +111,9 @@ rt_err_t tts_player_block(char *files[], rt_uint8_t num)
  * @return == RT_EOK: play success
  *         ==-RT_EINVAL: invalid parameter
  */
-rt_err_t tts_player_break(char *files[], rt_uint8_t num)
+rt_err_t tts_player_break(char *files[], uint8_t num)
 {
-    rt_uint8_t index = 0;
+    uint8_t index = 0;
     static char buffer[2048] = {0}; 
      
     rt_kprintf("start tts play.\n"); 

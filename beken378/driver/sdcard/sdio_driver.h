@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef __SDIO_DRIVER_H__
 #define __SDIO_DRIVER_H__
 
@@ -183,23 +184,23 @@ typedef enum
 //#define CONFIG_SDCARD_BUSWIDTH_4LINE
 
 // interface function
-void sdio_set_clock(UINT8 clk_index);
+void sdio_set_clock(uint8_t clk_index);
 void sdio_gpio_config(void);
-void sdio_clk_config(UINT8 enable);
+void sdio_clk_config(uint8_t enable);
 void sdio_register_reset(void);
-void sdio_sendcmd_function( UINT8 cmd_index, UINT32 flag,
-                            UINT32 timeout, VOID *arg );
-SDIO_Error sdio_wait_cmd_response(UINT32 cmd);
-void sdio_get_cmdresponse_argument(UINT8 num, UINT32 *resp);
-void sdio_setup_data(UINT32 data_dir, UINT32 byte_len);
-void sdio_set_data_timeout(UINT32 timeout);
+void sdio_sendcmd_function( uint8_t cmd_index, uint32_t flag,
+                            uint32_t timeout, void *arg );
+SDIO_Error sdio_wait_cmd_response(uint32_t cmd);
+void sdio_get_cmdresponse_argument(uint8_t num, uint32_t *resp);
+void sdio_setup_data(uint32_t data_dir, uint32_t byte_len);
+void sdio_set_data_timeout(uint32_t timeout);
 
-SDIO_Error sdcard_wait_receive_data(UINT8 *receive_buf);
+SDIO_Error sdcard_wait_receive_data(uint8_t *receive_buf);
 //SDIO_Error sdcard_wait_write_end(void);
-//SDIO_Error sdcard_write_data(UINT8 *writebuff, UINT32 block);
+//SDIO_Error sdcard_write_data(uint8_t *writebuff, uint32_t block);
 void driver_sdcard_recv_data_start(int timeout );
-//uint8 sd_clk_is_attached(void);
-//uint8 sd_is_attached(void);
+//uint8_t sd_clk_is_attached(void);
+//uint8_t sd_is_attached(void);
 //void sdio_register_reenable(void);
 int wait_Receive_Data(void);
 

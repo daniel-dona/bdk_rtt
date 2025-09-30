@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : main.c
  * This file is part of RT-Thread RTOS
@@ -44,7 +45,7 @@ extern const struct romfs_dirent romfs_root;
 
 extern int rt_hw_flash_disk_readonly_init(const char *name, uint32_t base, uint32_t sector_size, uint32_t capacity);
 
-extern void saradc_config_vddram_voltage(UINT32 vol);
+extern void saradc_config_vddram_voltage(uint32_t vol);
 extern void app_start(void); 
 
 void mount_fs(){

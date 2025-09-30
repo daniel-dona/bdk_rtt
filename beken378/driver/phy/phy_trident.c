@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /**
  ****************************************************************************************
  *
@@ -2023,7 +2025,7 @@ __INLINE void rc_trx_reg28_set(uint32_t value)
  ****************************************************************************************
  */
 #if CFG_SUPPORT_CALIBRATION
-extern INT32 rwnx_cal_load_trx_rcbekn_reg_val(void);
+extern int32_t rwnx_cal_load_trx_rcbekn_reg_val(void);
 #endif
 static void phy_rf_init(void)
 {
@@ -2311,7 +2313,7 @@ void phy_init(const struct phy_cfg_tag *config)
 
 void rcbeken_reconfigure(void)
 {
-    UINT32 tmp;
+    uint32_t tmp;
 
     phy_rcbeken_init();
     rc_fe_rx_del_set(0x12c);
@@ -2527,7 +2529,7 @@ void phy_mdm_isr(void)
     if (irq_status & MDM_IRQLSIGVALIDEN_BIT)
     {
 #if CFG_RX_SENSITIVITY_TEST
-        extern UINT32 g_rxsens_start;
+        extern uint32_t g_rxsens_start;
         if (g_rxsens_start)
             phy_large_signal_support(mdm_rssi1_getf());
         else

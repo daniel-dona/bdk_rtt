@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "intc_pub.h"
 #include "pwm_pub.h"
 #include "rw_pub.h"
@@ -11,18 +12,18 @@
 #include "ap_idle_pub.h"
 
 
-UINT32 ps_fake_global_ap_count = 0;
-UINT32 ap_ps_enabled = 0;
-UINT32 ap_rf_off = 0;
-UINT32 ps_fake_pause_shot = 0;
+uint32_t ps_fake_global_ap_count = 0;
+uint32_t ap_ps_enabled = 0;
+uint32_t ap_rf_off = 0;
+uint32_t ps_fake_pause_shot = 0;
 
 
 #if CFG_USE_AP_IDLE
 static beken_timer_t ps_ap_bcn_timer = {0};
 
 //switch ap rf on/off
-UINT32 ap_bcn_timer_pause_one_shot_get ( void );
-void ap_bcn_timer_pause_one_shot_set ( UINT32 value );
+uint32_t ap_bcn_timer_pause_one_shot_get ( void );
+void ap_bcn_timer_pause_one_shot_set ( uint32_t value );
 
 void ap_ps_do_rf_up ( void )
 {
@@ -30,7 +31,7 @@ void ap_ps_do_rf_up ( void )
     GLOBAL_INT_DISABLE();
 
     if ( ap_rf_off == 1 ) {
-        UINT32 reg = RF_HOLD_BY_AP_BIT;
+        uint32_t reg = RF_HOLD_BY_AP_BIT;
         sddev_control(SCTRL_DEV_NAME, CMD_RF_HOLD_BIT_SET, &reg);
         wifi_general_mac_state_set_active();
         ap_rf_off = 0;
@@ -41,7 +42,7 @@ void ap_ps_do_rf_up ( void )
 
 void ap_bcn_timer_real_handler ( void )
 {
-	UINT32 reg;
+	uint32_t reg;
 	GLOBAL_INT_DECLARATION();
 	GLOBAL_INT_DISABLE();
 	
@@ -84,7 +85,7 @@ void stop_global_ap_bcn_timer ( void )
 {
     GLOBAL_INT_DECLARATION();
     GLOBAL_INT_DISABLE();
-    UINT32 reg = RF_HOLD_BY_AP_BIT;
+    uint32_t reg = RF_HOLD_BY_AP_BIT;
     sddev_control(SCTRL_DEV_NAME, CMD_RF_HOLD_BIT_SET, &reg);
     wifi_general_mac_state_set_active();
     ap_rf_off = 0;
@@ -102,7 +103,7 @@ void stop_global_ap_bcn_timer ( void )
 
 void start_global_ap_bcn_timer ( void )
 {
-	UINT32 err;
+	uint32_t err;
 	stop_global_ap_bcn_timer();
 	err = rtos_init_timer ( &ps_ap_bcn_timer,
 	                        5,
@@ -145,11 +146,11 @@ void ap_idle_stop ( void )
 }
 
 #endif
-void ap_bcn_timer_pause_one_shot_set ( UINT32 value )
+void ap_bcn_timer_pause_one_shot_set ( uint32_t value )
 {
 	ps_fake_pause_shot = value;
 }
-UINT32 ap_bcn_timer_pause_one_shot_get ( void )
+uint32_t ap_bcn_timer_pause_one_shot_get ( void )
 {
 	uint32_t value;
 	GLOBAL_INT_DECLARATION();
@@ -174,7 +175,7 @@ void ap_ps_enable_clear ( void )
 	GLOBAL_INT_RESTORE();
 }
 
-UINT32 ap_ps_enable_get ( void )
+uint32_t ap_ps_enable_get ( void )
 {
 	uint32_t value;
 	GLOBAL_INT_DECLARATION();
@@ -184,7 +185,7 @@ UINT32 ap_ps_enable_get ( void )
 	return value;
 }
 
-UINT32 ap_ap_rf_sleep_get ( void )
+uint32_t ap_ap_rf_sleep_get ( void )
 {
 	uint32_t value;
 	GLOBAL_INT_DECLARATION();
@@ -195,7 +196,7 @@ UINT32 ap_ap_rf_sleep_get ( void )
 }
 
 
-UINT32 ap_if_ap_rf_sleep ( void )
+uint32_t ap_if_ap_rf_sleep ( void )
 {
 	if ( bk_wlan_has_role ( VIF_AP ) ) {
 		return ap_ap_rf_sleep_get();

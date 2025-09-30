@@ -216,9 +216,9 @@ typedef struct rt_mailbox *osMailQId;
 typedef const struct os_thread_def  {
 	const char *name;
 	os_pthread entry;
-	rt_uint32_t stack_size;
-	rt_uint8_t priority;
-	rt_uint32_t tick;
+	uint32_t stack_size;
+	uint8_t priority;
+	uint32_t tick;
 } osThreadDef_t;
 
 /// Timer Definition structure contains timer parameters.
@@ -228,21 +228,21 @@ typedef const struct os_timer_def  {
     os_ptimer timeout;
 	void *parameter;
 	rt_tick_t time;
-	rt_uint8_t flag;
+	uint8_t flag;
 } osTimerDef_t;
 
 /// Mutex Definition structure contains setup information for a mutex.
 /// \note CAN BE CHANGED: \b os_mutex_def is implementation specific in every CMSIS-RTOS.
 typedef const struct os_mutex_def  {
 	const char *name;
-	rt_uint8_t flag;	
+	uint8_t flag;	
 } osMutexDef_t;
 
 /// Semaphore Definition structure contains setup information for a semaphore.
 /// \note CAN BE CHANGED: \b os_semaphore_def is implementation specific in every CMSIS-RTOS.
 typedef const struct os_semaphore_def  {
 	const char *name;
-	rt_uint8_t flag;
+	uint8_t flag;
 } osSemaphoreDef_t;
 
 /// Definition structure for memory block allocation
@@ -259,7 +259,7 @@ typedef const struct os_messageQ_def  {
 	const char *name;
 	rt_size_t max_msgs;
 	rt_size_t msg_size;
-	rt_uint8_t flag;
+	uint8_t flag;
 } osMessageQDef_t;
 
 /// Definition structure for mail queue
@@ -267,7 +267,7 @@ typedef const struct os_messageQ_def  {
 typedef const struct os_mailQ_def  {
 	const char *name;
 	rt_size_t size;
-	rt_uint8_t flag;
+	uint8_t flag;
 } osMailQDef_t;
 
 /// Event structure contains detailed information about an event. 
@@ -317,7 +317,7 @@ extern osThreadDef_t os_thread_def_##name
 #else                            // define the object
 #define osThreadDef(name, priority, instances, stacksz)  \
 osThreadDef_t os_thread_def_##name = \
-{("cmsis"), (name), (stacksz), ((rt_uint8_t)(priority - osPriorityIdle) + 1), 50}
+{("cmsis"), (name), (stacksz), ((uint8_t)(priority - osPriorityIdle) + 1), 50}
 #endif
 
 /// Access a Thread defintion.

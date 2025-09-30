@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <rtthread.h>
 #include <rthw.h>
 #include <rtdevice.h>
@@ -60,9 +61,9 @@ rt_err_t _spi_configure(struct rt_spi_device *dev, struct rt_spi_configuration *
     return RT_EOK;
 }
 
-rt_uint32_t _spi_xfer(struct rt_spi_device *dev, struct rt_spi_message *msg)
+uint32_t _spi_xfer(struct rt_spi_device *dev, struct rt_spi_message *msg)
 {
-    rt_uint32_t master;
+    uint32_t master;
     struct rt_spi_configuration *cfg = RT_NULL;
     struct spi_message spi_msg;
 
@@ -88,7 +89,7 @@ rt_uint32_t _spi_xfer(struct rt_spi_device *dev, struct rt_spi_message *msg)
         }
         else if((msg->send_buf) && msg->length)
         {
-            spi_msg.send_buf = (UINT8*)msg->send_buf;
+            spi_msg.send_buf = (uint8_t*)msg->send_buf;
             spi_msg.send_len = msg->length;
             
             spi_msg.recv_buf = NULL;
@@ -113,7 +114,7 @@ rt_uint32_t _spi_xfer(struct rt_spi_device *dev, struct rt_spi_message *msg)
         }
         else if((msg->send_buf) && msg->length)
         {
-            spi_msg.send_buf = (UINT8*)msg->send_buf;
+            spi_msg.send_buf = (uint8_t*)msg->send_buf;
             spi_msg.send_len = msg->length;
             
             spi_msg.recv_buf = NULL;

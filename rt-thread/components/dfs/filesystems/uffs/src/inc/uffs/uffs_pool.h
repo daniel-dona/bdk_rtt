@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
   This file is part of UFFS, the Ultra-low-cost Flash File System.
   
@@ -60,14 +61,14 @@ typedef struct uffs_PoolEntrySt {
  * \brief Memory pool.
  */
 typedef struct uffs_PoolSt {
-	u8 *mem;					//!< memory pool
-	u32 buf_size;				//!< size of a buffer
-	u32 num_bufs;				//!< number of buffers in the pool
+	uint8_t *mem;					//!< memory pool
+	uint32_t buf_size;				//!< size of a buffer
+	uint32_t num_bufs;				//!< number of buffers in the pool
 	uffs_PoolEntry *free_list;	//!< linked list of free buffers
 	OSSEM sem;					//!< buffer lock
 } uffs_Pool;
 
-URET uffs_PoolInit(uffs_Pool *pool, void *mem, u32 mem_size, u32 buf_size, u32 num_bufs);
+URET uffs_PoolInit(uffs_Pool *pool, void *mem, uint32_t mem_size, uint32_t buf_size, uint32_t num_bufs);
 URET uffs_PoolRelease(uffs_Pool *pool);
 
 UBOOL uffs_PoolVerify(uffs_Pool *pool, void *p);
@@ -78,8 +79,8 @@ void *uffs_PoolGetLocked(uffs_Pool *pool);
 int uffs_PoolPut(uffs_Pool *pool, void *p);
 int uffs_PoolPutLocked(uffs_Pool *pool, void *p);
 
-void *uffs_PoolGetBufByIndex(uffs_Pool *pool, u32 index);
-u32 uffs_PoolGetIndex(uffs_Pool *pool, void *p);
+void *uffs_PoolGetBufByIndex(uffs_Pool *pool, uint32_t index);
+uint32_t uffs_PoolGetIndex(uffs_Pool *pool, void *p);
 UBOOL uffs_PoolCheckFreeList(uffs_Pool *pool, void *p);
 
 void * uffs_PoolFindNextAllocated(uffs_Pool *pool, void *from);

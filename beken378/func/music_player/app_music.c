@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include <string.h>
 #include "error.h"
@@ -23,35 +24,35 @@ MEDIA_CORE_T g_media_core = {0};
 #define USE_EXTERNAL_DAC
 
 extern void ClearMP3(MP3DecInfo *mp3DecInfo);
-UINT8 media_app_msg_handler(UINT32 msg_id);
-UINT16 currentDir = 0;
-UINT32 file_ptr_save = 0;
+uint8_t media_app_msg_handler(uint32_t msg_id);
+uint16_t currentDir = 0;
+uint32_t file_ptr_save = 0;
 static app_player_ctrl app_player;
 app_player_ctrl_backup player_config_backup;
 
-UINT8 *readBuf;   
-UINT16 *mp3_pcm_ptr; 
-UINT16 *mp3_pcm_ptr_tmp; 
-INT32  pcm_size = 0;
-volatile UINT8 aud_buff_full = 0;
-volatile UINT32 buf_free;
+uint8_t *readBuf;   
+uint16_t *mp3_pcm_ptr; 
+uint16_t *mp3_pcm_ptr_tmp; 
+int32_t  pcm_size = 0;
+volatile uint8_t aud_buff_full = 0;
+volatile uint32_t buf_free;
          
-UINT16  *aulawsmpl;
-UINT16  *alawtbl;
-UINT16  *ulawtbl;
-UINT8  *rbbuf;
+uint16_t  *aulawsmpl;
+uint16_t  *alawtbl;
+uint16_t  *ulawtbl;
+uint8_t  *rbbuf;
 HMP3Decoder hMP3Decoder;    //错误信息结构体
 MP3FrameInfo mp3FrameInfo;     //mp3文件信息结构体
 MP3DecInfo *mp3decinfo;
 
-UINT16 input_number;
-UINT8 init=0;
-UINT8 mp3_play_flag = 0;  
-UINT8 t=0;
-static UINT8 media_err_cnt = 0;
-UINT8 play_derect = 0;   // 1:next, 0 :previous
-UINT8 appPlayerPlayMode=0;
-UINT8 media_playing_flag = 0;//current meida playing status
+uint16_t input_number;
+uint8_t init=0;
+uint8_t mp3_play_flag = 0;  
+uint8_t t=0;
+static uint8_t media_err_cnt = 0;
+uint8_t play_derect = 0;   // 1:next, 0 :previous
+uint8_t appPlayerPlayMode=0;
+uint8_t media_playing_flag = 0;//current meida playing status
 FIL *newFatfs;
 
 static void app_player_mp3_file_end( void );
@@ -82,7 +83,7 @@ static void mp3_mem_init(void)
 
 	l2i = (L2DecodeContext *)(mp3decinfo->L2DecInfo);
 	l2i->sb_samples = (int32_t*)(mp3decinfo->SubbandInfoPS);
-	l2i->synth_buf = (INT16 *)(mp3decinfo->IMDCTInfoPS);
+	l2i->synth_buf = (int16_t *)(mp3decinfo->IMDCTInfoPS);
 
 
 	return;
@@ -121,9 +122,9 @@ static int app_player_to_first_file( void )
 {
 	FILE_INFO *pFile;
 
-	uint32 player_flag = app_player.player_flag;
-	uint32 schedule_cmd = app_player.schedule_cmd;
-	memset( (uint8 *)&app_player, 0, sizeof( app_player_ctrl ) );
+	uint32_t player_flag = app_player.player_flag;
+	uint32_t schedule_cmd = app_player.schedule_cmd;
+	memset( (uint8_t *)&app_player, 0, sizeof( app_player_ctrl ) );
 	app_player.player_flag = player_flag;
 	app_player.schedule_cmd = schedule_cmd;
 	if( 0 == get_musicfile_count())
@@ -148,7 +149,7 @@ static int app_player_to_first_file( void )
 static int app_player_get_next_stream_file( void )
 {
 	FILE_INFO *pFile ;
-	uint16 musicfilecount = get_musicfile_count();
+	uint16_t musicfilecount = get_musicfile_count();
 
 	if( 0 == musicfilecount)
 	{
@@ -177,7 +178,7 @@ static int app_player_get_next_stream_file( void )
 static int app_player_get_prev_stream_file( void )
 {
 	FILE_INFO *pFile;
-	uint16 musicfilecount = get_musicfile_count();
+	uint16_t musicfilecount = get_musicfile_count();
 
 	if( 0 == musicfilecount)
 	{
@@ -201,10 +202,10 @@ static int app_player_get_prev_stream_file( void )
 
 	return 0;
 }
-static int app_player_get_fix_stream_file( uint16  fileIndex )
+static int app_player_get_fix_stream_file( uint16_t  fileIndex )
 {
 	FILE_INFO *pFile ;
-	uint16 musicfilecount = get_musicfile_count();
+	uint16_t musicfilecount = get_musicfile_count();
 
 	if( 0 == musicfilecount)
 	{
@@ -232,7 +233,7 @@ static int app_player_get_fix_stream_file( uint16  fileIndex )
 static int app_player_play_mp3_file( void )
 {	
 	int err; 
-	static UINT32 error_cnt = 0;
+	static uint32_t error_cnt = 0;
 	
 	if(!hMP3Decoder && mp3_play_flag)
 	{
@@ -331,7 +332,7 @@ fill_aud_buff:
 	buf_free = aud_get_buffer_size();
 	if(buf_free > pcm_size*2)
 	{
-		aud_fill_buffer((uint8*)mp3_pcm_ptr_tmp, pcm_size*2);
+		aud_fill_buffer((uint8_t*)mp3_pcm_ptr_tmp, pcm_size*2);
 		aud_buff_full = 0;
 		pcm_size = 0;
 	}
@@ -343,7 +344,7 @@ fill_aud_buff:
 		//we cann't fill audbuffer to full, should be 4bytes less 
 		//see func: aud_fill_buffer
 			buf_free = (buf_free&0xfffffffe)-4;    
-			aud_fill_buffer((uint8*)mp3_pcm_ptr_tmp, buf_free);
+			aud_fill_buffer((uint8_t*)mp3_pcm_ptr_tmp, buf_free);
 			mp3_pcm_ptr_tmp += (buf_free>>1);
 			pcm_size -= (buf_free>>1);
 		}
@@ -357,9 +358,9 @@ fill_aud_buff:
 }
 
 
-static void app_player_play_pause( UINT8 play_pause  )
+static void app_player_play_pause( uint8_t play_pause  )
 {
-	UINT32 readbytes = 0;
+	uint32_t readbytes = 0;
 
 	if(get_musicfile_count() == 0 )
 		return;
@@ -497,7 +498,7 @@ static void app_player_file_info_init( void )
 		return;
 	}
 
-	memset( (uint8 *)&app_player, 0, sizeof( app_player ) );
+	memset( (uint8_t *)&app_player, 0, sizeof( app_player ) );
 	app_player.player_flag |= (APP_PLAYER_FLAG_PLAY_CONTINOUS|APP_PLAYER_FLAG_PLAY_CYCLE|APP_PLAYER_FLAG_HW_ATTACH);
 
 	file_index = player_config_backup.file_index;
@@ -533,7 +534,7 @@ static void app_player_file_info_init( void )
 }
 
 
-static uint8 app_player_play_func( void )
+static uint8_t app_player_play_func( void )
 {
 	if( !(app_player.player_flag & APP_PLAYER_FLAG_HW_ATTACH ))
 	{
@@ -639,7 +640,7 @@ void media_msg_sender(void const *param_ptr)
 	OSStatus ret;
 	MEDIA_MSG_T msg;
 
-	msg.id = (UINT32)param_ptr;
+	msg.id = (uint32_t)param_ptr;
 	ret = rtos_push_to_queue(&g_media_core.io_queue, &msg, BEKEN_NO_WAIT);
 	if(kNoErr != ret)
 	{
@@ -651,9 +652,9 @@ static void app_media_thread( void *arg )
 {
     OSStatus ret;
 	MEDIA_MSG_T msg;
-	UINT8 play_flag = 0;
-	UINT32 msg_timeout_ms = BEKEN_WAIT_FOREVER;
-	UINT8 meida_play=0;
+	uint8_t play_flag = 0;
+	uint32_t msg_timeout_ms = BEKEN_WAIT_FOREVER;
+	uint8_t meida_play=0;
 
 	while(1)
 	{	
@@ -739,10 +740,10 @@ fail:
 
 
 #if (CONFIG_APP_MP3PLAYER == 1)
-UINT8 media_app_msg_handler(UINT32 msg_id)
+uint8_t media_app_msg_handler(uint32_t msg_id)
 {
-	UINT8 ret = 0;
-	static UINT8 media_ok = 0;
+	uint8_t ret = 0;
+	static uint8_t media_ok = 0;
 	switch(msg_id)
 	{
 		case MSG_SD_ATTACH:

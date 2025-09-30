@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  * File      : rndis.c
  * This file is part of RT-Thread RTOS
@@ -50,19 +52,19 @@ struct rt_rndis_eth
     struct eth_device parent;
     struct ufunction *func;
     /* interface address info */
-    rt_uint8_t  host_addr[MAX_ADDR_LEN];
-    rt_uint8_t  dev_addr[MAX_ADDR_LEN];
+    uint8_t  host_addr[MAX_ADDR_LEN];
+    uint8_t  dev_addr[MAX_ADDR_LEN];
 
 #ifdef RNDIS_DELAY_LINK_UP
     struct rt_timer timer;
 #endif /* RNDIS_DELAY_LINK_UP */
 
     ALIGN(4)
-    rt_uint8_t rx_pool[512];
+    uint8_t rx_pool[512];
     ALIGN(4)
-    rt_uint8_t tx_pool[512];
+    uint8_t tx_pool[512];
 
-    rt_uint32_t cmd_pool[2];
+    uint32_t cmd_pool[2];
     ALIGN(4)
     char rx_buffer[sizeof(struct rndis_packet_msg) + USB_ETH_MTU + 14];
     rt_size_t rx_offset;
@@ -79,7 +81,7 @@ struct rt_rndis_eth
     struct cdc_eps eps;
 };
 typedef struct rt_rndis_eth * rt_rndis_eth_t;
-static rt_uint32_t oid_packet_filter = 0x0000000;
+static uint32_t oid_packet_filter = 0x0000000;
 
 ALIGN(4)
 static struct udevice_descriptor _dev_desc =
@@ -222,7 +224,7 @@ static struct usb_qualifier_descriptor dev_qualifier =
 
 /* supported OIDs */
 ALIGN(4)
-const static rt_uint32_t oid_supported_list[] =
+const static uint32_t oid_supported_list[] =
 {
     /* General OIDs */
     OID_GEN_SUPPORTED_LIST,
@@ -266,16 +268,16 @@ const static rt_uint32_t oid_supported_list[] =
     OID_802_3_MAC_OPTIONS,
 };
 
-static rt_uint8_t rndis_message_buffer[RNDIS_MESSAGE_BUFFER_SIZE];
+static uint8_t rndis_message_buffer[RNDIS_MESSAGE_BUFFER_SIZE];
 
 static void _rndis_response_available(ufunction_t func)
 {
     rt_rndis_eth_t device = (rt_rndis_eth_t)func->user_data;
-    rt_uint32_t * data;
+    uint32_t * data;
     if(device->need_notify == RT_TRUE)
     {
         device->need_notify = RT_FALSE;
-        data = (rt_uint32_t *)device->eps.ep_cmd->buffer;
+        data = (uint32_t *)device->eps.ep_cmd->buffer;
         data[0] = RESPONSE_AVAILABLE;
         data[1] = 0;
         device->eps.ep_cmd->request.buffer = device->eps.ep_cmd->buffer;
@@ -356,9 +358,9 @@ static void _copy_resp(rndis_query_cmplt_t resp, const void * buffer)
     memcpy(resp_buffer, buffer, resp->InformationBufferLength);
 }
 
-static void _set_resp(rndis_query_cmplt_t resp, rt_uint32_t value)
+static void _set_resp(rndis_query_cmplt_t resp, uint32_t value)
 {
-    rt_uint32_t * response = (rt_uint32_t *)((char *)resp + sizeof(struct rndis_query_cmplt));
+    uint32_t * response = (uint32_t *)((char *)resp + sizeof(struct rndis_query_cmplt));
     *response = value;
 }
 
@@ -556,7 +558,7 @@ static rt_err_t _rndis_set_response(ufunction_t func,rndis_set_msg_t msg)
     switch (msg->Oid)
     {
     case OID_GEN_CURRENT_PACKET_FILTER:
-        oid_packet_filter = *((rt_uint32_t *)((rt_uint8_t *)&(msg->RequestId) + \
+        oid_packet_filter = *((uint32_t *)((uint8_t *)&(msg->RequestId) + \
                                               msg->InformationBufferOffset));
         oid_packet_filter = oid_packet_filter;
         RNDIS_PRINTF("OID_GEN_CURRENT_PACKET_FILTER\r\n");
@@ -626,7 +628,7 @@ static rt_err_t _rndis_keepalive_response(ufunction_t func,rndis_keepalive_msg_t
     return RT_EOK;
 }
 
-static rt_err_t _rndis_msg_parser(ufunction_t func, rt_uint8_t *msg)
+static rt_err_t _rndis_msg_parser(ufunction_t func, uint8_t *msg)
 {
     rt_err_t ret = -RT_ERROR;
 
@@ -720,10 +722,10 @@ static rt_err_t _rndis_get_encapsulated_response(ufunction_t func, ureq_t setup)
 
     if(!rt_list_isempty(&((rt_rndis_eth_t)func->user_data)->response_list))
     {
-        rt_uint32_t * data;
+        uint32_t * data;
 
         RNDIS_PRINTF("auto append next response!\r\n");
-        data = (rt_uint32_t *)((rt_rndis_eth_t)func->user_data)->eps.ep_cmd->buffer;
+        data = (uint32_t *)((rt_rndis_eth_t)func->user_data)->eps.ep_cmd->buffer;
         data[0] = RESPONSE_AVAILABLE;
         data[1] = 0;
         ((rt_rndis_eth_t)func->user_data)->eps.ep_cmd->request.buffer = ((rt_rndis_eth_t)func->user_data)->eps.ep_cmd->buffer;
@@ -748,7 +750,7 @@ static rt_err_t _rndis_get_encapsulated_response(ufunction_t func, ureq_t setup)
  *
  * @return RT_EOK on successful.
  */
-static rt_err_t _rndis_indicate_status_msg(ufunction_t func, rt_uint32_t status)
+static rt_err_t _rndis_indicate_status_msg(ufunction_t func, uint32_t status)
 {
     rndis_indicate_status_msg_t resp;
     struct rt_rndis_response * response;
@@ -917,7 +919,7 @@ static rt_err_t _function_enable(ufunction_t func)
     eps = (cdc_eps_t)&((rt_rndis_eth_t)func->user_data)->eps;
     eps->ep_in->buffer  = ((rt_rndis_eth_t)func->user_data)->tx_pool;
     eps->ep_out->buffer = ((rt_rndis_eth_t)func->user_data)->rx_pool;
-    eps->ep_cmd->buffer = (rt_uint8_t*)((rt_rndis_eth_t)func->user_data)->cmd_pool;
+    eps->ep_cmd->buffer = (uint8_t*)((rt_rndis_eth_t)func->user_data)->cmd_pool;
 
     eps->ep_out->request.buffer = eps->ep_out->buffer;
     eps->ep_out->request.size = EP_MAXPACKET(eps->ep_out);
@@ -1009,7 +1011,7 @@ static struct ufunction_ops ops =
  *
  * @return RT_EOK on successful.
  */
-static rt_err_t _cdc_descriptor_config(ucdc_comm_desc_t comm, rt_uint8_t cintf_nr, ucdc_data_desc_t data, rt_uint8_t dintf_nr, rt_uint8_t device_is_hs)
+static rt_err_t _cdc_descriptor_config(ucdc_comm_desc_t comm, uint8_t cintf_nr, ucdc_data_desc_t data, uint8_t dintf_nr, uint8_t device_is_hs)
 {
     comm->call_mgmt_desc.data_interface = dintf_nr;
     comm->union_desc.master_interface = cintf_nr;
@@ -1029,7 +1031,7 @@ static rt_err_t rt_rndis_eth_init(rt_device_t dev)
     return RT_EOK;
 }
 
-static rt_err_t rt_rndis_eth_open(rt_device_t dev, rt_uint16_t oflag)
+static rt_err_t rt_rndis_eth_open(rt_device_t dev, uint16_t oflag)
 {
     return RT_EOK;
 }
@@ -1075,7 +1077,7 @@ static rt_err_t rt_rndis_eth_control(rt_device_t dev, int cmd, void *args)
 struct pbuf *rt_rndis_eth_rx(rt_device_t dev)
 {
     struct pbuf* p = RT_NULL;
-    rt_uint32_t offset = 0;
+    uint32_t offset = 0;
     rt_rndis_eth_t device = (rt_rndis_eth_t)dev;
     if(device->rx_flag == RT_FALSE)
     {
@@ -1094,7 +1096,7 @@ struct pbuf *rt_rndis_eth_rx(rt_device_t dev)
             {
                 /* Copy the received frame into buffer from memory pointed by the current ETHERNET DMA Rx descriptor */
                 memcpy(q->payload,
-                       (rt_uint8_t *)((device->rx_buffer) + offset),
+                       (uint8_t *)((device->rx_buffer) + offset),
                        q->len);
                 offset += q->len;
             }
@@ -1308,17 +1310,17 @@ ufunction_t rt_usbd_function_rndis_create(udevice_t device)
     _rndis->dev_addr[1]                 = 0x97;
     _rndis->dev_addr[2]                 = 0xF6;
     /* generate random MAC. */
-    _rndis->dev_addr[3]                 = 0x94;//*(const rt_uint8_t *)(0x1fff7a10);
-    _rndis->dev_addr[4]                 = 0xEA;//*(const rt_uint8_t *)(0x1fff7a14);
-    _rndis->dev_addr[5]                 = 0x12;//(const rt_uint8_t *)(0x1fff7a18);
+    _rndis->dev_addr[3]                 = 0x94;//*(const uint8_t *)(0x1fff7a10);
+    _rndis->dev_addr[4]                 = 0xEA;//*(const uint8_t *)(0x1fff7a14);
+    _rndis->dev_addr[5]                 = 0x12;//(const uint8_t *)(0x1fff7a18);
     /* OUI 00-00-00, only for test. */
     _rndis->host_addr[0]                = 0x34;
     _rndis->host_addr[1]                = 0x97;
     _rndis->host_addr[2]                = 0xF6;
     /* generate random MAC. */
-    _rndis->host_addr[3]                = 0x94;//*(const rt_uint8_t *)(0x0FE081F0);
-    _rndis->host_addr[4]                = 0xEA;//*(const rt_uint8_t *)(0x0FE081F1);
-    _rndis->host_addr[5]                = 0x13;//*(const rt_uint8_t *)(0x0FE081F2);
+    _rndis->host_addr[3]                = 0x94;//*(const uint8_t *)(0x0FE081F0);
+    _rndis->host_addr[4]                = 0xEA;//*(const uint8_t *)(0x0FE081F1);
+    _rndis->host_addr[5]                = 0x13;//*(const uint8_t *)(0x0FE081F2);
 
 #ifdef RT_USING_DEVICE_OPS
     _rndis->parent.parent.ops           = &rndis_device_ops;

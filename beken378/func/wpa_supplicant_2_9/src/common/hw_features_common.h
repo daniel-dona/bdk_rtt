@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * Common hostapd/wpa_supplicant HW features
  * Copyright (c) 2002-2013, Jouni Malinen <j@w1.fi>
@@ -35,14 +36,14 @@ int hostapd_set_freq_params(struct hostapd_freq_params *data,
 			    int vht_enabled, int he_enabled,
 			    int sec_channel_offset,
 			    int oper_chwidth, int center_segment0,
-			    int center_segment1, u32 vht_caps,
+			    int center_segment1, uint32_t vht_caps,
 			    struct he_capabilities *he_caps);
 void set_disable_ht40(struct ieee80211_ht_capabilities *htcaps,
 		      int disabled);
-int ieee80211ac_cap_check(u32 hw, u32 conf);
+int ieee80211ac_cap_check(uint32_t hw, uint32_t conf);
 
-u32 num_chan_to_bw(int num_chans);
-int chan_bw_allowed(const struct hostapd_channel_data *chan, u32 bw,
+uint32_t num_chan_to_bw(int num_chans);
+int chan_bw_allowed(const struct hostapd_channel_data *chan, uint32_t bw,
 		    int ht40_plus, int pri);
 int chan_pri_allowed(const struct hostapd_channel_data *chan);
 

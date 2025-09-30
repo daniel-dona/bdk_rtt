@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : module_dav.c
  * This file is part of RT-Thread RTOS/WebNet Server
@@ -36,12 +37,12 @@ struct webnet_module_put_entry
 
 struct webnet_module_put_session
 {
-    rt_uint16_t file_opened;
+    uint16_t file_opened;
 
     /* put entry */
     const struct webnet_module_put_entry* entry;
 
-    rt_uint32_t user_data;
+    uint32_t user_data;
 };
 
 static const char*  propfind_element ="<d:response>"
@@ -81,7 +82,7 @@ int webnet_module_dav(struct webnet_session* session, int event)
     {
         int fd;
         DIR *dir;
-        rt_uint8_t exit_file = 0;
+        uint8_t exit_file = 0;
         struct stat file_stat;
 
         const char* parent_path;
@@ -477,7 +478,7 @@ int webnet_module_put_method(struct webnet_session* session)
     put_session->user_data = 0;
 
     /* add this put session into webnet session */
-    session->user_data = (rt_uint32_t) put_session;
+    session->user_data = (uint32_t) put_session;
     /* set webnet session operations */
     session->session_ops = &_put_ops;
 

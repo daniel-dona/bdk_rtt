@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "ble_wifi_port.h"
 #include "sys_config.h"
 

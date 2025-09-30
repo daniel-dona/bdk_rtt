@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 #include "include.h"
 #include <stdio.h>
 #include <string.h>
@@ -231,7 +233,7 @@ extern int _wifi_connect_done(void *ctx);
 static void wm_netif_status_callback(struct netif *n)
 {
     struct dhcp *dhcp;
-	u32 val;
+	uint32_t val;
 	FUNC_1PARAM_PTR fn;
 	
     NET_DBG("L%d, %s \r\n", __LINE__, __FUNCTION__);
@@ -760,8 +762,8 @@ void net_wlan_add_netif(void *mac)
 {
     VIF_INF_PTR vif_entry = NULL;
     struct interface *wlan_if = NULL;
-    u8 vif_idx;
-    u8 *b = (u8 *)mac;
+    uint8_t vif_idx;
+    uint8_t *b = (uint8_t *)mac;
 
     NET_DBG("L%d, %s \r\n", __LINE__, __FUNCTION__);
 
@@ -808,10 +810,10 @@ void net_wlan_add_netif(void *mac)
 
 void net_wlan_remove_netif(void *mac)
 {
-    u8 vif_idx;
+    uint8_t vif_idx;
     VIF_INF_PTR vif_entry = NULL;
     struct netif *netif = NULL;
-    u8 *b = (u8 *)mac;
+    uint8_t *b = (uint8_t *)mac;
 
     NET_DBG("L%d, %s \r\n", __LINE__, __FUNCTION__);
     if (!b || (!(b[0] | b[1] | b[2] | b[3] | b[4] | b[5])))

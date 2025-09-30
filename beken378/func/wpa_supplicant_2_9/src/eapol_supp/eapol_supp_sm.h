@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * EAPOL supplicant state machines
  * Copyright (c) 2004-2012, Jouni Malinen <j@w1.fi>
@@ -149,7 +150,7 @@ struct eapol_ctx {
 	 * @len: Length of the EAPOL payload
 	 * Returns: 0 on success, -1 on failure
 	 */
-	int (*eapol_send)(void *ctx, int type, const u8 *buf, size_t len);
+	int (*eapol_send)(void *ctx, int type, const uint8_t *buf, size_t len);
 
 	/**
 	 * set_wep_key - Configure WEP keys
@@ -161,7 +162,7 @@ struct eapol_ctx {
 	 * Returns: 0 on success, -1 on failure
 	 */
 	int (*set_wep_key)(void *ctx, int unicast, int keyidx,
-			   const u8 *key, size_t keylen);
+			   const uint8_t *key, size_t keylen);
 
 	/**
 	 * set_config_blob - Set or add a named configuration blob
@@ -297,7 +298,7 @@ struct eapol_ctx {
 	 * @id: Anonymous identity (e.g., EAP-SIM pseudonym)
 	 * @len: Length of anonymous identity in octets
 	 */
-	void (*set_anon_id)(void *ctx, const u8 *id, size_t len);
+	void (*set_anon_id)(void *ctx, const uint8_t *id, size_t len);
 };
 
 
@@ -313,7 +314,7 @@ int eapol_sm_get_status(struct eapol_sm *sm, char *buf, size_t buflen,
 int eapol_sm_get_mib(struct eapol_sm *sm, char *buf, size_t buflen);
 void eapol_sm_configure(struct eapol_sm *sm, int heldPeriod, int authPeriod,
 			int startPeriod, int maxStart);
-int eapol_sm_rx_eapol(struct eapol_sm *sm, const u8 *src, const u8 *buf,
+int eapol_sm_rx_eapol(struct eapol_sm *sm, const uint8_t *src, const uint8_t *buf,
 		      size_t len);
 void eapol_sm_notify_tx_eapol_key(struct eapol_sm *sm);
 void eapol_sm_notify_portEnabled(struct eapol_sm *sm, Boolean enabled);
@@ -323,8 +324,8 @@ void eapol_sm_notify_eap_fail(struct eapol_sm *sm, Boolean fail);
 void eapol_sm_notify_config(struct eapol_sm *sm,
 			    struct eap_peer_config *config,
 			    const struct eapol_config *conf);
-int eapol_sm_get_key(struct eapol_sm *sm, u8 *key, size_t len);
-const u8 * eapol_sm_get_session_id(struct eapol_sm *sm, size_t *len);
+int eapol_sm_get_key(struct eapol_sm *sm, uint8_t *key, size_t len);
+const uint8_t * eapol_sm_get_session_id(struct eapol_sm *sm, size_t *len);
 void eapol_sm_notify_logoff(struct eapol_sm *sm, Boolean logoff);
 void eapol_sm_notify_cached(struct eapol_sm *sm);
 void eapol_sm_notify_pmkid_attempt(struct eapol_sm *sm);
@@ -341,15 +342,15 @@ void eapol_sm_set_ext_pw_ctx(struct eapol_sm *sm,
 int eapol_sm_failed(struct eapol_sm *sm);
 void eapol_sm_erp_flush(struct eapol_sm *sm);
 struct wpabuf * eapol_sm_build_erp_reauth_start(struct eapol_sm *sm);
-void eapol_sm_process_erp_finish(struct eapol_sm *sm, const u8 *buf,
+void eapol_sm_process_erp_finish(struct eapol_sm *sm, const uint8_t *buf,
 				 size_t len);
 int eapol_sm_get_eap_proxy_imsi(void *ctx, int sim_num, char *imsi,
 				size_t *len);
-int eapol_sm_update_erp_next_seq_num(struct eapol_sm *sm, u16 next_seq_num);
+int eapol_sm_update_erp_next_seq_num(struct eapol_sm *sm, uint16_t next_seq_num);
 int eapol_sm_get_erp_info(struct eapol_sm *sm, struct eap_peer_config *config,
-			  const u8 **username, size_t *username_len,
-			  const u8 **realm, size_t *realm_len,
-			  u16 *erp_next_seq_num, const u8 **rrk,
+			  const uint8_t **username, size_t *username_len,
+			  const uint8_t **realm, size_t *realm_len,
+			  uint16_t *erp_next_seq_num, const uint8_t **rrk,
 			  size_t *rrk_len);
 
 #else /* IEEE8021X_EAPOL */
@@ -379,8 +380,8 @@ static inline void eapol_sm_configure(struct eapol_sm *sm, int heldPeriod,
 				      int maxStart)
 {
 }
-static inline int eapol_sm_rx_eapol(struct eapol_sm *sm, const u8 *src,
-				    const u8 *buf, size_t len)
+static inline int eapol_sm_rx_eapol(struct eapol_sm *sm, const uint8_t *src,
+				    const uint8_t *buf, size_t len)
 {
 	return 0;
 }
@@ -407,11 +408,11 @@ static inline void eapol_sm_notify_config(struct eapol_sm *sm,
 					  struct eapol_config *conf)
 {
 }
-static inline int eapol_sm_get_key(struct eapol_sm *sm, u8 *key, size_t len)
+static inline int eapol_sm_get_key(struct eapol_sm *sm, uint8_t *key, size_t len)
 {
 	return -1;
 }
-static inline const u8 *
+static inline const uint8_t *
 eapol_sm_get_session_id(struct eapol_sm *sm, size_t *len)
 {
 	return NULL;
@@ -467,19 +468,19 @@ eapol_sm_build_erp_reauth_start(struct eapol_sm *sm)
 	return NULL;
 }
 static inline void eapol_sm_process_erp_finish(struct eapol_sm *sm,
-					       const u8 *buf, size_t len)
+					       const uint8_t *buf, size_t len)
 {
 }
 static inline int eapol_sm_update_erp_next_seq_num(struct eapol_sm *sm,
-						   u16 next_seq_num)
+						   uint16_t next_seq_num)
 {
 	return -1;
 }
 static inline int
 eapol_sm_get_erp_info(struct eapol_sm *sm, struct eap_peer_config *config,
-		      const u8 **username, size_t *username_len,
-		      const u8 **realm, size_t *realm_len,
-		      u16 *erp_next_seq_num, const u8 **rrk, size_t *rrk_len)
+		      const uint8_t **username, size_t *username_len,
+		      const uint8_t **realm, size_t *realm_len,
+		      uint16_t *erp_next_seq_num, const uint8_t **rrk, size_t *rrk_len)
 {
 	return -1;
 }

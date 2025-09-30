@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  *  token lex for finsh shell.
  *

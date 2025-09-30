@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : pin.h
  * This file is part of RT-Thread RTOS
@@ -62,18 +63,18 @@ struct rt_device_pin
 
 struct rt_device_pin_mode
 {
-    rt_uint16_t pin;
-    rt_uint16_t mode;
+    uint16_t pin;
+    uint16_t mode;
 };
 struct rt_device_pin_status
 {
-    rt_uint16_t pin;
-    rt_uint16_t status;
+    uint16_t pin;
+    uint16_t status;
 };
 struct rt_pin_irq_hdr
 {
-    rt_int16_t        pin;
-    rt_uint16_t       mode;
+    int16_t        pin;
+    uint16_t       mode;
     void (*hdr)(void *args);
     void             *args;
 };
@@ -84,10 +85,10 @@ struct rt_pin_ops
     int (*pin_read)(struct rt_device *device, rt_base_t pin);
 
     /* TODO: add GPIO interrupt */
-    rt_err_t (*pin_attach_irq)(struct rt_device *device, rt_int32_t pin,
-                      rt_uint32_t mode, void (*hdr)(void *args), void *args);
-    rt_err_t (*pin_detach_irq)(struct rt_device *device, rt_int32_t pin);
-    rt_err_t (*pin_irq_enable)(struct rt_device *device, rt_base_t pin, rt_uint32_t enabled);
+    rt_err_t (*pin_attach_irq)(struct rt_device *device, int32_t pin,
+                      uint32_t mode, void (*hdr)(void *args), void *args);
+    rt_err_t (*pin_detach_irq)(struct rt_device *device, int32_t pin);
+    rt_err_t (*pin_irq_enable)(struct rt_device *device, rt_base_t pin, uint32_t enabled);
 };
 
 int rt_device_pin_register(const char *name, const struct rt_pin_ops *ops, void *user_data);
@@ -95,10 +96,10 @@ int rt_device_pin_register(const char *name, const struct rt_pin_ops *ops, void 
 void rt_pin_mode(rt_base_t pin, rt_base_t mode);
 void rt_pin_write(rt_base_t pin, rt_base_t value);
 int  rt_pin_read(rt_base_t pin);
-rt_err_t rt_pin_attach_irq(rt_int32_t pin, rt_uint32_t mode,
+rt_err_t rt_pin_attach_irq(int32_t pin, uint32_t mode,
                              void (*hdr)(void *args), void  *args);
-rt_err_t rt_pin_detach_irq(rt_int32_t pin);
-rt_err_t rt_pin_irq_enable(rt_base_t pin, rt_uint32_t enabled);
+rt_err_t rt_pin_detach_irq(int32_t pin);
+rt_err_t rt_pin_irq_enable(rt_base_t pin, uint32_t enabled);
 
 #ifdef __cplusplus
 }

@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef WORKQUEUE_H__
 #define WORKQUEUE_H__
 
@@ -25,7 +26,7 @@ struct rt_work
 /**
  * WorkQueue for DeviceDriver
  */
-struct rt_workqueue *rt_workqueue_create(const char* name, rt_uint16_t stack_size, rt_uint8_t priority);
+struct rt_workqueue *rt_workqueue_create(const char* name, uint16_t stack_size, uint8_t priority);
 rt_err_t rt_workqueue_destroy(struct rt_workqueue* queue);
 rt_err_t rt_workqueue_dowork(struct rt_workqueue* queue, struct rt_work* work);
 rt_err_t rt_workqueue_cancel_work(struct rt_workqueue* queue, struct rt_work* work);

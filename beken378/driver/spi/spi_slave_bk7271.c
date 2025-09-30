@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 #include "typedef.h"
@@ -25,19 +26,19 @@ extern int spi_channel;
 #define SPI_SLAVE_RX_FIFO_LEN      (512)
 
 struct spi_rx_fifo {
-	UINT8 *buffer;
+	uint8_t *buffer;
 
-	UINT16 put_index, get_index;
+	uint16_t put_index, get_index;
 
-	UINT32 is_full;
+	uint32_t is_full;
 };
 
 struct bk_spi_slave_dev {
-	UINT32 flag;
+	uint32_t flag;
 
 	beken_semaphore_t tx_sem;
-	UINT8 *tx_ptr;
-	UINT32 tx_len;
+	uint8_t *tx_ptr;
+	uint32_t tx_len;
 
 	beken_semaphore_t rx_sem;
 	struct spi_rx_fifo *rx_fifo;
@@ -47,10 +48,10 @@ struct bk_spi_slave_dev {
 
 static struct bk_spi_slave_dev *spi_slave_dev;
 
-__maybe_unused static UINT32 bk_spi_slave_get_rx_fifo(void);
-static UINT32 bk_spi_slave_get_rx_fifo(void)
+__maybe_unused static uint32_t bk_spi_slave_get_rx_fifo(void);
+static uint32_t bk_spi_slave_get_rx_fifo(void)
 {
-	UINT32 rx_length;
+	uint32_t rx_length;
 	struct spi_rx_fifo *rx_fifo = spi_slave_dev->rx_fifo;
 	GLOBAL_INT_DECLARATION();
 
@@ -68,7 +69,7 @@ static UINT32 bk_spi_slave_get_rx_fifo(void)
 
 static void bk_spi_slave_spi_rx_callback(int is_rx_end, void *param)
 {
-	UINT8 ch;
+	uint8_t ch;
 	struct spi_rx_fifo *rx_fifo;
 	//GLOBAL_INT_DECLARATION();
 
@@ -109,7 +110,7 @@ static void bk_spi_slave_spi_rx_callback(int is_rx_end, void *param)
 	//REG_WRITE((0x00802800+(18*4)), 0x00);
 }
 
-static int bk_spi_slave_get_rx_data(UINT8 *rx_buf, int len)
+static int bk_spi_slave_get_rx_data(uint8_t *rx_buf, int len)
 {
 	struct spi_rx_fifo *rx_fifo;
 	rx_fifo = (struct spi_rx_fifo *)spi_slave_dev->rx_fifo;
@@ -162,19 +163,19 @@ static int bk_spi_slave_get_rx_data(UINT8 *rx_buf, int len)
 
 static void bk_spi_slave_tx_needwrite_callback(int port, void *param)
 {
-	UINT8 *tx_ptr = spi_slave_dev->tx_ptr;
-	UINT32 tx_len = spi_slave_dev->tx_len;
+	uint8_t *tx_ptr = spi_slave_dev->tx_ptr;
+	uint32_t tx_len = spi_slave_dev->tx_len;
 	GLOBAL_INT_DECLARATION();
 
 	if (tx_ptr && tx_len) {
-		UINT8 data = *tx_ptr;
+		uint8_t data = *tx_ptr;
 
 		while (spi_write_txfifo(data) == 1) {
 			spi_read_rxfifo(&data);
 			tx_len --;
 			tx_ptr ++;
 			if (tx_len == 0) {
-				UINT32 enable = 0;
+				uint32_t enable = 0;
 				sddev_control(SPI_DEV_NAME, CMD_SPI_TXINT_EN, (void *)&enable);
 				break;
 			}
@@ -188,7 +189,7 @@ static void bk_spi_slave_tx_needwrite_callback(int port, void *param)
 
 			if (tx_len == 0) {
 				os_printf("close tx\r\n");
-				UINT32 enable = 0;
+				uint32_t enable = 0;
 				sddev_control(SPI_DEV_NAME, CMD_SPI_TXINT_EN, (void *)&enable);
 				break;
 			}
@@ -212,9 +213,9 @@ static void bk_spi_slave_tx_finish_callback(int port, void *param)
 	}
 }
 
-static void bk_spi_slave_configure(UINT32 rate, UINT32 mode)
+static void bk_spi_slave_configure(uint32_t rate, uint32_t mode)
 {
-	UINT32 param;
+	uint32_t param;
 	struct spi_callback_des spi_dev_cb;
 
 	/* data bit width */
@@ -300,9 +301,9 @@ static void bk_spi_slave_unconfigure(void)
 
 int bk_spi_slave_xfer(struct spi_message *msg)
 {
-	UINT8 *recv_ptr = NULL;
-	const UINT8 *send_ptr = NULL;
-	UINT32 param, send_len, recv_len;
+	uint8_t *recv_ptr = NULL;
+	const uint8_t *send_ptr = NULL;
+	uint32_t param, send_len, recv_len;
 	GLOBAL_INT_DECLARATION();
 
 	ASSERT(spi_slave_dev != NULL);
@@ -335,7 +336,7 @@ int bk_spi_slave_xfer(struct spi_message *msg)
 
 	if ((send_ptr) && send_len) {
 		GLOBAL_INT_DISABLE();
-		spi_slave_dev->tx_ptr = (UINT8 *)send_ptr;
+		spi_slave_dev->tx_ptr = (uint8_t *)send_ptr;
 		spi_slave_dev->tx_len = send_len;
 		spi_slave_dev->flag &= ~(TX_FINISH_FLAG);
 		GLOBAL_INT_RESTORE();
@@ -394,7 +395,7 @@ int bk_spi_slave_xfer(struct spi_message *msg)
 	return param;
 }
 
-int bk_spi_slave_init(UINT32 rate,  UINT32 mode)
+int bk_spi_slave_init(uint32_t rate,  uint32_t mode)
 {
 	OSStatus result = 0;
 
@@ -513,15 +514,15 @@ volatile int dma_trans_flag = 0;
 #define SPI_RX_DMA_CHANNEL     GDMA_CHANNEL_1
 #define SPI_TX_DMA_CHANNEL     GDMA_CHANNEL_3
 
-void spi_dma_tx_enable(UINT8 enable);
+void spi_dma_tx_enable(uint8_t enable);
 
-void spi_dma_tx_half_handler(UINT32 param)
+void spi_dma_tx_half_handler(uint32_t param)
 {
 
 	//os_printf("spi_dma half handler\r\n");
 }
 
-static void spi_dma_tx_finish_handler(UINT32 param)
+static void spi_dma_tx_finish_handler(uint32_t param)
 {
 
 	if ((spi_slave_dev->flag & TX_FINISH_FLAG) == 0) {
@@ -531,13 +532,13 @@ static void spi_dma_tx_finish_handler(UINT32 param)
 
 	//os_printf("spi_dma finish handler\r\n");
 }
-void spi_dma_rx_half_handler(UINT32 param)
+void spi_dma_rx_half_handler(uint32_t param)
 {
 	dma_trans_flag |= 1;
 	//os_printf("spi_dma rx half hander\r\n");
 }
 
-void spi_dma_rx_finish_handler(UINT32 param)
+void spi_dma_rx_finish_handler(uint32_t param)
 {
 	dma_trans_flag |= 2;
 
@@ -662,7 +663,7 @@ void spi_dma_rx_init(struct spi_message *spi_msg)
 	sddev_control(GDMA_DEV_NAME, CMD_GDMA_CFG_WORK_MODE, (void *)&en_cfg);
 }
 
-void spi_dma_tx_enable(UINT8 enable)
+void spi_dma_tx_enable(uint8_t enable)
 {
 	int param;
 	GDMA_CFG_ST en_cfg;
@@ -685,7 +686,7 @@ void spi_dma_tx_enable(UINT8 enable)
 	sddev_control(SPI_DEV_NAME, CMD_SPI_TX_EN, (void *)&param);
 }
 
-void spi_dma_rx_enable(UINT8 enable)
+void spi_dma_rx_enable(uint8_t enable)
 {
 	int param ;
 	GDMA_CFG_ST en_cfg;
@@ -706,9 +707,9 @@ void spi_dma_rx_enable(UINT8 enable)
 	sddev_control(SPI_DEV_NAME, CMD_SPI_RX_EN, (void *)&param);
 }
 
-void bk_spi_slave_dma_config(UINT32 mode, UINT32 rate)
+void bk_spi_slave_dma_config(uint32_t mode, uint32_t rate)
 {
-	UINT32 param;
+	uint32_t param;
 	os_printf("spi slave dma init: mode:%d, rate;%d\r\n", mode, rate);
 	bk_spi_slave_configure(rate, mode);
 
@@ -741,7 +742,7 @@ void bk_spi_slave_dma_config(UINT32 mode, UINT32 rate)
 	os_printf("spi_slave [CONFIG]:0x%08x \n", REG_READ(SPI_CONFIG(spi_channel)));
 }
 
-int bk_spi_slave_dma_rx_init(UINT32 mode, UINT32 rate, struct spi_message *spi_msg)
+int bk_spi_slave_dma_rx_init(uint32_t mode, uint32_t rate, struct spi_message *spi_msg)
 {
 	OSStatus result = 0;
 
@@ -780,7 +781,7 @@ _exit:
 	return result;
 }
 
-int bk_spi_slave_dma_tx_init(UINT32 mode, UINT32 rate, struct spi_message *spi_msg)
+int bk_spi_slave_dma_tx_init(uint32_t mode, uint32_t rate, struct spi_message *spi_msg)
 {
 	OSStatus result = 0;
 
@@ -883,7 +884,7 @@ void spi_rx_loop_test(void *arg)
 {
 	struct spi_message	msg;
 
-	UINT8 *buf, *tx_buff;
+	uint8_t *buf, *tx_buff;
 	int rx_len, ret, i;
 	int cnt = 0;
 	int err_cnt;
@@ -892,11 +893,11 @@ void spi_rx_loop_test(void *arg)
 
 	os_printf("spi dma rx: rx_len:%d\n", rx_len);
 
-	tx_buff = os_malloc(rx_len * sizeof(UINT8));
+	tx_buff = os_malloc(rx_len * sizeof(uint8_t));
 	for (i = 0 ; i < 30 * 24; i++)
 		tx_buff[i] = 0x60 + i ;
 
-	buf = os_malloc(rx_len * sizeof(UINT8));
+	buf = os_malloc(rx_len * sizeof(uint8_t));
 
 	if (!buf)
 		os_printf("spi dma buff malloc error\r\n");
@@ -908,8 +909,8 @@ void spi_rx_loop_test(void *arg)
 	msg.recv_buf = buf;
 	msg.recv_len = rx_len;
 
-	UINT8 mode = SPI_MODE_0 | SPI_MSB | SPI_SLAVE;
-	UINT32 max_hz = 8 * 1000 * 1000;
+	uint8_t mode = SPI_MODE_0 | SPI_MSB | SPI_SLAVE;
+	uint32_t max_hz = 8 * 1000 * 1000;
 
 	bk_spi_slave_dma_rx_init(mode, max_hz, &msg);
 
@@ -939,7 +940,7 @@ void spi_rx_loop_test(void *arg)
 #if (!CFG_SUPPORT_RTT)
 
 xTaskHandle  spi_dma_slave_rx_thread_handle = NULL;
-uint32 spi_dma_slave_rx_thread_main(void)
+uint32_t spi_dma_slave_rx_thread_main(void)
 {
 	int ret;
 

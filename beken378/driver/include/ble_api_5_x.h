@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _BLE_API_5_X_H_
 #define _BLE_API_5_X_H_
 #include "typedef.h"
@@ -394,7 +395,7 @@ ble_err_t bk_ble_adv_stop(uint8_t actv_idx, ble_cmd_cb_t callback);
 ble_err_t bk_ble_scan_start(uint8_t actv_idx, struct scan_param *scan, ble_cmd_cb_t callback);
 ble_err_t bk_ble_scan_stop(uint8_t actv_idx, ble_cmd_cb_t callback);
 ble_err_t bk_ble_create_advertising(uint8_t actv_idx, unsigned char chnl_map, uint32_t intv_min, uint32_t intv_max, ble_cmd_cb_t callback);
-ble_err_t bk_ble_start_advertising(uint8_t actv_idx, uint16 duration, ble_cmd_cb_t callback);
+ble_err_t bk_ble_start_advertising(uint8_t actv_idx, uint16_t duration, ble_cmd_cb_t callback);
 ble_err_t bk_ble_stop_advertising(uint8_t actv_idx, ble_cmd_cb_t callback);
 ble_err_t bk_ble_delete_advertising(uint8_t actv_idx, ble_cmd_cb_t callback);
 ble_err_t bk_ble_set_adv_data(uint8_t actv_idx, unsigned char* adv_buff, unsigned char adv_len, ble_cmd_cb_t callback);
@@ -410,7 +411,7 @@ ble_err_t bk_ble_delete_scaning(uint8_t actv_idx, ble_cmd_cb_t callback);
 
 extern void ble_ps_enable_set(void);
 extern void ble_ps_enable_clear(void);
-extern UINT32 ble_ps_enabled(void );
+extern uint32_t ble_ps_enabled(void );
 
 #endif
 

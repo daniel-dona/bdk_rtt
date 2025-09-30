@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef BK_EZCONFIG_H
 #define BK_EZCONFIG_H
 

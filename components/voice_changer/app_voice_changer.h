@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef __APP_VOICE_CHANGER_H__
 #define __APP_VOICE_CHANGER_H__
 

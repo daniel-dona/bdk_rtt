@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 
 #ifndef __UART_BLE_H__
 #define __UART_BLE_H__

@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 #ifndef DATAQUEUE_H__
 #define DATAQUEUE_H__
 
@@ -14,12 +16,12 @@ struct rt_data_item;
 /* data queue implementation */
 struct rt_data_queue
 {
-    rt_uint16_t size;
-    rt_uint16_t lwm;
+    uint16_t size;
+    uint16_t lwm;
     rt_bool_t   waiting_lwm;
 
-    rt_uint16_t get_index;
-    rt_uint16_t put_index;
+    uint16_t get_index;
+    uint16_t put_index;
 
     struct rt_data_item *queue;
 
@@ -27,24 +29,24 @@ struct rt_data_queue
     rt_list_t suspended_pop_list;
 
     /* event notify */
-    void (*evt_notify)(struct rt_data_queue *queue, rt_uint32_t event);
+    void (*evt_notify)(struct rt_data_queue *queue, uint32_t event);
 };
 
 /**
  * DataQueue for DeviceDriver
  */
 rt_err_t rt_data_queue_init(struct rt_data_queue *queue,
-                            rt_uint16_t           size,
-                            rt_uint16_t           lwm,
-                            void (*evt_notify)(struct rt_data_queue *queue, rt_uint32_t event));
+                            uint16_t           size,
+                            uint16_t           lwm,
+                            void (*evt_notify)(struct rt_data_queue *queue, uint32_t event));
 rt_err_t rt_data_queue_push(struct rt_data_queue *queue,
                             const void           *data_ptr,
                             rt_size_t             data_size,
-                            rt_int32_t            timeout);
+                            int32_t            timeout);
 rt_err_t rt_data_queue_pop(struct rt_data_queue *queue,
                            const void          **data_ptr,
                            rt_size_t            *size,
-                           rt_int32_t            timeout);
+                           int32_t            timeout);
 rt_err_t rt_data_queue_peak(struct rt_data_queue *queue,
                             const void          **data_ptr,
                             rt_size_t            *size);

@@ -76,7 +76,7 @@ extern struct rt_lwp *rt_lwp_self(void);
 
 extern void rt_lwp_mem_init(struct rt_lwp *lwp);
 extern void rt_lwp_mem_deinit(struct rt_lwp *lwp);
-extern void *rt_lwp_mem_malloc(rt_uint32_t size);
+extern void *rt_lwp_mem_malloc(uint32_t size);
 extern void rt_lwp_mem_free(void *addr);
 extern void *rt_lwp_mem_realloc(void *rmem, rt_size_t newsize);
 

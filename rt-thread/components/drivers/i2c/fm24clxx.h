@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : fm24clxx.h
  * This file is part of RT-Thread RTOS
@@ -29,9 +30,9 @@
 
 struct fm24clxx_config
 {
-    rt_uint32_t              size;
-    rt_uint16_t              addr;
-    rt_uint16_t              flags;
+    uint32_t              size;
+    uint16_t              addr;
+    uint16_t              flags;
 };
 
 extern rt_err_t fm24clxx_register(const char *e2m_device_name,

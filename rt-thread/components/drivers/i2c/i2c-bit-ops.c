@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  * File      : i2c-bit-ops.c
  * This file is part of RT-Thread RTOS
@@ -141,10 +143,10 @@ rt_inline rt_bool_t i2c_waitack(struct rt_i2c_bit_ops *ops)
     return ack;
 }
 
-static rt_int32_t i2c_writeb(struct rt_i2c_bus_device *bus, rt_uint8_t data)
+static int32_t i2c_writeb(struct rt_i2c_bus_device *bus, uint8_t data)
 {
-    rt_int32_t i;
-    rt_uint8_t bit;
+    int32_t i;
+    uint8_t bit;
 
     struct rt_i2c_bit_ops *ops = bus->priv;
 
@@ -169,10 +171,10 @@ static rt_int32_t i2c_writeb(struct rt_i2c_bus_device *bus, rt_uint8_t data)
     return i2c_waitack(ops);
 }
 
-static rt_int32_t i2c_readb(struct rt_i2c_bus_device *bus)
+static int32_t i2c_readb(struct rt_i2c_bus_device *bus)
 {
-    rt_uint8_t i;
-    rt_uint8_t data = 0;
+    uint8_t i;
+    uint8_t data = 0;
     struct rt_i2c_bit_ops *ops = bus->priv;
 
     SDA_H(ops);
@@ -201,11 +203,11 @@ static rt_int32_t i2c_readb(struct rt_i2c_bus_device *bus)
 static rt_size_t i2c_send_bytes(struct rt_i2c_bus_device *bus,
                                 struct rt_i2c_msg        *msg)
 {
-    rt_int32_t ret;
+    int32_t ret;
     rt_size_t bytes = 0;
-    const rt_uint8_t *ptr = msg->buf;
-    rt_int32_t count = msg->len;
-    rt_uint16_t ignore_nack = msg->flags & RT_I2C_IGNORE_NACK;
+    const uint8_t *ptr = msg->buf;
+    int32_t count = msg->len;
+    uint16_t ignore_nack = msg->flags & RT_I2C_IGNORE_NACK;
 
     while (count > 0)
     {
@@ -255,11 +257,11 @@ static rt_err_t i2c_send_ack_or_nack(struct rt_i2c_bus_device *bus, int ack)
 static rt_size_t i2c_recv_bytes(struct rt_i2c_bus_device *bus,
                                 struct rt_i2c_msg        *msg)
 {
-    rt_int32_t val;
-    rt_int32_t bytes = 0;   /* actual bytes */
-    rt_uint8_t *ptr = msg->buf;
-    rt_int32_t count = msg->len;
-    const rt_uint32_t flags = msg->flags;
+    int32_t val;
+    int32_t bytes = 0;   /* actual bytes */
+    uint8_t *ptr = msg->buf;
+    int32_t count = msg->len;
+    const uint32_t flags = msg->flags;
 
     while (count > 0)
     {
@@ -292,12 +294,12 @@ static rt_size_t i2c_recv_bytes(struct rt_i2c_bus_device *bus,
     return bytes;
 }
 
-static rt_int32_t i2c_send_address(struct rt_i2c_bus_device *bus,
-                                   rt_uint8_t                addr,
-                                   rt_int32_t                retries)
+static int32_t i2c_send_address(struct rt_i2c_bus_device *bus,
+                                   uint8_t                addr,
+                                   int32_t                retries)
 {
     struct rt_i2c_bit_ops *ops = bus->priv;
-    rt_int32_t i;
+    int32_t i;
     rt_err_t ret = 0;
 
     for (i = 0; i <= retries; i++)
@@ -318,12 +320,12 @@ static rt_int32_t i2c_send_address(struct rt_i2c_bus_device *bus,
 static rt_err_t i2c_bit_send_address(struct rt_i2c_bus_device *bus,
                                      struct rt_i2c_msg        *msg)
 {
-    rt_uint16_t flags = msg->flags;
-    rt_uint16_t ignore_nack = msg->flags & RT_I2C_IGNORE_NACK;
+    uint16_t flags = msg->flags;
+    uint16_t ignore_nack = msg->flags & RT_I2C_IGNORE_NACK;
     struct rt_i2c_bit_ops *ops = bus->priv;
 
-    rt_uint8_t addr1, addr2;
-    rt_int32_t retries;
+    uint8_t addr1, addr2;
+    int32_t retries;
     rt_err_t ret;
 
     retries = ignore_nack ? 0 : bus->retries;
@@ -380,12 +382,12 @@ static rt_err_t i2c_bit_send_address(struct rt_i2c_bus_device *bus,
 
 static rt_size_t i2c_bit_xfer(struct rt_i2c_bus_device *bus,
                               struct rt_i2c_msg         msgs[],
-                              rt_uint32_t               num)
+                              uint32_t               num)
 {
     struct rt_i2c_msg *msg;
     struct rt_i2c_bit_ops *ops = bus->priv;
-    rt_int32_t i, ret;
-    rt_uint16_t ignore_nack;
+    int32_t i, ret;
+    uint16_t ignore_nack;
 
     bit_dbg("send start condition\n");
     i2c_start(ops);

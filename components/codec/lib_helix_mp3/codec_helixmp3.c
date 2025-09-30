@@ -28,12 +28,12 @@ struct audio_codec_mp3
     /* mp3 information */
     HMP3Decoder decoder;
     MP3FrameInfo frame_info;
-    rt_uint32_t frames;
-    rt_uint32_t stream_offset;
+    uint32_t frames;
+    uint32_t stream_offset;
 
     /* mp3 read session */
-    rt_uint8_t *read_buffer, *read_ptr;
-    rt_uint32_t bytes_left;
+    uint8_t *read_buffer, *read_ptr;
+    uint32_t bytes_left;
 
     int current_sample_rate;
 
@@ -59,7 +59,7 @@ static uint32_t calc_mp3_position(struct audio_codec_mp3 *codec, int second)
     return position;
 }
 
-static rt_int32_t codec_mp3_fill_buffer(struct audio_codec_mp3 *codec)
+static int32_t codec_mp3_fill_buffer(struct audio_codec_mp3 *codec)
 {
     int bytes_read;
     rt_size_t bytes_to_read;
@@ -83,7 +83,7 @@ static rt_int32_t codec_mp3_fill_buffer(struct audio_codec_mp3 *codec)
     bytes_to_read = (MP3_AUDIO_BUF_SZ - codec->bytes_left) & ~(512 - 1);
 
 __retry:
-    bytes_read = audio_stream_fetch(stream, (rt_uint8_t *)(codec->read_buffer + codec->bytes_left), bytes_to_read);
+    bytes_read = audio_stream_fetch(stream, (uint8_t *)(codec->read_buffer + codec->bytes_left), bytes_to_read);
     if (bytes_read > 0)
     {
         codec->bytes_left = codec->bytes_left + bytes_read;
@@ -288,7 +288,7 @@ static int codec_mp3_run(struct audio_codec *codec)
 {
     int read_offset;
     int err, event;
-    rt_uint16_t *buffer;
+    uint16_t *buffer;
 
     struct audio_codec_mp3 *codec_mp3;
 
@@ -355,7 +355,7 @@ static int codec_mp3_run(struct audio_codec *codec)
     }
 
     /* get a decoder buffer */
-    buffer = (rt_uint16_t *)audio_device_get_buffer(RT_NULL);
+    buffer = (uint16_t *)audio_device_get_buffer(RT_NULL);
     if (!buffer)
     {
         LOG_E("get audio device buffer failed!");
@@ -482,7 +482,7 @@ static int codec_mp3_run(struct audio_codec *codec)
                     audio_device_set_rate(codec_mp3->current_sample_rate);
                 }
 
-                audio_device_write((uint8_t *)buffer, outputSamps * sizeof(rt_uint16_t));
+                audio_device_write((uint8_t *)buffer, outputSamps * sizeof(uint16_t));
             }
         }
         else

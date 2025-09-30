@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef __DRV_PSRAM_H__
 #define __DRV_PSRAM_H__
 

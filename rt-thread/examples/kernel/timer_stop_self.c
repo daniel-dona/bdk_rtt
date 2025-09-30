@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * 程序清单：动态定时器例程
  *
@@ -8,7 +9,7 @@
 
 /* 定时器的控制块 */
 static rt_timer_t timer1;
-static rt_uint8_t count;
+static uint8_t count;
 
 /* 定时器超时函数 */
 static void timeout1(void* parameter)

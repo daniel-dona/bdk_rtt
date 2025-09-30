@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  *  Virtual machine finsh shell.
  *

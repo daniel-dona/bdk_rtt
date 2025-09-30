@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : dfs_def.h
  * This file is part of Device File System in RT-Thread RTOS
@@ -265,8 +266,8 @@
 struct stat
 {
     rt_device_t st_dev;
-    rt_uint16_t st_mode;
-    rt_uint32_t st_size;
+    uint16_t st_mode;
+    uint32_t st_size;
     rt_time_t   st_mtime;
 };
 #endif
@@ -291,9 +292,9 @@ struct statfs
 
 struct dirent
 {
-    rt_uint8_t d_type;           /* The type of the file */
-    rt_uint8_t d_namlen;         /* The length of the not including the terminating null file name */
-    rt_uint16_t d_reclen;        /* length of this record */
+    uint8_t d_type;           /* The type of the file */
+    uint8_t d_namlen;         /* The length of the not including the terminating null file name */
+    uint16_t d_reclen;        /* length of this record */
     char d_name[DFS_PATH_MAX];   /* The null-terminated file name */
 };
 #endif
@@ -302,14 +303,14 @@ struct dirent
 #define DFS_FD_MAGIC	 0xfdfd
 struct dfs_fd
 {
-    rt_uint16_t magic;           /* file descriptor magic number */
-    rt_uint16_t type;            /* Type (regular or socket) */
+    uint16_t magic;           /* file descriptor magic number */
+    uint16_t type;            /* Type (regular or socket) */
     char *path;                  /* Name (below mount point) */
     int ref_count;               /* Descriptor reference count */
 
     struct dfs_filesystem *fs;   /* Resident file system */
 
-    rt_uint32_t flags;           /* Descriptor flags */
+    uint32_t flags;           /* Descriptor flags */
     rt_size_t   size;            /* Size in bytes */
     rt_off_t    pos;             /* Current file position */
 

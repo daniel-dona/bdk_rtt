@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  *  Variable implementation in finsh shell.
  *

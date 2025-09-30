@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * netutils: ping implementation
  */
@@ -39,7 +40,7 @@
 static u16_t ping_seq_num;
 struct _ip_addr
 {
-    rt_uint8_t addr0, addr1, addr2, addr3;
+    uint8_t addr0, addr1, addr2, addr3;
 };
 
 /** Prepare a echo ICMP request */
@@ -115,16 +116,16 @@ static int ping_recv(int s, int *ttl)
     return len;
 }
 
-rt_err_t ping(char* target, rt_uint32_t times, rt_size_t size)
+rt_err_t ping(char* target, uint32_t times, rt_size_t size)
 {
     int s, ttl, recv_len;
     struct timeval timeout = { PING_RCV_TIMEO / RT_TICK_PER_SECOND, PING_RCV_TIMEO % RT_TICK_PER_SECOND };
     ip_addr_t ping_target;
-    rt_uint32_t send_times;
+    uint32_t send_times;
     rt_tick_t recv_start_tick;
     struct _ip_addr
     {
-        rt_uint8_t addr0, addr1, addr2, addr3;
+        uint8_t addr0, addr1, addr2, addr3;
     } *addr;
 
     send_times = 0;

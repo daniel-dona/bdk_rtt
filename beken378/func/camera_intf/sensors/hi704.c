@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 #include "drv_model_pub.h"
@@ -30,8 +31,8 @@ void hi704_sensor_init(DD_HANDLE i2c_hdl, DD_HANDLE ejpeg_hdl, camera_sensor_t *
 
     os_printf("Intializing HI704 sensor.\r\n");
 
-    UINT32 i, size;
-    UINT8 addr, data;
+    uint32_t i, size;
+    uint8_t addr, data;
     //I2C_OP_ST i2c_operater;
     //DJPEG_DESC_ST ejpeg_cfg;
 

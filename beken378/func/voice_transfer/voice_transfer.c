@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 
@@ -46,20 +47,20 @@
 
 typedef struct tvoice_hdr_st
 {
-    UINT32 id;
+    uint32_t id;
 }TVO_HDR_ST, *TVO_HDR_PTR;
 
 typedef struct tvoice_elem_st
 {
     struct co_list_hdr hdr;
     void *buf_start;
-    UINT32 buf_len;
+    uint32_t buf_len;
 } TVOICE_ELEM_ST, *TVOICE_ELEM_PTR;
 
 typedef struct tvoice_desc
 {
-    //UINT8  pool[TVOICE_POOL_LEN];
-    UINT8* pool;
+    //uint8_t  pool[TVOICE_POOL_LEN];
+    uint8_t* pool;
     TVOICE_ELEM_ST elem[TVOICE_POOL_LEN / TVOICE_RXNODE_SIZE];
     struct co_list free;
     struct co_list ready; 
@@ -83,14 +84,14 @@ enum
 
 typedef struct tvoice_message 
 {
-	UINT32 data;
+	uint32_t data;
 }TVO_MSG_T;
 
 #define TVO_QITEM_COUNT      (2)
 xTaskHandle tvoice_thread_hdl = NULL;
 beken_queue_t tvoice_msg_que = NULL;
 
-void tvoice_intfer_send_msg(UINT32 new_msg)
+void tvoice_intfer_send_msg(uint32_t new_msg)
 {
 	OSStatus ret;
 	TVO_MSG_T msg;
@@ -109,11 +110,11 @@ void tvoice_intfer_send_msg(UINT32 new_msg)
 
 static void tvoice_pool_init(void* data)
 {
-    UINT32 i = 0;
+    uint32_t i = 0;
 
     if(tvoice_st.pool == NULL)
     {
-        tvoice_st.pool = sdram_malloc(sizeof(UINT8)* TVOICE_POOL_LEN);
+        tvoice_st.pool = sdram_malloc(sizeof(uint8_t)* TVOICE_POOL_LEN);
         if(tvoice_st.pool == NULL)
         {
             TVOICE_WPRT("tvoice_pool alloc failed\r\n");
@@ -145,7 +146,7 @@ static void tvoice_pool_init(void* data)
 
 static void tvoice_send_audio_adc(void)
 {
-    UINT32 send_len;
+    uint32_t send_len;
     TVOICE_ELEM_PTR elem = NULL;
 
     do{
@@ -292,7 +293,7 @@ tvoice_exit:
     rtos_delete_thread(NULL);
 }
 
-UINT32 tvoice_transfer_init(video_transfer_send_func send_func)
+uint32_t tvoice_transfer_init(video_transfer_send_func send_func)
 {
     int ret;
 
@@ -329,7 +330,7 @@ UINT32 tvoice_transfer_init(video_transfer_send_func send_func)
     return kNoErr;
 }
 
-UINT32 tvoice_transfer_deinit(void)
+uint32_t tvoice_transfer_deinit(void)
 {
     TVOICE_PRT("tvoice deinit\r\n");
     

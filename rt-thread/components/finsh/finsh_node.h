@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  *  node routines for finsh shell.
  *

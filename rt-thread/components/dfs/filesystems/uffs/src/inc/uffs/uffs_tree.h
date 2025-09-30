@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
   This file is part of UFFS, the Ultra-low-cost Flash File System.
   
@@ -64,34 +65,34 @@ struct uffs_NodeTypeNameMapSt {
 struct BlockListSt {	/* 12 bytes */
 	struct uffs_TreeNodeSt * next;
 	struct uffs_TreeNodeSt * prev;
-	u16 block;
+	uint16_t block;
 	union {
-		u16 serial;    /* for suspended block list */
-		u8 need_check; /* for erased block list */
+		uint16_t serial;    /* for suspended block list */
+		uint8_t need_check; /* for erased block list */
 	} u;
 };
 
 struct DirhSt {		/* 8 bytes */
-	u16 checksum;	/* check sum of dir name */
-	u16 block;
-	u16 parent;
-	u16 serial;
+	uint16_t checksum;	/* check sum of dir name */
+	uint16_t block;
+	uint16_t parent;
+	uint16_t serial;
 };
 
 
 struct FilehSt {	/* 12 bytes */
-	u16 block;
-	u16 checksum;	/* check sum of file name */
-	u16 parent;
-	u16 serial;
-	u32 len;		/* file length total */
+	uint16_t block;
+	uint16_t checksum;	/* check sum of file name */
+	uint16_t parent;
+	uint16_t serial;
+	uint32_t len;		/* file length total */
 };
 
 struct FdataSt {	/* 10 bytes */
-	u16 block;
-	u16 parent;
-	u32 len;		/* file data length on this block */
-	u16 serial;
+	uint16_t block;
+	uint16_t parent;
+	uint32_t len;		/* file data length on this block */
+	uint16_t serial;
 };
 
 //UFFS TreeNode (14 or 16 bytes)
@@ -102,34 +103,34 @@ typedef struct uffs_TreeNodeSt {
 		struct FilehSt file;
 		struct FdataSt data;
 	} u;
-	u16 hash_next;		
-	u16 hash_prev;			
+	uint16_t hash_next;		
+	uint16_t hash_prev;			
 } TreeNode;
 
 
 //TODO: UFFS2 Tree structures
 /*
 struct FdataSt {
-	u32 len;
+	uint32_t len;
 };
 
 struct filebSt {
-	u16 bls;		//how many blocks this file contents ...
-	u8 offs;		//the offset of this file header on FILE block
-	u8 sum;			//short sum of file name
+	uint16_t bls;		//how many blocks this file contents ...
+	uint8_t offs;		//the offset of this file header on FILE block
+	uint8_t sum;			//short sum of file name
 };
 
 //Extra data structure for storing file length information
 struct FilehSt {
-	u32 len;
+	uint32_t len;
 };
 
 //UFFS2 TreeNode (12 bytes)
 typedef struct uffs_TreeNodeSt {
-	u16 nextIdx;
-	u16 block;
-	u16 parent;
-	u16 serial;
+	uint16_t nextIdx;
+	uint16_t block;
+	uint16_t parent;
+	uint16_t serial;
 	union {
 		struct FilehSt h;
 		struct filedSt file;
@@ -157,7 +158,7 @@ typedef struct uffs_TreeNodeSt {
 #define DATA_NODE_HASH_MASK		0x1ff
 #define DATA_NODE_ENTRY_LEN		(DATA_NODE_HASH_MASK + 1)
 #define FROM_IDX(idx, pool)		((TreeNode *)uffs_PoolGetBufByIndex(pool, idx))
-#define TO_IDX(p, pool)			((u16)uffs_PoolGetIndex(pool, (void *) p))
+#define TO_IDX(p, pool)			((uint16_t)uffs_PoolGetIndex(pool, (void *) p))
 
 
 #define GET_FILE_HASH(serial)			(serial & FILE_NODE_HASH_MASK)
@@ -172,34 +173,34 @@ struct uffs_TreeSt {
 	int erased_count;					//!< erased block counter
 	TreeNode *bad;						//!< bad block list
 	int bad_count;						//!< bad block count
-	u16 dir_entry[DIR_NODE_ENTRY_LEN];
-	u16 file_entry[FILE_NODE_ENTRY_LEN];
-	u16 data_entry[DATA_NODE_ENTRY_LEN];
-	u16 max_serial;
+	uint16_t dir_entry[DIR_NODE_ENTRY_LEN];
+	uint16_t file_entry[FILE_NODE_ENTRY_LEN];
+	uint16_t data_entry[DATA_NODE_ENTRY_LEN];
+	uint16_t max_serial;
 };
 
 
 URET uffs_TreeInit(uffs_Device *dev);
 URET uffs_TreeRelease(uffs_Device *dev);
 URET uffs_BuildTree(uffs_Device *dev);
-u16 uffs_FindFreeFsnSerial(uffs_Device *dev);
-TreeNode * uffs_TreeFindFileNode(uffs_Device *dev, u16 serial);
-TreeNode * uffs_TreeFindFileNodeWithParent(uffs_Device *dev, u16 parent);
-TreeNode * uffs_TreeFindDirNode(uffs_Device *dev, u16 serial);
-TreeNode * uffs_TreeFindDirNodeWithParent(uffs_Device *dev, u16 parent);
-TreeNode * uffs_TreeFindFileNodeByName(uffs_Device *dev, const char *name, u32 len, u16 sum, u16 parent);
-TreeNode * uffs_TreeFindDirNodeByName(uffs_Device *dev, const char *name, u32 len, u16 sum, u16 parent);
-TreeNode * uffs_TreeFindDataNode(uffs_Device *dev, u16 parent, u16 serial);
+uint16_t uffs_FindFreeFsnSerial(uffs_Device *dev);
+TreeNode * uffs_TreeFindFileNode(uffs_Device *dev, uint16_t serial);
+TreeNode * uffs_TreeFindFileNodeWithParent(uffs_Device *dev, uint16_t parent);
+TreeNode * uffs_TreeFindDirNode(uffs_Device *dev, uint16_t serial);
+TreeNode * uffs_TreeFindDirNodeWithParent(uffs_Device *dev, uint16_t parent);
+TreeNode * uffs_TreeFindFileNodeByName(uffs_Device *dev, const char *name, uint32_t len, uint16_t sum, uint16_t parent);
+TreeNode * uffs_TreeFindDirNodeByName(uffs_Device *dev, const char *name, uint32_t len, uint16_t sum, uint16_t parent);
+TreeNode * uffs_TreeFindDataNode(uffs_Device *dev, uint16_t parent, uint16_t serial);
 
 
-TreeNode * uffs_TreeFindDirNodeByBlock(uffs_Device *dev, u16 block);
-TreeNode * uffs_TreeFindFileNodeByBlock(uffs_Device *dev, u16 block);
-TreeNode * uffs_TreeFindDataNodeByBlock(uffs_Device *dev, u16 block);
-TreeNode * uffs_TreeFindErasedNodeByBlock(uffs_Device *dev, u16 block);
-TreeNode * uffs_TreeFindBadNodeByBlock(uffs_Device *dev, u16 block);
+TreeNode * uffs_TreeFindDirNodeByBlock(uffs_Device *dev, uint16_t block);
+TreeNode * uffs_TreeFindFileNodeByBlock(uffs_Device *dev, uint16_t block);
+TreeNode * uffs_TreeFindDataNodeByBlock(uffs_Device *dev, uint16_t block);
+TreeNode * uffs_TreeFindErasedNodeByBlock(uffs_Device *dev, uint16_t block);
+TreeNode * uffs_TreeFindBadNodeByBlock(uffs_Device *dev, uint16_t block);
 
 void uffs_TreeSuspendAdd(uffs_Device *dev, TreeNode *node);
-TreeNode * uffs_TreeFindSuspendNode(uffs_Device *dev, u16 serial);
+TreeNode * uffs_TreeFindSuspendNode(uffs_Device *dev, uint16_t serial);
 void uffs_TreeRemoveSuspendNode(uffs_Device *dev, TreeNode *node);
 
 #define SEARCH_REGION_DIR		1
@@ -207,23 +208,23 @@ void uffs_TreeRemoveSuspendNode(uffs_Device *dev, TreeNode *node);
 #define SEARCH_REGION_DATA		4
 #define SEARCH_REGION_BAD		8
 #define SEARCH_REGION_ERASED	16
-TreeNode * uffs_TreeFindNodeByBlock(uffs_Device *dev, u16 block, int *region);
+TreeNode * uffs_TreeFindNodeByBlock(uffs_Device *dev, uint16_t block, int *region);
 
 
 
-UBOOL uffs_TreeCompareFileName(uffs_Device *dev, const char *name, u32 len, u16 sum, TreeNode *node, int type);
+UBOOL uffs_TreeCompareFileName(uffs_Device *dev, const char *name, uint32_t len, uint16_t sum, TreeNode *node, int type);
 
 TreeNode * uffs_TreeGetErasedNode(uffs_Device *dev);
 
-void uffs_InsertNodeToTree(uffs_Device *dev, u8 type, TreeNode *node);
+void uffs_InsertNodeToTree(uffs_Device *dev, uint8_t type, TreeNode *node);
 void uffs_InsertToErasedListHead(uffs_Device *dev, TreeNode *node);
 void uffs_TreeInsertToErasedListTail(uffs_Device *dev, TreeNode *node);
 void uffs_TreeInsertToErasedListTailEx(uffs_Device *dev, TreeNode *node, int need_check);
 void uffs_TreeInsertToBadBlockList(uffs_Device *dev, TreeNode *node);
 
-void uffs_BreakFromEntry(uffs_Device *dev, u8 type, TreeNode *node);
+void uffs_BreakFromEntry(uffs_Device *dev, uint8_t type, TreeNode *node);
 
-void uffs_TreeSetNodeBlock(u8 type, TreeNode *node, u16 block);
+void uffs_TreeSetNodeBlock(uint8_t type, TreeNode *node, uint16_t block);
 
 
 #ifdef __cplusplus

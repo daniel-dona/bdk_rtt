@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 #include "uart_pub.h"
@@ -57,9 +58,9 @@ static DD_OPERATIONS uart2_op =
 };
 #endif
 
-UINT8 uart_is_tx_fifo_empty(UINT8 uport)
+uint8_t uart_is_tx_fifo_empty(uint8_t uport)
 {
-	UINT32 param;
+	uint32_t param;
 
     if(UART1_PORT == uport)
         param = REG_READ(REG_UART1_FIFO_STATUS);
@@ -69,9 +70,9 @@ UINT8 uart_is_tx_fifo_empty(UINT8 uport)
     return (param & TX_FIFO_EMPTY) != 0 ? 1 : 0;
 }
 
-UINT8 uart_is_tx_fifo_full(UINT8 uport)
+uint8_t uart_is_tx_fifo_full(uint8_t uport)
 {
-	UINT32 param;
+	uint32_t param;
 
     if(UART1_PORT == uport)
         param = REG_READ(REG_UART1_FIFO_STATUS);
@@ -81,7 +82,7 @@ UINT8 uart_is_tx_fifo_full(UINT8 uport)
     return (param & TX_FIFO_FULL) != 0 ? 1 : 0;
 }
 
-void bk_send_byte(UINT8 uport, UINT8 data)
+void bk_send_byte(uint8_t uport, uint8_t data)
 {
     if(UART1_PORT == uport)
         while(!UART1_TX_WRITE_READY);
@@ -91,7 +92,7 @@ void bk_send_byte(UINT8 uport, UINT8 data)
     UART_WRITE_BYTE(uport, data);
 }
 
-void bk_send_string(UINT8 uport, const char *string)
+void bk_send_string(uint8_t uport, const char *string)
 {
 	const char *p = string;
     while(*string)
@@ -139,7 +140,7 @@ void bk_printf(const char *fmt, ...)
 void print_hex_dump(const char *prefix, void *buf, int len)
 {
 	int i;
-	u8 *b = buf;
+	uint8_t *b = buf;
 
 	if (prefix)
 		os_printf("%s", prefix);
@@ -149,9 +150,9 @@ void print_hex_dump(const char *prefix, void *buf, int len)
 }
 
 #if CFG_BACKGROUND_PRINT
-INT32 uart_printf(const char *fmt, ...)
+int32_t uart_printf(const char *fmt, ...)
 {
-    INT32 rc;
+    int32_t rc;
     char buf[TX_RB_LENGTH];
 
     va_list args;
@@ -171,7 +172,7 @@ INT32 uart_printf(const char *fmt, ...)
         rc += 1;
     }
 
-    return kfifo_put(uart[1].tx, (UINT8 *)&buf[0], rc);
+    return kfifo_put(uart[1].tx, (uint8_t *)&buf[0], rc);
 }
 #endif // CFG_BACKGROUND_PRINT
 
@@ -182,11 +183,11 @@ void fatal_print(const char *fmt, ...)
     DEAD_WHILE();
 }
 
-void uart_hw_init(UINT8 uport)
+void uart_hw_init(uint8_t uport)
 {
-    UINT32 reg, baud_div;
-    UINT32 conf_reg_addr, fifo_conf_reg_addr;
-    UINT32 flow_conf_reg_addr, wake_conf_reg_addr, intr_reg_addr;
+    uint32_t reg, baud_div;
+    uint32_t conf_reg_addr, fifo_conf_reg_addr;
+    uint32_t flow_conf_reg_addr, wake_conf_reg_addr, intr_reg_addr;
 
 #if !((UART1_BAUD_RATE != UART_BAUD_RATE) && (UART2_BAUD_RATE != UART_BAUD_RATE))
     baud_div = UART_CLOCK / UART_BAUD_RATE;
@@ -239,15 +240,15 @@ void uart_hw_init(UINT8 uport)
     return;
 }
 
-void uart_hw_set_change(UINT8 uport, bk_uart_config_t *uart_config)
+void uart_hw_set_change(uint8_t uport, bk_uart_config_t *uart_config)
 {
-    UINT32 reg, baud_div, width;
+    uint32_t reg, baud_div, width;
     uart_parity_t 	     parity_en;
     uart_stop_bits_t	  stop_bits;
     uart_flow_control_t  flow_control;
-    UINT8 parity_mode = 0;
-    UINT32 intr_ena_reg_addr, conf_reg_addr, fifi_conf_reg_addr;
-    UINT32 flow_conf_reg_addr, wake_reg_addr;
+    uint8_t parity_mode = 0;
+    uint32_t intr_ena_reg_addr, conf_reg_addr, fifi_conf_reg_addr;
+    uint32_t flow_conf_reg_addr, wake_reg_addr;
 
     if(UART1_PORT == uport)
     {
@@ -309,7 +310,7 @@ void uart_hw_set_change(UINT8 uport, bk_uart_config_t *uart_config)
 
 
 #if CFG_UART_DEBUG_COMMAND_LINE
-UINT32 uart_sw_init(UINT8 uport)
+uint32_t uart_sw_init(uint8_t uport)
 {
     uart[uport].rx = kfifo_alloc(RX_RB_LENGTH);
     uart[uport].tx = kfifo_alloc(TX_RB_LENGTH);
@@ -331,7 +332,7 @@ UINT32 uart_sw_init(UINT8 uport)
     return UART_SUCCESS;
 }
 
-UINT32 uart_sw_uninit(UINT8 uport)
+uint32_t uart_sw_uninit(uint8_t uport)
 {
     if(uart[uport].tx)
     {
@@ -348,11 +349,11 @@ UINT32 uart_sw_uninit(UINT8 uport)
     return UART_SUCCESS;
 }
 
-void uart_fifo_flush(UINT8 uport)
+void uart_fifo_flush(uint8_t uport)
 {
-    UINT32 val;
-    UINT32 reg;
-    UINT32 reg_addr;
+    uint32_t val;
+    uint32_t reg;
+    uint32_t reg_addr;
 
     if(UART1_PORT == uport)
         reg_addr = REG_UART1_CONFIG;
@@ -367,12 +368,12 @@ void uart_fifo_flush(UINT8 uport)
     REG_WRITE(reg_addr, val);
 }
 
-void uart_hw_uninit(UINT8 uport)
+void uart_hw_uninit(uint8_t uport)
 {
-    UINT32 i;
-    UINT32 reg;
-    UINT32 rx_count;
-    UINT32 intr_ena_reg_addr, conf_reg_addr, fifostatus_reg_addr;
+    uint32_t i;
+    uint32_t reg;
+    uint32_t rx_count;
+    uint32_t intr_ena_reg_addr, conf_reg_addr, fifostatus_reg_addr;
     if(UART1_PORT == uport)
     {
         intr_ena_reg_addr = REG_UART1_INTR_ENABLE;
@@ -407,7 +408,7 @@ void uart_hw_uninit(UINT8 uport)
     }
 }
 
-void uart_reset(UINT8 uport)
+void uart_reset(uint8_t uport)
 {
     if(UART1_PORT == uport)
     {
@@ -427,17 +428,17 @@ void uart_send_backgroud(void)
     uart_write_fifo_frame(UART2_PORT, uart[UART2_PORT].tx, DEBUG_PRT_MAX_CNT);
 }
 
-UINT32 uart_write_fifo_frame(UINT8 uport, KFIFO_PTR tx_ptr, UINT32 count)
+uint32_t uart_write_fifo_frame(uint8_t uport, KFIFO_PTR tx_ptr, uint32_t count)
 {
-    UINT32 len;
-    UINT32 ret;
-    UINT32 val;
+    uint32_t len;
+    uint32_t ret;
+    uint32_t val;
 
     len = 0;
 
     while(1)
     {
-        ret = kfifo_get(tx_ptr, (UINT8 *)&val, 1);
+        ret = kfifo_get(tx_ptr, (uint8_t *)&val, 1);
         if(0 == ret)
         {
             break;
@@ -445,9 +446,9 @@ UINT32 uart_write_fifo_frame(UINT8 uport, KFIFO_PTR tx_ptr, UINT32 count)
 
 
 #if __CC_ARM
-        uart_send_byte(uport, (UINT8)val);
+        uart_send_byte(uport, (uint8_t)val);
 #else
-        bk_send_byte(uport, (UINT8)val);
+        bk_send_byte(uport, (uint8_t)val);
 #endif
 
         len += ret;
@@ -460,11 +461,11 @@ UINT32 uart_write_fifo_frame(UINT8 uport, KFIFO_PTR tx_ptr, UINT32 count)
     return len;
 }
 
-UINT32 uart_read_fifo_frame(UINT8 uport, KFIFO_PTR rx_ptr)
+uint32_t uart_read_fifo_frame(uint8_t uport, KFIFO_PTR rx_ptr)
 {
-    UINT32 val;
-    UINT32 rx_count, fifo_status_reg;
-    UINT32 unused = kfifo_unused(rx_ptr);
+    uint32_t val;
+    uint32_t rx_count, fifo_status_reg;
+    uint32_t unused = kfifo_unused(rx_ptr);
 
     if(UART1_PORT == uport)
         fifo_status_reg = REG_UART1_FIFO_STATUS;
@@ -476,7 +477,7 @@ UINT32 uart_read_fifo_frame(UINT8 uport, KFIFO_PTR rx_ptr)
     {
         UART_READ_BYTE(uport, val);
         if(unused > rx_count)
-            rx_count += kfifo_put(rx_ptr, (UINT8 *)&val, 1);
+            rx_count += kfifo_put(rx_ptr, (uint8_t *)&val, 1);
     }
 
     if(unused <= rx_count)
@@ -485,9 +486,9 @@ UINT32 uart_read_fifo_frame(UINT8 uport, KFIFO_PTR rx_ptr)
     return rx_count;
 }
 
-void uart_set_tx_fifo_needwr_int(UINT8 uport, UINT8 set)
+void uart_set_tx_fifo_needwr_int(uint8_t uport, uint8_t set)
 {
-	UINT32 reg;
+	uint32_t reg;
 
 	if(UART1_PORT == uport)
 		reg = REG_READ(REG_UART1_INTR_ENABLE);
@@ -510,9 +511,9 @@ void uart_set_tx_fifo_needwr_int(UINT8 uport, UINT8 set)
 		REG_WRITE(REG_UART2_INTR_ENABLE, reg);
 }
 
-void uart_set_tx_stop_end_int(UINT8 uport, UINT8 set)
+void uart_set_tx_stop_end_int(uint8_t uport, uint8_t set)
 {
-	UINT32 reg;
+	uint32_t reg;
 
 	if(UART1_PORT == uport)
 		reg = REG_READ(REG_UART1_INTR_ENABLE);
@@ -538,9 +539,9 @@ void uart_set_tx_stop_end_int(UINT8 uport, UINT8 set)
 void uart1_isr(void)
 {
 
-    UINT32 status;
-    UINT32 intr_en;
-    UINT32 intr_status;
+    uint32_t status;
+    uint32_t intr_en;
+    uint32_t intr_status;
 
     intr_en = REG_READ(REG_UART1_INTR_ENABLE);
     intr_status = REG_READ(REG_UART1_INTR_STATUS);
@@ -604,9 +605,9 @@ void uart1_isr(void)
 }
 void uart1_init(void)
 {
-    UINT32 ret;
-    UINT32 param;
-    UINT32 intr_status;
+    uint32_t ret;
+    uint32_t param;
+    uint32_t intr_status;
 	
 #if UART1_USE_FIFO_REC
     ret = uart_sw_init(UART1_PORT);
@@ -634,7 +635,7 @@ void uart1_init(void)
 
 void uart1_exit(void)
 {
-    UINT32 param;
+    uint32_t param;
 
     /*irq enable, Be careful: it is best that irq enable at close routine*/
     param = IRQ_UART1_BIT;
@@ -647,40 +648,40 @@ void uart1_exit(void)
     uart_sw_uninit(UART1_PORT);
 }
 
-UINT32 uart1_open(UINT32 op_flag)
+uint32_t uart1_open(uint32_t op_flag)
 {
     return UART_SUCCESS;
 }
 
-UINT32 uart1_close(void)
+uint32_t uart1_close(void)
 {
     return UART_SUCCESS;
 }
 
-UINT32 uart1_read(char *user_buf, UINT32 count, UINT32 op_flag)
+uint32_t uart1_read(char *user_buf, uint32_t count, uint32_t op_flag)
 {
 #if UART1_USE_FIFO_REC
-     return kfifo_get(uart[UART1_PORT].rx, (UINT8 *)user_buf, count);
+     return kfifo_get(uart[UART1_PORT].rx, (uint8_t *)user_buf, count);
 #else
      return -1;
 #endif
 }
 
-UINT32 uart1_write(char *user_buf, UINT32 count, UINT32 op_flag)
+uint32_t uart1_write(char *user_buf, uint32_t count, uint32_t op_flag)
 {
 #if UART1_USE_FIFO_REC
-     return kfifo_put(uart[UART1_PORT].tx, (UINT8 *)user_buf, count);
+     return kfifo_put(uart[UART1_PORT].tx, (uint8_t *)user_buf, count);
 #else
      return -1;
 #endif
 }
 
-UINT32 uart1_ctrl(UINT32 cmd, void *parm)
+uint32_t uart1_ctrl(uint32_t cmd, void *parm)
 {
-    UINT32 ret;
+    uint32_t ret;
 	int baud;
-	UINT32 conf_reg_addr;
-	UINT32 baud_div,reg;
+	uint32_t conf_reg_addr;
+	uint32_t baud_div,reg;
 
     peri_busy_count_add();
 
@@ -764,11 +765,11 @@ UINT32 uart1_ctrl(UINT32 cmd, void *parm)
         }
         break;
 	case CMD_SET_STOP_END:
-		uart_set_tx_stop_end_int(UART1_PORT, *(UINT8 *)parm);
+		uart_set_tx_stop_end_int(UART1_PORT, *(uint8_t *)parm);
 		break;
 
 	case CMD_SET_TX_FIFO_NEEDWR_INT:
-		uart_set_tx_fifo_needwr_int(UART1_PORT, *(UINT8 *)parm);
+		uart_set_tx_fifo_needwr_int(UART1_PORT, *(uint8_t *)parm);
 		break;
 	case CMD_SET_BAUT:
 
@@ -794,9 +795,9 @@ UINT32 uart1_ctrl(UINT32 cmd, void *parm)
 void uart2_isr(void)
 {
 #if CFG_UART_DEBUG_COMMAND_LINE
-    UINT32 status;
-    UINT32 intr_en;
-    UINT32 intr_status;
+    uint32_t status;
+    uint32_t intr_en;
+    uint32_t intr_status;
 
     intr_en = REG_READ(REG_UART2_INTR_ENABLE);
     intr_status = REG_READ(REG_UART2_INTR_STATUS);
@@ -862,9 +863,9 @@ void uart2_isr(void)
 }
 void uart2_init(void)
 {
-    UINT32 ret;
-    UINT32 param;
-    UINT32 intr_status;
+    uint32_t ret;
+    uint32_t param;
+    uint32_t intr_status;
 
 #if UART2_USE_FIFO_REC
     ret = uart_sw_init(UART2_PORT);
@@ -892,7 +893,7 @@ void uart2_init(void)
 
 void uart2_exit(void)
 {
-    UINT32 param;
+    uint32_t param;
 
     /*irq enable, Be careful: it is best that irq enable at close routine*/
     param = IRQ_UART2_BIT;
@@ -905,40 +906,40 @@ void uart2_exit(void)
     uart_sw_uninit(UART2_PORT);
 }
 
-UINT32 uart2_open(UINT32 op_flag)
+uint32_t uart2_open(uint32_t op_flag)
 {
     return UART_SUCCESS;
 }
 
-UINT32 uart2_close(void)
+uint32_t uart2_close(void)
 {
     return UART_SUCCESS;
 }
 
-UINT32 uart2_read(char *user_buf, UINT32 count, UINT32 op_flag)
+uint32_t uart2_read(char *user_buf, uint32_t count, uint32_t op_flag)
 {
 #if UART2_USE_FIFO_REC
-    return kfifo_get(uart[UART2_PORT].rx, (UINT8 *)user_buf, count);
+    return kfifo_get(uart[UART2_PORT].rx, (uint8_t *)user_buf, count);
 #else
     return -1;
 #endif
 }
 
-UINT32 uart2_write(char *user_buf, UINT32 count, UINT32 op_flag)
+uint32_t uart2_write(char *user_buf, uint32_t count, uint32_t op_flag)
 {
 #if UART2_USE_FIFO_REC
-    return kfifo_put(uart[UART2_PORT].tx, (UINT8 *)user_buf, count);
+    return kfifo_put(uart[UART2_PORT].tx, (uint8_t *)user_buf, count);
 #else
     return -1;
 #endif
 }
 
-UINT32 uart2_ctrl(UINT32 cmd, void *parm)
+uint32_t uart2_ctrl(uint32_t cmd, void *parm)
 {
-    UINT32 ret;
+    uint32_t ret;
 	int baud;
-	UINT32 conf_reg_addr;
-	UINT32 baud_div,reg;
+	uint32_t conf_reg_addr;
+	uint32_t baud_div,reg;
     peri_busy_count_add();
 
     ret = UART_SUCCESS;
@@ -1021,11 +1022,11 @@ UINT32 uart2_ctrl(UINT32 cmd, void *parm)
         }
         break;
 	case CMD_SET_STOP_END:
-		uart_set_tx_stop_end_int(UART2_PORT, *(UINT8 *)parm);
+		uart_set_tx_stop_end_int(UART2_PORT, *(uint8_t *)parm);
 		break;
 
 	case CMD_SET_TX_FIFO_NEEDWR_INT:
-		uart_set_tx_fifo_needwr_int(UART2_PORT, *(UINT8 *)parm);
+		uart_set_tx_fifo_needwr_int(UART2_PORT, *(uint8_t *)parm);
 		break;
 	case CMD_SET_BAUT:
 		baud =  *((int*)parm);
@@ -1046,9 +1047,9 @@ UINT32 uart2_ctrl(UINT32 cmd, void *parm)
     return ret;
 }
 
-UINT32 uart_wait_tx_over()
+uint32_t uart_wait_tx_over()
 {
-    UINT32 uart_wait_us,baudrate1,baudrate2;
+    uint32_t uart_wait_us,baudrate1,baudrate2;
     baudrate1 = UART_CLOCK/((((REG_READ(REG_UART1_CONFIG))>>UART_CLK_DIVID_POSI)
                     & UART_CLK_DIVID_MASK) + 1);
     baudrate2 = UART_CLOCK/((((REG_READ(REG_UART2_CONFIG))>>UART_CLK_DIVID_POSI)
@@ -1071,7 +1072,7 @@ UINT32 uart_wait_tx_over()
 
 #endif // KEIL_SIMULATOR
 
-INT32 os_null_printf(const char *fmt, ...)
+int32_t os_null_printf(const char *fmt, ...)
 {
     return 0;
 }
@@ -1079,7 +1080,7 @@ INT32 os_null_printf(const char *fmt, ...)
 int uart_read_byte(int uport)
 {
     int val = -1;
-    UINT32 fifo_status_reg;
+    uint32_t fifo_status_reg;
 
     if (UART1_PORT == uport)
         fifo_status_reg = REG_UART1_FIFO_STATUS;

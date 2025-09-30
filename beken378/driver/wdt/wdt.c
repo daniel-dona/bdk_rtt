@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 
@@ -26,11 +27,11 @@ void wdt_exit(void)
 	sddev_unregister_dev(WDT_DEV_NAME);
 }
 
-UINT32 wdt_ctrl(UINT32 cmd, void *param)
+uint32_t wdt_ctrl(uint32_t cmd, void *param)
 {
-	UINT32 ret;
-	UINT32 reg;
-	UINT32 parameter;
+	uint32_t ret;
+	uint32_t reg;
+	uint32_t parameter;
 
 	ret = WDT_SUCCESS;	
 
@@ -70,14 +71,14 @@ UINT32 wdt_ctrl(UINT32 cmd, void *param)
 
 		case WCMD_SET_PERIOD:				
 			ASSERT(param);
-			g_wdt_period = (*(UINT32 *)param);
+			g_wdt_period = (*(uint32_t *)param);
 			
 			reg = WDT_1ST_KEY << WDT_KEY_POSI;
-			reg |= ((*(UINT32 *)param) & WDT_PERIOD_MASK) << WDT_PERIOD_POSI;
+			reg |= ((*(uint32_t *)param) & WDT_PERIOD_MASK) << WDT_PERIOD_POSI;
 			REG_WRITE(WDT_CTRL_REG, reg);
 			
 			reg = WDT_2ND_KEY << WDT_KEY_POSI;
-			reg |= ((*(UINT32 *)param) & WDT_PERIOD_MASK) << WDT_PERIOD_POSI;
+			reg |= ((*(uint32_t *)param) & WDT_PERIOD_MASK) << WDT_PERIOD_POSI;
 			REG_WRITE(WDT_CTRL_REG, reg);
 			break;
 			

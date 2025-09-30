@@ -1,3 +1,4 @@
+#include <stdint.h>
 /**
  ****************************************************************************************
  *
@@ -44,7 +45,7 @@ uint32_t cfg_ap_is_open_system(void)
 	uint32_t no_passcode_flag = 0;
 	
 	if((NULL != g_ap_param_ptr) 
-		&& (!MAC_ADDR_NULL((u8 *)&g_ap_param_ptr->bssid))
+		&& (!MAC_ADDR_NULL((uint8_t *)&g_ap_param_ptr->bssid))
 		&& (BK_SECURITY_TYPE_NONE == g_ap_param_ptr->cipher_suite))
 	{
 		no_passcode_flag = 1;
@@ -79,7 +80,7 @@ uint32_t cfg_param_init(void)
 #define PARAM_CONFIG_RAMDOM_MAC 0
 #if PARAM_CONFIG_RAMDOM_MAC
 uint32_t prandom_get(void);
-static void random_mac_address(u8 *mac)
+static void random_mac_address(uint8_t *mac)
 {
     int i = 0;
     int val = 0;
@@ -100,15 +101,15 @@ static void random_mac_address(u8 *mac)
 #endif
 
 #if (CFG_OS_FREERTOS) || (CFG_SUPPORT_RTT)
-void cfg_load_mac(u8 *mac)
+void cfg_load_mac(uint8_t *mac)
 {
 #if (WIFI_MAC_POS == MAC_EFUSE)
-    if(!wifi_get_mac_address_from_efuse((UINT8 *)mac))
+    if(!wifi_get_mac_address_from_efuse((uint8_t *)mac))
 #elif (WIFI_MAC_POS == MAC_RF_OTP_FLASH)
-    if(!manual_cal_get_macaddr_from_flash((UINT8 *)mac))
+    if(!manual_cal_get_macaddr_from_flash((uint8_t *)mac))
 #elif (WIFI_MAC_POS == MAC_ITEM)
 	uint8_t tmp_mac[8] = {0};
-	if(get_info_item(WIFI_MAC_ITEM, (UINT8 *)tmp_mac, NULL, NULL))
+	if(get_info_item(WIFI_MAC_ITEM, (uint8_t *)tmp_mac, NULL, NULL))
 	{
 		os_memcpy(mac, tmp_mac, 6);
 	}
@@ -128,7 +129,7 @@ void cfg_load_mac(u8 *mac)
     }
 }
 
-void wifi_get_mac_address(char *mac, u8 type)
+void wifi_get_mac_address(char *mac, uint8_t type)
 {
     static int mac_inited = 0;
 
@@ -140,8 +141,8 @@ void wifi_get_mac_address(char *mac, u8 type)
 
     if(type == CONFIG_ROLE_AP)
     {
-        u8 mac_mask = (0xff & (NX_VIRT_DEV_MAX - 1));
-        u8 mac_low;
+        uint8_t mac_mask = (0xff & (NX_VIRT_DEV_MAX - 1));
+        uint8_t mac_low;
 
         os_memcpy(mac, system_mac, 6);
         mac_low = mac[5];
@@ -181,11 +182,11 @@ int wifi_set_mac_address(char *mac)
     {
         os_memcpy(system_mac, mac, sizeof(system_mac));
 #if (WIFI_MAC_POS == MAC_EFUSE)
-        //wifi_set_mac_address_to_efuse((UINT8 *)system_mac);
+        //wifi_set_mac_address_to_efuse((uint8_t *)system_mac);
 #elif (WIFI_MAC_POS == MAC_RF_OTP_FLASH)
-        manual_cal_write_macaddr_to_flash((UINT8 *)system_mac);
+        manual_cal_write_macaddr_to_flash((uint8_t *)system_mac);
 #elif (WIFI_MAC_POS == MAC_ITEM)
-        save_info_item(WIFI_MAC_ITEM, (UINT8 *)system_mac, NULL, NULL);
+        save_info_item(WIFI_MAC_ITEM, (uint8_t *)system_mac, NULL, NULL);
 #endif
         bk_wlan_stop(BK_SOFT_AP);
 #if CFG_ROLE_LAUNCH
@@ -201,7 +202,7 @@ int wifi_set_mac_address(char *mac)
 }
 
 #if (CFG_SOC_NAME != SOC_BK7231)
-int wifi_set_mac_address_to_efuse(UINT8 *mac)
+int wifi_set_mac_address_to_efuse(uint8_t *mac)
 {
     EFUSE_OPER_ST efuse;
     int i = 0, ret;
@@ -229,7 +230,7 @@ int wifi_set_mac_address_to_efuse(UINT8 *mac)
     return 1;
 }
 
-int wifi_get_mac_address_from_efuse(UINT8 *mac)
+int wifi_get_mac_address_from_efuse(uint8_t *mac)
 {
     EFUSE_OPER_ST efuse;
     int i = 0, ret;
@@ -263,9 +264,9 @@ int wifi_get_mac_address_from_efuse(UINT8 *mac)
     return 1;
 }
 
-int wifi_write_efuse(UINT8 addr, UINT8 data)
+int wifi_write_efuse(uint8_t addr, uint8_t data)
 {
-    UINT32 ret;
+    uint32_t ret;
     EFUSE_OPER_ST efuse;
 
     if(addr > EFUSE_CTRL_ADDR) {
@@ -285,9 +286,9 @@ int wifi_write_efuse(UINT8 addr, UINT8 data)
     return 1;
 }
 
-UINT8 wifi_read_efuse(UINT8 addr)
+uint8_t wifi_read_efuse(uint8_t addr)
 {
-    UINT32 ret;
+    uint32_t ret;
     EFUSE_OPER_ST efuse;
 
     if(addr > EFUSE_CTRL_ADDR) {

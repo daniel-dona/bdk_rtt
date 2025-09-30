@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  *  X.509 base functions for creating certificates / CSRs
  *
@@ -314,7 +316,7 @@ static int x509_write_extension( unsigned char **p, unsigned char *start,
 /*
  * Extension  ::=  SEQUENCE  {
  *     extnID      OBJECT IDENTIFIER,
- *     critical    BOOLEAN DEFAULT FALSE,
+ *     critical    bool DEFAULT FALSE,
  *     extnValue   OCTET STRING
  *                 -- contains the DER encoding of an ASN.1 value
  *                 -- corresponding to the extension type identified

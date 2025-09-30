@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _SA_STATION_H_
 #define _SA_STATION_H_
 
@@ -20,42 +21,42 @@
 typedef struct _scan_result_
 {
     /// Length of the frame
-    UINT16 length;
+    uint16_t length;
     /// Frame control field of the frame.
-    UINT16 framectrl;
+    uint16_t framectrl;
     /// Center frequency on which we received the packet
-    UINT16 center_freq;
+    uint16_t center_freq;
     /// PHY band
-    UINT8 band;
+    uint8_t band;
     /// Index of the station that sent the frame. 0xFF if unknown.
-    UINT8 sta_idx;
+    uint8_t sta_idx;
     /// Index of the VIF that received the frame. 0xFF if unknown.
-    UINT8 inst_nbr;
+    uint8_t inst_nbr;
     /// RSSI of the received frame.
-    INT8 rssi;
+    int8_t rssi;
     /// Frame payload.
-    UINT32 payload[1];
+    uint32_t payload[1];
 } SCAN_IND_T, *SCAN_IND_PTR;
 
 typedef struct probe_rsp
 {
-    UINT8 timestamp[8];
-    UINT16 beacon_int;
-    UINT16 capab_info;
+    uint8_t timestamp[8];
+    uint16_t beacon_int;
+    uint16_t capab_info;
 
     /* followed by some of SSID, Supported rates,
      * FH Params, DS Params, CF Params, IBSS Params */
-    UINT8 variable[1];
+    uint8_t variable[1];
 } __attribute__ ((packed)) PROBE_RSP_T;
 
 typedef struct ieee802_11_probe_rsp
 {
-    UINT16 frame_control;
-    UINT16 duration;
-    UINT8 da[6];
-    UINT8 sa[6];
-    UINT8 bssid[6];
-    UINT16 seq_ctrl;
+    uint16_t frame_control;
+    uint16_t duration;
+    uint8_t da[6];
+    uint8_t sa[6];
+    uint8_t bssid[6];
+    uint16_t seq_ctrl;
     struct probe_rsp rsp;
 } __attribute__ ((packed)) IEEE802_11_PROBE_RSP_T, *IEEE802_11_PROBE_RSP_PTR;
 

@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "video_demo_config.h"
 
@@ -52,15 +53,15 @@ typedef enum
 
 typedef struct temp_message
 {
-    u32 dmsg;
-    u32 data;
+    uint32_t dmsg;
+    uint32_t data;
 } DRONE_MSG_T;
 
 typedef struct app_demo_softap_st
 {
     beken_thread_t thread_hdl;
     beken_queue_t msg_que;
-    u32 status;
+    uint32_t status;
     char *wifi_ssid;
     char *wifi_key;
 } APP_DEMO_SOFTAP_ST, *APP_DEMO_SOFTAP_PTR;
@@ -93,8 +94,8 @@ enum
 
 typedef struct head_param
 {
-    u32 type;
-    u32 len;
+    uint32_t type;
+    uint32_t len;
 } head_param_t;
 
 APP_DEMO_SOFTAP_PTR g_demo_softap = NULL;
@@ -102,9 +103,9 @@ APP_DEMO_SOFTAP_PTR g_demo_softap = NULL;
 extern void bk_wlan_status_register_cb(FUNC_1PARAM_PTR cb);
 static int app_demo_softap_get_general_paramters(general_param_t *general);
 static int app_demo_softap_get_ap_paramters(ap_param_t *ap);
-void app_demo_softap_send_msg(u32 new_msg, u32 new_data);
+void app_demo_softap_send_msg(uint32_t new_msg, uint32_t new_data);
 
-static uint32 app_demo_softap_alloc_buffer(void)
+static uint32_t app_demo_softap_alloc_buffer(void)
 {
     if (g_demo_softap == NULL)
     {
@@ -169,7 +170,7 @@ static void app_demo_softap_free_buffer(void)
     }
 }
 
-void app_demo_softap_send_msg(u32 new_msg, u32 new_data)
+void app_demo_softap_send_msg(uint32_t new_msg, uint32_t new_data)
 {
     OSStatus ret;
     DRONE_MSG_T msg;
@@ -222,7 +223,7 @@ static void app_demo_softap_start_http_ota(int ota_param)
     char http_content[HTTP_RESP_CONTENT_LEN];
     const char *http_url;
     int    http_port;
-    UINT32 http_timeout;
+    uint32_t http_timeout;
 
     os_memset(&httpclient, 0, sizeof(httpclient_t));
     os_memset(&httpclient_data, 0, sizeof(httpclient_data));
@@ -283,7 +284,7 @@ static int app_demo_softap_setup(void)
     ap_param_t ap_info;
     network_InitTypeDef_st wNetConfig;
     int len;
-    u8 *mac;
+    uint8_t *mac;
 
     //efuse_disable_spi_download_mode();
     //efuse_disable_jtag_debug_mode();
@@ -326,7 +327,7 @@ static int app_demo_softap_setup(void)
     if (app_demo_softap_get_ap_paramters(&ap_info) == -1)
     {
         APP_DEMO_SOFTAP_PRT("no flash configuration, use default\r\n");
-        mac = (u8 *)&ap_info.bssid.array;
+        mac = (uint8_t *)&ap_info.bssid.array;
         wifi_get_mac_address((char *)mac, CONFIG_ROLE_AP);
         ap_info.chann = APP_DEMO_SOFTAP_DEF_CHANNEL;
         ap_info.cipher_suite = 0;
@@ -338,7 +339,7 @@ static int app_demo_softap_setup(void)
     {
         // first load mac addr from flash
         wifi_get_mac_address(NULL, 0);
-        mac = (u8 *)&ap_info.bssid.array;
+        mac = (uint8_t *)&ap_info.bssid.array;
         APP_DEMO_SOFTAP_PRT("ap: %02x:%02x:%02x:%02x:%02x:%02x,%d,%d,%s,%d,%s\r\n",
                             mac[0], mac[1], mac[2], mac[3], mac[4], mac[5],
                             ap_info.chann,
@@ -416,7 +417,7 @@ static int app_softap_user_config_setup(void)
 static void app_demo_softap_main(beken_thread_arg_t data)
 {
     OSStatus err;
-    u32 status;
+    uint32_t status;
 
     bk_wlan_status_register_cb(app_demo_softap_rw_event_func);
 
@@ -549,7 +550,7 @@ void app_demo_softap_start(char *oob_ssid, char *connect_key)
         }
         else
         {
-            UINT32 len;
+            uint32_t len;
             len = os_strlen(oob_ssid);
             if (len > 32)
             {
@@ -618,9 +619,9 @@ void app_demo_softap_exit(void)
     APP_DEMO_SOFTAP_PRT("done!\r\n");
 }
 
-static UINT32 search_opt_tab(UINT32 start_addr)
+static uint32_t search_opt_tab(uint32_t start_addr)
 {
-    UINT32 ret = 0, status;
+    uint32_t ret = 0, status;
     DD_HANDLE flash_handle;
     head_param_t head;
 #define BK_TLV_HEADER           (0x00564c54)   // ASIC TLV
@@ -641,9 +642,9 @@ static UINT32 search_opt_tab(UINT32 start_addr)
     return ret;
 }
 
-static UINT32 search_by_type(UINT32 type, UINT32 start_addr)
+static uint32_t search_by_type(uint32_t type, uint32_t start_addr)
 {
-    UINT32 status, addr, end_addr;
+    uint32_t status, addr, end_addr;
     DD_HANDLE flash_handle;
     head_param_t head;
 
@@ -676,7 +677,7 @@ static UINT32 search_by_type(UINT32 type, UINT32 start_addr)
 
 static int app_demo_softap_get_general_paramters(general_param_t *general)
 {
-    UINT32 status, addr, addr_start;
+    uint32_t status, addr, addr_start;
     DD_HANDLE flash_handle;
     head_param_t head;
 
@@ -753,7 +754,7 @@ static int app_demo_softap_get_general_paramters(general_param_t *general)
 
 static int app_demo_softap_get_ap_paramters(ap_param_t *ap)
 {
-    UINT32 status, addr, addr_start;
+    uint32_t status, addr, addr_start;
     DD_HANDLE flash_handle;
     head_param_t head;
     bk_logic_partition_t *pt = bk_flash_get_info(BK_PARTITION_USR_CONFIG);
@@ -829,7 +830,7 @@ static int app_demo_softap_get_ap_paramters(ap_param_t *ap)
     return 0;
 }
 
-int app_drone_load_mac_from_usercfg(UINT8 *mac)
+int app_drone_load_mac_from_usercfg(uint8_t *mac)
 {
     ap_param_t ap_info;
     os_memset(&ap_info, 0, sizeof(ap_param_t));
@@ -843,7 +844,7 @@ int app_drone_load_mac_from_usercfg(UINT8 *mac)
     {
         if (mac)
         {
-            os_memcpy(mac, (u8 *)&ap_info.bssid.array, 6);
+            os_memcpy(mac, (uint8_t *)&ap_info.bssid.array, 6);
             os_printf("0 MAC:%02x:%02x:%02x:%02x:%02x:%02x\r\n",
                       mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
         }

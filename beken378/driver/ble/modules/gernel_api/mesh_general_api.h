@@ -57,8 +57,8 @@ uint8_t app_relay_user_adv(uint16_t interval, uint8_t nb_tx, uint8_t data_len, c
 sys_reset_src_t sys_check_reset_src(void);
 
 void app_set_dev_key_param(uint8_t *p_dev_key);
-void app_set_net_key_param(uint8_t *p_net_key, uint16 key_id);
-void app_set_app_key_param(uint8_t *p_app_key, uint16 key_id);
+void app_set_net_key_param(uint8_t *p_net_key, uint16_t key_id);
+void app_set_app_key_param(uint8_t *p_app_key, uint16_t key_id);
 
 
 #if (UART_CMD_PROV_EN)

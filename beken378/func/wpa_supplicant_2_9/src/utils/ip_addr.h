@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * IP address processing
  * Copyright (c) 2003-2006, Jouni Malinen <j@w1.fi>
@@ -24,7 +25,7 @@ struct hostapd_ip_addr {
 		struct in6_addr v6;
 #endif /* CONFIG_IPV6 */
 
-		u8 max_len[16];
+		uint8_t max_len[16];
 	} u;
 };
 

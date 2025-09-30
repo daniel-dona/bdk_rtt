@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <rthw.h>
 #include <rtthread.h>
 #include <rtdevice.h>
@@ -91,8 +92,8 @@ static int _gpio_read(struct rt_device *device, rt_base_t pin)
     return bk_gpio_input(pin);
 }
 
-static rt_err_t _gpio_attach_irq(struct rt_device *device, rt_int32_t pin, 
-                                 rt_uint32_t mode, void (*hdr)(void *args), void *args)
+static rt_err_t _gpio_attach_irq(struct rt_device *device, int32_t pin, 
+                                 uint32_t mode, void (*hdr)(void *args), void *args)
 {
     dbg_log(DBG_LOG, "attach irq pin:%d mode:%d\n", pin, mode);
 
@@ -121,7 +122,7 @@ static rt_err_t _gpio_attach_irq(struct rt_device *device, rt_int32_t pin,
     return RT_EOK;
 }
 
-static rt_err_t _gpio_dettach_irq(struct rt_device *device, rt_int32_t pin)
+static rt_err_t _gpio_dettach_irq(struct rt_device *device, int32_t pin)
 {
     dbg_log(DBG_LOG, "dettach irq pin:%d\n", pin);
 
@@ -134,7 +135,7 @@ static rt_err_t _gpio_dettach_irq(struct rt_device *device, rt_int32_t pin)
     return RT_EOK;
 }
 
-static rt_err_t _gpio_irq_enable(struct rt_device *device, rt_base_t pin, rt_uint32_t enabled)
+static rt_err_t _gpio_irq_enable(struct rt_device *device, rt_base_t pin, uint32_t enabled)
 {
     dbg_log(DBG_LOG, "enable irq pin:%d enabled:%d\n", pin, enabled);
 

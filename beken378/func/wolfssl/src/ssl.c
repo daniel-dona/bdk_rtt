@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /* ssl.c
  *
  * Copyright (C) 2006-2019 wolfSSL Inc.
@@ -35865,7 +35867,7 @@ int wolfSSL_X509_check_ca(WOLFSSL_X509 *x509)
 const char *wolfSSL_ASN1_tag2str(int tag)
 {
     static const char *const tag_label[31] = {
-        "EOC", "BOOLEAN", "INTEGER", "BIT STRING", "OCTET STRING", "NULL",
+        "EOC", "bool", "INTEGER", "BIT STRING", "OCTET STRING", "NULL",
         "OBJECT", "OBJECT DESCRIPTOR", "EXTERNAL", "REAL", "ENUMERATED",
         "<ASN1 11>", "UTF8STRING", "<ASN1 13>", "<ASN1 14>", "<ASN1 15>",
         "SEQUENCE", "SET", "NUMERICSTRING", "PRINTABLESTRING", "T61STRING",

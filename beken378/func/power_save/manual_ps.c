@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "manual_ps.h"
 #include "manual_ps_pub.h"
 #include "gpio_pub.h"
@@ -20,12 +21,12 @@
 extern void phy_init_after_wakeup ( void );
 
 
-void general_sleep_wakeup_with_peri ( UINT8 uart2_wk, UINT32 gpio_index_map, UINT32 gpio_edge_map )
+void general_sleep_wakeup_with_peri ( uint8_t uart2_wk, uint32_t gpio_index_map, uint32_t gpio_edge_map )
 {
-	UINT32 reg, ret;
-	UINT32 param = 0;
-	UINT32 i;
-	UINT32    gpio_stat_cfg[32] = {0};
+	uint32_t reg, ret;
+	uint32_t param = 0;
+	uint32_t i;
+	uint32_t    gpio_stat_cfg[32] = {0};
 	
 	if ( power_save_ps_mode_get() != PS_NO_PS_MODE ) {
 		os_printf ( "can't peri ps,ps in mode %d!\r\n", power_save_ps_mode_get() );
@@ -85,11 +86,11 @@ void general_sleep_wakeup_with_peri ( UINT8 uart2_wk, UINT32 gpio_index_map, UIN
 	os_printf ( "exit peri ps\r\n" );
 }
 
-void general_sleep_wakeup_with_timer ( UINT32 sleep_time )
+void general_sleep_wakeup_with_timer ( uint32_t sleep_time )
 {
-	UINT32 reg;
-	UINT32 param;
-	UINT32 wakeup_timer;
+	uint32_t reg;
+	uint32_t param;
+	uint32_t wakeup_timer;
 	
 	if ( power_save_ps_mode_get() != PS_NO_PS_MODE ) {
 		os_printf ( "can't pwm ps,ps in mode %d!\r\n", power_save_ps_mode_get() );
@@ -133,10 +134,10 @@ void general_sleep_wakeup_with_timer ( UINT32 sleep_time )
 }
 
 
-void general_sleep_wakeup_with_gpio ( UINT32 gpio_index )
+void general_sleep_wakeup_with_gpio ( uint32_t gpio_index )
 {
-	UINT32 reg;
-	UINT32 param;
+	uint32_t reg;
+	uint32_t param;
 	
 	if ( power_save_ps_mode_get() != PS_NO_PS_MODE ) {
 		os_printf ( "can't gpio ps,ps in mode %d!\r\n", power_save_ps_mode_get() );
@@ -167,9 +168,9 @@ void general_sleep_wakeup_with_gpio ( UINT32 gpio_index )
  *  idle sleep
  *
 */
-void idle_sleep_wakeup_with_timer ( UINT32 sleep_time )
+void idle_sleep_wakeup_with_timer ( uint32_t sleep_time )
 {
-	UINT32 reg, param;
+	uint32_t reg, param;
 	PS_DEEP_CTRL_PARAM deep_param;
 	
 	if ( power_save_ps_mode_get() != PS_NO_PS_MODE ) {
@@ -211,11 +212,11 @@ void idle_sleep_wakeup_with_timer ( UINT32 sleep_time )
 
 /** @brief  Request idle sleep,and wakeup by gpio.
  */
-void idle_sleep_wakeup_with_gpio ( UINT32 gpio_index_map, UINT32 gpio_edge_map )
+void idle_sleep_wakeup_with_gpio ( uint32_t gpio_index_map, uint32_t gpio_edge_map )
 {
-	UINT32 reg, param;
+	uint32_t reg, param;
 	PS_DEEP_CTRL_PARAM deep_param;
-	UINT32 i;
+	uint32_t i;
 	
 	//for(i = 0; i < 32; i ++)
 	//	*((uint32_t *)(0x00802800 + i*4)) = 0x2c;
@@ -262,7 +263,7 @@ void idle_sleep_wakeup_with_gpio ( UINT32 gpio_index_map, UINT32 gpio_edge_map )
  *  @param  sleep_time: Sleep time with milliseconds.
  *              if 0xffffffff not wakeup
  */
-void bk_wlan_ps_wakeup_with_timer ( MANUAL_MODE mode, UINT32 sleep_time )
+void bk_wlan_ps_wakeup_with_timer ( MANUAL_MODE mode, uint32_t sleep_time )
 {
 	if ( mode == MANUAL_MODE_NORMAL )
 		general_sleep_wakeup_with_timer ( sleep_time );
@@ -272,7 +273,7 @@ void bk_wlan_ps_wakeup_with_timer ( MANUAL_MODE mode, UINT32 sleep_time )
 
 /** @brief  Request power save,and wakeup by uart if uart2_wk=1,nd wakeup by gpio from bitmap of gpio_index_map.
  */
-void bk_wlan_ps_wakeup_with_peri ( UINT8 uart2_wk, UINT32 gpio_index_map, UINT32 gpio_edge_map )
+void bk_wlan_ps_wakeup_with_peri ( uint8_t uart2_wk, uint32_t gpio_index_map, uint32_t gpio_edge_map )
 {
 	general_sleep_wakeup_with_peri ( uart2_wk, gpio_index_map, gpio_edge_map );
 }
@@ -286,7 +287,7 @@ void bk_wlan_ps_wakeup_with_peri ( UINT8 uart2_wk, UINT32 gpio_index_map, UINT32
  *              gpio_edge_map is hex and every bits is map to gpio0-gpio31.
  *              0:rising,1:falling.
  */
-void bk_wlan_ps_wakeup_with_gpio ( MANUAL_MODE mode, UINT32 gpio_index_map, UINT32 gpio_edge_map )
+void bk_wlan_ps_wakeup_with_gpio ( MANUAL_MODE mode, uint32_t gpio_index_map, uint32_t gpio_edge_map )
 {
 	//if(mode == MANUAL_MODE_NORMAL)
 	//    general_sleep_wakeup_with_peri(0, gpio_index_map, gpio_edge_map);
@@ -297,16 +298,16 @@ void bk_wlan_ps_wakeup_with_gpio ( MANUAL_MODE mode, UINT32 gpio_index_map, UINT
 
 #endif
 
-UINT32 use_unconditional_sleep = 0;
-UINT32 bk_unconditional_sleep_mode_get ( void )
+uint32_t use_unconditional_sleep = 0;
+uint32_t bk_unconditional_sleep_mode_get ( void )
 {
 	return use_unconditional_sleep;
 }
 #if CFG_USE_FAKERTC_PS
-UINT32 unconditional_sleep_inited = 0;
+uint32_t unconditional_sleep_inited = 0;
 void unconditional_ps_init ( void )
 {
-	UINT32 reg;
+	uint32_t reg;
 	GLOBAL_INT_DECLARATION();
 	GLOBAL_INT_DISABLE();
 	
@@ -357,11 +358,11 @@ void bk_disable_unconditional_sleep ( void )
 }
 
 
-int bk_unconditional_normal_sleep ( UINT32 sleep_ms, char flag )
+int bk_unconditional_normal_sleep ( uint32_t sleep_ms, char flag )
 {
 	//flag:1:only gpio wake,0:and other wakeup
-	UINT32  sleep_pwm_t, param, uart_miss_us = 0, miss_ticks = 0;
-	UINT32 wkup_type, wastage = 0;
+	uint32_t  sleep_pwm_t, param, uart_miss_us = 0, miss_ticks = 0;
+	uint32_t wkup_type, wastage = 0;
 	GLOBAL_INT_DECLARATION();
 	GLOBAL_INT_DISABLE();
 	{
@@ -378,7 +379,7 @@ int bk_unconditional_normal_sleep ( UINT32 sleep_ms, char flag )
 				sleep_ms = sleep_ms - FCLK_DURATION_MS;
 				sleep_pwm_t = ( sleep_ms * 32U );
 				
-				if ( ( int32 ) sleep_pwm_t <= 64U ) {
+				if ( ( int32_t ) sleep_pwm_t <= 64U ) {
 					break;
 				}
 				

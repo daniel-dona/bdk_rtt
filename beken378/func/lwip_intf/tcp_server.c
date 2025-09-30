@@ -1,3 +1,4 @@
+#include <stdint.h>
 /**
  ******************************************************************************
  * @file    tcp_server.c
@@ -42,7 +43,7 @@
 int my_fd = -1; 
 
 
-int unw_recv(const int fd, void *buf, u32 nbytes)
+int unw_recv(const int fd, void *buf, uint32_t nbytes)
 {
     fd_set readfds, errfds;
     int ret = 0;   
@@ -107,7 +108,7 @@ exit:
     rtos_delete_thread( NULL );
 }
 
-volatile u8 test_flag = 0;
+volatile uint8_t test_flag = 0;
 void close_tcp_client(void)
 {
     os_printf("close_tcp_client:%d, %p\r\n", my_fd, rtos_get_current_thread());

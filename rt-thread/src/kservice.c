@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : kservice.c
  * This file is part of RT-Thread RTOS
@@ -143,20 +144,20 @@ void *rt_memset(void *s, int c, rt_ubase_t count)
 
     return s;
 #else
-#define LBLOCKSIZE      (sizeof(rt_int32_t))
-#define UNALIGNED(X)    ((rt_int32_t)X & (LBLOCKSIZE - 1))
+#define LBLOCKSIZE      (sizeof(int32_t))
+#define UNALIGNED(X)    ((int32_t)X & (LBLOCKSIZE - 1))
 #define TOO_SMALL(LEN)  ((LEN) < LBLOCKSIZE)
 
     int i;
     char *m = (char *)s;
-    rt_uint32_t buffer;
-    rt_uint32_t *aligned_addr;
-    rt_uint32_t d = c & 0xff;
+    uint32_t buffer;
+    uint32_t *aligned_addr;
+    uint32_t d = c & 0xff;
 
     if (!TOO_SMALL(count) && !UNALIGNED(s))
     {
         /* If we get this far, we know that n is large and m is word-aligned. */
-        aligned_addr = (rt_uint32_t *)s;
+        aligned_addr = (uint32_t *)s;
 
         /* Store D into each char sized location in BUFFER so that
          * we can set large blocks quickly.
@@ -237,24 +238,24 @@ void *rt_memcpy(void *dst, const void *src, rt_ubase_t count)
 #else
 
 #define UNALIGNED(X, Y)                                               \
-                        (((rt_int32_t)X & (sizeof(rt_int32_t) - 1)) | \
-                         ((rt_int32_t)Y & (sizeof(rt_int32_t) - 1)))
-#define BIGBLOCKSIZE    (sizeof(rt_int32_t) << 2)
-#define LITTLEBLOCKSIZE (sizeof(rt_int32_t))
+                        (((int32_t)X & (sizeof(int32_t) - 1)) | \
+                         ((int32_t)Y & (sizeof(int32_t) - 1)))
+#define BIGBLOCKSIZE    (sizeof(int32_t) << 2)
+#define LITTLEBLOCKSIZE (sizeof(int32_t))
 #define TOO_SMALL(LEN)  ((LEN) < BIGBLOCKSIZE)
 
     char *dst_ptr = (char *)dst;
     char *src_ptr = (char *)src;
-    rt_int32_t *aligned_dst;
-    rt_int32_t *aligned_src;
+    int32_t *aligned_dst;
+    int32_t *aligned_src;
     int len = count;
 
     /* If the size is small, or either SRC or DST is unaligned,
     then punt into the byte copy loop.  This should be rare. */
     if (!TOO_SMALL(len) && !UNALIGNED(src_ptr, dst_ptr))
     {
-        aligned_dst = (rt_int32_t *)dst_ptr;
-        aligned_src = (rt_int32_t *)src_ptr;
+        aligned_dst = (int32_t *)dst_ptr;
+        aligned_src = (int32_t *)src_ptr;
 
         /* Copy 4X long words at a time if possible. */
         while (len >= BIGBLOCKSIZE)
@@ -331,7 +332,7 @@ RTM_EXPORT(rt_memmove);
  *
  * @return the result
  */
-rt_int32_t rt_memcmp(const void *cs, const void *ct, rt_ubase_t count)
+int32_t rt_memcmp(const void *cs, const void *ct, rt_ubase_t count)
 {
     const unsigned char *su1, *su2;
     int res = 0;
@@ -380,7 +381,7 @@ RTM_EXPORT(rt_strstr);
  *
  * @return the result
  */
-rt_uint32_t rt_strcasecmp(const char *a, const char *b)
+uint32_t rt_strcasecmp(const char *a, const char *b)
 {
     int ca, cb;
 
@@ -440,7 +441,7 @@ RTM_EXPORT(rt_strncpy);
  *
  * @return the result
  */
-rt_int32_t rt_strncmp(const char *cs, const char *ct, rt_ubase_t count)
+int32_t rt_strncmp(const char *cs, const char *ct, rt_ubase_t count)
 {
     register signed char __res = 0;
 
@@ -463,7 +464,7 @@ RTM_EXPORT(rt_strncmp);
  *
  * @return the result
  */
-rt_int32_t rt_strcmp(const char *cs, const char *ct)
+int32_t rt_strcmp(const char *cs, const char *ct)
 {
     while (*cs && *cs == *ct)
         cs++, ct++;
@@ -549,20 +550,20 @@ RTM_EXPORT(rt_show_version);
 /* private function */
 #define isdigit(c)  ((unsigned)((c) - '0') < 10)
 
-rt_inline rt_int32_t divide(rt_int32_t *n, rt_int32_t base)
+rt_inline int32_t divide(int32_t *n, int32_t base)
 {
-    rt_int32_t res;
+    int32_t res;
 
     /* optimized for processor which does not support divide instructions. */
     if (base == 10)
     {
-        res = ((rt_uint32_t) * n) % 10U;
-        *n = ((rt_uint32_t) * n) / 10U;
+        res = ((uint32_t) * n) % 10U;
+        *n = ((uint32_t) * n) / 10U;
     }
     else
     {
-        res = ((rt_uint32_t) * n) % 16U;
-        *n = ((rt_uint32_t) * n) / 16U;
+        res = ((uint32_t) * n) % 16U;
+        *n = ((uint32_t) * n) / 16U;
     }
 
     return res;
@@ -748,7 +749,7 @@ static char *print_number(char *buf,
     return buf;
 }
 
-rt_int32_t rt_vsnprintf(char       *buf,
+int32_t rt_vsnprintf(char       *buf,
                         rt_size_t   size,
                         const char *fmt,
                         va_list     args)
@@ -756,16 +757,16 @@ rt_int32_t rt_vsnprintf(char       *buf,
 #ifdef RT_PRINTF_LONGLONG
     unsigned long long num;
 #else
-    rt_uint32_t num;
+    uint32_t num;
 #endif
     int i, len;
     char *str, *end, c;
     const char *s;
 
-    rt_uint8_t base;            /* the base of number */
-    rt_uint8_t flags;           /* flags to print number */
-    rt_uint8_t qualifier;       /* 'h', 'l', or 'L' for integer fields */
-    rt_int32_t field_width;     /* width of output field */
+    uint8_t base;            /* the base of number */
+    uint8_t flags;           /* flags to print number */
+    uint8_t qualifier;       /* 'h', 'l', or 'L' for integer fields */
+    int32_t field_width;     /* width of output field */
 
 #ifdef RT_PRINTF_PRECISION
     int precision;      /* min. # of digits for integers and max for a string */
@@ -872,7 +873,7 @@ rt_int32_t rt_vsnprintf(char       *buf,
             }
 
             /* get character */
-            c = (rt_uint8_t)va_arg(args, int);
+            c = (uint8_t)va_arg(args, int);
             if (str <= end) *str = c;
             ++ str;
 
@@ -978,18 +979,18 @@ rt_int32_t rt_vsnprintf(char       *buf,
         if (qualifier == 'l')
 #endif
         {
-            num = va_arg(args, rt_uint32_t);
-            if (flags & SIGN) num = (rt_int32_t)num;
+            num = va_arg(args, uint32_t);
+            if (flags & SIGN) num = (int32_t)num;
         }
         else if (qualifier == 'h')
         {
-            num = (rt_uint16_t)va_arg(args, rt_int32_t);
-            if (flags & SIGN) num = (rt_int16_t)num;
+            num = (uint16_t)va_arg(args, int32_t);
+            if (flags & SIGN) num = (int16_t)num;
         }
         else
         {
-            num = va_arg(args, rt_uint32_t);
-            if (flags & SIGN) num = (rt_int32_t)num;
+            num = va_arg(args, uint32_t);
+            if (flags & SIGN) num = (int32_t)num;
         }
 #ifdef RT_PRINTF_PRECISION
         str = print_number(str, end, num, base, field_width, precision, flags);
@@ -1015,9 +1016,9 @@ RTM_EXPORT(rt_vsnprintf);
  * @param size the size of buffer
  * @param fmt the format
  */
-rt_int32_t rt_snprintf(char *buf, rt_size_t size, const char *fmt, ...)
+int32_t rt_snprintf(char *buf, rt_size_t size, const char *fmt, ...)
 {
-    rt_int32_t n;
+    int32_t n;
     va_list args;
 
     va_start(args, fmt);
@@ -1035,7 +1036,7 @@ RTM_EXPORT(rt_snprintf);
  * @param arg_ptr the arg_ptr
  * @param format the format
  */
-rt_int32_t rt_vsprintf(char *buf, const char *format, va_list arg_ptr)
+int32_t rt_vsprintf(char *buf, const char *format, va_list arg_ptr)
 {
     return rt_vsnprintf(buf, (rt_size_t) - 1, format, arg_ptr);
 }
@@ -1047,9 +1048,9 @@ RTM_EXPORT(rt_vsprintf);
  * @param buf the buffer to save formatted string
  * @param format the format
  */
-rt_int32_t rt_sprintf(char *buf, const char *format, ...)
+int32_t rt_sprintf(char *buf, const char *format, ...)
 {
-    rt_int32_t n;
+    int32_t n;
     va_list arg_ptr;
 
     va_start(arg_ptr, format);
@@ -1132,7 +1133,7 @@ void rt_kputs(const char *str)
     }
     else
     {
-        rt_uint16_t old_flag = _console_device->open_flag;
+        uint16_t old_flag = _console_device->open_flag;
 
         _console_device->open_flag |= RT_DEVICE_FLAG_STREAM;
         rt_device_write(_console_device, 0, str, rt_strlen(str));
@@ -1170,7 +1171,7 @@ void rt_kprintf(const char *fmt, ...)
     }
     else
     {
-        rt_uint16_t old_flag = _console_device->open_flag;
+        uint16_t old_flag = _console_device->open_flag;
 
         _console_device->open_flag |= RT_DEVICE_FLAG_STREAM;
         rt_device_write(_console_device, 0, rt_log_buf, length);
@@ -1210,17 +1211,17 @@ void *rt_malloc_align(rt_size_t size, rt_size_t align)
     if (ptr != RT_NULL)
     {
         /* the allocated memory block is aligned */
-        if (((rt_uint32_t)ptr & (align - 1)) == 0)
+        if (((uint32_t)ptr & (align - 1)) == 0)
         {
-            align_ptr = (void *)((rt_uint32_t)ptr + align);
+            align_ptr = (void *)((uint32_t)ptr + align);
         }
         else
         {
-            align_ptr = (void *)(((rt_uint32_t)ptr + (align - 1)) & ~(align - 1));
+            align_ptr = (void *)(((uint32_t)ptr + (align - 1)) & ~(align - 1));
         }
 
         /* set the pointer before alignment pointer to the real pointer */
-        *((rt_uint32_t *)((rt_uint32_t)align_ptr - sizeof(void *))) = (rt_uint32_t)ptr;
+        *((uint32_t *)((uint32_t)align_ptr - sizeof(void *))) = (uint32_t)ptr;
 
         ptr = align_ptr;
     }
@@ -1239,14 +1240,14 @@ void rt_free_align(void *ptr)
 {
     void *real_ptr;
 
-    real_ptr = (void *) * (rt_uint32_t *)((rt_uint32_t)ptr - sizeof(void *));
+    real_ptr = (void *) * (uint32_t *)((uint32_t)ptr - sizeof(void *));
     rt_free(real_ptr);
 }
 RTM_EXPORT(rt_free_align);
 #endif
 
 #ifndef RT_USING_CPU_FFS
-const rt_uint8_t __lowest_bit_bitmap[] =
+const uint8_t __lowest_bit_bitmap[] =
 {
     /* 00 */ 0, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
     /* 10 */ 4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,

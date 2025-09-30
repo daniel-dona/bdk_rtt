@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef __VIDEO_TRANS_H__
 #define __VIDEO_TRANS_H__
 
@@ -47,52 +48,52 @@ typedef enum
 
 typedef struct tvideo_desc
 {
-    UINT8 *rxbuf;
+    uint8_t *rxbuf;
 
-    void (*node_full_handler)(void *curptr, UINT32 newlen, UINT32 is_eof, UINT32 frame_len);
+    void (*node_full_handler)(void *curptr, uint32_t newlen, uint32_t is_eof, uint32_t frame_len);
     void (*data_end_handler)(void);
 
-    UINT16 rxbuf_len;
-    UINT16 rx_read_len;
-    UINT32 node_len;
-    UINT32 sener_cfg;
+    uint16_t rxbuf_len;
+    uint16_t rx_read_len;
+    uint32_t node_len;
+    uint32_t sener_cfg;
 } TVIDEO_DESC_ST, *TVIDEO_DESC_PTR;
 
 typedef struct tvideo_hdr_param
 {
-    UINT8 *ptk_ptr;
-    UINT32 ptklen;
-    UINT32 frame_id;
-    UINT32 is_eof;
-    UINT32 frame_len;
+    uint8_t *ptk_ptr;
+    uint32_t ptklen;
+    uint32_t frame_id;
+    uint32_t is_eof;
+    uint32_t frame_len;
 } TV_HDR_PARAM_ST, *TV_HDR_PARAM_PTR;
 
 typedef void (*tvideo_add_pkt_header)(TV_HDR_PARAM_PTR param);
-typedef int (*video_transfer_send_func)(UINT8 *data, UINT32 len);
+typedef int (*video_transfer_send_func)(uint8_t *data, uint32_t len);
 typedef void (*video_transfer_start_cb)(void);
 typedef void (*video_transfer_end_cb)(void);
 
 typedef struct tvideo_setup_desc
 {
-    UINT16 open_type;
-    UINT16 send_type;
+    uint16_t open_type;
+    uint16_t send_type;
     video_transfer_send_func send_func;
     video_transfer_start_cb start_cb;
     video_transfer_start_cb end_cb;
 
-    UINT32 pkt_header_size;
+    uint32_t pkt_header_size;
     tvideo_add_pkt_header add_pkt_header;
 } TVIDEO_SETUP_DESC_ST, *TVIDEO_SETUP_DESC_PTR;
 
 #if (CFG_USE_SPIDMA || CFG_USE_CAMERA_INTF)
-void tvideo_intfer_send_msg(UINT32 new_msg);
+void tvideo_intfer_send_msg(uint32_t new_msg);
 int video_transfer_init(TVIDEO_SETUP_DESC_PTR setup_cfg);
 int video_transfer_deinit(void);
-UINT32 video_transfer_set_video_param(UINT32 ppi, UINT32 fps);
+uint32_t video_transfer_set_video_param(uint32_t ppi, uint32_t fps);
 
 int video_buffer_open(void);
 int video_buffer_close(void);
-UINT32 video_buffer_read_frame(UINT8 *buf, UINT32 buf_len);
+uint32_t video_buffer_read_frame(uint8_t *buf, uint32_t buf_len);
 #endif
 
 #endif // __VIDEO_TRANS_H__

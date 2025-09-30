@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : memheap.c
  * This file is part of RT-Thread RTOS
@@ -44,10 +45,10 @@
 #define RT_MEMHEAP_MINIALLOC    12
 
 #define RT_MEMHEAP_SIZE         RT_ALIGN(sizeof(struct rt_memheap_item), RT_ALIGN_SIZE)
-#define MEMITEM_SIZE(item)      ((rt_uint32_t)item->next - (rt_uint32_t)item - RT_MEMHEAP_SIZE)
+#define MEMITEM_SIZE(item)      ((uint32_t)item->next - (uint32_t)item - RT_MEMHEAP_SIZE)
 
 #ifdef RT_USING_MEMTRACE
-rt_uint8_t rt_object_get_type(rt_object_t object)
+uint8_t rt_object_get_type(rt_object_t object)
 {
     /* object check */
     RT_ASSERT(object != RT_NULL);
@@ -81,7 +82,7 @@ rt_inline void rt_memheap_item_save_tick(struct rt_memheap_item *item)
 rt_err_t rt_memheap_init(struct rt_memheap *memheap,
                          const char        *name,
                          void              *start_addr,
-                         rt_uint32_t        size)
+                         uint32_t        size)
 {
     struct rt_memheap_item *item;
 
@@ -124,7 +125,7 @@ rt_err_t rt_memheap_init(struct rt_memheap *memheap,
     rt_memheap_item_save_tick(item); 
 #endif
 
-    item->next = (struct rt_memheap_item *)((rt_uint8_t *)item + memheap->available_size + RT_MEMHEAP_SIZE);
+    item->next = (struct rt_memheap_item *)((uint8_t *)item + memheap->available_size + RT_MEMHEAP_SIZE);
     item->prev = item->next;
 
     /* block list header */
@@ -176,10 +177,10 @@ rt_err_t rt_memheap_detach(struct rt_memheap *heap)
 }
 RTM_EXPORT(rt_memheap_detach);
 
-void *rt_memheap_alloc(struct rt_memheap *heap, rt_uint32_t size)
+void *rt_memheap_alloc(struct rt_memheap *heap, uint32_t size)
 {
     rt_err_t result;
-    rt_uint32_t free_size;
+    uint32_t free_size;
     struct rt_memheap_item *header_ptr;
 
     RT_ASSERT(heap != RT_NULL);
@@ -231,7 +232,7 @@ void *rt_memheap_alloc(struct rt_memheap *heap, rt_uint32_t size)
 
                 /* split the block. */
                 new_ptr = (struct rt_memheap_item *)
-                          (((rt_uint8_t *)header_ptr) + size + RT_MEMHEAP_SIZE);
+                          (((uint8_t *)header_ptr) + size + RT_MEMHEAP_SIZE);
 
                 RT_DEBUG_LOG(RT_DEBUG_MEMHEAP,
                              ("split: block[0x%08x] nextm[0x%08x] prevm[0x%08x] to new[0x%08x]\n",
@@ -321,11 +322,11 @@ void *rt_memheap_alloc(struct rt_memheap *heap, rt_uint32_t size)
             /* Return a memory address to the caller.  */
             RT_DEBUG_LOG(RT_DEBUG_MEMHEAP,
                          ("alloc mem: memory[0x%08x], heap[0x%08x], size: %d\n",
-                          (void *)((rt_uint8_t *)header_ptr + RT_MEMHEAP_SIZE),
+                          (void *)((uint8_t *)header_ptr + RT_MEMHEAP_SIZE),
                           header_ptr,
                           size));
 
-            return (void *)((rt_uint8_t *)header_ptr + RT_MEMHEAP_SIZE);
+            return (void *)((uint8_t *)header_ptr + RT_MEMHEAP_SIZE);
         }
 
         /* release lock */
@@ -364,7 +365,7 @@ void *rt_memheap_realloc(struct rt_memheap *heap, void *ptr, rt_size_t newsize)
 
     /* get memory block header and get the size of memory block */
     header_ptr = (struct rt_memheap_item *)
-                 ((rt_uint8_t *)ptr - RT_MEMHEAP_SIZE);
+                 ((uint8_t *)ptr - RT_MEMHEAP_SIZE);
     oldsize = MEMITEM_SIZE(header_ptr);
     /* re-allocate memory */
     if (newsize > oldsize)
@@ -388,7 +389,7 @@ void *rt_memheap_realloc(struct rt_memheap *heap, void *ptr, rt_size_t newsize)
         /* check whether the following free space is enough to expand */
         if (!RT_MEMHEAP_IS_USED(next_ptr))
         {
-            rt_int32_t nextsize;
+            int32_t nextsize;
 
             nextsize = MEMITEM_SIZE(next_ptr);
             RT_ASSERT(next_ptr > 0);
@@ -491,7 +492,7 @@ void *rt_memheap_realloc(struct rt_memheap *heap, void *ptr, rt_size_t newsize)
 
     /* split the block. */
     new_ptr = (struct rt_memheap_item *)
-              (((rt_uint8_t *)header_ptr) + newsize + RT_MEMHEAP_SIZE);
+              (((uint8_t *)header_ptr) + newsize + RT_MEMHEAP_SIZE);
 
     RT_DEBUG_LOG(RT_DEBUG_MEMHEAP,
                  ("split: block[0x%08x] nextm[0x%08x] prevm[0x%08x] to new[0x%08x]\n",
@@ -557,7 +558,7 @@ void rt_memheap_free(void *ptr)
     rt_err_t result;
     struct rt_memheap *heap;
     struct rt_memheap_item *header_ptr, *new_ptr;
-    rt_uint32_t insert_header;
+    uint32_t insert_header;
 
     /* NULL check */
     if (ptr == RT_NULL) return;
@@ -566,7 +567,7 @@ void rt_memheap_free(void *ptr)
     insert_header = 1;
     new_ptr       = RT_NULL;
     header_ptr    = (struct rt_memheap_item *)
-                    ((rt_uint8_t *)ptr - RT_MEMHEAP_SIZE);
+                    ((uint8_t *)ptr - RT_MEMHEAP_SIZE);
 
     RT_DEBUG_LOG(RT_DEBUG_MEMHEAP, ("free memory: memory[0x%08x], block[0x%08x]\n",
                                     ptr, header_ptr));
@@ -667,7 +668,7 @@ void rt_system_heap_init(void *begin_addr, void *end_addr)
     rt_memheap_init(&_heap,
                     "heap",
                     begin_addr,
-                    (rt_uint32_t)end_addr - (rt_uint32_t)begin_addr);
+                    (uint32_t)end_addr - (uint32_t)begin_addr);
 }
 
 void *rt_malloc(rt_size_t size)
@@ -729,7 +730,7 @@ void *rt_realloc(void *rmem, rt_size_t newsize)
 
     /* get old memory item */
     header_ptr = (struct rt_memheap_item *)
-                 ((rt_uint8_t *)rmem - RT_MEMHEAP_SIZE);
+                 ((uint8_t *)rmem - RT_MEMHEAP_SIZE);
 
     new_ptr = rt_memheap_realloc(header_ptr->pool_ptr, rmem, newsize);
     if (new_ptr == RT_NULL && newsize != 0)
@@ -777,7 +778,7 @@ int memtrace(int argc, char **argv)
 {
     int major = 0;
     int minor = 0; 
-    rt_uint8_t index = 0; 
+    uint8_t index = 0; 
 
     struct rt_object *object = RT_NULL;
     struct rt_list_node *node = RT_NULL;

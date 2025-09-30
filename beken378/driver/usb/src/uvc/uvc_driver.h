@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _UVC_DRIVER_H_
 #define _UVC_DRIVER_H_
 

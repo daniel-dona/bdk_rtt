@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef __JPEG_ENCODER_PUB_H__
 #define __JPEG_ENCODER_PUB_H__
 
@@ -20,24 +21,24 @@
 
 typedef struct ejpeg_desc
 {
-    UINT8 *rxbuf;
+    uint8_t *rxbuf;
 
-    void (*node_full_handler)(void *curptr, UINT32 newlen, UINT32 is_eof, UINT32 frame_len);
+    void (*node_full_handler)(void *curptr, uint32_t newlen, uint32_t is_eof, uint32_t frame_len);
     void (*data_end_handler)(void);
 
-    UINT16 rxbuf_len;
-    UINT16 rx_read_len;
-    UINT32 node_len;
-    UINT32 sener_cfg;
+    uint16_t rxbuf_len;
+    uint16_t rx_read_len;
+    uint32_t node_len;
+    uint32_t sener_cfg;
 
-    UINT16 x_pixel;
-    UINT16 y_pixel;
+    uint16_t x_pixel;
+    uint16_t y_pixel;
     void (*start_frame_handler)(void);
     void (*end_frame_handler)(void);
 
     #if CFG_GENERAL_DMA
-    void (*dma_rx_handler)(UINT32);
-    UINT32 dma_channel;
+    void (*dma_rx_handler)(uint32_t);
+    uint32_t dma_channel;
     #endif
 } DJPEG_DESC_ST, *DJPEG_DESC_PTR;
 
@@ -72,7 +73,7 @@ enum
 
 void ejpeg_init(void);
 void ejpeg_exit(void);
-void ejpeg_set_target_bitrate_size(UINT32 ppi_type);
+void ejpeg_set_target_bitrate_size(uint32_t ppi_type);
 
 #endif // CFG_USE_JPEG_ENCODER
 #endif // __JPEG_ENCODER_PUB_H__

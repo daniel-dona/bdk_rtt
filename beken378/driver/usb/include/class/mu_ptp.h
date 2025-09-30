@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*****************************************************************************
  *                                                                           *
  *      Copyright Mentor Graphics Corporation 2006                           *
@@ -172,11 +173,11 @@
 
 /*
  * DeviceInfo dataset:
- * UINT16  StandardVersion
- * UINT32  VendorExtensionID
- * UINT16  VendorExtensionVersion
+ * uint16_t  StandardVersion
+ * uint32_t  VendorExtensionID
+ * uint16_t  VendorExtensionVersion
  * STR     VendorExtensionDesc
- * UINT16  FunctionalMode
+ * uint16_t  FunctionalMode
  * AUINT16 OperationsSupported
  * AUINT16 EventsSupported
  * AUINT16 DevicePropertiesSupported
@@ -192,21 +193,21 @@
 
 /*
  * ObjectInfo dataset:
- * UINT32  StorageID
- * UINT16  ObjectFormat
- * UINT16  ProtectionStatus
- * UINT32  ObjectCompressedSize
- * UINT16  ThumbFormat
- * UINT32  ThumbCompressedSize
- * UINT32  ThumbPixWidth
- * UINT32  ThumbPixHeight
- * UINT32  ImagePixWidth
- * UINT32  ImagePixHeight
- * UINT32  ImageBitDepth
- * UINT32  ParentObject
- * UINT16  AssociationType
- * UINT32  AssociationDesc
- * UINT32  SequenceNumber
+ * uint32_t  StorageID
+ * uint16_t  ObjectFormat
+ * uint16_t  ProtectionStatus
+ * uint32_t  ObjectCompressedSize
+ * uint16_t  ThumbFormat
+ * uint32_t  ThumbCompressedSize
+ * uint32_t  ThumbPixWidth
+ * uint32_t  ThumbPixHeight
+ * uint32_t  ImagePixWidth
+ * uint32_t  ImagePixHeight
+ * uint32_t  ImageBitDepth
+ * uint32_t  ParentObject
+ * uint16_t  AssociationType
+ * uint32_t  AssociationDesc
+ * uint32_t  SequenceNumber
  * STR     Filename
  * STR     CaptureDate
  * STR     ModificationDate
@@ -217,12 +218,12 @@
 
 /*
  * StorageInfo dataset:
- * UINT16  StorageType
- * UINT16  FilesystemType
- * UINT16  AccessCapability
- * UINT64  MaxCapacity
- * UINT64  FreeSpaceInBytes
- * UINT32  FreeSpaceInImages
+ * uint16_t  StorageType
+ * uint16_t  FilesystemType
+ * uint16_t  AccessCapability
+ * uint64_t  MaxCapacity
+ * uint64_t  FreeSpaceInBytes
+ * uint32_t  FreeSpaceInImages
  * STR     StorageDescription
  * STR     VolumeLabel
  */
@@ -280,37 +281,37 @@
 
 /*
  * OperationRequest dataset:
- * UINT16  OperationCode
- * UINT32  SessionID
- * UINT32  TransactionID
- * UINT32  Parameter1
- * UINT32  Parameter2
- * UINT32  Parameter3
- * UINT32  Parameter4
- * UINT32  Parameter5
+ * uint16_t  OperationCode
+ * uint32_t  SessionID
+ * uint32_t  TransactionID
+ * uint32_t  Parameter1
+ * uint32_t  Parameter2
+ * uint32_t  Parameter3
+ * uint32_t  Parameter4
+ * uint32_t  Parameter5
  */
 #define MGC_PTP_REQUEST_PARAM_ALL 0xffffffffUL
 
 /*
  * Response dataset:
- * UINT16  ResponseCode
- * UINT32  SessionID
- * UINT32  TransactionID
- * UINT32  Parameter1
- * UINT32  Parameter2
- * UINT32  Parameter3
- * UINT32  Parameter4
- * UINT32  Parameter5
+ * uint16_t  ResponseCode
+ * uint32_t  SessionID
+ * uint32_t  TransactionID
+ * uint32_t  Parameter1
+ * uint32_t  Parameter2
+ * uint32_t  Parameter3
+ * uint32_t  Parameter4
+ * uint32_t  Parameter5
  */
 
 /*
  * Event dataset:
- * UINT16  EventCode
- * UINT32  SessionID
- * UINT32  TransactionID
- * UINT32  Parameter1
- * UINT32  Parameter2
- * UINT32  Parameter3
+ * uint16_t  EventCode
+ * uint32_t  SessionID
+ * uint32_t  TransactionID
+ * uint32_t  Parameter1
+ * uint32_t  Parameter2
+ * uint32_t  Parameter3
  */
 
 #endif	/* multiple inclusion protection */

@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 
@@ -31,7 +32,7 @@
 #include "sensors/pas6329.h"
 #include "sensors/pas6375.h"
 
-extern void delay100us(INT32 num);
+extern void delay100us(int32_t num);
 
 DJPEG_DESC_ST ejpeg_cfg;
 TVIDEO_DESC_ST tvideo_st;
@@ -41,11 +42,11 @@ I2C_OP_ST i2c_operater;
 
 // General interface functions
 
-void camera_intf_delay_timer_hdl(UINT8 param){
+void camera_intf_delay_timer_hdl(uint8_t param){
     #if CFG_GENERAL_DMA
     GDMA_CFG_ST en_cfg;
-    UINT16 already_len = ejpeg_cfg.rx_read_len;
-    UINT32 channel = ejpeg_cfg.dma_channel;
+    uint16_t already_len = ejpeg_cfg.rx_read_len;
+    uint32_t channel = ejpeg_cfg.dma_channel;
     GLOBAL_INT_DECLARATION();
 
     if (ejpeg_hdl == DD_HANDLE_UNVALID)
@@ -57,7 +58,7 @@ void camera_intf_delay_timer_hdl(UINT8 param){
 
     int left_len = sddev_control(GDMA_DEV_NAME, CMD_GDMA_GET_LEFT_LEN, (void *)channel);
     int rec_len = ejpeg_cfg.node_len - left_len;
-    UINT32 frame_len = 0;
+    uint32_t frame_len = 0;
     frame_len = ddev_control(ejpeg_hdl, EJPEG_CMD_GET_FRAME_LEN, NULL);
 
     if ((ejpeg_cfg.node_full_handler != NULL) && (rec_len > 0))
@@ -115,9 +116,9 @@ static void camera_intf_start_delay_timer(void){
     //REG_WRITE((0x00802800+(16*4)), 0x00);
 }
 
-static void camera_intf_ejpeg_rx_handler(UINT32 dma){
-    UINT16 already_len = ejpeg_cfg.rx_read_len;
-    UINT16 copy_len = ejpeg_cfg.node_len;
+static void camera_intf_ejpeg_rx_handler(uint32_t dma){
+    uint16_t already_len = ejpeg_cfg.rx_read_len;
+    uint16_t copy_len = ejpeg_cfg.node_len;
     GLOBAL_INT_DECLARATION();
 
     if (ejpeg_hdl == DD_HANDLE_UNVALID)
@@ -150,7 +151,7 @@ static void camera_intf_ejpeg_end_handler(void){
     camera_intf_start_delay_timer();
 }
 
-static void camera_intf_init_ejpeg_pixel(UINT32 ppi_type){
+static void camera_intf_init_ejpeg_pixel(uint32_t ppi_type){
     switch (ppi_type)
     {
     case QVGA_320_240:
@@ -196,7 +197,7 @@ static void camera_intf_config_ejpeg(void *data){
     #endif
 }
 
-void camera_intf_sccb_write(UINT8 addr, UINT8 data)
+void camera_intf_sccb_write(uint8_t addr, uint8_t data)
 {
     unsigned int status;
     unsigned int err_count = 0;
@@ -204,7 +205,7 @@ void camera_intf_sccb_write(UINT8 addr, UINT8 data)
     i2c_operater.addr_width = ADDR_WIDTH_8;
     do
     {
-        status = ddev_write(i2c_hdl, (char *)&data, 1, (UINT32)&i2c_operater);
+        status = ddev_write(i2c_hdl, (char *)&data, 1, (uint32_t)&i2c_operater);
         if (err_count++ > I2C_WIRTE_TIMEOUT_COUNT)
         {
             break;
@@ -214,14 +215,14 @@ void camera_intf_sccb_write(UINT8 addr, UINT8 data)
 
 }
 
-void camera_intf_sccb_read(UINT8 addr, UINT8 *data)
+void camera_intf_sccb_read(uint8_t addr, uint8_t *data)
 {
     unsigned int status;
     i2c_operater.op_addr = addr;
     i2c_operater.addr_width = ADDR_WIDTH_8;
     do
     {
-        status = ddev_read(i2c_hdl, (char *)data, 1, (UINT32)&i2c_operater);
+        status = ddev_read(i2c_hdl, (char *)data, 1, (uint32_t)&i2c_operater);
     }
     while (status != 0);
 }
@@ -233,7 +234,7 @@ uint8_t camera_intf_sccb_write2(uint8_t device_addr, uint8_t register_addr, uint
     i2c_operater.op_addr = register_addr;
     i2c_operater.addr_width = ADDR_WIDTH_8;
 
-    status = ddev_write(i2c_hdl, (char *)data, (UINT32)len, (UINT32)&i2c_operater);
+    status = ddev_write(i2c_hdl, (char *)data, (uint32_t)len, (uint32_t)&i2c_operater);
 
     if(status != 0){
         os_printf("Unable to read I2C.");
@@ -249,7 +250,7 @@ uint8_t camera_intf_sccb_read2(uint8_t device_addr, uint8_t register_addr, uint8
     i2c_operater.op_addr = register_addr;
     i2c_operater.addr_width = ADDR_WIDTH_8;
 
-    status = ddev_read(i2c_hdl, (char *)data, (UINT32)len, (UINT32)&i2c_operater);
+    status = ddev_read(i2c_hdl, (char *)data, (uint32_t)len, (uint32_t)&i2c_operater);
 
     if(status != 0){
         os_printf("Unable to read I2C.");
@@ -262,7 +263,7 @@ uint8_t camera_intf_sccb_read2(uint8_t device_addr, uint8_t register_addr, uint8
 /* None of the sensors I can test use 16 bit I2C addresses
 
 #else
-void camera_intf_sccb_write(UINT16 addr, UINT8 data)
+void camera_intf_sccb_write(uint16_t addr, uint8_t data)
 {
     unsigned int status;
     unsigned int err_count = 0;
@@ -270,7 +271,7 @@ void camera_intf_sccb_write(UINT16 addr, UINT8 data)
     i2c_operater.addr_width = ADDR_WIDTH_16;
     do
     {
-        status = ddev_write(i2c_hdl, (char *)&data, 1, (UINT32)&i2c_operater);
+        status = ddev_write(i2c_hdl, (char *)&data, 1, (uint32_t)&i2c_operater);
         if (err_count++ > I2C_WIRTE_TIMEOUT_COUNT)
         {
             break;
@@ -280,14 +281,14 @@ void camera_intf_sccb_write(UINT16 addr, UINT8 data)
 
 }
 
-void camera_intf_sccb_read(UINT16 addr, UINT8 *data)
+void camera_intf_sccb_read(uint16_t addr, uint8_t *data)
 {
     unsigned int status;
     i2c_operater.op_addr = addr;
     i2c_operater.addr_width = ADDR_WIDTH_16;
     do
     {
-        status = ddev_read(i2c_hdl, (char *)data, 1, (UINT32)&i2c_operater);
+        status = ddev_read(i2c_hdl, (char *)data, 1, (uint32_t)&i2c_operater);
     }
     while (status != 0);
 }
@@ -317,17 +318,17 @@ void camera_reset(void)
 
 void camera_intfer_init(void *ejpeg_config, camera_sensor_t *sensor){
 
-    UINT32 status;
+    uint32_t status;
 
     camera_intf_config_ejpeg(ejpeg_config);
 
-    ejpeg_hdl = ddev_open(EJPEG_DEV_NAME, &status, (UINT32)&ejpeg_cfg);
+    ejpeg_hdl = ddev_open(EJPEG_DEV_NAME, &status, (uint32_t)&ejpeg_cfg);
     
     //camera_reset();
 
     if(sensor->i2c_bus == (char*) &I2C2_DEV_NAME){
 
-        UINT32 i2c2_trans_mode = (0 & (~I2C2_MSG_WORK_MODE_MS_BIT)// master
+        uint32_t i2c2_trans_mode = (0 & (~I2C2_MSG_WORK_MODE_MS_BIT)// master
                                 & (~I2C2_MSG_WORK_MODE_AL_BIT))// 7bit address
                                 | (I2C2_MSG_WORK_MODE_IA_BIT); // with inner address
 
@@ -345,7 +346,7 @@ void camera_intfer_init(void *ejpeg_config, camera_sensor_t *sensor){
 
     
     /*{
-        extern void uart_hw_uninit(UINT8 uport);
+        extern void uart_hw_uninit(uint8_t uport);
         // disable uart temporarily
         uart_hw_uninit(1);
     }*/
@@ -355,7 +356,7 @@ void camera_intfer_init(void *ejpeg_config, camera_sensor_t *sensor){
 
     In case I2C1 is used, to be tested!!
 
-    UINT32 oflag = 0;
+    uint32_t oflag = 0;
     i2c_hdl = ddev_open(I2C1_DEV_NAME, &status, oflag);
     bk_printf("open I2C1\r\n");
     #endif*/
@@ -386,15 +387,15 @@ void camera_intfer_deinit(camera_sensor_t *sensor){
 
 camera_sensor_t* camera_detect(){
 
-    UINT32 status;
+    uint32_t status;
 
     camera_intf_config_ejpeg(&tvideo_st);
 
-    ejpeg_hdl = ddev_open(EJPEG_DEV_NAME, &status, (UINT32)&ejpeg_cfg);
+    ejpeg_hdl = ddev_open(EJPEG_DEV_NAME, &status, (uint32_t)&ejpeg_cfg);
     
     //camera_reset();
 
-    UINT32 i2c2_trans_mode = (0 & (~I2C2_MSG_WORK_MODE_MS_BIT)// master
+    uint32_t i2c2_trans_mode = (0 & (~I2C2_MSG_WORK_MODE_MS_BIT)// master
                               & (~I2C2_MSG_WORK_MODE_AL_BIT))// 7bit address
                              | (I2C2_MSG_WORK_MODE_IA_BIT); // with inner address
 
@@ -441,7 +442,7 @@ camera_sensor_t* camera_detect(){
 
         ddev_close(i2c_hdl);
 
-        UINT32 i2c1_trans_mode = 0;
+        uint32_t i2c1_trans_mode = 0;
 
         i2c_hdl = ddev_open(I2C1_DEV_NAME, &status, i2c1_trans_mode);
 
@@ -488,7 +489,7 @@ camera_sensor_t* camera_detect(){
     return sensor;
 }
 
-/*UINT32 camera_intfer_set_video_param(UINT32 ppi_type, UINT32 pfs_type)
+/*uint32_t camera_intfer_set_video_param(uint32_t ppi_type, uint32_t pfs_type)
 {
     #if (USE_CAMERA == GC0328C_DEV)
     if (ejpeg_hdl == DD_HANDLE_UNVALID)
@@ -498,7 +499,7 @@ camera_sensor_t* camera_detect(){
 
     if (ppi_type < PPI_MAX)
     {
-        UINT32 param;
+        uint32_t param;
         camera_intf_init_ejpeg_pixel(ppi_type);
 
         param = ejpeg_cfg.x_pixel;

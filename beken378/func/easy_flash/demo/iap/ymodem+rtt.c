@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * This file is part of the EasyFlash Library.
  *
@@ -56,7 +57,7 @@
 #include "stdlib.h"
 
 static uint32_t update_file_total_size, update_file_cur_size;
-static enum rym_code ymodem_on_begin(struct rym_ctx *ctx, rt_uint8_t *buf, rt_size_t len) {
+static enum rym_code ymodem_on_begin(struct rym_ctx *ctx, uint8_t *buf, rt_size_t len) {
     char *file_name, *file_size;
 
     /* calculate and store file size */
@@ -74,7 +75,7 @@ static enum rym_code ymodem_on_begin(struct rym_ctx *ctx, rt_uint8_t *buf, rt_si
     return RYM_CODE_ACK;
 }
 
-static enum rym_code ymodem_on_data(struct rym_ctx *ctx, rt_uint8_t *buf, rt_size_t len) {
+static enum rym_code ymodem_on_data(struct rym_ctx *ctx, uint8_t *buf, rt_size_t len) {
     /* write data of application to backup section  */
     if (ef_write_data_to_bak(buf, len, &update_file_cur_size, update_file_total_size)) {
         /* if write fail then end session */

@@ -1,3 +1,4 @@
+#include <stdint.h>
 // Copyright 2020-2021 Beken
 //
 // Licensed under the Apache License, Version 2.0 (the "License");

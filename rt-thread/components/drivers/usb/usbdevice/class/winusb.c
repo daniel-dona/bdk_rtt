@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : winusb.c
  * COPYRIGHT (C) 2008 - 2016, RT-Thread Development Team
@@ -15,8 +16,8 @@
 struct winusb_device
 {
     struct rt_device parent;
-    void (*cmd_handler)(rt_uint8_t *buffer,rt_size_t size);
-    rt_uint8_t cmd_buff[256];
+    void (*cmd_handler)(uint8_t *buffer,rt_size_t size);
+    uint8_t cmd_buff[256];
     uep_t ep_out;
     uep_t ep_in;
 };
@@ -198,7 +199,7 @@ static struct ufunction_ops ops =
     RT_NULL,
 };
 
-static rt_err_t _winusb_descriptor_config(winusb_desc_t winusb, rt_uint8_t cintf_nr, rt_uint8_t device_is_hs)
+static rt_err_t _winusb_descriptor_config(winusb_desc_t winusb, uint8_t cintf_nr, uint8_t device_is_hs)
 {
 #ifdef RT_USB_DEVICE_COMPOSITE
     winusb->iad_desc.bFirstInterface = cintf_nr;
@@ -242,7 +243,7 @@ static rt_err_t  win_usb_control(rt_device_t dev, int cmd, void *args)
     winusb_device_t winusb_device = (winusb_device_t)dev;
     if(RT_DEVICE_CTRL_CONFIG == cmd)
     {
-        winusb_device->cmd_handler = (void(*)(rt_uint8_t*,rt_size_t))args;
+        winusb_device->cmd_handler = (void(*)(uint8_t*,rt_size_t))args;
     }
     return RT_EOK;
 }

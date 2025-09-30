@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _PWM_PUB_H_
 #define _PWM_PUB_H_
 
@@ -38,7 +39,7 @@ enum
     PWM_COUNT
 };
 
-typedef void (*PFUNC)(UINT8);
+typedef void (*PFUNC)(uint8_t);
 
 
 #define PWM_ENABLE           (0x01)
@@ -68,11 +69,11 @@ typedef void (*PFUNC)(UINT8);
 
 typedef struct
 {
-    UINT8 channel;
+    uint8_t channel;
 
     union
     {
-        UINT8 val;
+        uint8_t val;
         struct
         {
 #if (CFG_SOC_NAME == SOC_BK7231N)
@@ -95,11 +96,11 @@ typedef struct
                *           01: PWM clock 26MHz
                *           10/11: PWM clock DCO
                */
-            UINT8 mode: 3;
-            UINT8 en: 1;
-            UINT8 int_en: 1;
-            UINT8 clk: 2;
-            UINT8 rsv: 1;
+            uint8_t mode: 3;
+            uint8_t en: 1;
+            uint8_t int_en: 1;
+            uint8_t clk: 2;
+            uint8_t rsv: 1;
 #else
            /* cfg--PWM config
               * bit[0]:   PWM enable
@@ -119,34 +120,34 @@ typedef struct
               *          10/11: PWM clock DPLL
               * bit[7:6]: reserved
               */
-            UINT8 en: 1;
-            UINT8 int_en: 1;
-            UINT8 mode: 2;
-            UINT8 clk: 2;
-            UINT8 rsv: 2;
+            uint8_t en: 1;
+            uint8_t int_en: 1;
+            uint8_t mode: 2;
+            uint8_t clk: 2;
+            uint8_t rsv: 2;
 #endif
         } bits;
     } cfg;
 
 #if (CFG_SOC_NAME == SOC_BK7231)
-    UINT16 end_value;
-    UINT16 duty_cycle;
+    uint16_t end_value;
+    uint16_t duty_cycle;
 #elif (CFG_SOC_NAME == SOC_BK7231N)
-    UINT32 end_value;
-    UINT32 duty_cycle1;
-    UINT32 duty_cycle2;
-    UINT32 duty_cycle3;
+    uint32_t end_value;
+    uint32_t duty_cycle1;
+    uint32_t duty_cycle2;
+    uint32_t duty_cycle3;
 #else
-	UINT32 end_value;
-	UINT32 duty_cycle;
+	uint32_t end_value;
+	uint32_t duty_cycle;
 #endif
     PFUNC p_Int_Handler;
 } pwm_param_t;
 
 typedef struct
 {
-    UINT32 ucChannel;
-    UINT32 value;
+    uint32_t ucChannel;
+    uint32_t value;
 } pwm_capture_t;
 
 /*******************************************************************************

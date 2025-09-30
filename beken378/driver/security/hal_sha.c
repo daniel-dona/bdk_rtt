@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "sys_config.h"
 
 #if 0//(CFG_SOC_NAME == SOC_BK7221U)
@@ -82,7 +83,7 @@ void hal_sha_update( void *ct, const unsigned char *input,
                      size_t ilen )
 {
     size_t fill;
-    UINT32 left;
+    uint32_t left;
     hal_sha_context *ctx = ct;
 
     if( ilen == 0 )
@@ -91,10 +92,10 @@ void hal_sha_update( void *ct, const unsigned char *input,
     left = ctx->total[0] & 0x3F;
     fill = 64 - left;
 
-    ctx->total[0] += (UINT32) ilen;
+    ctx->total[0] += (uint32_t) ilen;
     ctx->total[0] &= 0xFFFFFFFF;
 
-    if( ctx->total[0] < (UINT32) ilen )
+    if( ctx->total[0] < (uint32_t) ilen )
         ctx->total[1]++;
 
     if( left && ilen >= fill )
@@ -130,8 +131,8 @@ static const unsigned char sha256_padding[64] =
  */
 void hal_sha_finish( void *ct, unsigned char output[32] )
 {
-    UINT32 last, padn;
-    UINT32 high, low;
+    uint32_t last, padn;
+    uint32_t high, low;
     unsigned char msglen[8];
     hal_sha_context *ctx = ct;
 

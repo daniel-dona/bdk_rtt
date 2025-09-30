@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : interrupt.c
  * This file is part of RT-Thread RTOS
@@ -13,9 +14,9 @@
 #include "icu_pub.h"
 #include "drv_model_pub.h"
 
-extern rt_uint32_t rt_interrupt_nest;
-rt_uint32_t rt_interrupt_from_thread, rt_interrupt_to_thread;
-rt_uint32_t rt_thread_switch_interrupt_flag;
+extern uint32_t rt_interrupt_nest;
+uint32_t rt_interrupt_from_thread, rt_interrupt_to_thread;
+uint32_t rt_thread_switch_interrupt_flag;
 
 /**
  * This function will initialize hardware interrupt

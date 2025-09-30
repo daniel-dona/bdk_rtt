@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 #include "str_pub.h"
@@ -27,7 +28,7 @@
 #define JPEG_BITRATE_MAX_SIZE           JPEG_BITRATE_MAX_SIZE_640_480
 #define JPEG_BITRATE_MIN_SIZE           JPEG_BITRATE_MIN_SIZE_640_480
 
-/*const UINT32 jpeg_quant_table[JPEG_QUANT_TAB_LEN] =
+/*const uint32_t jpeg_quant_table[JPEG_QUANT_TAB_LEN] =
 {
     0x07060608, 0x07080506, 0x09090707, 0x140c0a08,
     0x0b0b0c0d, 0x1312190c, 0x1a1d140f, 0x1a1d1e1f,
@@ -39,7 +40,7 @@
     0x32323232, 0x32323232, 0x32323232, 0x32323232
 };*/
 
-const UINT32 jpeg_quant_table[JPEG_QUANT_TAB_LEN] = 
+const uint32_t jpeg_quant_table[JPEG_QUANT_TAB_LEN] = 
 {
     // Luminance quantization table (standard quality ~50)
     0x100A0B10, 0x3D332818, 0x370C0C0C, 0x13100E0D,
@@ -55,7 +56,7 @@ const UINT32 jpeg_quant_table[JPEG_QUANT_TAB_LEN] =
 };
 
 /*
-const UINT32 jpeg_quant_table[JPEG_QUANT_TAB_LEN] = 
+const uint32_t jpeg_quant_table[JPEG_QUANT_TAB_LEN] = 
 {
     // High quality luminance table
     0x08060608, 0x14080605, 0x0C0B0707, 0x0D0A0909,
@@ -81,10 +82,10 @@ static const DD_OPERATIONS ejpeg_op =
     ejpeg_ctrl
 };
 
-static void ejpeg_set_start_frame_int(UINT32 enable)
+static void ejpeg_set_start_frame_int(uint32_t enable)
 {
-    UINT32 reg_addr = JPEG_REG0;
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = JPEG_REG0;
+    uint32_t reg_val = REG_READ(reg_addr);
 
     if (enable)
     {
@@ -97,10 +98,10 @@ static void ejpeg_set_start_frame_int(UINT32 enable)
     REG_WRITE(reg_addr, reg_val);
 }
 
-static void ejpeg_set_end_frame_int(UINT32 enable)
+static void ejpeg_set_end_frame_int(uint32_t enable)
 {
-    UINT32 reg_addr = JPEG_REG0;
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = JPEG_REG0;
+    uint32_t reg_val = REG_READ(reg_addr);
 
     if (enable)
     {
@@ -113,20 +114,20 @@ static void ejpeg_set_end_frame_int(UINT32 enable)
     REG_WRITE(reg_addr, reg_val);
 }
 
-static void ejpeg_set_mclk_div(UINT32 div)
+static void ejpeg_set_mclk_div(uint32_t div)
 {
-    UINT32 reg_addr = JPEG_REG0;
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = JPEG_REG0;
+    uint32_t reg_val = REG_READ(reg_addr);
 
     reg_val = (reg_val & ~(DIV_MASK << DIV_POSI))
               | ((div & DIV_MASK) << DIV_POSI);
     REG_WRITE(reg_addr, reg_val);
 }
 
-static void ejpeg_set_video_byte_reverse(UINT32 reverse)
+static void ejpeg_set_video_byte_reverse(uint32_t reverse)
 {
-    UINT32 reg_addr = JPEG_REG1;
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = JPEG_REG1;
+    uint32_t reg_val = REG_READ(reg_addr);
 
     if (reverse)
     {
@@ -139,20 +140,20 @@ static void ejpeg_set_video_byte_reverse(UINT32 reverse)
     REG_WRITE(reg_addr, reg_val);
 }
 
-static void ejpeg_select_yuv_format(UINT32 format)
+static void ejpeg_select_yuv_format(uint32_t format)
 {
-    UINT32 reg_addr = JPEG_REG1;
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = JPEG_REG1;
+    uint32_t reg_val = REG_READ(reg_addr);
 
     reg_val = (reg_val & ~(YUV_FMT_SEL_MASK << YUV_FMT_SEL_POSI))
               | ((format & YUV_FMT_SEL_MASK) << YUV_FMT_SEL_POSI);
     REG_WRITE(reg_addr, reg_val);
 }
 
-static void ejpeg_set_encoder_enable(UINT32 enable)
+static void ejpeg_set_encoder_enable(uint32_t enable)
 {
-    UINT32 reg_addr = JPEG_REG1;
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = JPEG_REG1;
+    uint32_t reg_val = REG_READ(reg_addr);
 
     if (enable)
     {
@@ -165,20 +166,20 @@ static void ejpeg_set_encoder_enable(UINT32 enable)
     REG_WRITE(reg_addr, reg_val);
 }
 
-static void ejpeg_set_x_pixel(UINT32 x_piexl)
+static void ejpeg_set_x_pixel(uint32_t x_piexl)
 {
-    UINT32 reg_addr = JPEG_REG1;
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = JPEG_REG1;
+    uint32_t reg_val = REG_READ(reg_addr);
 
     reg_val = (reg_val & ~(X_PIXEL_MASK << X_PIXEL_POSI))
               | ((x_piexl & X_PIXEL_MASK) << X_PIXEL_POSI);
     REG_WRITE(reg_addr, reg_val);
 }
 
-static void ejpeg_enable_enc_size(UINT32 enable)
+static void ejpeg_enable_enc_size(uint32_t enable)
 {
-    UINT32 reg_addr = JPEG_REG1;
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = JPEG_REG1;
+    uint32_t reg_val = REG_READ(reg_addr);
 
     if (enable)
     {
@@ -191,10 +192,10 @@ static void ejpeg_enable_enc_size(UINT32 enable)
     REG_WRITE(reg_addr, reg_val);
 }
 
-static void ejpeg_enable_bitrate_ctrl(UINT32 enable)
+static void ejpeg_enable_bitrate_ctrl(uint32_t enable)
 {
-    UINT32 reg_addr = JPEG_REG1;
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = JPEG_REG1;
+    uint32_t reg_val = REG_READ(reg_addr);
 
     if (enable)
     {
@@ -207,20 +208,20 @@ static void ejpeg_enable_bitrate_ctrl(UINT32 enable)
     REG_WRITE(reg_addr, reg_val);
 }
 
-static void ejpeg_set_bitrate_step(UINT32 step)
+static void ejpeg_set_bitrate_step(uint32_t step)
 {
-    UINT32 reg_addr = JPEG_REG1;
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = JPEG_REG1;
+    uint32_t reg_val = REG_READ(reg_addr);
 
     reg_val = (reg_val & ~(BIT_RATE_STEP_MASK << BIT_RATE_STEP_POSI))
               | ((step & BIT_RATE_STEP_MASK) << BIT_RATE_STEP_POSI);
     REG_WRITE(reg_addr, reg_val);
 }
 
-static void ejpeg_set_hsync_reverse(UINT32 reverse)
+static void ejpeg_set_hsync_reverse(uint32_t reverse)
 {
-    UINT32 reg_addr = JPEG_REG1;
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = JPEG_REG1;
+    uint32_t reg_val = REG_READ(reg_addr);
 
     if (reverse)
     {
@@ -233,10 +234,10 @@ static void ejpeg_set_hsync_reverse(UINT32 reverse)
     REG_WRITE(reg_addr, reg_val);
 }
 
-static void ejpeg_set_vsync_reverse(UINT32 reverse)
+static void ejpeg_set_vsync_reverse(uint32_t reverse)
 {
-    UINT32 reg_addr = JPEG_REG1;
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = JPEG_REG1;
+    uint32_t reg_val = REG_READ(reg_addr);
 
     if (reverse)
     {
@@ -249,77 +250,77 @@ static void ejpeg_set_vsync_reverse(UINT32 reverse)
     REG_WRITE(reg_addr, reg_val);
 }
 
-static void ejpeg_set_y_pixel(UINT32 y_piexl)
+static void ejpeg_set_y_pixel(uint32_t y_piexl)
 {
-    UINT32 reg_addr = JPEG_REG1;
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = JPEG_REG1;
+    uint32_t reg_val = REG_READ(reg_addr);
 
     reg_val = (reg_val & ~(Y_PIXEL_MASK << Y_PIXEL_POSI))
               | ((y_piexl & Y_PIXEL_MASK) << Y_PIXEL_POSI);
     REG_WRITE(reg_addr, reg_val);
 }
 
-void ejpeg_set_target_high_byte(UINT32 high)
+void ejpeg_set_target_high_byte(uint32_t high)
 {
     REG_WRITE(JPEG_REG2, high & TARGET_BYTE_H_MASK);
 }
 
-UINT32 ejpeg_get_target_high_byte(void)
+uint32_t ejpeg_get_target_high_byte(void)
 {
     return REG_READ(JPEG_REG2) & TARGET_BYTE_H_MASK;
 }
 
-void ejpeg_set_target_low_byte(UINT32 low)
+void ejpeg_set_target_low_byte(uint32_t low)
 {
     REG_WRITE(JPEG_REG3, low & TARGET_BYTE_L_MASK);
 }
 
-static UINT32 ejpeg_get_target_low_byte(void)
+static uint32_t ejpeg_get_target_low_byte(void)
 {
     return REG_READ(JPEG_REG3) & TARGET_BYTE_L_MASK;
 }
 
-static UINT32 ejpeg_get_frame_len(void)
+static uint32_t ejpeg_get_frame_len(void)
 {
     return REG_READ(JPEG_REG7) & BYTE_CNT_PFRM_MASK;
 }
 
 static void ejpeg_gpio_config(void)
 {
-    UINT32 param;
+    uint32_t param;
     param = GFUNC_MODE_DCMI;
     sddev_control(GPIO_DEV_NAME, CMD_GPIO_ENABLE_SECOND, &param);
 }
 
 static void ejpeg_init_quant_table(void)
 {
-    UINT32 i;
-    UINT32 reg_addr;
+    uint32_t i;
+    uint32_t reg_addr;
 
     for (i = 0; i < JPEG_QUANT_TAB_LEN; i++)
     {
         reg_addr = JPEG_REG20_QUANT_TAB + i * 4;
-        REG_WRITE(reg_addr, (UINT32)jpeg_quant_table[i]);
+        REG_WRITE(reg_addr, (uint32_t)jpeg_quant_table[i]);
     }
 }
 
 static void ejpeg_power_up(void)
 {
-    UINT32 param;
+    uint32_t param;
     param = PWD_JEPG_CLK_BIT;
     sddev_control(ICU_DEV_NAME, CMD_CLK_PWR_UP, &param);
 }
 
 static void ejpeg_power_down(void)
 {
-    UINT32 param;
+    uint32_t param;
     param = PWD_JEPG_CLK_BIT;
     sddev_control(ICU_DEV_NAME, CMD_CLK_PWR_DOWN, &param);
 }
 
 static void ejpeg_enable_interrupt(void)
 {
-    UINT32 param;
+    uint32_t param;
     #if (CFG_SOC_NAME != SOC_BK7236)
     param = (FIQ_JPEG_DECODER_BIT);
     #else
@@ -330,7 +331,7 @@ static void ejpeg_enable_interrupt(void)
 
 static void ejpeg_disable_interrupt(void)
 {
-    UINT32 param;
+    uint32_t param;
     #if (CFG_SOC_NAME != SOC_BK7236)
     param = (FIQ_JPEG_DECODER_BIT);
     #else
@@ -339,7 +340,7 @@ static void ejpeg_disable_interrupt(void)
     sddev_control(ICU_DEV_NAME, CMD_ICU_INT_DISABLE, &param);
 }
 
-void ejpeg_set_target_bitrate_size(UINT32 ppi_type)
+void ejpeg_set_target_bitrate_size(uint32_t ppi_type)
 {
     switch (ppi_type)
     {
@@ -417,7 +418,7 @@ static void ejpeg_eixt_rxdma(void)
 
 static void ejpeg_isr(void)
 {
-    UINT32 status = REG_READ(JPEG_REG6);
+    uint32_t status = REG_READ(JPEG_REG6);
 
     if (status & START_FRM_INT_STATUS)
     {
@@ -445,7 +446,7 @@ static void ejpeg_software_init(void)
 
 static void ejpeg_hardware_init(void)
 {
-    UINT32 reg;
+    uint32_t reg;
 
     #if (CFG_SOC_NAME == SOC_BK7236)
     /* register interrupt */
@@ -478,9 +479,9 @@ void ejpeg_exit(void)
     ddev_unregister_dev(EJPEG_DEV_NAME);
 }
 
-static UINT32 ejpeg_open(UINT32 op_flag)
+static uint32_t ejpeg_open(uint32_t op_flag)
 {
-    // UINT32 reg;
+    // uint32_t reg;
     if (!op_flag)
     {
         EJPEG_PRT("ejpeg_open is NULL\r\n");
@@ -538,7 +539,7 @@ void camera_power_on()
     ejpeg_set_encoder_enable(1);
 }
 
-static UINT32 ejpeg_close(void)
+static uint32_t ejpeg_close(void)
 {
     ejpeg_set_encoder_enable(0);
 
@@ -552,50 +553,50 @@ static UINT32 ejpeg_close(void)
     return EJPEG_SUCCESS;
 }
 
-static UINT32 ejpeg_ctrl(UINT32 cmd, void *param)
+static uint32_t ejpeg_ctrl(uint32_t cmd, void *param)
 {
-    UINT32 ret = EJPEG_SUCCESS;
+    uint32_t ret = EJPEG_SUCCESS;
 
     switch (cmd)
     {
     case EJPEG_CMD_SET_START_FRAME_INT:
-        ejpeg_set_start_frame_int(*((UINT32 *)param));
+        ejpeg_set_start_frame_int(*((uint32_t *)param));
         break;
     case EJPEG_CMD_SET_END_FRAME_INT:
-        ejpeg_set_end_frame_int(*((UINT32 *)param));
+        ejpeg_set_end_frame_int(*((uint32_t *)param));
         break;
     case EJPEG_CMD_SET_MCLK_DIV:
-        ejpeg_set_mclk_div(*((UINT32 *)param));
+        ejpeg_set_mclk_div(*((uint32_t *)param));
         break;
     case EJPEG_CMD_SET_VIDEO_BYTE_REVERSE:
-        ejpeg_set_video_byte_reverse(*((UINT32 *)param));
+        ejpeg_set_video_byte_reverse(*((uint32_t *)param));
         break;
     case EJPEG_CMD_SELECT_YUV_FORMAT:
-        ejpeg_select_yuv_format(*((UINT32 *)param));
+        ejpeg_select_yuv_format(*((uint32_t *)param));
         break;
     case EJPEG_CMD_SET_ENCODER_ENABLE:
-        ejpeg_set_encoder_enable(*((UINT32 *)param));
+        ejpeg_set_encoder_enable(*((uint32_t *)param));
         break;
     case EJPEG_CMD_SET_X_PIXEL:
-        ejpeg_set_x_pixel(*((UINT32 *)param));
+        ejpeg_set_x_pixel(*((uint32_t *)param));
         break;
     case EJPEG_CMD_ENABLE_ENC_SIZE:
-        ejpeg_enable_enc_size(*((UINT32 *)param));
+        ejpeg_enable_enc_size(*((uint32_t *)param));
         break;
     case EJPEG_CMD_ENABLE_BITRATE_CTRL:
-        ejpeg_enable_bitrate_ctrl(*((UINT32 *)param));
+        ejpeg_enable_bitrate_ctrl(*((uint32_t *)param));
         break;
     case EJPEG_CMD_SET_BITRATE_STEP:
-        ejpeg_set_bitrate_step(*((UINT32 *)param));
+        ejpeg_set_bitrate_step(*((uint32_t *)param));
         break;
     case EJPEG_CMD_SET_HSYNC_REVERSE:
-        ejpeg_set_hsync_reverse(*((UINT32 *)param));
+        ejpeg_set_hsync_reverse(*((uint32_t *)param));
         break;
     case EJPEG_CMD_SET_VSYNC_REVERSE:
-        ejpeg_set_vsync_reverse(*((UINT32 *)param));
+        ejpeg_set_vsync_reverse(*((uint32_t *)param));
         break;
     case EJPEG_CMD_SET_Y_PIXEL:
-        ejpeg_set_y_pixel(*((UINT32 *)param));
+        ejpeg_set_y_pixel(*((uint32_t *)param));
         break;
     case EJPEG_CMD_GET_TARGET_HIGH_BYTE:
         ret = ejpeg_get_target_high_byte();

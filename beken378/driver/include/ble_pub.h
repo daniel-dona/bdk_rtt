@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _BLE_PUB_H_
 #define _BLE_PUB_H_
 
@@ -36,13 +37,13 @@ extern uint8_t ble_active;
 void ble_init(void);
 void ble_exit(void);
 void ble_dut_start(void);
-UINT8 ble_is_start(void);
-UINT8* ble_get_mac_addr(void);
-UINT8* ble_get_name(void);
+uint8_t ble_is_start(void);
+uint8_t* ble_get_mac_addr(void);
+uint8_t* ble_get_name(void);
 uint8_t if_ble_sleep(void);
 void rf_wifi_used_clr(void);
 void rf_wifi_used_set(void);
-UINT32 if_rf_wifi_used(void );
+uint32_t if_rf_wifi_used(void );
 void ble_ps_dump(void);
 
 #endif /* _BLE_PUB_H_ */

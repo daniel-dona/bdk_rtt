@@ -316,12 +316,12 @@ struct net_device
     struct eth_device parent;
 
     /* interface address info. */
-    rt_uint8_t  dev_addr[MAX_ADDR_LEN]; /* hw address   */
+    uint8_t  dev_addr[MAX_ADDR_LEN]; /* hw address   */
 
-    rt_uint8_t emac_rev;
-    rt_uint8_t phy_rev;
-    rt_uint8_t phy_pn;
-    rt_uint32_t phy_id;
+    uint8_t emac_rev;
+    uint8_t phy_rev;
+    uint8_t phy_pn;
+    uint32_t phy_id;
 
     /* spi device */
     struct rt_spi_device *spi_device;

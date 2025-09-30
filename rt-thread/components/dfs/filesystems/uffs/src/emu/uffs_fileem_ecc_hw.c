@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
   This file is part of UFFS, the Ultra-low-cost Flash File System.
   
@@ -53,16 +54,16 @@
 #define MSG(msg,...) uffs_PerrorRaw(UFFS_MSG_NORMAL, msg, ## __VA_ARGS__)
 #define MSGLN(msg,...) uffs_Perror(UFFS_MSG_NORMAL, msg, ## __VA_ARGS__)
 
-static int femu_hw_WritePageWithLayout(uffs_Device *dev, u32 block, u32 page,
-							const u8 *data, int data_len, const u8 *ecc, const uffs_TagStore *ts)
+static int femu_hw_WritePageWithLayout(uffs_Device *dev, uint32_t block, uint32_t page,
+							const uint8_t *data, int data_len, const uint8_t *ecc, const uffs_TagStore *ts)
 {
 	int written;
 	int abs_page;
 	int full_page_size;
 	uffs_FileEmu *emu;
 	struct uffs_StorageAttrSt *attr = dev->attr;
-	u8 spare[UFFS_MAX_SPARE_SIZE];
-	u8 ecc_buf[UFFS_MAX_ECC_SIZE];
+	uint8_t spare[UFFS_MAX_SPARE_SIZE];
+	uint8_t ecc_buf[UFFS_MAX_ECC_SIZE];
 	int spare_len;
 
 
@@ -144,8 +145,8 @@ err:
 }
 
 
-static URET femu_hw_ReadPageWithLayout(uffs_Device *dev, u32 block, u32 page, u8* data, int data_len, u8 *ecc,
-									uffs_TagStore *ts, u8 *ecc_store)
+static URET femu_hw_ReadPageWithLayout(uffs_Device *dev, uint32_t block, uint32_t page, uint8_t* data, int data_len, uint8_t *ecc,
+									uffs_TagStore *ts, uint8_t *ecc_store)
 {
 	int nread;
 	uffs_FileEmu *emu;
@@ -153,7 +154,7 @@ static URET femu_hw_ReadPageWithLayout(uffs_Device *dev, u32 block, u32 page, u8
 	int full_page_size;
 	struct uffs_StorageAttrSt *attr = dev->attr;
 	unsigned char status;
-	u8 spare[UFFS_MAX_SPARE_SIZE];
+	uint8_t spare[UFFS_MAX_SPARE_SIZE];
 	int spare_len;
 
 	emu = (uffs_FileEmu *)(dev->attr->_private);

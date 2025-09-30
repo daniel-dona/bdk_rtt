@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _ICU_PUB_H_
 #define _ICU_PUB_H_
 
@@ -182,7 +183,7 @@ enum
 *******************************************************************************/
 extern void icu_init(void);
 extern void icu_exit(void);
-extern UINT32 icu_ctrl(UINT32 cmd, void *param);
+extern uint32_t icu_ctrl(uint32_t cmd, void *param);
 
 #endif //_ICU_PUB_H_ 
 

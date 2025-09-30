@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 #ifndef __RPC_PMAP_PROT_H__
 #define __RPC_PMAP_PROT_H__
 

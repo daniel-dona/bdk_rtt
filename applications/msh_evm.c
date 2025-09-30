@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : msh_evm.c
  * This file is part of RT-Thread RTOS

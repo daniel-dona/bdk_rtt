@@ -1,3 +1,4 @@
+#include <stdbool.h>
 /*
  * File      : Mail.h
  * This file is part of RT-Thread RTOS
@@ -58,14 +59,14 @@ public:
     */
     bool put(T *mptr, int32_t millisec = 0)
     {
-        rt_int32_t tick;
+        int32_t tick;
 
         if (millisec < 0)
             tick = -1;
         else
             tick = rt_tick_from_millisecond(millisec);
 
-        return rt_mb_send_wait(&mID, (rt_uint32_t)mptr, tick) == RT_EOK;
+        return rt_mb_send_wait(&mID, (uint32_t)mptr, tick) == RT_EOK;
     }
 
     /** Get a mail from a queue.
@@ -75,7 +76,7 @@ public:
     T* get(int32_t millisec = -1)
     {
         T *t = NULL;
-        rt_int32_t tick;
+        int32_t tick;
 
         if (millisec < 0)
             tick = -1;

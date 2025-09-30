@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef LWIP_PING_H
 #define LWIP_PING_H
 

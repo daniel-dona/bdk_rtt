@@ -1,3 +1,4 @@
+#include <stdint.h>
 /**
  * @file reg_intc.h
  * @brief Definitions of the INTC HW block registers and register access functions.

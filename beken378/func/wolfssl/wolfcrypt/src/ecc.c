@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /* ecc.c
  *
  * Copyright (C) 2006-2019 wolfSSL Inc.

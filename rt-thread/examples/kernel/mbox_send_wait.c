@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * 程序清单：邮箱例程_发送阻塞
  *
@@ -27,7 +28,7 @@ static void thread1_entry(void* parameter)
     while (1)
     {
         /* 从邮箱中收取邮件 */
-        if (rt_mb_recv(&mb, (rt_uint32_t*)&str, RT_WAITING_FOREVER) == RT_EOK)
+        if (rt_mb_recv(&mb, (uint32_t*)&str, RT_WAITING_FOREVER) == RT_EOK)
         {
             rt_kprintf("thread1: get a mail from mailbox, the content:%s\n", str);
 
@@ -40,7 +41,7 @@ static void thread1_entry(void* parameter)
 /* 线程2入口 */
 static void thread2_entry(void* parameter)
 {
-    rt_uint8_t count;
+    uint8_t count;
     char  *str;
 
     count = 0;
@@ -59,7 +60,7 @@ static void thread2_entry(void* parameter)
         }
 
         /* 不停的发送邮件，如果满了则等待10个tick，然后超时 */
-        if( rt_mb_send_wait(&mb, (rt_uint32_t)str,10) == RT_EOK )
+        if( rt_mb_send_wait(&mb, (uint32_t)str,10) == RT_EOK )
             rt_kprintf("thread2: sent a mail to mailbox, the content:%s\n", str);
         else
             rt_kprintf("thread2: timeout while waiting to send a mail.\n");

@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 #include "saradc.h"
@@ -16,8 +17,8 @@
 #endif
 saradc_desc_t *saradc_desc = NULL;
 saradc_calibrate_val saradc_val = {0x55, 0x354};
-static volatile u8 saradc_is_busy = 0;
-static volatile u8 saradc_accuracy = 0;
+static volatile uint8_t saradc_is_busy = 0;
+static volatile uint8_t saradc_accuracy = 0;
 static DD_OPERATIONS saradc_op = {
             saradc_open,
             saradc_close,
@@ -30,7 +31,7 @@ static void saradc_int_clr(void);
 
 static void saradc_flush(void)
 {
-    UINT32 value;
+    uint32_t value;
 
 	value = REG_READ(SARADC_ADC_CONFIG);
     value &= ~(SARADC_ADC_MODE_MASK << SARADC_ADC_MODE_POSI);
@@ -73,28 +74,28 @@ static void saradc_disable_sysctrl(void)
 
 static void saradc_enable_icu_config(void)
 {
-    UINT32 param;
+    uint32_t param;
     param = PWD_SARADC_CLK_BIT;
 	sddev_control(ICU_DEV_NAME, CMD_CLK_PWR_UP, &param);
 }
 
 static void saradc_disable_icu_config(void)
 {
-    UINT32 param;
+    uint32_t param;
     param = PWD_SARADC_CLK_BIT;
 	sddev_control(ICU_DEV_NAME, CMD_CLK_PWR_DOWN, &param);
 }
 
 static void saradc_enable_interrupt(void)
 {
-    UINT32 param;
+    uint32_t param;
     param = (IRQ_SARADC_BIT);
     sddev_control(ICU_DEV_NAME, CMD_ICU_INT_ENABLE, &param);
 }
 
 static void saradc_disable_interrupt(void)
 {
-    UINT32 param;
+    uint32_t param;
     param = (IRQ_SARADC_BIT);
     sddev_control(ICU_DEV_NAME, CMD_ICU_INT_DISABLE, &param);
 }
@@ -103,7 +104,7 @@ static void saradc_gpio_config(void)
 {
 #if (CFG_SOC_NAME != SOC_BK7271)
 
-	UINT32 param;
+	uint32_t param;
 
 	switch (saradc_desc->channel)
 	{
@@ -163,19 +164,19 @@ static void saradc_gpio_config(void)
 #endif
 }
 
-UINT32 saradc_check_busy(void)
+uint32_t saradc_check_busy(void)
 {
     return (saradc_is_busy == 1)? 1 : 0;
 }
 
-static UINT32 saradc_open(UINT32 op_flag)
+static uint32_t saradc_open(uint32_t op_flag)
 {
-	UINT32 config_value = 0;
-	UINT32 sat_config_value = 0;
+	uint32_t config_value = 0;
+	uint32_t sat_config_value = 0;
     saradc_desc_t *p_saradc_desc;
 
 #if (SOC_BK7271 == CFG_SOC_NAME)
-    UINT32 status = BLK_BIT_SARADC;
+    uint32_t status = BLK_BIT_SARADC;
     sddev_control(SCTRL_DEV_NAME, CMD_SCTRL_BLK_ENABLE, &status);
 #endif
 
@@ -253,9 +254,9 @@ static UINT32 saradc_open(UINT32 op_flag)
 	return SARADC_SUCCESS;
 }
 
-static UINT32 saradc_pause()
+static uint32_t saradc_pause()
 {
-    UINT32 value;
+    uint32_t value;
 
     saradc_disable_sysctrl();
 
@@ -276,9 +277,9 @@ static UINT32 saradc_pause()
     return SARADC_SUCCESS;
 }
 
-static UINT32 saradc_resume(void)
+static uint32_t saradc_resume(void)
 {
-    UINT32 value = 0;
+    uint32_t value = 0;
 
     saradc_enable_sysctrl();
     saradc_enable_icu_config();
@@ -306,15 +307,15 @@ static UINT32 saradc_resume(void)
 
 void saradc_disable(void)
 {
-	UINT32 value;
+	uint32_t value;
     value = REG_READ(SARADC_ADC_CONFIG);
     value &= (~SARADC_ADC_CHNL_EN);
     REG_WRITE(SARADC_ADC_CONFIG, value) ;
 }
 
-static UINT32 saradc_close(void)
+static uint32_t saradc_close(void)
 {
-	UINT32 value;
+	uint32_t value;
 
 	GLOBAL_INT_DECLARATION();
 
@@ -343,16 +344,16 @@ static UINT32 saradc_close(void)
     GLOBAL_INT_RESTORE();
 
 #if (SOC_BK7271 == CFG_SOC_NAME)
-    UINT32 status = BLK_BIT_SARADC;
+    uint32_t status = BLK_BIT_SARADC;
     sddev_control(SCTRL_DEV_NAME, CMD_SCTRL_BLK_DISABLE, &status);
 #endif
 
 	return SARADC_SUCCESS;
 }
 
-static UINT32 saradc_set_mode(UINT8 mode)
+static uint32_t saradc_set_mode(uint8_t mode)
 {
-	UINT32 value;
+	uint32_t value;
 
 	if(mode > 3){
 		return SARADC_FAILURE;
@@ -366,9 +367,9 @@ static UINT32 saradc_set_mode(UINT8 mode)
 	return SARADC_SUCCESS;
 }
 
-static UINT32 saradc_set_channel(saradc_chan_t *p_chan)
+static uint32_t saradc_set_channel(saradc_chan_t *p_chan)
 {
-	UINT32 value;
+	uint32_t value;
 
 	value = REG_READ(SARADC_ADC_CONFIG);
 	if(p_chan->enable == 0){
@@ -383,9 +384,9 @@ static UINT32 saradc_set_channel(saradc_chan_t *p_chan)
 	return SARADC_SUCCESS;
 }
 
-static UINT32 saradc_set_sample_rate(UINT8 rate)
+static uint32_t saradc_set_sample_rate(uint8_t rate)
 {
-	UINT32 value;
+	uint32_t value;
 
 	if(rate > 3){
 		return SARADC_FAILURE;
@@ -399,9 +400,9 @@ static UINT32 saradc_set_sample_rate(UINT8 rate)
 	return SARADC_SUCCESS;
 }
 
-static UINT32 saradc_set_waiting_time(UINT8 time)
+static uint32_t saradc_set_waiting_time(uint8_t time)
 {
-	UINT32 value, mode;
+	uint32_t value, mode;
 
 	value = REG_READ(SARADC_ADC_CONFIG);
 
@@ -421,7 +422,7 @@ static UINT32 saradc_set_waiting_time(UINT8 time)
 	return SARADC_SUCCESS;
 }
 
-static UINT32 saradc_set_valid_mode(UINT8 mode)
+static uint32_t saradc_set_valid_mode(uint8_t mode)
 {
 
 	return SARADC_SUCCESS;
@@ -429,7 +430,7 @@ static UINT32 saradc_set_valid_mode(UINT8 mode)
 
 static void saradc_int_clr(void)
 {
-	UINT32 value;
+	uint32_t value;
 
 	do{
 		value = REG_READ(SARADC_ADC_CONFIG);
@@ -438,9 +439,9 @@ static void saradc_int_clr(void)
 	}while(REG_READ(SARADC_ADC_CONFIG) & SARADC_ADC_INT_CLR);
 }
 
-static UINT32 saradc_set_clk_rate(UINT8 rate)
+static uint32_t saradc_set_clk_rate(uint8_t rate)
 {
-	UINT32 value;
+	uint32_t value;
 
 	if(rate > SARADC_ADC_PRE_DIV_MASK){
 		return SARADC_FAILURE;
@@ -454,9 +455,9 @@ static UINT32 saradc_set_clk_rate(UINT8 rate)
 	return SARADC_SUCCESS;
 }
 
-static UINT32 saradc_run_or_stop_adc(UINT8 run_stop)
+static uint32_t saradc_run_or_stop_adc(uint8_t run_stop)
 {
-	UINT32 value;
+	uint32_t value;
 
 	value = REG_READ(SARADC_ADC_CONFIG);
 
@@ -470,7 +471,7 @@ static UINT32 saradc_run_or_stop_adc(UINT8 run_stop)
 	return SARADC_SUCCESS;
 }
 
-static UINT32 saradc_set_calibrate_val(saradc_cal_val_t *p_cal)
+static uint32_t saradc_set_calibrate_val(saradc_cal_val_t *p_cal)
 {
     GLOBAL_INT_DECLARATION();
     GLOBAL_INT_DISABLE();
@@ -517,7 +518,7 @@ void saradc_ensure_close(void)
     }
 }
 
-float saradc_calculate(UINT16 adc_val)
+float saradc_calculate(uint16_t adc_val)
 {
 #if ( (CFG_SOC_NAME != SOC_BK7271) && (CFG_SOC_NAME != SOC_BK7221U))
     float practic_voltage;
@@ -566,9 +567,9 @@ void saradc_calculate_step2(void)
 #endif
 }
 
-UINT32 saradc_check_accuracy(void)
+uint32_t saradc_check_accuracy(void)
 {
-	UINT32 value;
+	uint32_t value;
 
 	value = REG_READ(SARADC_ADC_SATURATION_CFG);
 	value = value & SARADC_ADC_SAT_CTRL_MASK;
@@ -576,39 +577,39 @@ UINT32 saradc_check_accuracy(void)
 	return value;
 }
 
-static UINT32 saradc_ctrl(UINT32 cmd, void *param)
+static uint32_t saradc_ctrl(uint32_t cmd, void *param)
 {
-	UINT32 ret = SARADC_SUCCESS;
+	uint32_t ret = SARADC_SUCCESS;
 #if (CFG_SOC_NAME == SOC_BK7231N) || (CFG_SOC_NAME == SOC_BK7236)
-	UINT32 value;
+	uint32_t value;
 #endif
 
     peri_busy_count_add();
 
 	switch(cmd){
 	case SARADC_CMD_SET_MODE:
-		ret = saradc_set_mode(*(UINT8 *)param);
+		ret = saradc_set_mode(*(uint8_t *)param);
 		break;
 	case SARADC_CMD_SET_CHANNEL:
 		ret = saradc_set_channel((saradc_chan_t *)param);
 		break;
 	case SARADC_CMD_SET_SAMPLE_RATE:
-		ret = saradc_set_sample_rate(*(UINT8 *)param);
+		ret = saradc_set_sample_rate(*(uint8_t *)param);
 		break;
 	case SARADC_CMD_SET_WAITING_TIME:
-		ret = saradc_set_waiting_time(*(UINT8 *)param);
+		ret = saradc_set_waiting_time(*(uint8_t *)param);
 		break;
 	case SARADC_CMD_SET_VALID_MODE:
-		ret = saradc_set_valid_mode(*(UINT8 *)param);
+		ret = saradc_set_valid_mode(*(uint8_t *)param);
 		break;
 	case SARADC_CMD_CLEAR_INT:
 		saradc_int_clr();
 		break;
 	case SARADC_CMD_SET_CLK_RATE:
-		ret = saradc_set_clk_rate(*(UINT8 *)param);
+		ret = saradc_set_clk_rate(*(uint8_t *)param);
 		break;
     case SARADC_CMD_RUN_OR_STOP_ADC:
-        ret = saradc_run_or_stop_adc(*(UINT8 *)param);
+        ret = saradc_run_or_stop_adc(*(uint8_t *)param);
         break;
     case SARADC_CMD_SET_CAL_VAL:
         ret = saradc_set_calibrate_val((saradc_cal_val_t *)param);
@@ -622,7 +623,7 @@ static UINT32 saradc_ctrl(UINT32 cmd, void *param)
 #if (CFG_SOC_NAME == SOC_BK7231N) || (CFG_SOC_NAME == SOC_BK7236)
     case SARADC_CMD_SET_BYPASS_CALIB:
         value = REG_READ(SARADC_ADC_CTRL_CFG);
-        if (*(UINT32 *)param)
+        if (*(uint32_t *)param)
         {
             /* set */
             value |= SARADC_ADC_BYPASS_CALIB;
@@ -647,12 +648,12 @@ static UINT32 saradc_ctrl(UINT32 cmd, void *param)
 
 void saradc_isr(void)
 {
-	UINT32 value;
+	uint32_t value;
 
 	value = REG_READ(SARADC_ADC_CONFIG);
     while((value & SARADC_ADC_FIFO_EMPTY) == 0)
     {
-        UINT16 dac_val;
+        uint16_t dac_val;
 
         #if (CFG_SOC_NAME == SOC_BK7231)
         dac_val = REG_READ(SARADC_ADC_DATA)&0x03FF;

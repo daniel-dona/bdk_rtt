@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : dataqueue.c
  * This file is part of RT-Thread RTOS
@@ -35,9 +36,9 @@ struct rt_data_item
 
 rt_err_t
 rt_data_queue_init(struct rt_data_queue *queue,
-                   rt_uint16_t size,
-                   rt_uint16_t lwm,
-                   void (*evt_notify)(struct rt_data_queue *queue, rt_uint32_t event))
+                   uint16_t size,
+                   uint16_t lwm,
+                   void (*evt_notify)(struct rt_data_queue *queue, uint32_t event))
 {
     RT_ASSERT(queue != RT_NULL);
 
@@ -65,7 +66,7 @@ RTM_EXPORT(rt_data_queue_init);
 rt_err_t rt_data_queue_push(struct rt_data_queue *queue,
                             const void *data_ptr,
                             rt_size_t data_size,
-                            rt_int32_t timeout)
+                            int32_t timeout)
 {
     rt_ubase_t  level;
     rt_thread_t thread;
@@ -154,7 +155,7 @@ RTM_EXPORT(rt_data_queue_push);
 rt_err_t rt_data_queue_pop(struct rt_data_queue *queue,
                            const void** data_ptr,
                            rt_size_t *size, 
-                           rt_int32_t timeout)
+                           int32_t timeout)
 {
     rt_ubase_t  level;
     rt_thread_t thread;

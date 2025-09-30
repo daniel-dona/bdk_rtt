@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "rw_ieee80211.h"
 #include "rw_pub.h"
@@ -7,7 +8,7 @@
 
 typedef struct _wifi_cn_code_st_ 
 {
-    UINT32 init;
+    uint32_t init;
     wifi_country_t cfg;
 } WIFI_CN_ST, *WIFI_CN_PTR;
 
@@ -82,7 +83,7 @@ static struct ieee80211_channel rw_5ghz_a_channels[] =
 #endif
 
 WIPHY_T g_wiphy;
-UINT8 beacon[149] =
+uint8_t beacon[149] =
 {
     128, 0, 0, 0, 255, 255, 255, 255, 255, 255, 18, 113, 17, 113, 11, 113,
     18, 113, 17, 113, 11, 113, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -96,7 +97,7 @@ UINT8 beacon[149] =
     0, 98, 50, 47, 0
 };
 
-UINT32 rw_ieee80211_init(void)
+uint32_t rw_ieee80211_init(void)
 {
     RW_CONNECTOR_T intf;
     struct ieee80211_sta_ht_cap ht_cap = RWNX_HT_CAPABILITIES;
@@ -142,11 +143,11 @@ UINT32 rw_ieee80211_init(void)
     return 0;
 }
 
-UINT32 rw_ieee80211_set_country(const wifi_country_t *country)
+uint32_t rw_ieee80211_set_country(const wifi_country_t *country)
 {
     if(country) 
     {
-        UINT32 prev_policy;
+        uint32_t prev_policy;
         
         if(g_country_code.init == 0)
             return kNotInitializedErr;
@@ -179,7 +180,7 @@ UINT32 rw_ieee80211_set_country(const wifi_country_t *country)
     }
 }
 
-UINT32 rw_ieee80211_get_country(wifi_country_t *country)
+uint32_t rw_ieee80211_get_country(wifi_country_t *country)
 {
     if(country) 
     {
@@ -196,9 +197,9 @@ UINT32 rw_ieee80211_get_country(wifi_country_t *country)
     }
 }
 
-UINT32 rw_ieee80211_get_centre_frequency(UINT32 chan_id)
+uint32_t rw_ieee80211_get_centre_frequency(uint32_t chan_id)
 {
-    UINT32 freq = 0;
+    uint32_t freq = 0;
     struct ieee80211_channel *channels = NULL;
 
     if((chan_id >= 1) && (chan_id <= 14))
@@ -228,7 +229,7 @@ UINT32 rw_ieee80211_get_centre_frequency(UINT32 chan_id)
 	}
 }
 
-UINT8 rw_ieee80211_get_chan_id(UINT32 freq)
+uint8_t rw_ieee80211_get_chan_id(uint32_t freq)
 {
     int i;
     struct ieee80211_channel *channels = NULL;
@@ -250,9 +251,9 @@ UINT8 rw_ieee80211_get_chan_id(UINT32 freq)
     return i + 1;
 }
 
-UINT8 rw_ieee80211_init_scan_chan(struct scanu_start_req *req)
+uint8_t rw_ieee80211_init_scan_chan(struct scanu_start_req *req)
 {
-    UINT32 i, start_chan, num_chan;
+    uint32_t i, start_chan, num_chan;
 
     ASSERT(g_country_code.init);
     ASSERT(req);
@@ -291,9 +292,9 @@ UINT8 rw_ieee80211_init_scan_chan(struct scanu_start_req *req)
     return 0;
 }
 
-UINT8 rw_ieee80211_is_scan_rst_in_countrycode(UINT8 freq)
+uint8_t rw_ieee80211_is_scan_rst_in_countrycode(uint8_t freq)
 {
-    UINT32 start_chan, end_chan;
+    uint32_t start_chan, end_chan;
 
     ASSERT(g_country_code.init);
 
@@ -313,7 +314,7 @@ UINT8 rw_ieee80211_is_scan_rst_in_countrycode(UINT8 freq)
 }
 
 #if CFG_IEEE80211N
-void rw_ieee80211_set_ht_cap(UINT8 ht_supp)
+void rw_ieee80211_set_ht_cap(uint8_t ht_supp)
 {
 	g_wiphy.bands[IEEE80211_BAND_2GHZ].ht_cap.ht_supported = ht_supp;
 	rw_msg_send_me_config_req();

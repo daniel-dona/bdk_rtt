@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * EAPOL definitions shared between hostapd and wpa_supplicant
  * Copyright (c) 2002-2007, Jouni Malinen <j@w1.fi>
@@ -16,15 +17,15 @@
 #endif /* _MSC_VER */
 
 struct ieee802_1x_hdr {
-	u8 version;
-	u8 type;
+	uint8_t version;
+	uint8_t type;
 	be16 length;
 	/* followed by length octets of data */
 } STRUCT_PACKED;
 
 struct ieee8023_hdr {
-	u8 dest[ETH_ALEN];
-	u8 src[ETH_ALEN];
+	uint8_t dest[ETH_ALEN];
+	uint8_t src[ETH_ALEN];
 	be16 ethertype;
 } STRUCT_PACKED;
 
@@ -62,20 +63,20 @@ enum { EAPOL_KEY_TYPE_RC4 = 1, EAPOL_KEY_TYPE_RSN = 2,
 #endif /* _MSC_VER */
 
 struct ieee802_1x_eapol_key {
-	u8 type;
+	uint8_t type;
 	/* Note: key_length is unaligned */
-	u8 key_length[2];
+	uint8_t key_length[2];
 	/* does not repeat within the life of the keying material used to
 	 * encrypt the Key field; 64-bit NTP timestamp MAY be used here */
-	u8 replay_counter[IEEE8021X_REPLAY_COUNTER_LEN];
-	u8 key_iv[IEEE8021X_KEY_IV_LEN]; /* cryptographically random number */
-	u8 key_index; /* key flag in the most significant bit:
+	uint8_t replay_counter[IEEE8021X_REPLAY_COUNTER_LEN];
+	uint8_t key_iv[IEEE8021X_KEY_IV_LEN]; /* cryptographically random number */
+	uint8_t key_index; /* key flag in the most significant bit:
 		       * 0 = broadcast (default key),
 		       * 1 = unicast (key mapping key); key index is in the
 		       * 7 least significant bits */
 	/* HMAC-MD5 message integrity check computed with MS-MPPE-Send-Key as
 	 * the key */
-	u8 key_signature[IEEE8021X_KEY_SIGN_LEN];
+	uint8_t key_signature[IEEE8021X_KEY_SIGN_LEN];
 
 	/* followed by key: if packet body length = 44 + key length, then the
 	 * key field (of key_length bytes) contains the key in encrypted form;

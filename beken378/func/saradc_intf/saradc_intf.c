@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "error.h"
 #include "include.h"
 #include "arm_arch.h"
@@ -31,7 +32,7 @@ enum
 
 typedef struct tadc_message
 {
-	UINT32 data;
+	uint32_t data;
 }TADC_MSG_T;
 
 typedef struct _tadc_entity_
@@ -46,7 +47,7 @@ typedef struct _tadc_entity_
 
     DD_HANDLE adc_handle;
     saradc_desc_t adc_cfg;
-    UINT16 adc_data[ADC_TEMP_BUFFER_SIZE];
+    uint16_t adc_data[ADC_TEMP_BUFFER_SIZE];
 } TADC_ENTITY_T;
 
 void saradc_calculate_step1(void);
@@ -54,7 +55,7 @@ void saradc_calculate_step2(void);
 
 static TADC_ENTITY_T *tadc_entity = NULL;
 
-void adc_obj_init(ADC_OBJ* handle, adc_obj_callback cb, UINT32 channel, void *user_data)
+void adc_obj_init(ADC_OBJ* handle, adc_obj_callback cb, uint32_t channel, void *user_data)
 {
     if(handle) {
         adc_obj_stop(handle);
@@ -114,7 +115,7 @@ static void sadc_detect_handler(void)
 
 	if (p_ADC_drv_desc->current_sample_data_cnt >= p_ADC_drv_desc->data_buff_size)
 	{
-		UINT32 sum = 0, sum1, sum2;
+		uint32_t sum = 0, sum1, sum2;
 
 		ddev_close(tadc_entity->adc_handle);
 		tadc_entity->adc_handle = DD_HANDLE_UNVALID;
@@ -138,7 +139,7 @@ static void sadc_detect_handler(void)
 void tadc_obj_handler(ADC_OBJ* handle)
 {
 	saradc_desc_t *p_ADC_drv_desc = NULL;
-	UINT32 status, ret;
+	uint32_t status, ret;
 	GLOBAL_INT_DECLARATION();
 
 	p_ADC_drv_desc = &tadc_entity->adc_cfg;
@@ -151,7 +152,7 @@ void tadc_obj_handler(ADC_OBJ* handle)
 	p_ADC_drv_desc->current_sample_data_cnt = 0;
 	p_ADC_drv_desc->has_data                = 0;
 	p_ADC_drv_desc->pData                   = &tadc_entity->adc_data[0];
-	os_memset(p_ADC_drv_desc->pData, 0x00, p_ADC_drv_desc->data_buff_size * sizeof(UINT16));
+	os_memset(p_ADC_drv_desc->pData, 0x00, p_ADC_drv_desc->data_buff_size * sizeof(uint16_t));
 
 	p_ADC_drv_desc->p_Int_Handler           = sadc_detect_handler;
 
@@ -160,7 +161,7 @@ void tadc_obj_handler(ADC_OBJ* handle)
 	{
 		GLOBAL_INT_DISABLE();
 		if (saradc_check_busy() == 0) {
-			tadc_entity->adc_handle = ddev_open(SARADC_DEV_NAME, &status, (UINT32)p_ADC_drv_desc);
+			tadc_entity->adc_handle = ddev_open(SARADC_DEV_NAME, &status, (uint32_t)p_ADC_drv_desc);
 			if (DD_HANDLE_UNVALID != tadc_entity->adc_handle) {
 				GLOBAL_INT_RESTORE();
 				break;
@@ -271,9 +272,9 @@ vol:	PSRAM_VDD_1_8V
 		PSRAM_VDD_2_5V
 		PSRAM_VDD_3_3V
 */
-void saradc_config_vddram_voltage(UINT32 vol)
+void saradc_config_vddram_voltage(uint32_t vol)
 {
-    UINT32 param;
+    uint32_t param;
 
     param = BLK_BIT_MIC_QSPI_RAM_OR_FLASH;
     sddev_control(SCTRL_DEV_NAME, CMD_SCTRL_BLK_ENABLE, &param);
@@ -284,7 +285,7 @@ void saradc_config_vddram_voltage(UINT32 vol)
 
 void saradc_disable_vddram_voltage(void)
 {
-    UINT32 param;
+    uint32_t param;
 
     param = BLK_BIT_MIC_QSPI_RAM_OR_FLASH;
     sddev_control(SCTRL_DEV_NAME, CMD_SCTRL_BLK_DISABLE, &param);
@@ -292,7 +293,7 @@ void saradc_disable_vddram_voltage(void)
 }
 #endif
 
-void tadc_send_msg(UINT32 new_msg)
+void tadc_send_msg(uint32_t new_msg)
 {
     OSStatus ret;
     TADC_MSG_T msg;
@@ -309,7 +310,7 @@ void tadc_send_msg(UINT32 new_msg)
 
 static void tadc_check_timer_callback(void *arg)
 {
-    UINT32 data = TADC_TIMER_POLL;
+    uint32_t data = TADC_TIMER_POLL;
     tadc_send_msg(data);
 }
 
@@ -411,7 +412,7 @@ create_exit:
 #if (CFG_SARADC_CALIBRATE && (CFG_SUPPORT_RTT))
 static void adc_check(int argc, char **argv)
 {
-    UINT32 status, ret;
+    uint32_t status, ret;
     DD_HANDLE flash_handle;
     DD_HANDLE saradc_handle;
     saradc_cal_val_t p_ADC_cal;
@@ -447,8 +448,8 @@ static void adc_check(int argc, char **argv)
         p_ADC_drv_desc->has_data                = 0;
         p_ADC_drv_desc->current_read_data_cnt   = 0;
         p_ADC_drv_desc->current_sample_data_cnt = 0;
-        p_ADC_drv_desc->pData = (UINT16 *)malloc(p_ADC_drv_desc->data_buff_size * sizeof(UINT16));
-        os_memset(p_ADC_drv_desc->pData, 0x00, p_ADC_drv_desc->data_buff_size * sizeof(UINT16));
+        p_ADC_drv_desc->pData = (uint16_t *)malloc(p_ADC_drv_desc->data_buff_size * sizeof(uint16_t));
+        os_memset(p_ADC_drv_desc->pData, 0x00, p_ADC_drv_desc->data_buff_size * sizeof(uint16_t));
 
         if(p_ADC_drv_desc->pData == NULL) {
             os_printf("malloc1 failed!\r\n");
@@ -460,7 +461,7 @@ static void adc_check(int argc, char **argv)
         do {
             GLOBAL_INT_DISABLE();
             if(saradc_check_busy() == 0) {
-                saradc_handle = ddev_open(SARADC_DEV_NAME, &status, (UINT32)p_ADC_drv_desc);
+                saradc_handle = ddev_open(SARADC_DEV_NAME, &status, (uint32_t)p_ADC_drv_desc);
                 if(DD_HANDLE_UNVALID != saradc_handle)
                 {
                     GLOBAL_INT_RESTORE();
@@ -491,8 +492,8 @@ static void adc_check(int argc, char **argv)
         }
 
         {
-        UINT32 sum = 0, sum1, sum2;
-        UINT16 *pData = p_ADC_drv_desc->pData;
+        uint32_t sum = 0, sum1, sum2;
+        uint16_t *pData = p_ADC_drv_desc->pData;
         sum1 = pData[1] + pData[2];
         sum2 = pData[3] + pData[4];
         sum = sum1/ 2  + sum2 / 2;
@@ -515,7 +516,7 @@ static void adc_check(int argc, char **argv)
             return;
         }
         p_ADC_cal.val = p_ADC_drv_desc->pData[0];
-        if(SARADC_FAILURE == ddev_control(saradc_handle, SARADC_CMD_SET_CAL_VAL, (VOID *)&p_ADC_cal))
+        if(SARADC_FAILURE == ddev_control(saradc_handle, SARADC_CMD_SET_CAL_VAL, (void *)&p_ADC_cal))
         {
             os_printf("set calibrate value failture\r\n");
             free(p_ADC_drv_desc->pData);
@@ -551,8 +552,8 @@ static void adc_check(int argc, char **argv)
         p_ADC_drv_desc->has_data                = 0;
         p_ADC_drv_desc->current_read_data_cnt   = 0;
         p_ADC_drv_desc->current_sample_data_cnt = 0;
-        p_ADC_drv_desc->pData = (UINT16 *)malloc(p_ADC_drv_desc->data_buff_size * sizeof(UINT16));
-        os_memset(p_ADC_drv_desc->pData, 0x00, p_ADC_drv_desc->data_buff_size * sizeof(UINT16));
+        p_ADC_drv_desc->pData = (uint16_t *)malloc(p_ADC_drv_desc->data_buff_size * sizeof(uint16_t));
+        os_memset(p_ADC_drv_desc->pData, 0x00, p_ADC_drv_desc->data_buff_size * sizeof(uint16_t));
 
         if(p_ADC_drv_desc->pData == NULL) {
             os_printf("malloc1 failed!\r\n");
@@ -564,7 +565,7 @@ static void adc_check(int argc, char **argv)
         do {
             GLOBAL_INT_DISABLE();
             if(saradc_check_busy() == 0) {
-                saradc_handle = ddev_open(SARADC_DEV_NAME, &status, (UINT32)p_ADC_drv_desc);
+                saradc_handle = ddev_open(SARADC_DEV_NAME, &status, (uint32_t)p_ADC_drv_desc);
                 if(DD_HANDLE_UNVALID != saradc_handle)
                 {
                     GLOBAL_INT_RESTORE();
@@ -595,8 +596,8 @@ static void adc_check(int argc, char **argv)
         }
 
         {
-        UINT32 sum = 0, sum1, sum2;
-        UINT16 *pData = p_ADC_drv_desc->pData;
+        uint32_t sum = 0, sum1, sum2;
+        uint16_t *pData = p_ADC_drv_desc->pData;
 #if (CFG_SOC_NAME == SOC_BK7231N) || (CFG_SOC_NAME == SOC_BK7236)
         sum1 = pData[6] + pData[7];
         sum2 = pData[8] + pData[9];
@@ -611,10 +612,10 @@ static void adc_check(int argc, char **argv)
         }
 
 #if (CFG_SOC_NAME == SOC_BK7231N) || (CFG_SOC_NAME == SOC_BK7236)
-        os_printf("saradc[ch%d]=%d\r\n", (UINT32)p_ADC_drv_desc->channel, (UINT32)p_ADC_drv_desc->pData[0]);
+        os_printf("saradc[ch%d]=%d\r\n", (uint32_t)p_ADC_drv_desc->channel, (uint32_t)p_ADC_drv_desc->pData[0]);
 #else
         voltage = saradc_calculate(p_ADC_drv_desc->pData[0]);
-        os_printf("voltage is [%d] mv\r\n", (UINT32)(voltage * 1000));
+        os_printf("voltage is [%d] mv\r\n", (uint32_t)(voltage * 1000));
 #endif
         free(p_ADC_drv_desc->pData);
         free(p_ADC_drv_desc);
@@ -641,7 +642,7 @@ void adc_detect_callback(int new_mv, void *user_data)
     TADC_WARNING_PRINTF("new:%d, %d\r\n", new_mv, cfg->channel);
 }
 
-void adc_detect_configuration(UINT32 channel)
+void adc_detect_configuration(uint32_t channel)
 {
     TADC_WARNING_PRINTF("adc_detect %d, %d\r\n", channel, adc_test.channel);
 

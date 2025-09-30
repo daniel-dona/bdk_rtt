@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * WPA Supplicant - Layer2 packet interface definition
  * Copyright (c) 2003-2005, Jouni Malinen <j@w1.fi>
@@ -30,8 +31,8 @@ struct l2_packet_data;
 #endif /* _MSC_VER */
 
 struct l2_ethhdr {
-	u8 h_dest[ETH_ALEN];
-	u8 h_source[ETH_ALEN];
+	uint8_t h_dest[ETH_ALEN];
+	uint8_t h_source[ETH_ALEN];
 	be16 h_proto;
 } STRUCT_PACKED;
 
@@ -63,9 +64,9 @@ enum l2_packet_filter_type {
  * l2_hdr=1 to include the layer 2 header in the data buffer.
  */
 struct l2_packet_data * l2_packet_init(
-	const char *ifname, const u8 *own_addr, unsigned short protocol,
-	void (*rx_callback)(void *ctx, const u8 *src_addr,
-			    const u8 *buf, size_t len),
+	const char *ifname, const uint8_t *own_addr, unsigned short protocol,
+	void (*rx_callback)(void *ctx, const uint8_t *src_addr,
+			    const uint8_t *buf, size_t len),
 	void *rx_callback_ctx, int l2_hdr);
 
 /**
@@ -75,10 +76,10 @@ struct l2_packet_data * l2_packet_init(
  * packet socket in case of a station interface in a bridge.
  */
 struct l2_packet_data * l2_packet_init_bridge(
-	const char *br_ifname, const char *ifname, const u8 *own_addr,
+	const char *br_ifname, const char *ifname, const uint8_t *own_addr,
 	unsigned short protocol,
-	void (*rx_callback)(void *ctx, const u8 *src_addr,
-			    const u8 *buf, size_t len),
+	void (*rx_callback)(void *ctx, const uint8_t *src_addr,
+			    const uint8_t *buf, size_t len),
 	void *rx_callback_ctx, int l2_hdr);
 
 /**
@@ -93,7 +94,7 @@ void l2_packet_deinit(struct l2_packet_data *l2);
  * @addr: Buffer for the own address (6 bytes)
  * Returns: 0 on success, -1 on failure
  */
-int l2_packet_get_own_addr(struct l2_packet_data *l2, u8 *addr);
+int l2_packet_get_own_addr(struct l2_packet_data *l2, uint8_t *addr);
 
 /**
  * l2_packet_send - Send a packet
@@ -107,10 +108,10 @@ int l2_packet_get_own_addr(struct l2_packet_data *l2, u8 *addr);
  * @len: Length of the buffer (including l2 header only if l2_hdr == 1)
  * Returns: >=0 on success, <0 on failure
  */
-int l2_packet_send(struct l2_packet_data *l2, const u8 *dst_addr, u16 proto,
-		   const u8 *buf, size_t len);
-int l2_packet_send_sync(struct l2_packet_data *l2, const u8 *dst_addr, u16 proto,
-		   const u8 *buf, size_t len);
+int l2_packet_send(struct l2_packet_data *l2, const uint8_t *dst_addr, uint16_t proto,
+		   const uint8_t *buf, size_t len);
+int l2_packet_send_sync(struct l2_packet_data *l2, const uint8_t *dst_addr, uint16_t proto,
+		   const uint8_t *buf, size_t len);
 
 /**
  * l2_packet_get_ip_addr - Get the current IP address from the interface

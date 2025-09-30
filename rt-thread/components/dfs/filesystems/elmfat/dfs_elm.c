@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : dfs_elm.c
  * This file is part of Device File System in RT-Thread RTOS
@@ -592,7 +593,7 @@ int dfs_elm_getdents(struct dfs_fd *file, struct dirent *dirp, uint32_t count)
     DIR *dir;
     FILINFO fno;
     FRESULT result;
-    rt_uint32_t index;
+    uint32_t index;
     struct dirent *d;
 
     dir = (DIR *)(file->data);
@@ -626,8 +627,8 @@ int dfs_elm_getdents(struct dfs_fd *file, struct dirent *dirp, uint32_t count)
         else
             d->d_type = DT_REG;
 
-        d->d_namlen = (rt_uint8_t)rt_strlen(fn);
-        d->d_reclen = (rt_uint16_t)sizeof(struct dirent);
+        d->d_namlen = (uint8_t)rt_strlen(fn);
+        d->d_reclen = (uint16_t)sizeof(struct dirent);
         rt_strncpy(d->d_name, fn, rt_strlen(fn) + 1);
 
         index ++;

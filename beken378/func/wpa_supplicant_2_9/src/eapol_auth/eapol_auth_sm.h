@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * IEEE 802.1X-2004 Authenticator - EAPOL state machine
  * Copyright (c) 2002-2015, Jouni Malinen <j@w1.fi>
@@ -29,8 +30,8 @@ struct eapol_auth_config {
 	int erp; /* Whether ERP is enabled on authentication server */
 	unsigned int tls_session_lifetime;
 	unsigned int tls_flags;
-	u8 *pac_opaque_encr_key;
-	u8 *eap_fast_a_id;
+	uint8_t *pac_opaque_encr_key;
+	uint8_t *eap_fast_a_id;
 	size_t eap_fast_a_id_len;
 	char *eap_fast_a_id_info;
 	int eap_fast_prov;
@@ -43,9 +44,9 @@ struct eapol_auth_config {
 	int tnc;
 	struct wps_context *wps;
 	int fragment_size;
-	u16 pwd_group;
+	uint16_t pwd_group;
 	int pbc_in_m1;
-	const u8 *server_id;
+	const uint8_t *server_id;
 	size_t server_id_len;
 
 	/* Opaque context pointer to owner data for callback functions */
@@ -65,16 +66,16 @@ enum eapol_event {
 };
 
 struct eapol_auth_cb {
-	void (*eapol_send)(void *ctx, void *sta_ctx, u8 type, const u8 *data,
+	void (*eapol_send)(void *ctx, void *sta_ctx, uint8_t type, const uint8_t *data,
 			   size_t datalen);
-	void (*aaa_send)(void *ctx, void *sta_ctx, const u8 *data,
+	void (*aaa_send)(void *ctx, void *sta_ctx, const uint8_t *data,
 			 size_t datalen);
 	void (*finished)(void *ctx, void *sta_ctx, int success, int preauth,
 			 int remediation);
-	int (*get_eap_user)(void *ctx, const u8 *identity, size_t identity_len,
+	int (*get_eap_user)(void *ctx, const uint8_t *identity, size_t identity_len,
 			    int phase2, struct eap_user *user);
-	int (*sta_entry_alive)(void *ctx, const u8 *addr);
-	void (*logger)(void *ctx, const u8 *addr, eapol_logger_level level,
+	int (*sta_entry_alive)(void *ctx, const uint8_t *addr);
+	void (*logger)(void *ctx, const uint8_t *addr, eapol_logger_level level,
 		       const char *txt);
 	void (*set_port_authorized)(void *ctx, void *sta_ctx, int authorized);
 	void (*abort_auth)(void *ctx, void *sta_ctx);
@@ -90,7 +91,7 @@ struct eapol_authenticator * eapol_auth_init(struct eapol_auth_config *conf,
 					     struct eapol_auth_cb *cb);
 void eapol_auth_deinit(struct eapol_authenticator *eapol);
 struct eapol_state_machine *
-eapol_auth_alloc(struct eapol_authenticator *eapol, const u8 *addr,
+eapol_auth_alloc(struct eapol_authenticator *eapol, const uint8_t *addr,
 		 int flags, const struct wpabuf *assoc_wps_ie,
 		 const struct wpabuf *assoc_p2p_ie, void *sta_ctx,
 		 const char *identity, const char *radius_cui);

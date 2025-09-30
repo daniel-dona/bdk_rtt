@@ -1,8 +1,9 @@
+#include <stdint.h>
 #ifndef _SDCARD_PUB_H_
 #define _SDCARD_PUB_H_
 
 #define SDCARD_SUCCESS                 (0)
-#define SDCARD_FAILURE                 ((UINT32)-1)
+#define SDCARD_FAILURE                 ((uint32_t)-1)
 
 #define SDCARD_DEV_NAME                ("sdcard")
 

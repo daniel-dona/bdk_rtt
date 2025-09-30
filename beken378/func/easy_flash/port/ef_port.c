@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * This file is part of the EasyFlash Library.
  *
@@ -99,7 +100,7 @@ EfErrCode ef_port_read(uint32_t addr, uint32_t *buf, size_t size)
 static int bk_erase(uint32_t addr, size_t size)
 {
 	int param;
-	UINT32 status;
+	uint32_t status;
 	int protect_type;
     DD_HANDLE flash_handle;
     unsigned int _size = size;
@@ -173,7 +174,7 @@ EfErrCode ef_port_erase(uint32_t addr, size_t size)
 EfErrCode ef_port_write(uint32_t addr, const uint32_t *buf, size_t size)
 {
 	int param;
-	UINT32 status;
+	uint32_t status;
 	int protect_type;
     DD_HANDLE flash_handle;
     EfErrCode result = EF_NO_ERR;

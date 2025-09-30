@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  * File      : cdc_vcom.c
  * This file is part of RT-Thread RTOS
@@ -64,7 +66,7 @@
 #endif /*RT_VCOM_SER_LEN*/
 
 ALIGN(RT_ALIGN_SIZE)
-static rt_uint8_t vcom_thread_stack[VCOM_TASK_STK_SIZE];
+static uint8_t vcom_thread_stack[VCOM_TASK_STK_SIZE];
 static struct rt_thread vcom_thread;
 static struct ucdc_line_coding line_coding;
 
@@ -82,9 +84,9 @@ struct vcom
     rt_bool_t connected;
     rt_bool_t in_sending;
     struct rt_completion wait;
-    rt_uint8_t rx_rbp[CDC_RX_BUFSIZE];
+    uint8_t rx_rbp[CDC_RX_BUFSIZE];
     struct rt_ringbuffer rx_ringbuffer;
-    rt_uint8_t tx_rbp[CDC_TX_BUFSIZE];
+    uint8_t tx_rbp[CDC_TX_BUFSIZE];
     struct rt_ringbuffer tx_ringbuffer;
     struct rt_event  tx_event;
 };
@@ -297,7 +299,7 @@ static rt_err_t _ep_in_handler(ufunction_t func, rt_size_t size)
  */
 static rt_err_t _ep_out_handler(ufunction_t func, rt_size_t size)
 {
-    rt_uint32_t level;
+    uint32_t level;
     struct vcom *data;
 
     RT_ASSERT(func != RT_NULL);
@@ -355,7 +357,7 @@ static rt_err_t _ep_cmd_handler(ufunction_t func, rt_size_t size)
 static rt_err_t _cdc_get_line_coding(udevice_t device, ureq_t setup)
 {
     struct ucdc_line_coding data;
-    rt_uint16_t size;
+    uint16_t size;
 
     RT_ASSERT(device != RT_NULL);
     RT_ASSERT(setup != RT_NULL);
@@ -526,7 +528,7 @@ static struct ufunction_ops ops =
  * @return RT_EOK on successful.
  */
 static rt_err_t _cdc_descriptor_config(ucdc_comm_desc_t comm, 
-    rt_uint8_t cintf_nr, ucdc_data_desc_t data, rt_uint8_t dintf_nr)
+    uint8_t cintf_nr, ucdc_data_desc_t data, uint8_t dintf_nr)
 {
     comm->call_mgmt_desc.data_interface = dintf_nr;
     comm->union_desc.master_interface = cintf_nr;
@@ -657,8 +659,8 @@ static rt_err_t _vcom_control(struct rt_serial_device *serial,
 static int _vcom_getc(struct rt_serial_device *serial)
 {
     int result;
-    rt_uint8_t ch;
-    rt_uint32_t level;
+    uint8_t ch;
+    uint32_t level;
     struct ufunction *func;
     struct vcom *data;
     
@@ -678,16 +680,16 @@ static int _vcom_getc(struct rt_serial_device *serial)
 
     return result;
 }
-static rt_size_t _vcom_tx(struct rt_serial_device *serial, rt_uint8_t *buf, rt_size_t size,int direction)
+static rt_size_t _vcom_tx(struct rt_serial_device *serial, uint8_t *buf, rt_size_t size,int direction)
 {
-    rt_uint32_t level;
+    uint32_t level;
 
     struct ufunction *func;
     struct vcom *data;
-    rt_uint32_t baksize;
+    uint32_t baksize;
     rt_size_t ptr = 0;
     int empty = 0;
-    rt_uint8_t crlf[2] = {'\r', '\n',};
+    uint8_t crlf[2] = {'\r', '\n',};
 
     func = (struct ufunction*)serial->parent.user_data;
     data = (struct vcom*)func->user_data;
@@ -715,7 +717,7 @@ static rt_size_t _vcom_tx(struct rt_serial_device *serial, rt_uint8_t *buf, rt_s
                 if(ptr < baksize)
                 {
                     level = rt_hw_interrupt_disable();
-                    size += rt_ringbuffer_put_force(&data->tx_ringbuffer, (const rt_uint8_t *)&buf[size], ptr - size);
+                    size += rt_ringbuffer_put_force(&data->tx_ringbuffer, (const uint8_t *)&buf[size], ptr - size);
                     rt_hw_interrupt_enable(level);
 
                     /* no data was be ignored */
@@ -753,7 +755,7 @@ static rt_size_t _vcom_tx(struct rt_serial_device *serial, rt_uint8_t *buf, rt_s
         if(size < baksize && !empty)
         {
             level = rt_hw_interrupt_disable();
-            size += rt_ringbuffer_put_force(&data->tx_ringbuffer, (rt_uint8_t *)&buf[size], baksize - size);
+            size += rt_ringbuffer_put_force(&data->tx_ringbuffer, (uint8_t *)&buf[size], baksize - size);
             rt_hw_interrupt_enable(level);
         }
 
@@ -772,7 +774,7 @@ static rt_size_t _vcom_tx(struct rt_serial_device *serial, rt_uint8_t *buf, rt_s
 }
 static int _vcom_putc(struct rt_serial_device *serial, char c)
 {
-    rt_uint32_t level;
+    uint32_t level;
     struct ufunction *func;
     struct vcom *data;
 
@@ -811,11 +813,11 @@ static const struct rt_uart_ops usb_vcom_ops =
 /* Vcom Tx Thread */
 static void vcom_tx_thread_entry(void* parameter)
 {
-    rt_uint32_t level;
-    rt_uint32_t res;
+    uint32_t level;
+    uint32_t res;
     struct ufunction *func = (struct ufunction *)parameter;
     struct vcom *data = (struct vcom*)func->user_data;
-    rt_uint8_t ch[CDC_BULKIN_MAXSIZE];
+    uint8_t ch[CDC_BULKIN_MAXSIZE];
 
     while (1)
     {

@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _SDMA_H_
 #define _SDMA_H_
 
@@ -64,8 +65,8 @@
 /*sdm driver macro*/
 #define CMD_BUF_MAX_LEN        (64)
 
-#define SDMA_BUSY              ((UINT32)-2)
-#define SDMA_FAILURE           ((UINT32)-1)
+#define SDMA_BUSY              ((uint32_t)-2)
+#define SDMA_FAILURE           ((uint32_t)-1)
 #define SDMA_SUCCESS           (0
 
 #endif // _SDMA_H_

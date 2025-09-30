@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef __YMODEM_H__
 #define __YMODEM_H__
 /*
@@ -86,7 +87,7 @@ struct rym_ctx;
  * transfer and the buf will be discarded. Any other return values will cause
  * the transfer continue.
  */
-typedef enum rym_code (*rym_callback)(struct rym_ctx *ctx, rt_uint8_t *buf, rt_size_t len);
+typedef enum rym_code (*rym_callback)(struct rym_ctx *ctx, uint8_t *buf, rt_size_t len);
 
 /* Currently RYM only support one transfer session(ctx) for simplicity.
  *
@@ -102,7 +103,7 @@ struct rym_ctx
      * happened. */
     enum rym_stage stage;
     /* user could get the error content through this */
-    rt_uint8_t *buf;
+    uint8_t *buf;
 
     struct rt_semaphore sem;
 
@@ -134,7 +135,7 @@ struct rym_ctx
  * @param handshake_timeout the timeout when hand shaking. The unit is in
  * second.
  */
-rt_err_t rym_recv_on_device(struct rym_ctx *ctx, rt_device_t dev, rt_uint16_t oflag,
+rt_err_t rym_recv_on_device(struct rym_ctx *ctx, rt_device_t dev, uint16_t oflag,
         rym_callback on_begin, rym_callback on_data, rym_callback on_end,
         int handshake_timeout);
 

@@ -179,7 +179,7 @@ static rt_err_t w25qxx_flash_init(rt_device_t dev)
     return RT_EOK;
 }
 
-static rt_err_t w25qxx_flash_open(rt_device_t dev, rt_uint16_t oflag)
+static rt_err_t w25qxx_flash_open(rt_device_t dev, uint16_t oflag)
 {
     uint8_t send_buffer[3];
 
@@ -306,8 +306,8 @@ rt_err_t w25qxx_init(const char * flash_device_name, const char * spi_device_nam
 
     /* init flash */
     {
-        rt_uint8_t cmd;
-        rt_uint8_t id_recv[3];
+        uint8_t cmd;
+        uint8_t id_recv[3];
         uint16_t memory_type_capacity;
 
         flash_lock(&spi_flash_device);

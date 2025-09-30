@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * SHA-512 internal definitions
  * Copyright (c) 2015, Pali Rohár <pali.rohar@gmail.com>
@@ -12,9 +13,9 @@
 #define SHA512_BLOCK_SIZE 128
 
 struct sha512_state {
-	u64 length, state[8];
-	u32 curlen;
-	u8 buf[SHA512_BLOCK_SIZE];
+	uint64_t length, state[8];
+	uint32_t curlen;
+	uint8_t buf[SHA512_BLOCK_SIZE];
 };
 
 void sha512_init(struct sha512_state *md);

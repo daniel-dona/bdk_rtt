@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 
@@ -17,16 +18,16 @@ static SDD_OPERATIONS gdma_op =
 };
 
 #if (CFG_SOC_NAME != SOC_BK7231)
-void (*p_dma_fin_handler[GDMA_CHANNEL_MAX])(UINT32);
-void (*p_dma_hfin_handler[GDMA_CHANNEL_MAX])(UINT32);
+void (*p_dma_fin_handler[GDMA_CHANNEL_MAX])(uint32_t);
+void (*p_dma_hfin_handler[GDMA_CHANNEL_MAX])(uint32_t);
 #endif
 
 static void gdma_isr(void);
 
-static void gdma_set_dma_en(UINT32 channel, UINT32 enable)
+static void gdma_set_dma_en(uint32_t channel, uint32_t enable)
 {
-    UINT32 reg_addr = GENER_DMA0_REG0_CONF + (channel * 8 * 4);
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = GENER_DMA0_REG0_CONF + (channel * 8 * 4);
+    uint32_t reg_val = REG_READ(reg_addr);
     if(enable)
         reg_val |= GDMA_X_DMA_EN;
     else
@@ -34,17 +35,17 @@ static void gdma_set_dma_en(UINT32 channel, UINT32 enable)
     REG_WRITE(reg_addr, reg_val);
 }
 
-static UINT32 gdma_get_dma_en(UINT32 channel)
+static uint32_t gdma_get_dma_en(uint32_t channel)
 {
-    UINT32 reg_addr = GENER_DMA0_REG0_CONF + (channel * 8 * 4);
+    uint32_t reg_addr = GENER_DMA0_REG0_CONF + (channel * 8 * 4);
     
     return REG_READ(reg_addr) & GDMA_X_DMA_EN;
 }
 
-static void gdma_cfg_finish_inten(UINT32 channel, UINT32 enable)
+static void gdma_cfg_finish_inten(uint32_t channel, uint32_t enable)
 {
-    UINT32 reg_addr = GENER_DMA0_REG0_CONF + (channel * 8 * 4);
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = GENER_DMA0_REG0_CONF + (channel * 8 * 4);
+    uint32_t reg_val = REG_READ(reg_addr);
     if(enable)
         reg_val |= GDMA_X_FIN_INTEN;
     else
@@ -52,10 +53,10 @@ static void gdma_cfg_finish_inten(UINT32 channel, UINT32 enable)
     REG_WRITE(reg_addr, reg_val);
 }
 
-static void gdma_cfg_half_fin_inten(UINT32 channel, UINT32 enable)
+static void gdma_cfg_half_fin_inten(uint32_t channel, uint32_t enable)
 {
-    UINT32 reg_addr = GENER_DMA0_REG0_CONF + (channel * 8 * 4);
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = GENER_DMA0_REG0_CONF + (channel * 8 * 4);
+    uint32_t reg_val = REG_READ(reg_addr);
     if(enable)
         reg_val |= GDMA_X_HFIN_INTEN;
     else
@@ -64,10 +65,10 @@ static void gdma_cfg_half_fin_inten(UINT32 channel, UINT32 enable)
 }
 
 #if (CFG_SOC_NAME != SOC_BK7231)
-static void gdma_cfg_work_mode(UINT32 channel, UINT32 repeat)
+static void gdma_cfg_work_mode(uint32_t channel, uint32_t repeat)
 {
-    UINT32 reg_addr = GENER_DMA0_REG0_CONF + (channel * 8 * 4);
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = GENER_DMA0_REG0_CONF + (channel * 8 * 4);
+    uint32_t reg_val = REG_READ(reg_addr);
     if(repeat)
         reg_val |= GDMA_X_REPEAT_MODE;
     else
@@ -76,10 +77,10 @@ static void gdma_cfg_work_mode(UINT32 channel, UINT32 repeat)
 }
 #endif // (CFG_SOC_NAME != SOC_BK7231)
 
-static void gdma_cfg_srcdata_width(UINT32 channel, UINT32 bitwidth)
+static void gdma_cfg_srcdata_width(uint32_t channel, uint32_t bitwidth)
 {
-    UINT32 reg_addr = GENER_DMA0_REG0_CONF + (channel * 8 * 4);
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = GENER_DMA0_REG0_CONF + (channel * 8 * 4);
+    uint32_t reg_val = REG_READ(reg_addr);
     reg_val &= ~(GDMA_X_SRCDATA_WIDTH_MASK << GDMA_X_SRCDATA_WIDTH_POSI);
 
     switch(bitwidth)
@@ -100,10 +101,10 @@ static void gdma_cfg_srcdata_width(UINT32 channel, UINT32 bitwidth)
     REG_WRITE(reg_addr, reg_val);
 }
 
-static void gdma_cfg_dstdata_width(UINT32 channel, UINT32 bitwidth)
+static void gdma_cfg_dstdata_width(uint32_t channel, uint32_t bitwidth)
 {
-    UINT32 reg_addr = GENER_DMA0_REG0_CONF + (channel * 8 * 4);
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = GENER_DMA0_REG0_CONF + (channel * 8 * 4);
+    uint32_t reg_val = REG_READ(reg_addr);
     reg_val &= ~(GDMA_X_DSTDATA_WIDTH_MASK << GDMA_X_DSTDATA_WIDTH_POSI);
 
     switch(bitwidth)
@@ -124,10 +125,10 @@ static void gdma_cfg_dstdata_width(UINT32 channel, UINT32 bitwidth)
     REG_WRITE(reg_addr, reg_val);
 }
 
-static void gdma_cfg_srcaddr_increase(UINT32 channel, UINT32 incr)
+static void gdma_cfg_srcaddr_increase(uint32_t channel, uint32_t incr)
 {
-    UINT32 reg_addr = GENER_DMA0_REG0_CONF + (channel * 8 * 4);
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = GENER_DMA0_REG0_CONF + (channel * 8 * 4);
+    uint32_t reg_val = REG_READ(reg_addr);
     if(incr)
         reg_val |= GDMA_X_SRCADDR_INC;
     else
@@ -135,10 +136,10 @@ static void gdma_cfg_srcaddr_increase(UINT32 channel, UINT32 incr)
     REG_WRITE(reg_addr, reg_val);
 }
 
-static void gdma_cfg_dstaddr_increase(UINT32 channel, UINT32 incr)
+static void gdma_cfg_dstaddr_increase(uint32_t channel, uint32_t incr)
 {
-    UINT32 reg_addr = GENER_DMA0_REG0_CONF + (channel * 8 * 4);
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = GENER_DMA0_REG0_CONF + (channel * 8 * 4);
+    uint32_t reg_val = REG_READ(reg_addr);
     if(incr)
         reg_val |= GDMA_X_DSTADDR_INC;
     else
@@ -146,10 +147,10 @@ static void gdma_cfg_dstaddr_increase(UINT32 channel, UINT32 incr)
     REG_WRITE(reg_addr, reg_val);
 }
 
-static void gdma_cfg_srcaddr_loop(UINT32 channel, UINT32 loop)
+static void gdma_cfg_srcaddr_loop(uint32_t channel, uint32_t loop)
 {
-    UINT32 reg_addr = GENER_DMA0_REG0_CONF + (channel * 8 * 4);
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = GENER_DMA0_REG0_CONF + (channel * 8 * 4);
+    uint32_t reg_val = REG_READ(reg_addr);
     if(loop)
         reg_val |= GDMA_X_SRCADDR_LOOP;
     else
@@ -157,10 +158,10 @@ static void gdma_cfg_srcaddr_loop(UINT32 channel, UINT32 loop)
     REG_WRITE(reg_addr, reg_val);
 }
 
-static void gdma_cfg_dstaddr_loop(UINT32 channel, UINT32 loop)
+static void gdma_cfg_dstaddr_loop(uint32_t channel, uint32_t loop)
 {
-    UINT32 reg_addr = GENER_DMA0_REG0_CONF + (channel * 8 * 4);
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = GENER_DMA0_REG0_CONF + (channel * 8 * 4);
+    uint32_t reg_val = REG_READ(reg_addr);
     if(loop)
         reg_val |= GDMA_X_DSTADDR_LOOP;
     else
@@ -168,10 +169,10 @@ static void gdma_cfg_dstaddr_loop(UINT32 channel, UINT32 loop)
     REG_WRITE(reg_addr, reg_val);
 }
 
-static void gdma_set_channel_prioprity(UINT32 channel, UINT32 prio)
+static void gdma_set_channel_prioprity(uint32_t channel, uint32_t prio)
 {
-    UINT32 reg_addr = GENER_DMA0_REG0_CONF + (channel * 8 * 4);
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = GENER_DMA0_REG0_CONF + (channel * 8 * 4);
+    uint32_t reg_val = REG_READ(reg_addr);
 
     reg_val &= ~(GDMA_X_CHNL_PRIO_MASK << GDMA_X_CHNL_PRIO_POSI);
     reg_val |= ((prio & GDMA_X_CHNL_PRIO_MASK) << GDMA_X_CHNL_PRIO_POSI);
@@ -179,10 +180,10 @@ static void gdma_set_channel_prioprity(UINT32 channel, UINT32 prio)
     REG_WRITE(reg_addr, reg_val);
 }
 
-static void gdma_set_transfer_length(UINT32 channel, UINT32 len)
+static void gdma_set_transfer_length(uint32_t channel, uint32_t len)
 {
-    UINT32 reg_addr = GENER_DMA0_REG0_CONF + (channel * 8 * 4);
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = GENER_DMA0_REG0_CONF + (channel * 8 * 4);
+    uint32_t reg_val = REG_READ(reg_addr);
 
     reg_val &= ~(GDMA_X_TRANS_LEN_MASK << GDMA_X_TRANS_LEN_POSI);
     reg_val |= (((len - 1) & GDMA_X_TRANS_LEN_MASK) << GDMA_X_TRANS_LEN_POSI);
@@ -190,69 +191,69 @@ static void gdma_set_transfer_length(UINT32 channel, UINT32 len)
     REG_WRITE(reg_addr, reg_val);
 }
 
-static UINT32 gdma_get_transfer_length(UINT32 channel)
+static uint32_t gdma_get_transfer_length(uint32_t channel)
 {
-    UINT32 reg_addr = GENER_DMA0_REG0_CONF + (channel * 8 * 4);
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = GENER_DMA0_REG0_CONF + (channel * 8 * 4);
+    uint32_t reg_val = REG_READ(reg_addr);
 
     return ((reg_val >> GDMA_X_TRANS_LEN_POSI) & GDMA_X_TRANS_LEN_MASK) + 1;
 }
 
-static void gdma_set_dst_start_addr(UINT32 channel, void *dstptr)
+static void gdma_set_dst_start_addr(uint32_t channel, void *dstptr)
 {
-    UINT32 reg_addr = GENER_DMA0_REG1_DST_START_ADDR + (channel * 8 * 4);
-    REG_WRITE(reg_addr, (UINT32)dstptr);
+    uint32_t reg_addr = GENER_DMA0_REG1_DST_START_ADDR + (channel * 8 * 4);
+    REG_WRITE(reg_addr, (uint32_t)dstptr);
 }
 
-static void gdma_set_src_start_addr(UINT32 channel, void *srcptr)
+static void gdma_set_src_start_addr(uint32_t channel, void *srcptr)
 {
-    UINT32 reg_addr = GENER_DMA0_REG2_SRC_START_ADDR + (channel * 8 * 4);
-    REG_WRITE(reg_addr, (UINT32)srcptr);
+    uint32_t reg_addr = GENER_DMA0_REG2_SRC_START_ADDR + (channel * 8 * 4);
+    REG_WRITE(reg_addr, (uint32_t)srcptr);
 }
 
-static void gdma_set_dstloop_endaddr(UINT32 channel, void *dendptr)
+static void gdma_set_dstloop_endaddr(uint32_t channel, void *dendptr)
 {
-    UINT32 reg_addr = GENER_DMA0_REG3_DSTLOOP_END_ADDR + (channel * 8 * 4);
-    REG_WRITE(reg_addr, (UINT32)dendptr);
+    uint32_t reg_addr = GENER_DMA0_REG3_DSTLOOP_END_ADDR + (channel * 8 * 4);
+    REG_WRITE(reg_addr, (uint32_t)dendptr);
 }
 
-static void gdma_set_dstloop_startaddr(UINT32 channel, void *dstartptr)
+static void gdma_set_dstloop_startaddr(uint32_t channel, void *dstartptr)
 {
-    UINT32 reg_addr = GENER_DMA0_REG4_DSTLOOP_START_ADDR + (channel * 8 * 4);
-    REG_WRITE(reg_addr, (UINT32)dstartptr);
+    uint32_t reg_addr = GENER_DMA0_REG4_DSTLOOP_START_ADDR + (channel * 8 * 4);
+    REG_WRITE(reg_addr, (uint32_t)dstartptr);
 }
 
-static void gdma_set_srcloop_endaddr(UINT32 channel, void *sendptr)
+static void gdma_set_srcloop_endaddr(uint32_t channel, void *sendptr)
 {
-    UINT32 reg_addr = GENER_DMA0_REG5_SRCLOOP_END_ADDR + (channel * 8 * 4);
-    REG_WRITE(reg_addr, (UINT32)sendptr);
+    uint32_t reg_addr = GENER_DMA0_REG5_SRCLOOP_END_ADDR + (channel * 8 * 4);
+    REG_WRITE(reg_addr, (uint32_t)sendptr);
 }
 
-static void gdma_set_srcloop_startaddr(UINT32 channel, void *sstartptr)
+static void gdma_set_srcloop_startaddr(uint32_t channel, void *sstartptr)
 {
-    UINT32 reg_addr = GENER_DMA0_REG6_SRCLOOP_START_ADDR + (channel * 8 * 4);
-    REG_WRITE(reg_addr, (UINT32)sstartptr);
+    uint32_t reg_addr = GENER_DMA0_REG6_SRCLOOP_START_ADDR + (channel * 8 * 4);
+    REG_WRITE(reg_addr, (uint32_t)sstartptr);
 }
 
 #if (CFG_SOC_NAME == SOC_BK7231)
-static UINT32 gdma_get_remain_len(UINT32 channel)
+static uint32_t gdma_get_remain_len(uint32_t channel)
 {
-    UINT32 reg_addr = GENER_DMA0_REG7_REMAIN_LEN + (channel * 8 * 4);
+    uint32_t reg_addr = GENER_DMA0_REG7_REMAIN_LEN + (channel * 8 * 4);
     return REG_READ(reg_addr) & GDMA_REMAIN_LEN_MASK;
 }
 #else
-static UINT32 gdma_get_remain_len(UINT32 channel)
+static uint32_t gdma_get_remain_len(uint32_t channel)
 {
-    UINT32 reg_addr = GENER_DMA0_REG30_INT_CNTS + (channel * 4);
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = GENER_DMA0_REG30_INT_CNTS + (channel * 4);
+    uint32_t reg_val = REG_READ(reg_addr);
     
     return ((reg_val >> GDMA_X_REMAIN_LEN_POSI) & GDMA_X_REMAIN_LEN_MASK);
 }
 
-static void gdma_set_src_reqmux(UINT32 channel, UINT32 reqmux)
+static void gdma_set_src_reqmux(uint32_t channel, uint32_t reqmux)
 {
-    UINT32 reg_addr = GENER_DMA0_REG7_MUX_REQS + (channel * 8 * 4);
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = GENER_DMA0_REG7_MUX_REQS + (channel * 8 * 4);
+    uint32_t reg_val = REG_READ(reg_addr);
 
     reg_val &= ~(GDMA_X_SRC_REQ_MASK << GDMA_X_SRC_REQ_POSI);
 
@@ -261,10 +262,10 @@ static void gdma_set_src_reqmux(UINT32 channel, UINT32 reqmux)
     REG_WRITE(reg_addr, reg_val);
 }
 
-static void gdma_set_dst_reqmux(UINT32 channel, UINT32 reqmux)
+static void gdma_set_dst_reqmux(uint32_t channel, uint32_t reqmux)
 {
-    UINT32 reg_addr = GENER_DMA0_REG7_MUX_REQS + (channel * 8 * 4);
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = GENER_DMA0_REG7_MUX_REQS + (channel * 8 * 4);
+    uint32_t reg_val = REG_READ(reg_addr);
 
     reg_val &= ~(GDMA_X_DST_REQ_MASK << GDMA_X_DST_REQ_POSI);
 
@@ -273,10 +274,10 @@ static void gdma_set_dst_reqmux(UINT32 channel, UINT32 reqmux)
     REG_WRITE(reg_addr, reg_val);
 }
 
-static void gdma_set_dctm_write_wd(UINT32 channel, UINT32 read4byte)
+static void gdma_set_dctm_write_wd(uint32_t channel, uint32_t read4byte)
 {
-    UINT32 reg_addr = GENER_DMA0_REG7_MUX_REQS + (channel * 8 * 4);
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = GENER_DMA0_REG7_MUX_REQS + (channel * 8 * 4);
+    uint32_t reg_val = REG_READ(reg_addr);
 
     if(read4byte)
         reg_val |= GDMA_X_DTCM_WR_WAIT_WORD;
@@ -285,25 +286,25 @@ static void gdma_set_dctm_write_wd(UINT32 channel, UINT32 read4byte)
     REG_WRITE(reg_addr, reg_val);
 }
 
-static UINT32 gdma_get_finish_cnt(UINT32 channel)
+static uint32_t gdma_get_finish_cnt(uint32_t channel)
 {
-    UINT32 reg_addr = GENER_DMA0_REG30_INT_CNTS + (channel * 4);
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = GENER_DMA0_REG30_INT_CNTS + (channel * 4);
+    uint32_t reg_val = REG_READ(reg_addr);
     
     return ((reg_val >> GDMA_X_FIN_CNT_POSI) & GDMA_X_FIN_CNT_MASK);
 }
 
-static UINT32 gdma_get_half_finish_cnt(UINT32 channel)
+static uint32_t gdma_get_half_finish_cnt(uint32_t channel)
 {
-    UINT32 reg_addr = GENER_DMA0_REG30_INT_CNTS + (channel * 4);
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = GENER_DMA0_REG30_INT_CNTS + (channel * 4);
+    uint32_t reg_val = REG_READ(reg_addr);
     
     return ((reg_val >> GDMA_X_HFIN_CNT_POSI) & GDMA_X_HFIN_CNT_MASK);
 }
 
-static void gdma_set_priority(UINT32 fixed)
+static void gdma_set_priority(uint32_t fixed)
 {
-    UINT32 reg_val = REG_READ(GENER_DMA_REG37_PRIO_MODE);
+    uint32_t reg_val = REG_READ(GENER_DMA_REG37_PRIO_MODE);
 
     if(fixed)
         reg_val |= GDMA_PRIO_FIXED;
@@ -314,12 +315,12 @@ static void gdma_set_priority(UINT32 fixed)
 
 #endif // (CFG_SOC_NAME == SOC_BK7231)
 
-static UINT32 gdma_get_finish_interrupt_bit(UINT32 channel)
+static uint32_t gdma_get_finish_interrupt_bit(uint32_t channel)
 {
     #if (CFG_SOC_NAME == SOC_BK7231)
-    UINT32 reg_val = REG_READ(GENER_DMA_REG20_DMA_INT_STATUS);
+    uint32_t reg_val = REG_READ(GENER_DMA_REG20_DMA_INT_STATUS);
     #else
-    UINT32 reg_val = REG_READ(GENER_DMA_REG38_DMA_INT_STATUS);
+    uint32_t reg_val = REG_READ(GENER_DMA_REG38_DMA_INT_STATUS);
     #endif // (CFG_SOC_NAME == SOC_BK7231)
 
     reg_val &= GENER_DMA_FIN_INT_STATUS_MASK;
@@ -328,9 +329,9 @@ static UINT32 gdma_get_finish_interrupt_bit(UINT32 channel)
     return reg_val;
 }
 
-static void gdma_clr_finish_interrupt_bit(UINT32 channel)
+static void gdma_clr_finish_interrupt_bit(uint32_t channel)
 {
-    UINT32 reg_val;
+    uint32_t reg_val;
 
     reg_val = ( 0x1 << channel);
     
@@ -341,12 +342,12 @@ static void gdma_clr_finish_interrupt_bit(UINT32 channel)
     #endif // (CFG_SOC_NAME == SOC_BK7231)
 }
 
-static UINT32 gdma_get_half_finish_interrupt_bit(UINT32 channel)
+static uint32_t gdma_get_half_finish_interrupt_bit(uint32_t channel)
 {
     #if (CFG_SOC_NAME == SOC_BK7231)
-    UINT32 reg_val = REG_READ(GENER_DMA_REG20_DMA_INT_STATUS);
+    uint32_t reg_val = REG_READ(GENER_DMA_REG20_DMA_INT_STATUS);
     #else
-    UINT32 reg_val = REG_READ(GENER_DMA_REG38_DMA_INT_STATUS);
+    uint32_t reg_val = REG_READ(GENER_DMA_REG38_DMA_INT_STATUS);
     #endif // (CFG_SOC_NAME == SOC_BK7231)
 
     reg_val &= (GENER_DMA_HFIN_INT_STATUS_MASK << GENER_DMA_HFIN_INT_STATUS_POSI);
@@ -355,9 +356,9 @@ static UINT32 gdma_get_half_finish_interrupt_bit(UINT32 channel)
     return reg_val;
 }
 
-static void gdma_clr_half_finish_interrupt_bit(UINT32 channel)
+static void gdma_clr_half_finish_interrupt_bit(uint32_t channel)
 {
-    UINT32 reg_val;
+    uint32_t reg_val;
 
     reg_val = ( 0x1 << (channel + GENER_DMA_HFIN_INT_STATUS_POSI));
 
@@ -370,70 +371,70 @@ static void gdma_clr_half_finish_interrupt_bit(UINT32 channel)
 
 static void gdma_enable_interrupt(void)
 {
-    UINT32 param;
+    uint32_t param;
     param = (IRQ_GDMA_BIT);
     sddev_control(ICU_DEV_NAME, CMD_ICU_INT_ENABLE, &param);
 }
 
 static void gdma_disable_interrupt(void)
 {
-    UINT32 param;
+    uint32_t param;
     param = (IRQ_GDMA_BIT);
     sddev_control(ICU_DEV_NAME, CMD_ICU_INT_DISABLE, &param);
 }
 
 #if (CFG_SOC_NAME == SOC_BK7221U)
-static void gdma_set_src_pause_addr(UINT32 channel, UINT32 addr)
+static void gdma_set_src_pause_addr(uint32_t channel, uint32_t addr)
 {
-    UINT32 reg_addr = GENER_DMA0_REG40_SRC_PAUSE_ADDR + (channel * 4);
+    uint32_t reg_addr = GENER_DMA0_REG40_SRC_PAUSE_ADDR + (channel * 4);
 
     //os_printf("set src pause:%d, %x\r\n", channel, addr);
     REG_WRITE(reg_addr, addr);
 }
 
-static UINT32 gdma_get_src_pause_addr(UINT32 channel)
+static uint32_t gdma_get_src_pause_addr(uint32_t channel)
 {
-    UINT32 reg_addr = GENER_DMA0_REG40_SRC_PAUSE_ADDR + (channel * 4);
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = GENER_DMA0_REG40_SRC_PAUSE_ADDR + (channel * 4);
+    uint32_t reg_val = REG_READ(reg_addr);
 
     return reg_val;
 }
 
-static void gdma_set_dest_pause_addr(UINT32 channel, UINT32 addr)
+static void gdma_set_dest_pause_addr(uint32_t channel, uint32_t addr)
 {
-    UINT32 reg_addr = GENER_DMA0_REG48_DST_PAUSE_ADDR + (channel * 4);
+    uint32_t reg_addr = GENER_DMA0_REG48_DST_PAUSE_ADDR + (channel * 4);
 
     REG_WRITE(reg_addr, addr);
 }
 
-static UINT32 gdma_get_dest_pause_addr(UINT32 channel)
+static uint32_t gdma_get_dest_pause_addr(uint32_t channel)
 {
-    UINT32 reg_addr = GENER_DMA0_REG48_DST_PAUSE_ADDR + (channel * 4);
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = GENER_DMA0_REG48_DST_PAUSE_ADDR + (channel * 4);
+    uint32_t reg_val = REG_READ(reg_addr);
 
     return reg_val;
 }
 
-static UINT32 gdma_get_src_read_addr(UINT32 channel)
+static uint32_t gdma_get_src_read_addr(uint32_t channel)
 {
-    UINT32 reg_addr = GENER_DMA0_REG50_SRC_RD_ADDR + (channel * 4);
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = GENER_DMA0_REG50_SRC_RD_ADDR + (channel * 4);
+    uint32_t reg_val = REG_READ(reg_addr);
 
     //os_printf("get src read:%d, %x\r\n", channel, reg_val);
     return reg_val;
 }
 
-static UINT32 gdma_get_dest_write_addr(UINT32 channel)
+static uint32_t gdma_get_dest_write_addr(uint32_t channel)
 {
-    UINT32 reg_addr = GENER_DMA0_REG58_DST_WR_ADDR + (channel * 4);
-    UINT32 reg_val = REG_READ(reg_addr);
+    uint32_t reg_addr = GENER_DMA0_REG58_DST_WR_ADDR + (channel * 4);
+    uint32_t reg_val = REG_READ(reg_addr);
 
     return reg_val;
 }
 #endif // (CFG_SOC_NAME == SOC_BK7221U)
 
 /*---------------------------------------------------------------------------*/
-static int gdma_get_received_len(UINT32 channel)
+static int gdma_get_received_len(uint32_t channel)
 {
     if(channel >= GDMA_CHANNEL_MAX) {
         GENER_DMA_WPRT("gdma channel err\r\n");
@@ -446,7 +447,7 @@ static int gdma_get_received_len(UINT32 channel)
 // no loop src, no loop dst
 static void gdma_congfig_type0(GDMACFG_TPYES_PTR cfg)
 {
-    UINT32 reg_addr;
+    uint32_t reg_addr;
     if(cfg->channel >= GDMA_CHANNEL_MAX)
     {
         GENER_DMA_WPRT("gdma channel err\r\n");
@@ -471,7 +472,7 @@ static void gdma_congfig_type0(GDMACFG_TPYES_PTR cfg)
 // loop src, no loop dst
 static void gdma_congfig_type1(GDMACFG_TPYES_PTR cfg)
 {
-    UINT32 reg_addr;
+    uint32_t reg_addr;
     if(cfg->channel >= GDMA_CHANNEL_MAX)
     {
         GENER_DMA_WPRT("gdma channel err\r\n");
@@ -500,7 +501,7 @@ static void gdma_congfig_type1(GDMACFG_TPYES_PTR cfg)
 // no loop src, loop dst
 static void gdma_congfig_type2(GDMACFG_TPYES_PTR cfg)
 {
-    UINT32 reg_addr;
+    uint32_t reg_addr;
     if(cfg->channel >= GDMA_CHANNEL_MAX)
     {
         GENER_DMA_WPRT("gdma channel err\r\n");
@@ -529,7 +530,7 @@ static void gdma_congfig_type2(GDMACFG_TPYES_PTR cfg)
 // loop src, loop dst
 static void gdma_congfig_type3(GDMACFG_TPYES_PTR cfg)
 {
-    UINT32 reg_addr;
+    uint32_t reg_addr;
     if(cfg->channel >= GDMA_CHANNEL_MAX)
     {
         GENER_DMA_WPRT("gdma channel err\r\n");
@@ -564,7 +565,7 @@ static void gdma_congfig_type3(GDMACFG_TPYES_PTR cfg)
 // memery to module fifo to , so dest is register -- src is memery and loop
 static void gdma_congfig_type4(GDMACFG_TPYES_PTR cfg)
 {
-    UINT32 reg_addr;
+    uint32_t reg_addr;
     if(cfg->channel >= GDMA_CHANNEL_MAX)
     {
         GENER_DMA_WPRT("gdma channel err\r\n");
@@ -606,7 +607,7 @@ static void gdma_congfig_type4(GDMACFG_TPYES_PTR cfg)
 // module fifo to memery, so src is register -- dst is memery and loop
 static void gdma_congfig_type5(GDMACFG_TPYES_PTR cfg)
 {
-    UINT32 reg_addr;
+    uint32_t reg_addr;
     if(cfg->channel >= GDMA_CHANNEL_MAX)
     {
         GENER_DMA_WPRT("gdma channel err\r\n");
@@ -652,7 +653,7 @@ static void gdma_congfig_type6(GDMACFG_TPYES_PTR cfg)
 }
 #endif
 
-static UINT32 gdma_enable( GDMA_DO_PTR do_st )
+static uint32_t gdma_enable( GDMA_DO_PTR do_st )
 {
     GLOBAL_INT_DECLARATION();
     if(!do_st->length)
@@ -681,7 +682,7 @@ static UINT32 gdma_enable( GDMA_DO_PTR do_st )
 /*---------------------------------------------------------------------------*/
 void gdma_flush(void)
 {
-	UINT32 status;
+	uint32_t status;
 
 	gdma_set_dma_en(GDMA_CHANNEL_0, 0);
 	gdma_set_dma_en(GDMA_CHANNEL_1, 0);
@@ -797,9 +798,9 @@ void gdma_exit(void)
     sddev_unregister_dev(GDMA_DEV_NAME);
 }
 
-UINT32 gdma_ctrl(UINT32 cmd, void *param)
+uint32_t gdma_ctrl(uint32_t cmd, void *param)
 {
-    UINT32 ret;
+    uint32_t ret;
     GDMA_CFG_PTR dma_cfg;
     ret = ICU_SUCCESS;
 
@@ -879,7 +880,7 @@ UINT32 gdma_ctrl(UINT32 cmd, void *param)
         gdma_set_dctm_write_wd(dma_cfg->channel, dma_cfg->param);
         break;        
     case CMD_GDMA_SET_FIN_CNT:
-        ret = gdma_get_finish_cnt((UINT32)param);
+        ret = gdma_get_finish_cnt((uint32_t)param);
         break;
     case CMD_GDMA_SET_HFIN_CNT:
         ret = gdma_get_half_finish_cnt(dma_cfg->channel);
@@ -928,7 +929,7 @@ UINT32 gdma_ctrl(UINT32 cmd, void *param)
         break;
     #if (CFG_SOC_NAME != SOC_BK7231)
     case CMD_GDMA_GET_LEFT_LEN:
-        ret = gdma_get_received_len((UINT32)param);
+        ret = gdma_get_received_len((uint32_t)param);
         break;
     #endif // (CFG_SOC_NAME != SOC_BK7231)
     #if (CFG_SOC_NAME == SOC_BK7221U)
@@ -959,7 +960,7 @@ UINT32 gdma_ctrl(UINT32 cmd, void *param)
 }
 
 /*Before using this fuction, please config general dma moudule first*/
-void *gdma_memcpy(void *out, const void *in, UINT32 n)
+void *gdma_memcpy(void *out, const void *in, uint32_t n)
 {
     GLOBAL_INT_DECLARATION();
     GDMA_DO_ST do_st;
@@ -980,7 +981,7 @@ static void gdma_isr(void)
     #if (CFG_SOC_NAME == SOC_BK7231)
     GENER_DMA_PRT("gdma_isr is null\r\n");
     #else
-    UINT32 i, status, rev_len, cmp_bit;
+    uint32_t i, status, rev_len, cmp_bit;
 
     status = REG_READ(GENER_DMA_REG38_DMA_INT_STATUS);
 

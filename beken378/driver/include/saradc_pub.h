@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _SARADC_PUB_H_
 #define _SARADC_PUB_H_
 
@@ -40,13 +41,13 @@ typedef enum
 
 typedef struct
 {
-    UINT16 *pData;
-    volatile UINT8 current_sample_data_cnt;
-    volatile UINT8 current_read_data_cnt;
-    UINT8 data_buff_size;
-    volatile UINT8 has_data; /* 1: has data      0: no data*/
-    volatile UINT8 all_done; /* 1: all done      0: still sampling*/
-    UINT8 channel;
+    uint16_t *pData;
+    volatile uint8_t current_sample_data_cnt;
+    volatile uint8_t current_read_data_cnt;
+    uint8_t data_buff_size;
+    volatile uint8_t has_data; /* 1: has data      0: no data*/
+    volatile uint8_t all_done; /* 1: all done      0: still sampling*/
+    uint8_t channel;
     /* mode:     ADC mode
      * bit[0:1]: ADC operation mode
      *          00:  ADC power down mode
@@ -58,7 +59,7 @@ typedef struct
      *           1: delay 8 clk
      * bit[7:3]: reserved
      */
-    UINT8 mode;
+    uint8_t mode;
     void (*p_Int_Handler)(void);
     unsigned char pre_div;					// ADC pre-divide clk
     unsigned char samp_rate;				// ADC sample rate
@@ -67,8 +68,8 @@ typedef struct
 
 typedef struct
 {
-    UINT8 enable;
-    UINT8 channel;
+    uint8_t enable;
+    uint8_t channel;
 } saradc_chan_t;
 
 typedef struct 
@@ -91,11 +92,11 @@ void saradc_disable(void);
 void saradc_init(void);
 void saradc_exit(void);
 void saradc_isr(void);
-float saradc_calculate(UINT16 adc_val);
+float saradc_calculate(uint16_t adc_val);
 void saradc_config_param_init(saradc_desc_t * adc_config);
 void saradc_ensure_close(void);
-UINT32 saradc_check_busy(void);
-UINT32 saradc_check_accuracy(void);
+uint32_t saradc_check_busy(void);
+uint32_t saradc_check_accuracy(void);
 
 extern saradc_calibrate_val saradc_val;
 #endif //_SARADC_PUB_H_

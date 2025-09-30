@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  *  Simple DTLS client demonstration program
  *

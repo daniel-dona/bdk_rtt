@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*-----------------------------------------------------------------------*/
 /* Low level disk I/O module skeleton for FatFs     (C)ChaN, 2016        */
 /*-----------------------------------------------------------------------*/
@@ -192,7 +193,7 @@ DSTATUS disk_uninitialize ( BYTE pdrv/* Physical drive nmuber to identify the dr
 )
 {
 	DSTATUS stat;
-	UINT32 result=RES_ERROR;
+	uint32_t result=RES_ERROR;
 	switch (pdrv) {
 	case DEV_SD :
 #if CFG_USE_SDCARD_HOST		

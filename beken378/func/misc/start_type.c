@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "fake_clock_pub.h"
 #include "icu_pub.h"
@@ -15,7 +16,7 @@
 
 void bk_misc_crash_xat0_reboot(void)
 {
-	UINT32 wdt_val = 5;
+	uint32_t wdt_val = 5;
 
 	os_printf("xat0_reboot\r\n");
 
@@ -38,7 +39,7 @@ RESET_SOURCE_STATUS bk_misc_get_start_type()
 }
 
 #if (CFG_SOC_NAME == SOC_BK7231N)
-extern UINT32 sctrl_ctrl(UINT32 cmd, void *param);
+extern uint32_t sctrl_ctrl(uint32_t cmd, void *param);
 //only can be do once
  RESET_SOURCE_STATUS bk_misc_init_start_type(void)
 {

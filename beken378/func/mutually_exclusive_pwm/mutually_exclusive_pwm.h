@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _TUYA_PWM_H_
 #define _TUYA_PWM_H_
 
@@ -15,16 +16,16 @@
 #endif
 
 
-extern UINT32 tuya_pwm_init(uint8 channel_num, uint32 end_value, uint32 duty_cycle);
+extern uint32_t tuya_pwm_init(uint8_t channel_num, uint32_t end_value, uint32_t duty_cycle);
 
-extern void tuya_pwm_set_duty_cycle(uint8 channel_num, uint32 duty_cycle);
-extern void tuya_pwm_set_end_value(uint8 channel_num, uint32 end_value);
+extern void tuya_pwm_set_duty_cycle(uint8_t channel_num, uint32_t duty_cycle);
+extern void tuya_pwm_set_end_value(uint8_t channel_num, uint32_t end_value);
 
-extern void tuya_pwm_stop(uint8 channel_num_1, uint8 channel_num_2);
+extern void tuya_pwm_stop(uint8_t channel_num_1, uint8_t channel_num_2);
 
-extern void tuya_pwm_reset_duty_cycle(uint8 channel_num_1, uint8 channel_num_2,
-                                           uint32 duty_cycle_1, uint32 duty_cycle_2,
-                                           uint32 end_value, uint32 dead_band_1);
+extern void tuya_pwm_reset_duty_cycle(uint8_t channel_num_1, uint8_t channel_num_2,
+                                           uint32_t duty_cycle_1, uint32_t duty_cycle_2,
+                                           uint32_t end_value, uint32_t dead_band_1);
 
 #endif
 

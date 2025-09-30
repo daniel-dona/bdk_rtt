@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include "include.h"
 #include "arm_arch.h"
 #include <stddef.h>     // standard definition
@@ -136,7 +137,7 @@ void uart_rx_cmd_handler(uint8_t *buff, uint8_t len)
 					channel = 39;
 				if (pwr_idx > 79)
 					pwr_idx = 79;
-				extern void manual_cal_save_txpwr(UINT32 rate, UINT32 channel, UINT32 pwr_gain);
+				extern void manual_cal_save_txpwr(uint32_t rate, uint32_t channel, uint32_t pwr_gain);
 				manual_cal_save_txpwr(EVM_DEFUALT_BLE_RATE, channel, pwr_idx);
 
 			} else {
@@ -180,9 +181,9 @@ void uart_rx_cmd_handler(uint8_t *buff, uint8_t len)
 extern int bkreg_run_command(const char *content, int cnt);
 void  ble_uart_isr(void)
 {
-	UINT32 status;
-	UINT32 intr_en;
-	UINT32 intr_status;
+	uint32_t status;
+	uint32_t intr_en;
+	uint32_t intr_status;
 
 #if (BLE_DUT_UART_PORT == PORT_UART1)
 	intr_en = REG_READ(REG_UART1_INTR_ENABLE);
@@ -275,7 +276,7 @@ void host_send_cmd(uint8_t *bufptr, uint16_t length)
 	ble_send_msg(BLE_MSG_DUT);
 }
 
-////void host_get_event(uint8 *bufptr, uint8 length)
+////void host_get_event(uint8_t *bufptr, uint8_t length)
 void host_get_event(void)
 {
 

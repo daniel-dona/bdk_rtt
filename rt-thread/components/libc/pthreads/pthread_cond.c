@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : pthread_cond.c
  * This file is part of RT-Thread RTOS
@@ -88,7 +89,7 @@ int pthread_cond_init(pthread_cond_t *cond, const pthread_condattr_t *attr)
 {
     rt_err_t result;
     char cond_name[RT_NAME_MAX];
-    static rt_uint16_t cond_num = 0;
+    static uint16_t cond_num = 0;
 
     /* parameter check */
     if (cond == RT_NULL)
@@ -191,7 +192,7 @@ RTM_EXPORT(pthread_cond_signal);
 
 rt_err_t _pthread_cond_timedwait(pthread_cond_t  *cond,
                                  pthread_mutex_t *mutex,
-                                 rt_int32_t       timeout)
+                                 int32_t       timeout)
 {
     rt_err_t result;
 

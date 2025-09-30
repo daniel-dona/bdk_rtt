@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /* Hey EMACS -*- linux-c -*- */
 /*
  *

@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  * File      : rtc.c
  * This file is part of RT-Thread RTOS
@@ -46,14 +48,14 @@
 /**
  * Set system date(time not modify).
  *
- * @param rt_uint32_t year  e.g: 2012.
- * @param rt_uint32_t month e.g: 12 (1~12).
- * @param rt_uint32_t day   e.g: 31.
+ * @param uint32_t year  e.g: 2012.
+ * @param uint32_t month e.g: 12 (1~12).
+ * @param uint32_t day   e.g: 31.
  *
  * @return rt_err_t if set success, return RT_EOK.
  *
  */
-rt_err_t set_date(rt_uint32_t year, rt_uint32_t month, rt_uint32_t day)
+rt_err_t set_date(uint32_t year, uint32_t month, uint32_t day)
 {
     time_t now;
     struct tm *p_tm;
@@ -96,14 +98,14 @@ rt_err_t set_date(rt_uint32_t year, rt_uint32_t month, rt_uint32_t day)
 /**
  * Set system time(date not modify).
  *
- * @param rt_uint32_t hour   e.g: 0~23.
- * @param rt_uint32_t minute e.g: 0~59.
- * @param rt_uint32_t second e.g: 0~59.
+ * @param uint32_t hour   e.g: 0~23.
+ * @param uint32_t minute e.g: 0~59.
+ * @param uint32_t second e.g: 0~59.
  *
  * @return rt_err_t if set success, return RT_EOK.
  *
  */
-rt_err_t set_time(rt_uint32_t hour, rt_uint32_t minute, rt_uint32_t second)
+rt_err_t set_time(uint32_t hour, uint32_t minute, uint32_t second)
 {
     time_t now;
     struct tm *p_tm;

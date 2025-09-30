@@ -1,3 +1,4 @@
+#include <stdint.h>
 /**
  ****************************************************************************************
  *
@@ -46,7 +47,7 @@
 #define CAMERA_RESET_GPIO_INDEX		GPIO16
 #define CAMERA_RESET_HIGH_VAL       1
 #define CAMERA_RESET_LOW_VAL        0
-extern void delay100us(INT32 num);
+extern void delay100us(int32_t num);
 
 #include "msh.h"
 
@@ -204,8 +205,8 @@ void bmsg_tx_raw_handler(BUS_MSG_T *msg){
 	uint8_t *pkt = (uint8_t *)msg->arg;
 	uint16_t len = msg->len;
 	MSDU_NODE_T *node;
-	UINT8 *content_ptr;
-	UINT32 queue_idx = AC_VI;
+	uint8_t *content_ptr;
+	uint32_t queue_idx = AC_VI;
 	struct txdesc *txdesc_new;
 	struct umacdesc *umac;
 
@@ -226,10 +227,10 @@ void bmsg_tx_raw_handler(BUS_MSG_T *msg){
 	txdesc_new->status = TXDESC_STA_USED;
 	txdesc_new->host.flags = TXU_CNTRL_MGMT;
 	txdesc_new->host.msdu_node = (void *)node;
-	txdesc_new->host.orig_addr = (UINT32)node->msdu_ptr;
-	txdesc_new->host.packet_addr = (UINT32)content_ptr;
+	txdesc_new->host.orig_addr = (uint32_t)node->msdu_ptr;
+	txdesc_new->host.packet_addr = (uint32_t)content_ptr;
 	txdesc_new->host.packet_len = len;
-	txdesc_new->host.status_desc_addr = (UINT32)content_ptr;
+	txdesc_new->host.status_desc_addr = (uint32_t)content_ptr;
 	txdesc_new->host.tid = 0xff;
 
 	umac = &txdesc_new->umac;
@@ -287,7 +288,7 @@ void bmsg_skt_tx_sender(void *arg)
 extern void power_save_wait_timer_real_handler(void );
 extern void power_save_wait_timer_start(void);
 
-void ps_msg_process(UINT8 ps_msg)
+void ps_msg_process(uint8_t ps_msg)
 {
     switch(ps_msg)
     {
@@ -517,7 +518,7 @@ void bmsg_txing_sender(uint8_t sta_idx)
 void bmsg_txing_handler(BUS_MSG_T *msg)
 {
     OSStatus ret;
-    UINT8 sta_idx = (UINT8)msg->arg;
+    uint8_t sta_idx = (uint8_t)msg->arg;
 
     rwm_msdu_send_txing_node(sta_idx);
 }
@@ -549,9 +550,9 @@ void bmsg_ps_sender(uint8_t arg)
 
 void bmsg_ps_handler(BUS_MSG_T *msg)
 {
-    UINT8 arg;
+    uint8_t arg;
 
-    arg = (UINT8)msg->arg;
+    arg = (uint8_t)msg->arg;
     ps_msg_process(arg);
 }
 #endif
@@ -720,18 +721,18 @@ void scan_camera_sensors(int argc, char **argv){
 
     DJPEG_DESC_ST ejpeg_cfg;
 
-    UINT32 status;
+    uint32_t status;
 
-    DD_HANDLE ejpeg_hdl = ddev_open(EJPEG_DEV_NAME, &status, (UINT32)&ejpeg_cfg);
+    DD_HANDLE ejpeg_hdl = ddev_open(EJPEG_DEV_NAME, &status, (uint32_t)&ejpeg_cfg);
 
     os_printf("open EJPEG %p\r\n", ejpeg_hdl);
     os_printf("status: %d\r\n", status);
 
-    UINT32 i2c2_trans_mode = (0 & (~I2C2_MSG_WORK_MODE_MS_BIT)		// master
+    uint32_t i2c2_trans_mode = (0 & (~I2C2_MSG_WORK_MODE_MS_BIT)		// master
 						 & (~I2C2_MSG_WORK_MODE_AL_BIT)) 	// 7bit address
 						 | ( I2C2_MSG_WORK_MODE_IA_BIT);	
 
-    //UINT32 oflag = 0;
+    //uint32_t oflag = 0;
 
     DD_HANDLE i2c_hdl = ddev_open(I2C2_DEV_NAME, &status, i2c2_trans_mode);
     os_printf("open I2C2\r\n");
@@ -741,7 +742,7 @@ void scan_camera_sensors(int argc, char **argv){
     I2C_OP_ST i2c_operater;
 
 
-    //status = ddev_write(i2c_hdl, (char *)&data, 1, (UINT32)&i2c_operater);
+    //status = ddev_write(i2c_hdl, (char *)&data, 1, (uint32_t)&i2c_operater);
 
 
     //i2c_operater.addr_width = ADDR_WIDTH_8;
@@ -755,11 +756,11 @@ void scan_camera_sensors(int argc, char **argv){
 
         data = 0x00;
 
-        //status = ddev_write(i2c_hdl, (char *) data, 1, (UINT32)&i2c_operater);
+        //status = ddev_write(i2c_hdl, (char *) data, 1, (uint32_t)&i2c_operater);
 
         //os_printf("\nREAD -> Status: %d, Data: %d %d %d %d", status, data[0], data[1], data[2], data[3]);
 
-        status = ddev_read(i2c_hdl, (char *) &data, 1, (UINT32)&i2c_operater);
+        status = ddev_read(i2c_hdl, (char *) &data, 1, (uint32_t)&i2c_operater);
 
         os_printf("READ -> Status: %d, Device: %x, Addr: %x, Data: %x \n\n", status, i2c_operater.salve_id, i2c_operater.op_addr, data);
 

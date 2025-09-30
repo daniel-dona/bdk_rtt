@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * Universally Unique IDentifier (UUID)
  * Copyright (c) 2008, Jouni Malinen <j@w1.fi>
@@ -11,9 +12,9 @@
 
 #define UUID_LEN 16
 
-int uuid_str2bin(const char *str, u8 *bin);
-int uuid_bin2str(const u8 *bin, char *str, size_t max_len);
-int is_nil_uuid(const u8 *uuid);
-int uuid_random(u8 *uuid);
+int uuid_str2bin(const char *str, uint8_t *bin);
+int uuid_bin2str(const uint8_t *bin, char *str, size_t max_len);
+int is_nil_uuid(const uint8_t *uuid);
+int uuid_random(uint8_t *uuid);
 
 #endif /* UUID_H */

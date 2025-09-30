@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : dfs_ramfs.h
  * This file is part of Device File System in RT-Thread RTOS
@@ -38,7 +39,7 @@ struct ramfs_dirent
     struct dfs_ramfs *fs;       /* file system ref */
 
     char name[RAMFS_NAME_MAX];  /* dirent name */
-    rt_uint8_t* data;
+    uint8_t* data;
 
     rt_size_t size;             /* file size */
 };
@@ -48,14 +49,14 @@ struct ramfs_dirent
  */
 struct dfs_ramfs
 {
-    rt_uint32_t magic;
+    uint32_t magic;
 
     struct rt_memheap memheap;
     struct ramfs_dirent root;
 };
 
 int dfs_ramfs_init(void);
-struct dfs_ramfs* dfs_ramfs_create(rt_uint8_t* pool, rt_size_t size);
+struct dfs_ramfs* dfs_ramfs_create(uint8_t* pool, rt_size_t size);
 
 #endif
 

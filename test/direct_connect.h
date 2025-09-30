@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _DIRECT_CONNECT_H_
 #define _DIRECT_CONNECT_H_
 

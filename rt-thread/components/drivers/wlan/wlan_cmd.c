@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : wlan_cmd.c
  *             Wi-Fi common commands

@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "diskio.h"		/* Declarations of low level disk I/O functions */
 #if CFG_USE_SDCARD_HOST
 #include "ff.h"
@@ -10,18 +11,18 @@ FILE_INFO FileInfo;
 char *MP3_Ext = ".MP3";
 char *WAV_Ext = ".WAV";
 FAT_DIR_INFO file_queue[MAX_SONG_DIR];
-uint16 mp3queuecount = 0; //有MP3文件的文件夹数目
-uint16 mp3filecount = 0;//	MP3歌曲总的数目
+uint16_t mp3queuecount = 0; //有MP3文件的文件夹数目
+uint16_t mp3filecount = 0;//	MP3歌曲总的数目
 FATFS Fatfs_buf;
 FIL fsFD;
 DIR_QUEUE *point_front;//队头指针
 DIR_QUEUE *point_rear;//队尾指针
-static uint16 rear_cnt = 0;
+static uint16_t rear_cnt = 0;
 
 DIR_QUEUE g_dirbuf[MAX_DIR_SUPPORT];
 
-extern void mem_set (void *dst, int val, uint32 cnt);
-extern FRESULT chk_mounted_con (FATFS *rfs, uint8 chk_wp);
+extern void mem_set (void *dst, int val, uint32_t cnt);
+extern FRESULT chk_mounted_con (FATFS *rfs, uint8_t chk_wp);
 
 int strcmpi (const void *dst, const void *src, int cnt)
 {
@@ -40,9 +41,9 @@ char *strrchr_con(char *str, char ch)
         return( (char *)str );
     return NULL;
 }
-static void Convert2UpperCase(char *str, uint32 len)
+static void Convert2UpperCase(char *str, uint32_t len)
 {
-    uint32 i;
+    uint32_t i;
     for(i = 0; i < len; i++)
         ((str[i] <= 'z') && (str[i] >= 'a')) ? (str[i] -= 0x20) : str[i];
 }
@@ -51,7 +52,7 @@ static void Convert2UpperCase(char *str, uint32 len)
 FRESULT f_open_con (
     FIL *fp,			/* Pointer to the blank file object */
     PFILINFOADD finfo,
-    uint8 mode			/* Access mode and file open mode flags */
+    uint8_t mode			/* Access mode and file open mode flags */
 )
 {
     fp->flag = mode;				/* File access mode */
@@ -67,23 +68,23 @@ FRESULT f_open_con (
 }
 
 ////
-FRESULT fl_listatdir(DIR *dj_con, PFILINFOADD fi_con, uint16 idx)
+FRESULT fl_listatdir(DIR *dj_con, PFILINFOADD fi_con, uint16_t idx)
 {
     int i;
-    uint8 c, *dir;
+    uint8_t c, *dir;
     char *p;
     FRESULT ret = FR_NO_FILE;
     /*for exfat use*/
-    static	uint8	DirEntryAttr = 0;
-    static	uint8	no_fat_chain_Flag = 0;
-    static  uint8	ExtNameStartFlag = 0;
-    static	uint8	exfat_name_length = 0;
-    static	uint8   extname_idx = 0;
+    static	uint8_t	DirEntryAttr = 0;
+    static	uint8_t	no_fat_chain_Flag = 0;
+    static  uint8_t	ExtNameStartFlag = 0;
+    static	uint8_t	exfat_name_length = 0;
+    static	uint8_t   extname_idx = 0;
     static	char   	ext_name[3];
-    static	uint32	exfat_first_cluster = 0;
-    static	uint32	exfat_file_size = 0;
-    static	uint16  exfat_entry_phase = 0;
-    uint32	tmp = 0;
+    static	uint32_t	exfat_first_cluster = 0;
+    static	uint32_t	exfat_file_size = 0;
+    static	uint16_t  exfat_entry_phase = 0;
+    uint32_t	tmp = 0;
 
     dj_con->dir = dj_con->fs->win + (idx % (SS(dj_con->fs) / 32)) * 32;
     dir = dj_con->dir;
@@ -209,7 +210,7 @@ FRESULT fl_listatdir(DIR *dj_con, PFILINFOADD fi_con, uint16 idx)
         fi_con->fsize = LD_DWORD(dir + DIR_FileSize);		/* Size */
         fi_con->fdate = LD_WORD(dir + DIR_WrtDate);		/* Date */
         fi_con->ftime = LD_WORD(dir + DIR_WrtTime);		/* Time */
-        fi_con->fcluster = ((uint32)LD_WORD(dir + DIR_FstClusHI) << 16) | LD_WORD(dir + DIR_FstClusLO);
+        fi_con->fcluster = ((uint32_t)LD_WORD(dir + DIR_FstClusHI) << 16) | LD_WORD(dir + DIR_FstClusLO);
         ret = FR_OK;
     }
     return ret;
@@ -217,9 +218,9 @@ FRESULT fl_listatdir(DIR *dj_con, PFILINFOADD fi_con, uint16 idx)
 
 static FRESULT  get_curdir_info(DIR_QUEUE *p_front)
 {
-    uint16 idx = 0;
-    uint16 cur_musicfile = 0;
-    uint16 ic, dc;
+    uint16_t idx = 0;
+    uint16_t cur_musicfile = 0;
+    uint16_t ic, dc;
     FRESULT ret;
     DIR dj;
     FILINFOADD fl_curnode;
@@ -310,10 +311,10 @@ static FRESULT  get_curdir_info(DIR_QUEUE *p_front)
 /*input:
 i -- directory index
 number -- music file idx in  directory i */
-static FIL	*GetFile_From_NumInDir(uint16 i, uint16 number)
+static FIL	*GetFile_From_NumInDir(uint16_t i, uint16_t number)
 {
-    uint16 idx = 0;
-    uint16 ic, dc, brootdir, music_count;
+    uint16_t idx = 0;
+    uint16_t ic, dc, brootdir, music_count;
     FRESULT ret;
     FILINFOADD fl_curnode;
     char *Ext = NULL;
@@ -390,9 +391,9 @@ static FIL	*GetFile_From_NumInDir(uint16 i, uint16 number)
 
 /*input:number -- 0~mp3filecount-1 */
 //Playlist_GetSongFileInfo
-FIL *Get_File_From_Number(uint16 number)
+FIL *Get_File_From_Number(uint16_t number)
 {
-    uint16 i;
+    uint16_t i;
     FIL *fhFile;
 
     for(i = 0; i < MAX_SONG_DIR; i++)
@@ -414,7 +415,7 @@ FIL *Get_File_From_Number(uint16 number)
 /*scan whole disk, get total music file number and store the DIRs info
 which have music files
 */
-static uint32 initfatsystem(uint8 type)
+static uint32_t initfatsystem(uint8_t type)
 {
     int count = 0, ret;
     DIR_QUEUE *dir_buf;
@@ -476,10 +477,10 @@ static uint32 initfatsystem(uint8 type)
 }
 
 /*Sd card & filesystem initialization*/
-//uint32 SD_Fs_Init(void)
-uint32 Media_Fs_Init(uint8 type)
+//uint32_t SD_Fs_Init(void)
+uint32_t Media_Fs_Init(uint8_t type)
 {
-    uint32 ret = 1;
+    uint32_t ret = 1;
     FileInfo.fat_ok_flag = 0;
     if(f_mount(1, &Fatfs_buf) == FR_OK)
     {
@@ -492,12 +493,12 @@ uint32 Media_Fs_Init(uint8 type)
     return ret;
 }
 
-uint8 get_fat_ok_flag(void)
+uint8_t get_fat_ok_flag(void)
 {
     return FileInfo.fat_ok_flag;
 }
 
-uint16 get_musicfile_count(void)
+uint16_t get_musicfile_count(void)
 {
     return mp3filecount;
 }
@@ -506,7 +507,7 @@ FILE_INFO *get_file_info(void)
     return (&FileInfo);
 }
 
-uint8 get_disk_type(void)
+uint8_t get_disk_type(void)
 {
     return Fatfs_buf.drive;
 }

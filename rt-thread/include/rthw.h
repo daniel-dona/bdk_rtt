@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : rthw.h
  * This file is part of RT-Thread RTOS
@@ -39,13 +40,13 @@ extern "C" {
  * Some macros define
  */
 #ifndef HWREG32
-#define HWREG32(x)          (*((volatile rt_uint32_t *)(x)))
+#define HWREG32(x)          (*((volatile uint32_t *)(x)))
 #endif
 #ifndef HWREG16
-#define HWREG16(x)          (*((volatile rt_uint16_t *)(x)))
+#define HWREG16(x)          (*((volatile uint16_t *)(x)))
 #endif
 #ifndef HWREG8
-#define HWREG8(x)           (*((volatile rt_uint8_t *)(x)))
+#define HWREG8(x)           (*((volatile uint8_t *)(x)))
 #endif
 
 #ifndef RT_CPU_CACHE_LINE_SZ
@@ -74,9 +75,9 @@ void rt_hw_cpu_dcache_ops(int ops, void* addr, int size);
 void rt_hw_cpu_reset(void);
 void rt_hw_cpu_shutdown(void);
 
-rt_uint8_t *rt_hw_stack_init(void       *entry,
+uint8_t *rt_hw_stack_init(void       *entry,
                              void       *parameter,
-                             rt_uint8_t *stack_addr,
+                             uint8_t *stack_addr,
                              void       *exit);
 void rt_hw_stack_print_after_exception(void);
 
@@ -92,7 +93,7 @@ struct rt_irq_desc
 
 #ifdef RT_USING_INTERRUPT_INFO
     char             name[RT_NAME_MAX];
-    rt_uint32_t      counter;
+    uint32_t      counter;
 #endif
 };
 
@@ -113,14 +114,14 @@ void rt_hw_interrupt_enable(rt_base_t level);
 /*
  * Context interfaces
  */
-void rt_hw_context_switch(rt_uint32_t from, rt_uint32_t to);
-void rt_hw_context_switch_to(rt_uint32_t to);
-void rt_hw_context_switch_interrupt(rt_uint32_t from, rt_uint32_t to);
+void rt_hw_context_switch(uint32_t from, uint32_t to);
+void rt_hw_context_switch_to(uint32_t to);
+void rt_hw_context_switch_interrupt(uint32_t from, uint32_t to);
 
 void rt_hw_console_output(const char *str);
 
-void rt_hw_backtrace(rt_uint32_t *fp, rt_uint32_t thread_entry);
-void rt_hw_show_memory(rt_uint32_t addr, rt_uint32_t size);
+void rt_hw_backtrace(uint32_t *fp, uint32_t thread_entry);
+void rt_hw_show_memory(uint32_t addr, uint32_t size);
 
 /*
  * Exception interfaces
@@ -130,7 +131,7 @@ void rt_hw_exception_install(rt_err_t (*exception_handle)(void *context));
 /*
  * delay interfaces
  */
-void rt_hw_us_delay(rt_uint32_t us);
+void rt_hw_us_delay(uint32_t us);
 
 #ifdef __cplusplus
 }

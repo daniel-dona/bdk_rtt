@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
   This file is part of UFFS, the Ultra-low-cost Flash File System.
   
@@ -41,7 +42,7 @@
 
 #define PFX "ecc : "
 
-static const u8 bits_tbl[256] = {
+static const uint8_t bits_tbl[256] = {
 	0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4,
 	1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5,
 	1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5,
@@ -60,17 +61,17 @@ static const u8 bits_tbl[256] = {
 	4, 5, 5, 6, 5, 6, 6, 7, 5, 6, 6, 7, 6, 7, 7, 8,
 };
 
-static const u8 line_parity_tbl[16] = {
+static const uint8_t line_parity_tbl[16] = {
 	0x00, 0x02, 0x08, 0x0a, 0x20, 0x22, 0x28, 0x2a,
 	0x80, 0x82, 0x88, 0x8a, 0xa0, 0xa2, 0xa8, 0xaa
 };
 
-static const u8 line_parity_prime_tbl[16] = {
+static const uint8_t line_parity_prime_tbl[16] = {
 	0x00, 0x01, 0x04, 0x05, 0x10, 0x11, 0x14, 0x15,
 	0x40, 0x41, 0x44, 0x45, 0x50, 0x51, 0x54, 0x55
 };
 
-static const u8 column_parity_tbl[256] = {
+static const uint8_t column_parity_tbl[256] = {
 	0x00, 0x55, 0x59, 0x0c, 0x65, 0x30, 0x3c, 0x69,
 	0x69, 0x3c, 0x30, 0x65, 0x0c, 0x59, 0x55, 0x00, 
 	0x95, 0xc0, 0xcc, 0x99, 0xf0, 0xa5, 0xa9, 0xfc,
@@ -112,12 +113,12 @@ static const u8 column_parity_tbl[256] = {
  * \param[out] ecc output ecc
  * \param[in] length of data in bytes
  */
-static void uffs_EccMakeChunk256(const void *data, void *ecc, u16 len)
+static void uffs_EccMakeChunk256(const void *data, void *ecc, uint16_t len)
 {
-	u8 *pecc = (u8 *)ecc;
-	const u8 *p = (const u8 *)data;
-	u8 b, col_parity = 0, line_parity = 0, line_parity_prime = 0;
-	u16 i;
+	uint8_t *pecc = (uint8_t *)ecc;
+	const uint8_t *p = (const uint8_t *)data;
+	uint8_t b, col_parity = 0, line_parity = 0, line_parity_prime = 0;
+	uint16_t i;
 
 	for (i = 0; i < len; i++) {
 		b = column_parity_tbl[*p++];
@@ -152,8 +153,8 @@ static void uffs_EccMakeChunk256(const void *data, void *ecc, u16 len)
  */
 int uffs_EccMake(const void *data, int data_len, void *ecc)
 {
-	const u8 *p_data = (const u8 *)data;
-	u8 *p_ecc = (u8 *)ecc;
+	const uint8_t *p_data = (const uint8_t *)data;
+	uint8_t *p_ecc = (uint8_t *)ecc;
 	int len;
 
 	if (data == NULL || ecc == NULL)
@@ -167,7 +168,7 @@ int uffs_EccMake(const void *data, int data_len, void *ecc)
 		p_ecc += 3;
 	}
 
-	return p_ecc - (u8 *)ecc;
+	return p_ecc - (uint8_t *)ecc;
 }
 
 /**
@@ -185,9 +186,9 @@ int uffs_EccMake(const void *data, int data_len, void *ecc)
 static int uffs_EccCorrectChunk256(void *data, void *read_ecc,
 								   const void *test_ecc, int errtop)
 {
-	u8 d0, d1, d2;		/* deltas */
-	u8 *p = (u8 *)data;
-	u8 *pread_ecc = (u8 *)read_ecc, *ptest_ecc = (u8 *)test_ecc;
+	uint8_t d0, d1, d2;		/* deltas */
+	uint8_t *p = (uint8_t *)data;
+	uint8_t *pread_ecc = (uint8_t *)read_ecc, *ptest_ecc = (uint8_t *)test_ecc;
 
 	d0 = pread_ecc[0] ^ ptest_ecc[0];
 	d1 = pread_ecc[1] ^ ptest_ecc[1];
@@ -202,8 +203,8 @@ static int uffs_EccCorrectChunk256(void *data, void *read_ecc,
 	{
 		// Single bit (recoverable) error in data
 
-		u8 b;
-		u8 bit;
+		uint8_t b;
+		uint8_t bit;
 		
 		bit = b = 0;		
 		
@@ -252,9 +253,9 @@ static int uffs_EccCorrectChunk256(void *data, void *read_ecc,
 int uffs_EccCorrect(void *data, int data_len,
 					void *read_ecc, const void *test_ecc)
 {
-	u8 *p_data = (u8 *)data;
-	u8 *p_read_ecc = (u8 *)read_ecc;
-	u8 *p_test_ecc = (u8 *)test_ecc;
+	uint8_t *p_data = (uint8_t *)data;
+	uint8_t *p_read_ecc = (uint8_t *)read_ecc;
+	uint8_t *p_test_ecc = (uint8_t *)test_ecc;
 	int total = 0, ret, len;
 
 	if (data == NULL || read_ecc == NULL || test_ecc == NULL)
@@ -289,12 +290,12 @@ int uffs_EccCorrect(void *data, int data_len,
  *
  * \return 12 bits ECC data (lower 12 bits).
  */
-u16 uffs_EccMake8(void *data, int data_len)
+uint16_t uffs_EccMake8(void *data, int data_len)
 {
-	u8 *p = (u8 *)data;
-	u8 b, col_parity = 0, line_parity = 0, line_parity_prime = 0;
-	u8 i;
-	u16 ecc = 0;
+	uint8_t *p = (uint8_t *)data;
+	uint8_t b, col_parity = 0, line_parity = 0, line_parity_prime = 0;
+	uint8_t i;
+	uint16_t ecc = 0;
 
 
 	data_len = (data_len > 8 ? 8 : data_len);
@@ -333,10 +334,10 @@ u16 uffs_EccMake8(void *data, int data_len)
  *			-1 -- can not be corrected
  *			>0 -- how many bits corrected
  */
-int uffs_EccCorrect8(void *data, u16 read_ecc, u16 test_ecc, int errtop)
+int uffs_EccCorrect8(void *data, uint16_t read_ecc, uint16_t test_ecc, int errtop)
 {
-	u8 d0, d1;			/* deltas */
-	u8 *p = (u8 *)data;
+	uint8_t d0, d1;			/* deltas */
+	uint8_t *p = (uint8_t *)data;
 
 	read_ecc &= 0xfff;
 	test_ecc &= 0xfff;
@@ -352,8 +353,8 @@ int uffs_EccCorrect8(void *data, u16 read_ecc, u16 test_ecc, int errtop)
 	{
 		// Single bit (recoverable) error in data
 
-		u8 b;
-		u8 bit;
+		uint8_t b;
+		uint8_t bit;
 		
 		bit = b = 0;		
 		
@@ -365,7 +366,7 @@ int uffs_EccCorrect8(void *data, u16 read_ecc, u16 test_ecc, int errtop)
 		if(d1 & 0x08) bit |= 0x02;
 		if(d1 & 0x02) bit |= 0x01;
 
-		if (b >= (u8)errtop) return -1;
+		if (b >= (uint8_t)errtop) return -1;
 		if (bit >= 8) return -1;
 
 		p[b] ^= (1 << bit);

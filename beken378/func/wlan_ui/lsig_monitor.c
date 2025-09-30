@@ -1,3 +1,4 @@
+#include <stdint.h>
 /* use LSIG to do monitor */
 #include "include.h"
 #include "common.h"

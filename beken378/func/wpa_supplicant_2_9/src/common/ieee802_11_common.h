@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * IEEE 802.11 Common routines
  * Copyright (c) 2002-2019, Jouni Malinen <j@w1.fi>
@@ -13,9 +14,9 @@
 #include "ieee802_11_defs.h"
 
 struct element {
-	u8 id;
-	u8 datalen;
-	u8 data[];
+	uint8_t id;
+	uint8_t datalen;
+	uint8_t data[];
 } STRUCT_PACKED;
 
 struct hostapd_hw_modes;
@@ -24,141 +25,141 @@ struct hostapd_hw_modes;
 
 struct mb_ies_info {
 	struct {
-		const u8 *ie;
-		u8 ie_len;
+		const uint8_t *ie;
+		uint8_t ie_len;
 	} ies[MAX_NOF_MB_IES_SUPPORTED];
-	u8 nof_ies;
+	uint8_t nof_ies;
 };
 
 /* Parsed Information Elements */
 struct ieee802_11_elems {
-	const u8 *ssid;
-	const u8 *supp_rates;
-	const u8 *ds_params;
-	const u8 *challenge;
-	const u8 *erp_info;
-	const u8 *ext_supp_rates;
-	const u8 *wpa_ie;
-	const u8 *rsn_ie;
-	const u8 *wmm; /* WMM Information or Parameter Element */
-	const u8 *wmm_tspec;
-	const u8 *wps_ie;
-	const u8 *supp_channels;
-	const u8 *mdie;
-	const u8 *ftie;
-	const u8 *timeout_int;
-	const u8 *ht_capabilities;
-	const u8 *ht_operation;
-	const u8 *mesh_config;
-	const u8 *mesh_id;
-	const u8 *peer_mgmt;
-	const u8 *vht_capabilities;
-	const u8 *vht_operation;
-	const u8 *vht_opmode_notif;
-	const u8 *vendor_ht_cap;
-	const u8 *vendor_vht;
-	const u8 *p2p;
-	const u8 *wfd;
-	const u8 *link_id;
-	const u8 *interworking;
-	const u8 *qos_map_set;
-	const u8 *hs20;
-	const u8 *ext_capab;
-	const u8 *bss_max_idle_period;
-	const u8 *ssid_list;
-	const u8 *osen;
-	const u8 *mbo;
-	const u8 *ampe;
-	const u8 *mic;
-	const u8 *pref_freq_list;
-	const u8 *supp_op_classes;
-	const u8 *rrm_enabled;
-	const u8 *cag_number;
-	const u8 *ap_csn;
-	const u8 *fils_indic;
-	const u8 *dils;
-	const u8 *assoc_delay_info;
-	const u8 *fils_req_params;
-	const u8 *fils_key_confirm;
-	const u8 *fils_session;
-	const u8 *fils_hlp;
-	const u8 *fils_ip_addr_assign;
-	const u8 *key_delivery;
-	const u8 *fils_wrapped_data;
-	const u8 *fils_pk;
-	const u8 *fils_nonce;
-	const u8 *owe_dh;
-	const u8 *power_capab;
-	const u8 *roaming_cons_sel;
-	const u8 *password_id;
-	const u8 *oci;
-	const u8 *multi_ap;
-	const u8 *he_capabilities;
-	const u8 *he_operation;
+	const uint8_t *ssid;
+	const uint8_t *supp_rates;
+	const uint8_t *ds_params;
+	const uint8_t *challenge;
+	const uint8_t *erp_info;
+	const uint8_t *ext_supp_rates;
+	const uint8_t *wpa_ie;
+	const uint8_t *rsn_ie;
+	const uint8_t *wmm; /* WMM Information or Parameter Element */
+	const uint8_t *wmm_tspec;
+	const uint8_t *wps_ie;
+	const uint8_t *supp_channels;
+	const uint8_t *mdie;
+	const uint8_t *ftie;
+	const uint8_t *timeout_int;
+	const uint8_t *ht_capabilities;
+	const uint8_t *ht_operation;
+	const uint8_t *mesh_config;
+	const uint8_t *mesh_id;
+	const uint8_t *peer_mgmt;
+	const uint8_t *vht_capabilities;
+	const uint8_t *vht_operation;
+	const uint8_t *vht_opmode_notif;
+	const uint8_t *vendor_ht_cap;
+	const uint8_t *vendor_vht;
+	const uint8_t *p2p;
+	const uint8_t *wfd;
+	const uint8_t *link_id;
+	const uint8_t *interworking;
+	const uint8_t *qos_map_set;
+	const uint8_t *hs20;
+	const uint8_t *ext_capab;
+	const uint8_t *bss_max_idle_period;
+	const uint8_t *ssid_list;
+	const uint8_t *osen;
+	const uint8_t *mbo;
+	const uint8_t *ampe;
+	const uint8_t *mic;
+	const uint8_t *pref_freq_list;
+	const uint8_t *supp_op_classes;
+	const uint8_t *rrm_enabled;
+	const uint8_t *cag_number;
+	const uint8_t *ap_csn;
+	const uint8_t *fils_indic;
+	const uint8_t *dils;
+	const uint8_t *assoc_delay_info;
+	const uint8_t *fils_req_params;
+	const uint8_t *fils_key_confirm;
+	const uint8_t *fils_session;
+	const uint8_t *fils_hlp;
+	const uint8_t *fils_ip_addr_assign;
+	const uint8_t *key_delivery;
+	const uint8_t *fils_wrapped_data;
+	const uint8_t *fils_pk;
+	const uint8_t *fils_nonce;
+	const uint8_t *owe_dh;
+	const uint8_t *power_capab;
+	const uint8_t *roaming_cons_sel;
+	const uint8_t *password_id;
+	const uint8_t *oci;
+	const uint8_t *multi_ap;
+	const uint8_t *he_capabilities;
+	const uint8_t *he_operation;
 
-	u8 ssid_len;
-	u8 supp_rates_len;
-	u8 challenge_len;
-	u8 ext_supp_rates_len;
-	u8 wpa_ie_len;
-	u8 rsn_ie_len;
-	u8 wmm_len; /* 7 = WMM Information; 24 = WMM Parameter */
-	u8 wmm_tspec_len;
-	u8 wps_ie_len;
-	u8 supp_channels_len;
-	u8 mdie_len;
-	u8 ftie_len;
-	u8 mesh_config_len;
-	u8 mesh_id_len;
-	u8 peer_mgmt_len;
-	u8 vendor_ht_cap_len;
-	u8 vendor_vht_len;
-	u8 p2p_len;
-	u8 wfd_len;
-	u8 interworking_len;
-	u8 qos_map_set_len;
-	u8 hs20_len;
-	u8 ext_capab_len;
-	u8 ssid_list_len;
-	u8 osen_len;
-	u8 mbo_len;
-	u8 ampe_len;
-	u8 mic_len;
-	u8 pref_freq_list_len;
-	u8 supp_op_classes_len;
-	u8 rrm_enabled_len;
-	u8 cag_number_len;
-	u8 fils_indic_len;
-	u8 dils_len;
-	u8 fils_req_params_len;
-	u8 fils_key_confirm_len;
-	u8 fils_hlp_len;
-	u8 fils_ip_addr_assign_len;
-	u8 key_delivery_len;
-	u8 fils_wrapped_data_len;
-	u8 fils_pk_len;
-	u8 owe_dh_len;
-	u8 power_capab_len;
-	u8 roaming_cons_sel_len;
-	u8 password_id_len;
-	u8 oci_len;
-	u8 multi_ap_len;
-	u8 he_capabilities_len;
-	u8 he_operation_len;
+	uint8_t ssid_len;
+	uint8_t supp_rates_len;
+	uint8_t challenge_len;
+	uint8_t ext_supp_rates_len;
+	uint8_t wpa_ie_len;
+	uint8_t rsn_ie_len;
+	uint8_t wmm_len; /* 7 = WMM Information; 24 = WMM Parameter */
+	uint8_t wmm_tspec_len;
+	uint8_t wps_ie_len;
+	uint8_t supp_channels_len;
+	uint8_t mdie_len;
+	uint8_t ftie_len;
+	uint8_t mesh_config_len;
+	uint8_t mesh_id_len;
+	uint8_t peer_mgmt_len;
+	uint8_t vendor_ht_cap_len;
+	uint8_t vendor_vht_len;
+	uint8_t p2p_len;
+	uint8_t wfd_len;
+	uint8_t interworking_len;
+	uint8_t qos_map_set_len;
+	uint8_t hs20_len;
+	uint8_t ext_capab_len;
+	uint8_t ssid_list_len;
+	uint8_t osen_len;
+	uint8_t mbo_len;
+	uint8_t ampe_len;
+	uint8_t mic_len;
+	uint8_t pref_freq_list_len;
+	uint8_t supp_op_classes_len;
+	uint8_t rrm_enabled_len;
+	uint8_t cag_number_len;
+	uint8_t fils_indic_len;
+	uint8_t dils_len;
+	uint8_t fils_req_params_len;
+	uint8_t fils_key_confirm_len;
+	uint8_t fils_hlp_len;
+	uint8_t fils_ip_addr_assign_len;
+	uint8_t key_delivery_len;
+	uint8_t fils_wrapped_data_len;
+	uint8_t fils_pk_len;
+	uint8_t owe_dh_len;
+	uint8_t power_capab_len;
+	uint8_t roaming_cons_sel_len;
+	uint8_t password_id_len;
+	uint8_t oci_len;
+	uint8_t multi_ap_len;
+	uint8_t he_capabilities_len;
+	uint8_t he_operation_len;
 
 	struct mb_ies_info mb_ies;
 };
 
 typedef enum { ParseOK = 0, ParseUnknown = 1, ParseFailed = -1 } ParseRes;
 
-ParseRes ieee802_11_parse_elems(const u8 *start, size_t len,
+ParseRes ieee802_11_parse_elems(const uint8_t *start, size_t len,
 				struct ieee802_11_elems *elems,
 				int show_errors);
-int ieee802_11_ie_count(const u8 *ies, size_t ies_len);
-struct wpabuf * ieee802_11_vendor_ie_concat(const u8 *ies, size_t ies_len,
-					    u32 oui_type);
+int ieee802_11_ie_count(const uint8_t *ies, size_t ies_len);
+struct wpabuf * ieee802_11_vendor_ie_concat(const uint8_t *ies, size_t ies_len,
+					    uint32_t oui_type);
 struct ieee80211_hdr;
-const u8 * get_hdr_bssid(const struct ieee80211_hdr *hdr, size_t len);
+const uint8_t * get_hdr_bssid(const struct ieee80211_hdr *hdr, size_t len);
 
 struct hostapd_wmm_ac_params {
 	int cwmin;
@@ -170,32 +171,32 @@ struct hostapd_wmm_ac_params {
 
 int hostapd_config_wmm_ac(struct hostapd_wmm_ac_params wmm_ac_params[],
 			  const char *name, const char *val);
-enum hostapd_hw_mode ieee80211_freq_to_chan(int freq, u8 *channel);
-int ieee80211_chan_to_freq(const char *country, u8 op_class, u8 chan);
+enum hostapd_hw_mode ieee80211_freq_to_chan(int freq, uint8_t *channel);
+int ieee80211_chan_to_freq(const char *country, uint8_t op_class, uint8_t chan);
 enum hostapd_hw_mode ieee80211_freq_to_channel_ext(unsigned int freq,
 						   int sec_channel, int vht,
-						   u8 *op_class, u8 *channel);
+						   uint8_t *op_class, uint8_t *channel);
 int ieee80211_chaninfo_to_channel(unsigned int freq, enum chan_width chanwidth,
-				  int sec_channel, u8 *op_class, u8 *channel);
+				  int sec_channel, uint8_t *op_class, uint8_t *channel);
 int ieee80211_is_dfs(int freq, const struct hostapd_hw_modes *modes,
-		     u16 num_modes);
+		     uint16_t num_modes);
 enum phy_type ieee80211_get_phy_type(int freq, int ht, int vht);
 
 int supp_rates_11b_only(struct ieee802_11_elems *elems);
-int mb_ies_info_by_ies(struct mb_ies_info *info, const u8 *ies_buf,
+int mb_ies_info_by_ies(struct mb_ies_info *info, const uint8_t *ies_buf,
 		       size_t ies_len);
 struct wpabuf * mb_ies_by_info(struct mb_ies_info *info);
 
-const char * fc2str(u16 fc);
-const char * reason2str(u16 reason);
-const char * status2str(u16 status);
+const char * fc2str(uint16_t fc);
+const char * reason2str(uint16_t reason);
+const char * status2str(uint16_t status);
 
 struct oper_class_map {
 	enum hostapd_hw_mode mode;
-	u8 op_class;
-	u8 min_chan;
-	u8 max_chan;
-	u8 inc;
+	uint8_t op_class;
+	uint8_t min_chan;
+	uint8_t max_chan;
+	uint8_t inc;
 	enum { BW20, BW40PLUS, BW40MINUS, BW80, BW2160, BW160, BW80P80 } bw;
 	enum { P2P_SUPP, NO_P2P_SUPP } p2p;
 };
@@ -203,35 +204,35 @@ struct oper_class_map {
 extern const struct oper_class_map global_op_class[];
 extern size_t global_op_class_size;
 
-const u8 * get_ie(const u8 *ies, size_t len, u8 eid);
-const u8 * get_ie_ext(const u8 *ies, size_t len, u8 ext);
-const u8 * get_vendor_ie(const u8 *ies, size_t len, u32 vendor_type);
+const uint8_t * get_ie(const uint8_t *ies, size_t len, uint8_t eid);
+const uint8_t * get_ie_ext(const uint8_t *ies, size_t len, uint8_t ext);
+const uint8_t * get_vendor_ie(const uint8_t *ies, size_t len, uint32_t vendor_type);
 
-size_t mbo_add_ie(u8 *buf, size_t len, const u8 *attr, size_t attr_len);
+size_t mbo_add_ie(uint8_t *buf, size_t len, const uint8_t *attr, size_t attr_len);
 
-size_t add_multi_ap_ie(u8 *buf, size_t len, u8 value);
+size_t add_multi_ap_ie(uint8_t *buf, size_t len, uint8_t value);
 
 struct country_op_class {
-	u8 country_op_class;
-	u8 global_op_class;
+	uint8_t country_op_class;
+	uint8_t global_op_class;
 };
 
-u8 country_to_global_op_class(const char *country, u8 op_class);
+uint8_t country_to_global_op_class(const char *country, uint8_t op_class);
 
-const struct oper_class_map * get_oper_class(const char *country, u8 op_class);
+const struct oper_class_map * get_oper_class(const char *country, uint8_t op_class);
 int oper_class_bw_to_int(const struct oper_class_map *map);
 
-int ieee802_11_parse_candidate_list(const char *pos, u8 *nei_rep,
+int ieee802_11_parse_candidate_list(const char *pos, uint8_t *nei_rep,
 				    size_t nei_rep_len);
 
-int ieee802_11_ext_capab(const u8 *ie, unsigned int capab);
+int ieee802_11_ext_capab(const uint8_t *ie, unsigned int capab);
 
 /* element iteration helpers */
 #define for_each_element(_elem, _data, _datalen)			\
 	for (_elem = (const struct element *) (_data);			\
-	     (const u8 *) (_data) + (_datalen) - (const u8 *) _elem >=	\
+	     (const uint8_t *) (_data) + (_datalen) - (const uint8_t *) _elem >=	\
 		(int) sizeof(*_elem) &&					\
-	     (const u8 *) (_data) + (_datalen) - (const u8 *) _elem >=	\
+	     (const uint8_t *) (_data) + (_datalen) - (const uint8_t *) _elem >=	\
 		(int) sizeof(*_elem) + _elem->datalen;			\
 	     _elem = (const struct element *) (_elem->data + _elem->datalen))
 
@@ -270,7 +271,7 @@ int ieee802_11_ext_capab(const u8 *ie, unsigned int capab);
 static inline int for_each_element_completed(const struct element *element,
 					     const void *data, size_t datalen)
 {
-	return (const u8 *) element == (const u8 *) data + datalen;
+	return (const uint8_t *) element == (const uint8_t *) data + datalen;
 }
 
 #endif /* IEEE802_11_COMMON_H */

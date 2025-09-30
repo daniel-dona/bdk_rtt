@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _APP_MUSIC_H_
 #define _APP_MUSIC_H_
 #include "sys_rtos.h"
@@ -14,20 +15,20 @@
 typedef struct _app_player_ctrl_s
 {
     fat_file_info_t file_info;        // cur file info
-    UINT32           file_index;      // file handle
-    UINT32          block_played;
+    uint32_t           file_index;      // file handle
+    uint32_t          block_played;
 
-    UINT32          player_flag;
-    UINT32          schedule_cmd; 
-    UINT8          media_err_status; 
+    uint32_t          player_flag;
+    uint32_t          schedule_cmd; 
+    uint8_t          media_err_status; 
 
 }app_player_ctrl;
 
 typedef struct _app_player_ctrl_backup_s
 {
-    UINT32          file_index;      // file handle
-    UINT32          file_size_blks;
-    UINT32          block_played;
+    uint32_t          file_index;      // file handle
+    uint32_t          file_size_blks;
+    uint32_t          block_played;
 }app_player_ctrl_backup;
 
 

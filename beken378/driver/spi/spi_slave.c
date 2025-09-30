@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 
@@ -21,20 +22,20 @@
 
 struct spi_rx_fifo
 {
-    UINT8 *buffer;
+    uint8_t *buffer;
 
-    UINT16 put_index, get_index;
+    uint16_t put_index, get_index;
 
-    UINT32 is_full;
+    uint32_t is_full;
 };
 
 struct bk_spi_slave_dev
 {
-    UINT32 flag;
+    uint32_t flag;
 
     beken_semaphore_t tx_sem;
-    UINT8 *tx_ptr;
-    UINT32 tx_len;
+    uint8_t *tx_ptr;
+    uint32_t tx_len;
     
     beken_semaphore_t rx_sem;
     struct spi_rx_fifo *rx_fifo;
@@ -42,12 +43,12 @@ struct bk_spi_slave_dev
     beken_mutex_t mutex;
 };
 
-__maybe_unused static UINT32 bk_spi_slave_get_rx_fifo(void);
+__maybe_unused static uint32_t bk_spi_slave_get_rx_fifo(void);
 static struct bk_spi_slave_dev *spi_slave_dev;
 
-static UINT32 bk_spi_slave_get_rx_fifo(void)
+static uint32_t bk_spi_slave_get_rx_fifo(void)
 {
-    UINT32 rx_length;
+    uint32_t rx_length;
     struct spi_rx_fifo* rx_fifo = spi_slave_dev->rx_fifo;
     GLOBAL_INT_DECLARATION();
     
@@ -65,7 +66,7 @@ static UINT32 bk_spi_slave_get_rx_fifo(void)
 
 static void bk_spi_slave_spi_rx_callback(int is_rx_end, void *param)
 {
-    UINT8 ch;
+    uint8_t ch;
     struct spi_rx_fifo *rx_fifo;
     //GLOBAL_INT_DECLARATION();
     
@@ -107,7 +108,7 @@ static void bk_spi_slave_spi_rx_callback(int is_rx_end, void *param)
     //REG_WRITE((0x00802800+(18*4)), 0x00);
 }
 
-static int bk_spi_slave_get_rx_data(UINT8 *rx_buf, int len)
+static int bk_spi_slave_get_rx_data(uint8_t *rx_buf, int len)
 { 
     struct spi_rx_fifo *rx_fifo;
     rx_fifo = (struct spi_rx_fifo *)spi_slave_dev->rx_fifo;
@@ -157,13 +158,13 @@ static int bk_spi_slave_get_rx_data(UINT8 *rx_buf, int len)
 
 static void bk_spi_slave_tx_needwrite_callback(int port, void *param)
 {
-    UINT8 *tx_ptr = spi_slave_dev->tx_ptr;
-    UINT32 tx_len = spi_slave_dev->tx_len;
+    uint8_t *tx_ptr = spi_slave_dev->tx_ptr;
+    uint32_t tx_len = spi_slave_dev->tx_len;
     GLOBAL_INT_DECLARATION();
     
     if(tx_ptr && tx_len) 
     {
-        UINT8 data = *tx_ptr;
+        uint8_t data = *tx_ptr;
         
         while(spi_write_txfifo(data) == 1)
         {
@@ -172,7 +173,7 @@ static void bk_spi_slave_tx_needwrite_callback(int port, void *param)
             tx_ptr ++;
             if(tx_len == 0) 
             {
-                UINT32 enable = 0;
+                uint32_t enable = 0;
                 sddev_control(SPI_DEV_NAME, CMD_SPI_TXINT_EN, (void *)&enable);
                 break;
             }
@@ -191,7 +192,7 @@ static void bk_spi_slave_tx_needwrite_callback(int port, void *param)
             
             if(tx_len == 0) 
             {
-                UINT32 enable = 0;
+                uint32_t enable = 0;
                 sddev_control(SPI_DEV_NAME, CMD_SPI_TXINT_EN, (void *)&enable);
                 break;
             }
@@ -217,9 +218,9 @@ static void bk_spi_slave_tx_finish_callback(int port, void *param)
     }
 }
 
-static void bk_spi_slave_configure(UINT32 rate, UINT32 mode)
+static void bk_spi_slave_configure(uint32_t rate, uint32_t mode)
 {
-    UINT32 param;
+    uint32_t param;
     struct spi_callback_des spi_dev_cb;
 
     /* data bit width */
@@ -291,9 +292,9 @@ static void bk_spi_slave_unconfigure(void)
 
 int bk_spi_slave_xfer(struct spi_message *msg)
 {
-    UINT8 *recv_ptr = NULL;
-    const UINT8 *send_ptr = NULL;
-    UINT32 param, send_len, recv_len;
+    uint8_t *recv_ptr = NULL;
+    const uint8_t *send_ptr = NULL;
+    uint32_t param, send_len, recv_len;
     GLOBAL_INT_DECLARATION();
 
     ASSERT(spi_slave_dev != NULL);
@@ -309,7 +310,7 @@ int bk_spi_slave_xfer(struct spi_message *msg)
     if((send_ptr) && send_len) 
     {
         GLOBAL_INT_DISABLE();
-        spi_slave_dev->tx_ptr = (UINT8 *)send_ptr;
+        spi_slave_dev->tx_ptr = (uint8_t *)send_ptr;
         spi_slave_dev->tx_len = send_len;
         spi_slave_dev->flag &= ~(TX_FINISH_FLAG);
         GLOBAL_INT_RESTORE();
@@ -371,7 +372,7 @@ int bk_spi_slave_xfer(struct spi_message *msg)
     return param;
 }
 
-int bk_spi_slave_init(UINT32 rate,  UINT32 mode)
+int bk_spi_slave_init(uint32_t rate,  uint32_t mode)
 {
     OSStatus result = 0;
 
@@ -500,7 +501,7 @@ static rt_err_t rt_spi_slave_init(rt_device_t dev)
     return RT_EOK;
 }
 
-static rt_err_t rt_spi_slave_open(rt_device_t dev, rt_uint16_t oflag)
+static rt_err_t rt_spi_slave_open(rt_device_t dev, uint16_t oflag)
 {
     return RT_EOK;
 }

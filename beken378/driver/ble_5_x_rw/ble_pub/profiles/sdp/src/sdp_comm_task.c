@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "rwip_config.h"             // SW configuration
 
 #if (BLE_APP_PRESENT && (BLE_CENTRAL) && (BLE_SDP_CLIENT))
@@ -359,7 +360,7 @@ static int sdp_task_gattc_read_ind_handler(kernel_msg_id_t const msgid,
 	bk_printf("\r\n");
 #endif
 
-	app_sdp_charac_callback_handler(CHARAC_READ,conidx,param->handle,param->length,(uint8*)param->value);
+	app_sdp_charac_callback_handler(CHARAC_READ,conidx,param->handle,param->length,(uint8_t*)param->value);
 
 	return (KERNEL_MSG_CONSUMED);
 }

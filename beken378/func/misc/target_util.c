@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 
@@ -14,9 +15,9 @@
 				delay(10):about 125us
 				delay(100):about 850us
  */
-void delay(INT32 num)
+void delay(int32_t num)
 {
-    volatile INT32 i, j;
+    volatile int32_t i, j;
 
     for(i = 0; i < num; i ++)
     {
@@ -28,12 +29,12 @@ void delay(INT32 num)
 /*
 	when parameter is 1, the return result is approximately 1 ms;
  */
-void delay_ms(UINT32 ms_count)
+void delay_ms(uint32_t ms_count)
 {
-    UINT32 ret;
-    UINT32 div;
-    UINT32 clk = 0;
-    UINT32 cell;
+    uint32_t ret;
+    uint32_t div;
+    uint32_t clk = 0;
+    uint32_t cell;
     SYS_CTRL_U param;
 
     ret = sddev_control(SCTRL_DEV_NAME, CMD_GET_SCTRL_CONTROL, &param);
@@ -68,10 +69,10 @@ void delay_ms(UINT32 ms_count)
 /*
 	[delay offset]worst case: delay about 1 second;
  */
-void delay_sec(UINT32 ms_count)
+void delay_sec(uint32_t ms_count)
 {
-    UINT32 t0;
-    UINT32 t1;
+    uint32_t t0;
+    uint32_t t1;
 
     t0 = fclk_get_second();
     while(1)
@@ -87,10 +88,10 @@ void delay_sec(UINT32 ms_count)
 /*
 	[delay offset]worst case: delay about 1 tick;
  */
-void delay_tick(UINT32 tick_count)
+void delay_tick(uint32_t tick_count)
 {
-    UINT32 t0;
-    UINT32 t1;
+    uint32_t t0;
+    uint32_t t1;
 
     t0 = fclk_get_tick();
     while(1)

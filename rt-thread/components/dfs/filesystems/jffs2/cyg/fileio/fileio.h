@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 #ifndef CYGONCE_FILEIO_H
 #define CYGONCE_FILEIO_H
 //=============================================================================

@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _WDT_H_
 #define _WDT_H_
 
@@ -27,7 +28,7 @@
 /*******************************************************************************
 * Function Declarations
 *******************************************************************************/
-extern UINT32 wdt_ctrl(UINT32 cmd, void *param);
+extern uint32_t wdt_ctrl(uint32_t cmd, void *param);
 
 #endif //_WDT_H_ 
 

@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * WPA Supplicant - Scanning
  * Copyright (c) 2003-2014, Jouni Malinen <j@w1.fi>
@@ -26,15 +27,15 @@ struct wpa_scan_results *
 wpa_supplicant_get_scan_results(struct wpa_supplicant *wpa_s,
 				struct scan_info *info, int new_scan);
 int wpa_supplicant_update_scan_results(struct wpa_supplicant *wpa_s);
-const u8 * wpa_scan_get_ie(const struct wpa_scan_res *res, u8 ie);
-const u8 * wpa_scan_get_vendor_ie(const struct wpa_scan_res *res,
-				  u32 vendor_type);
-const u8 * wpa_scan_get_vendor_ie_beacon(const struct wpa_scan_res *res,
-					 u32 vendor_type);
+const uint8_t * wpa_scan_get_ie(const struct wpa_scan_res *res, uint8_t ie);
+const uint8_t * wpa_scan_get_vendor_ie(const struct wpa_scan_res *res,
+				  uint32_t vendor_type);
+const uint8_t * wpa_scan_get_vendor_ie_beacon(const struct wpa_scan_res *res,
+					 uint32_t vendor_type);
 struct wpabuf * wpa_scan_get_vendor_ie_multi(const struct wpa_scan_res *res,
-					     u32 vendor_type);
+					     uint32_t vendor_type);
 int wpa_supplicant_filter_bssid_match(struct wpa_supplicant *wpa_s,
-				      const u8 *bssid);
+				      const uint8_t *bssid);
 void wpa_supplicant_update_scan_int(struct wpa_supplicant *wpa_s, int sec);
 void scan_only_handler(struct wpa_supplicant *wpa_s,
 		       struct wpa_scan_results *scan_res);
@@ -50,8 +51,8 @@ void wpas_scan_restart_sched_scan(struct wpa_supplicant *wpa_s);
 void wpas_mac_addr_rand_scan_clear(struct wpa_supplicant *wpa_s,
 				   unsigned int type);
 int wpas_mac_addr_rand_scan_set(struct wpa_supplicant *wpa_s,
-				unsigned int type, const u8 *addr,
-				const u8 *mask);
+				unsigned int type, const uint8_t *addr,
+				const uint8_t *mask);
 int wpas_abort_ongoing_scan(struct wpa_supplicant *wpa_s);
 void filter_scan_res(struct wpa_supplicant *wpa_s,
 		     struct wpa_scan_results *res);

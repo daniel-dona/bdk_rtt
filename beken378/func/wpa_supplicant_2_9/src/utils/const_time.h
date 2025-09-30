@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * Helper functions for constant time operations
  * Copyright (c) 2019, The Linux Foundation
@@ -52,9 +53,9 @@ static inline unsigned int const_time_eq(unsigned int a, unsigned int b)
 
 
 /* Returns: -1 if a == b; 0 if a != b */
-static inline u8 const_time_eq_u8(unsigned int a, unsigned int b)
+static inline uint8_t const_time_eq_u8(unsigned int a, unsigned int b)
 {
-	return (u8) const_time_eq(a, b);
+	return (uint8_t) const_time_eq(a, b);
 }
 
 
@@ -77,10 +78,10 @@ static inline u8 const_time_eq_u8(unsigned int a, unsigned int b)
 static inline unsigned int const_time_eq_bin(const void *a, const void *b,
 					     size_t len)
 {
-	const u8 *aa = a;
-	const u8 *bb = b;
+	const uint8_t *aa = a;
+	const uint8_t *bb = b;
 	size_t i;
-	u8 res = 0;
+	uint8_t res = 0;
 
 	for (i = 0; i < len; i++)
 		res |= aa[i] ^ bb[i];
@@ -120,28 +121,28 @@ static inline int const_time_select_int(unsigned int mask, int true_val,
 
 
 /**
- * const_time_select_u8 - Constant time u8 selection
+ * const_time_select_u8 - Constant time uint8_t selection
  * @mask: 0 (false) or -1 (true) to identify which value to select
  * @true_val: Value to select for the true case
  * @false_val: Value to select for the false case
  * Returns: true_val if mask == -1, false_val if mask == 0
  */
-static inline u8 const_time_select_u8(u8 mask, u8 true_val, u8 false_val)
+static inline uint8_t const_time_select_u8(uint8_t mask, uint8_t true_val, uint8_t false_val)
 {
-	return (u8) const_time_select(mask, true_val, false_val);
+	return (uint8_t) const_time_select(mask, true_val, false_val);
 }
 
 
 /**
- * const_time_select_s8 - Constant time s8 selection
+ * const_time_select_s8 - Constant time int8_t selection
  * @mask: 0 (false) or -1 (true) to identify which value to select
  * @true_val: Value to select for the true case
  * @false_val: Value to select for the false case
  * Returns: true_val if mask == -1, false_val if mask == 0
  */
-static inline s8 const_time_select_s8(u8 mask, s8 true_val, s8 false_val)
+static inline int8_t const_time_select_s8(uint8_t mask, int8_t true_val, int8_t false_val)
 {
-	return (s8) const_time_select(mask, (unsigned int) true_val,
+	return (int8_t) const_time_select(mask, (unsigned int) true_val,
 				      (unsigned int) false_val);
 }
 
@@ -158,9 +159,9 @@ static inline s8 const_time_select_s8(u8 mask, s8 true_val, s8 false_val)
  * operations with identical memory access pattern regardless of which buffer
  * is being copied.
  */
-static inline void const_time_select_bin(u8 mask, const u8 *true_val,
-					 const u8 *false_val, size_t len,
-					 u8 *dst)
+static inline void const_time_select_bin(uint8_t mask, const uint8_t *true_val,
+					 const uint8_t *false_val, size_t len,
+					 uint8_t *dst)
 {
 	size_t i;
 
@@ -171,8 +172,8 @@ static inline void const_time_select_bin(u8 mask, const u8 *true_val,
 
 static inline int const_time_memcmp(const void *a, const void *b, size_t len)
 {
-	const u8 *aa = a;
-	const u8 *bb = b;
+	const uint8_t *aa = a;
+	const uint8_t *bb = b;
 	int diff, res = 0;
 	unsigned int mask;
 

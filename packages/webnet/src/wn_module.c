@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : wn_module.c
  * This file is part of RT-Thread RTOS
@@ -403,7 +404,7 @@ int webnet_module_system_dofile(struct webnet_session *session)
     {
         /* set dofile session ops */
         session->session_event_mask = WEBNET_EVENT_WRITE;
-        session->user_data = (rt_uint32_t)fd;
+        session->user_data = (uint32_t)fd;
         session->session_ops = &_dofile_ops;
     }
     return WEBNET_MODULE_FINISHED;
@@ -515,7 +516,7 @@ int webnet_module_handle_uri(struct webnet_session *session)
 {
     int result, fd;
     char *full_path;
-    rt_uint32_t index;
+    uint32_t index;
     struct webnet_request *request;
 
     RT_ASSERT(session != RT_NULL);

@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
   This file is part of UFFS, the Ultra-low-cost Flash File System.
   
@@ -47,7 +48,7 @@ extern "C"{
 
 typedef struct uffs_FindInfoSt {
 	uffs_Device *dev;				//!< the device to be searched
-	u16 serial;						//!< the dir serial number
+	uint16_t serial;						//!< the dir serial number
 	int step;						//!< step:	0 - working on dir entries,
 									//			1 - working on file entries,
 									//			2 - stoped.

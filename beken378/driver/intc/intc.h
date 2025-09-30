@@ -1,3 +1,4 @@
+#include <stdint.h>
 /**
  ****************************************************************************************
  *
@@ -32,24 +33,24 @@
 
 struct arm_registers
 {
-    uint32 r0;
-    uint32 r1;
-    uint32 r2;
-    uint32 r3;
-    uint32 r4;
-    uint32 r5;
-    uint32 r6;
-    uint32 r7;
-    uint32 r8;
-    uint32 r9;
-    uint32 r10;
-    uint32 fp;
-    uint32 ip;
-    uint32 sp;
-    uint32 lr;
-    uint32 pc;
-    uint32 spsr;
-    uint32 cpsr;
+    uint32_t r0;
+    uint32_t r1;
+    uint32_t r2;
+    uint32_t r3;
+    uint32_t r4;
+    uint32_t r5;
+    uint32_t r6;
+    uint32_t r7;
+    uint32_t r8;
+    uint32_t r9;
+    uint32_t r10;
+    uint32_t fp;
+    uint32_t ip;
+    uint32_t sp;
+    uint32_t lr;
+    uint32_t pc;
+    uint32_t spsr;
+    uint32_t cpsr;
 };
 
 typedef struct
@@ -58,17 +59,17 @@ typedef struct
 
     FUNCPTR isr_func;
 
-    UINT8  pri;            // priority
-    UINT8  int_num;
-    UINT16 resv;
+    uint8_t  pri;            // priority
+    uint8_t  int_num;
+    uint16_t resv;
 } ISR_T;
 
 typedef struct
 {
     LIST_HEADER_T isr;
 
-    UINT8 max;     // maximum interrupt number
-    UINT8 min;     // minum interrupt number
+    uint8_t max;     // maximum interrupt number
+    uint8_t min;     // minum interrupt number
 } ISR_LIST_T;
 /*
  * FUNCTION DECLARATIONS

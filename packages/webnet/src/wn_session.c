@@ -155,7 +155,7 @@ void webnet_session_close(struct webnet_session *session)
 void webnet_session_printf(struct webnet_session *session, const char* fmt, ...)
 {
     va_list args;
-    rt_uint32_t length;
+    uint32_t length;
 
     va_start(args, fmt);
     length = vsnprintf((char*)(session->buffer),
@@ -177,7 +177,7 @@ RTM_EXPORT(webnet_session_printf);
  *
  * @return the number of bytes actually written to the session
  */
-int webnet_session_write(struct webnet_session *session, const rt_uint8_t* data, rt_size_t size)
+int webnet_session_write(struct webnet_session *session, const uint8_t* data, rt_size_t size)
 {
     /* send data directly */
     send(session->socket, data, size, 0);
@@ -322,7 +322,7 @@ RTM_EXPORT(webnet_session_set_header);
 static void _webnet_session_handle_read(struct webnet_session* session)
 {
     int read_length;
-    rt_uint8_t *buffer_ptr;
+    uint8_t *buffer_ptr;
 
     buffer_ptr = &session->buffer[session->buffer_offset];
     /* to read data from the socket */
@@ -603,7 +603,7 @@ static void list_webnet(void)
 {
     struct webnet_session *session;
     char client_ip_str[16]; /* ###.###.###.### */
-    rt_uint32_t num = 0;
+    uint32_t num = 0;
 
     rt_enter_critical();
     for (session = _session_list; session != RT_NULL; session = session->next)

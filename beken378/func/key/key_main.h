@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _KEY_MAIN_H_
 #define _KEY_MAIN_H_
 

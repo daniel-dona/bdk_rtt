@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  * File      : wn_module_lua.c
  * This file is part of RT-Thread RTOS

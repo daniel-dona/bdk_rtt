@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
   This file is part of UFFS, the Ultra-low-cost Flash File System.
   
@@ -59,7 +60,7 @@ static URET _LoadObjectInfo(uffs_Device *dev,
 {
 	uffs_Buf *buf;
 
-	buf = uffs_BufGetEx(dev, (u8)type, node, 0, 0);
+	buf = uffs_BufGetEx(dev, (uint8_t)type, node, 0, 0);
 
 	if (buf == NULL) {
 		if (err)
@@ -177,7 +178,7 @@ URET uffs_FindObjectOpenEx(uffs_FindInfo *f, uffs_Device *dev, int dir)
 }
 
 
-static URET do_FindObject(uffs_FindInfo *f, uffs_ObjectInfo *info, u16 x)
+static URET do_FindObject(uffs_FindInfo *f, uffs_ObjectInfo *info, uint16_t x)
 {
 	URET ret = U_SUCC;
 	TreeNode *node;

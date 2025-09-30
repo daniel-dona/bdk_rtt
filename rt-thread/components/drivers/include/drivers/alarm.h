@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  * File      : alarm.h
  * This file is part of RT-Thread RTOS
@@ -47,22 +49,22 @@ typedef void (*rt_alarm_callback_t)(rt_alarm_t alarm, time_t timestamp);
 struct rt_rtc_wkalarm
 {
     rt_bool_t  enable;               /* 0 = alarm disabled, 1 = alarm enabled */
-    rt_int32_t tm_sec;               /* alarm at tm_sec */
-    rt_int32_t tm_min;               /* alarm at tm_min */
-    rt_int32_t tm_hour;              /* alarm at tm_hour */
+    int32_t tm_sec;               /* alarm at tm_sec */
+    int32_t tm_min;               /* alarm at tm_min */
+    int32_t tm_hour;              /* alarm at tm_hour */
 };
 
 struct rt_alarm
 {
     rt_list_t list;
-    rt_uint32_t flag;
+    uint32_t flag;
     rt_alarm_callback_t callback;
     struct tm wktime;
 };
 
 struct rt_alarm_setup
 {
-    rt_uint32_t flag;                /* alarm flag */
+    uint32_t flag;                /* alarm flag */
     struct tm wktime;                /* when will the alarm wake up user */
 };
 
@@ -77,7 +79,7 @@ struct rt_alarm_container
 rt_alarm_t rt_alarm_create(rt_alarm_callback_t    callback,
                            struct rt_alarm_setup *setup);
 rt_err_t rt_alarm_control(rt_alarm_t alarm, int cmd, void *arg);
-void rt_alarm_update(rt_device_t dev, rt_uint32_t event);
+void rt_alarm_update(rt_device_t dev, uint32_t event);
 rt_err_t rt_alarm_delete(rt_alarm_t alarm);
 rt_err_t rt_alarm_start(rt_alarm_t alarm);
 rt_err_t rt_alarm_stop(rt_alarm_t alarm);

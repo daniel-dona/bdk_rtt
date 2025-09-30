@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * Event loop
  * Copyright (c) 2002-2006, Jouni Malinen <j@w1.fi>

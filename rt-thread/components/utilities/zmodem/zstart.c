@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : zstart.c
  * the implemention of zmodem protocol.
@@ -29,7 +30,7 @@ void finsh_rz(void *parameter)
 {
 	char *path;
     rt_err_t (*rx_indicate)(rt_device_t dev, rt_size_t size);
-    rt_uint8_t flag;	
+    uint8_t flag;	
 
 	flag = RT_DEVICE_FLAG_STREAM;
     zmodem.device->flag &=(~flag);
@@ -51,7 +52,7 @@ void finsh_sz(void *parameter)
 {
 	char *path;
     rt_err_t (*rx_indicate)(rt_device_t dev, rt_size_t size);
-    rt_uint8_t flag;	
+    uint8_t flag;	
 
 	flag = RT_DEVICE_FLAG_STREAM;
     zmodem.device->flag &=(~flag);

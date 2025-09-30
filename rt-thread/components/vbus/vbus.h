@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef __VBUS_H__
 #define __VBUS_H__
 /*
@@ -55,11 +56,11 @@ void rt_vbus_resume_out_thread(void);
  *
  * @sa rt_vbus_register_listener .
  */
-rt_err_t rt_vbus_post(rt_uint8_t chnr,
-                      rt_uint8_t prio,
+rt_err_t rt_vbus_post(uint8_t chnr,
+                      uint8_t prio,
                       const void *datap,
                       rt_size_t size,
-                      rt_int32_t timeout);
+                      int32_t timeout);
 
 struct rt_vbus_data {
     /* Number of bytes in current data package. */
@@ -120,8 +121,8 @@ void rt_vbus_register_listener(unsigned char chnr,
  *
  * This function blocks until events occur or timeout happened.
  */
-rt_err_t rt_vbus_listen_on(rt_uint8_t chnr,
-                           rt_int32_t timeout);
+rt_err_t rt_vbus_listen_on(uint8_t chnr,
+                           int32_t timeout);
 
 /** Push a data package into the receive queue of the channel @chnr. */
 void rt_vbus_data_push(unsigned int chnr,
@@ -136,7 +137,7 @@ struct rt_vbus_data* rt_vbus_data_pop(unsigned int chnr);
 struct rt_vbus_dev
 {
     /* Runtime infomations. */
-    rt_uint8_t chnr;
+    uint8_t chnr;
     struct rt_vbus_data *act;
     rt_size_t pos;
 
@@ -147,7 +148,7 @@ struct rt_vbus_dev
 
 rt_err_t rt_vbus_chnx_init(void);
 /** Get the corresponding channel number from the VBus device @dev. */
-rt_uint8_t rt_vbus_get_chnnr(rt_device_t dev);
+uint8_t rt_vbus_get_chnnr(rt_device_t dev);
 /** Register a call back on the other side disconnect the channel.
  *
  * @sa rt_vbus_register_listener .

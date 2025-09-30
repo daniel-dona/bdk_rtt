@@ -1,8 +1,9 @@
+#include <stdint.h>
 #include <ymodem.h>
 
 static enum rym_code _rym_dummy_write(
         struct rym_ctx *ctx,
-        rt_uint8_t *buf,
+        uint8_t *buf,
         rt_size_t len)
 {
     return RYM_CODE_ACK;

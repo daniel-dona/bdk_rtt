@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * Copyright (c) 2006-2018, RT-Thread Development Team
  *
@@ -28,14 +29,14 @@ static rt_err_t _pwm_control(rt_device_t dev, int cmd, void *args)
 
 /*
 pos: channel
-void *buffer: rt_uint32_t pulse[size]
-size : number of pulse, only set to sizeof(rt_uint32_t).
+void *buffer: uint32_t pulse[size]
+size : number of pulse, only set to sizeof(uint32_t).
 */
 static rt_size_t _pwm_read(rt_device_t dev, rt_off_t pos, void *buffer, rt_size_t size)
 {
     rt_err_t result = RT_EOK;
     struct rt_device_pwm *pwm = (struct rt_device_pwm *)dev;
-    rt_uint32_t *pulse = (rt_uint32_t *)buffer;
+    uint32_t *pulse = (uint32_t *)buffer;
     struct rt_pwm_configuration configuration = {0};
 
     configuration.channel = pos;
@@ -56,14 +57,14 @@ static rt_size_t _pwm_read(rt_device_t dev, rt_off_t pos, void *buffer, rt_size_
 
 /*
 pos: channel
-void *buffer: rt_uint32_t pulse[size]
-size : number of pulse, only set to sizeof(rt_uint32_t).
+void *buffer: uint32_t pulse[size]
+size : number of pulse, only set to sizeof(uint32_t).
 */
 static rt_size_t _pwm_write(rt_device_t dev, rt_off_t pos, const void *buffer, rt_size_t size)
 {
     rt_err_t result = RT_EOK;
     struct rt_device_pwm *pwm = (struct rt_device_pwm *)dev;
-    rt_uint32_t *pulse = (rt_uint32_t *)buffer;
+    uint32_t *pulse = (uint32_t *)buffer;
     struct rt_pwm_configuration configuration = {0};
 
     configuration.channel = pos;
@@ -158,7 +159,7 @@ rt_err_t rt_pwm_disable(struct rt_device_pwm *device, int channel)
     return result;
 }
 
-rt_err_t rt_pwm_set(struct rt_device_pwm *device, int channel, rt_uint32_t period, rt_uint32_t pulse)
+rt_err_t rt_pwm_set(struct rt_device_pwm *device, int channel, uint32_t period, uint32_t pulse)
 {
     rt_err_t result = RT_EOK;
     struct rt_pwm_configuration configuration = {0};

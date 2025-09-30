@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * hostapd / WPS integration
  * Copyright (c) 2008-2012, Jouni Malinen <j@w1.fi>
@@ -17,12 +18,12 @@ int hostapd_init_wps_complete(struct hostapd_data *hapd);
 void hostapd_deinit_wps(struct hostapd_data *hapd);
 void hostapd_update_wps(struct hostapd_data *hapd);
 void hostapd_wps_eap_completed(struct hostapd_data *hapd);
-int hostapd_wps_add_pin(struct hostapd_data *hapd, const u8 *addr,
+int hostapd_wps_add_pin(struct hostapd_data *hapd, const uint8_t *addr,
 			const char *uuid, const char *pin, int timeout);
 int hostapd_wps_button_pushed(struct hostapd_data *hapd,
-			      const u8 *p2p_dev_addr);
+			      const uint8_t *p2p_dev_addr);
 int hostapd_wps_cancel(struct hostapd_data *hapd);
-int hostapd_wps_get_mib_sta(struct hostapd_data *hapd, const u8 *addr,
+int hostapd_wps_get_mib_sta(struct hostapd_data *hapd, const uint8_t *addr,
 			    char *buf, size_t buflen);
 void hostapd_wps_ap_pin_disable(struct hostapd_data *hapd);
 const char * hostapd_wps_ap_pin_random(struct hostapd_data *hapd, int timeout);
@@ -70,14 +71,14 @@ static inline void hostapd_wps_eap_completed(struct hostapd_data *hapd)
 }
 
 static inline int hostapd_wps_get_mib_sta(struct hostapd_data *hapd,
-					  const u8 *addr,
+					  const uint8_t *addr,
 					  char *buf, size_t buflen)
 {
 	return 0;
 }
 
 static inline int hostapd_wps_button_pushed(struct hostapd_data *hapd,
-					    const u8 *p2p_dev_addr)
+					    const uint8_t *p2p_dev_addr)
 {
 	return 0;
 }

@@ -1,3 +1,4 @@
+#include <stdint.h>
 /**
  ******************************************************************************
  * @file    BkDriverPwm.h
@@ -144,7 +145,7 @@ OSStatus bk_pwm_stop(bk_pwm_t pwm);
  * @return    kGeneralErr   : if an error occurred with any step
  */
 
-UINT32 bk_pwm_get_capvalue(bk_pwm_t pwm);
+uint32_t bk_pwm_get_capvalue(bk_pwm_t pwm);
 
 
 #if (CFG_SOC_NAME == SOC_BK7231N)

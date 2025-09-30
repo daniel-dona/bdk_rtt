@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : semaphore.c
  * This file is part of RT-Thread RTOS
@@ -189,7 +190,7 @@ RTM_EXPORT(sem_getvalue);
 int sem_init(sem_t *sem, int pshared, unsigned int value)
 {
     char name[RT_NAME_MAX];
-    static rt_uint16_t psem_number = 0;
+    static uint16_t psem_number = 0;
 
     if (sem == RT_NULL)
     {
@@ -327,7 +328,7 @@ RTM_EXPORT(sem_post);
 int sem_timedwait(sem_t *sem, const struct timespec *abs_timeout)
 {
     rt_err_t result;
-    rt_int32_t tick;
+    int32_t tick;
 
     if (!sem || !abs_timeout)
         return EINVAL;

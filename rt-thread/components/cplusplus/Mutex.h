@@ -1,3 +1,4 @@
+#include <stdbool.h>
 /*
  * File      : Mutex.h
  * This file is part of RT-Thread RTOS

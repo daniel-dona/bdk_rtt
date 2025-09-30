@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : dfs_ramfs.c
  * This file is part of Device File System in RT-Thread RTOS
@@ -141,7 +142,7 @@ int dfs_ramfs_write(struct dfs_fd *fd, const void *buf, size_t count)
 
     if (count + fd->pos > fd->size)
     {
-        rt_uint8_t *ptr;
+        uint8_t *ptr;
         ptr = rt_memheap_realloc(&(ramfs->memheap), dirent->data, fd->pos + count);
         if (ptr == NULL)
         {
@@ -338,7 +339,7 @@ int dfs_ramfs_getdents(struct dfs_fd *file,
             d = dirp + count;
             d->d_type = DT_REG;
             d->d_namlen = RT_NAME_MAX;
-            d->d_reclen = (rt_uint16_t)sizeof(struct dirent);
+            d->d_reclen = (uint16_t)sizeof(struct dirent);
             rt_strncpy(d->d_name, dirent->name, RAMFS_NAME_MAX);
 
             count += 1;
@@ -432,16 +433,16 @@ int dfs_ramfs_init(void)
 }
 INIT_COMPONENT_EXPORT(dfs_ramfs_init);
 
-struct dfs_ramfs* dfs_ramfs_create(rt_uint8_t *pool, rt_size_t size)
+struct dfs_ramfs* dfs_ramfs_create(uint8_t *pool, rt_size_t size)
 {
     struct dfs_ramfs *ramfs;
-    rt_uint8_t *data_ptr;
+    uint8_t *data_ptr;
     rt_err_t result;
 
     size  = RT_ALIGN_DOWN(size, RT_ALIGN_SIZE);
     ramfs = (struct dfs_ramfs *)pool;
 
-    data_ptr = (rt_uint8_t *)(ramfs + 1);
+    data_ptr = (uint8_t *)(ramfs + 1);
     size = size - sizeof(struct dfs_ramfs);
     size = RT_ALIGN_DOWN(size, RT_ALIGN_SIZE);
 

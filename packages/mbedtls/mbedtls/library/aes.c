@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  *  FIPS-197 compliant AES implementation
  *

@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  * eap.c - Extensible Authentication Protocol for PPP (RFC 2284)
  *

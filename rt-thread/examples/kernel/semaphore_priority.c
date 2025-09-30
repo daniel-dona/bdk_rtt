@@ -1,8 +1,9 @@
+#include <stdint.h>
 #include <rtthread.h>
 #include "tc_comm.h"
 
 static rt_sem_t sem;
-static rt_uint8_t t1_count, t2_count;
+static uint8_t t1_count, t2_count;
 static rt_thread_t t1, t2, worker;
 static void thread1_entry(void* parameter)
 {

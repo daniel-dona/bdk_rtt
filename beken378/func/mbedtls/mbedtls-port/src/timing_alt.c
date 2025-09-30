@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  *  Portable interface to the CPU cycle counter
  *

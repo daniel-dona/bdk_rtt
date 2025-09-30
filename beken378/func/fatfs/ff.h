@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _FF_HEADER_FILE_
 #define _FF_HEADER_FILE_
 
@@ -14,7 +15,7 @@ extern "C" {
 
     /* Definitions of volume management */
     /* Each logical drive is bound to the same physical drive number */
-#define LD2PD(vol)      (uint8)(vol)
+#define LD2PD(vol)      (uint8_t)(vol)
     /* Find first valid partition or in SFD */
 #define LD2PT(vol)      0
     typedef unsigned short	WCHAR;
@@ -45,43 +46,43 @@ typedef struct _fat_file_info_s
 {
     char    filename[13];
     char    ext_name[3];
-    uint32  file_start_cluster;
-    uint32  file_blks;
+    uint32_t  file_start_cluster;
+    uint32_t  file_blks;
 } fat_file_info_t;
 
 typedef struct _FATFS_
 {
-    uint8	fs_type;	/* FAT sub type */
-    uint8	drive;		/* Physical drive number */
-    uint8	csize;		/* Number of sectors per cluster */
-    uint8	n_fats;		/* Number of FAT copies */
-    uint8	wflag;		/* win[] dirty flag (1:must be written back) */
-    uint8	fsi_flag;	/* fsinfo dirty flag (1:must be written back) */
-    uint16	id;			/* File system mount ID */
-    uint16	n_rootdir;	/* Number of root directory entries (0 on FAT32) */
-    uint32	sects_fat;	/* Sectors per fat */
-    uint32	max_clust;	/* Maximum cluster# + 1. Number of clusters is max_clust - 2 */
-    uint32	fatbase;	/* FAT start sector */
-    uint32	dirbase;	/* Root directory start sector (Cluster# on FAT32) */
-    uint8	win[_MAX_SS];/* Disk access window for Directory/FAT */	//make sure win is allign(4)
-    uint32	database;	/* Data start sector */
-    uint32	winsect;	/* Current sector appearing in the win[] */
+    uint8_t	fs_type;	/* FAT sub type */
+    uint8_t	drive;		/* Physical drive number */
+    uint8_t	csize;		/* Number of sectors per cluster */
+    uint8_t	n_fats;		/* Number of FAT copies */
+    uint8_t	wflag;		/* win[] dirty flag (1:must be written back) */
+    uint8_t	fsi_flag;	/* fsinfo dirty flag (1:must be written back) */
+    uint16_t	id;			/* File system mount ID */
+    uint16_t	n_rootdir;	/* Number of root directory entries (0 on FAT32) */
+    uint32_t	sects_fat;	/* Sectors per fat */
+    uint32_t	max_clust;	/* Maximum cluster# + 1. Number of clusters is max_clust - 2 */
+    uint32_t	fatbase;	/* FAT start sector */
+    uint32_t	dirbase;	/* Root directory start sector (Cluster# on FAT32) */
+    uint8_t	win[_MAX_SS];/* Disk access window for Directory/FAT */	//make sure win is allign(4)
+    uint32_t	database;	/* Data start sector */
+    uint32_t	winsect;	/* Current sector appearing in the win[] */
 } FATFS;
 
 /* File object structure */
 typedef struct _FIL_
 {
     FATFS	*fs;			/* Pointer to the owner file system object */
-    uint16	id;			/* Owner file system mount ID */
-    uint8	flag;		/* File status flags */
-    uint8	csect;		/* Sector address in the cluster */
-    uint32	fptr;		/* File R/W pointer */
-    uint32	fsize;		/* File size */
-    uint32	org_clust;	/* File start cluster */
-    uint8	buf[_MAX_SS];/* File R/W buffer *///make sure buf is allign(4)
-    uint32	curr_clust;	/* Current cluster */
-    uint32	dsect;		/* Current data sector */
-    uint32	ExNoChainFlag;
+    uint16_t	id;			/* Owner file system mount ID */
+    uint8_t	flag;		/* File status flags */
+    uint8_t	csect;		/* Sector address in the cluster */
+    uint32_t	fptr;		/* File R/W pointer */
+    uint32_t	fsize;		/* File size */
+    uint32_t	org_clust;	/* File start cluster */
+    uint8_t	buf[_MAX_SS];/* File R/W buffer *///make sure buf is allign(4)
+    uint32_t	curr_clust;	/* Current cluster */
+    uint32_t	dsect;		/* Current data sector */
+    uint32_t	ExNoChainFlag;
 } FIL;
 
 
@@ -89,64 +90,64 @@ typedef struct _FIL_
 typedef struct
 {
     FATFS	*fs;			/* Pointer to the owner file system object (**do not change order**) */
-    uint16	id;			/* Owner file system mount ID (**do not change order**) */
-    uint16	index;		/* Current read/write index number */
-    uint32	sclust;		/* Table start cluster (0:Root dir) */
-    uint32	clust;		/* Current cluster */
-    uint32	sect;		/* Current sector */
-    uint8	*dir;		/* Pointer to the current SFN entry in the win[] */
-    uint8	*fn;			/* Pointer to the SFN (in/out) {file[8],ext[3],status[1]} */
-    uint32	ExNoChainFlag;  /* if the value equals to 0x03,then all cluster are contiguous*/
+    uint16_t	id;			/* Owner file system mount ID (**do not change order**) */
+    uint16_t	index;		/* Current read/write index number */
+    uint32_t	sclust;		/* Table start cluster (0:Root dir) */
+    uint32_t	clust;		/* Current cluster */
+    uint32_t	sect;		/* Current sector */
+    uint8_t	*dir;		/* Pointer to the current SFN entry in the win[] */
+    uint8_t	*fn;			/* Pointer to the SFN (in/out) {file[8],ext[3],status[1]} */
+    uint32_t	ExNoChainFlag;  /* if the value equals to 0x03,then all cluster are contiguous*/
 #if _USE_LFN
     WCHAR	*lfn;		/* Pointer to the LFN working buffer */
-    uint16	lfn_idx;	/* Last matched LFN index number (0xFFFF:No LFN) */
+    uint16_t	lfn_idx;	/* Last matched LFN index number (0xFFFF:No LFN) */
 #endif
 } DIR;
 
 /* File status structure (FILINFO) */
 typedef struct
 {
-    uint32	fsize;		/* File size */
-    uint16	fdate;		/* Last modified date */
-    uint16	ftime;		/* Last modified time */
-    uint8	fattrib;	/* Attribute */
+    uint32_t	fsize;		/* File size */
+    uint16_t	fdate;		/* Last modified date */
+    uint16_t	ftime;		/* Last modified time */
+    uint8_t	fattrib;	/* Attribute */
     TCHAR	fname[13];	/* Short file name (8.3 format) */
 
-    uint8	ExNoChainFlag;	//
-    uint8	reserved;
-    uint32	fcluster;
+    uint8_t	ExNoChainFlag;	//
+    uint8_t	reserved;
+    uint32_t	fcluster;
 #if _USE_LFN
     TCHAR	*lfname;		/* Pointer to the LFN buffer */
-    uint32 	lfsize;		/* Size of LFN buffer in TCHAR */
+    uint32_t 	lfsize;		/* Size of LFN buffer in TCHAR */
 #endif
 } FILINFO, FILINFOADD, *PFILINFOADD;;
 
 typedef struct
 {
-    uint32	fcluster;	/* 文件的簇号 */
+    uint32_t	fcluster;	/* 文件的簇号 */
     char	fname[13];	/* Short file name (8.3 format) */
     char    extname[3];
-    //	uint8	ExNoChainFlag;//exfat flag
-    uint8   fat_ok_flag;
-    uint16	Reserved1;
+    //	uint8_t	ExNoChainFlag;//exfat flag
+    uint8_t   fat_ok_flag;
+    uint16_t	Reserved1;
 } FILE_INFO;
 
 /*app struct*/
 //add by wangxuejun
 typedef struct
 {
-    uint32		first_cluster;
-    uint16 		music_total;
-    uint8		broot_dir;
-    uint8		ExNoChainFlag;
+    uint32_t		first_cluster;
+    uint16_t 		music_total;
+    uint8_t		broot_dir;
+    uint8_t		ExNoChainFlag;
 } FAT_DIR_INFO;
 //add by wangxuejun
 typedef struct
 {
-    uint32		cluster_number;
-    uint16 		dirlevel;
-    uint8 		broot_dir;
-    uint8		ExNoChainFlag;
+    uint32_t		cluster_number;
+    uint16_t 		dirlevel;
+    uint8_t 		broot_dir;
+    uint8_t		ExNoChainFlag;
 } DIR_QUEUE;
 
 
@@ -182,36 +183,36 @@ typedef enum
 /* FatFs module application interface                           */
 FRESULT dir_seek (
     DIR *dj,		/* Pointer to directory object */
-    uint16 idx		/* Directory index number */
+    uint16_t idx		/* Directory index number */
 );
 
 FRESULT move_window (
     FATFS *fs,		/* File system object */
-    uint32 sector	/* Sector number to make apperance in the fs->win[] */
+    uint32_t sector	/* Sector number to make apperance in the fs->win[] */
 );					/* Move to zero only writes back dirty window */
 
 FRESULT f_lseek (
     FIL *fp,		/* Pointer to the file object */
-    uint32 ofs		/* File pointer from top of file */
+    uint32_t ofs		/* File pointer from top of file */
 );
 
 /* Close an open file object */
 FRESULT f_close (FIL *fp);
 /* Read data from a file */
-FRESULT f_read (FIL *fp, void *buff, uint32 btr, uint32 *br);
+FRESULT f_read (FIL *fp, void *buff, uint32_t btr, uint32_t *br);
 /* Read data from a file */
-FRESULT f_wav_read(FIL *fp, void *buff, uint32 btr, uint32 *br);
+FRESULT f_wav_read(FIL *fp, void *buff, uint32_t btr, uint32_t *br);
 /* Mount/Unmount a logical drive */
-FRESULT f_mount (uint8 vol, FATFS *fs);
+FRESULT f_mount (uint8_t vol, FATFS *fs);
 /* Unmount a logical drive */
 FRESULT f_unmount (FATFS *fs);
 /*decide the end of an file*/
 FRESULT f_EOF(FIL *fp);
 
 /* Get current directory */
-FRESULT f_getcwd (TCHAR *buff, uint32 len);
+FRESULT f_getcwd (TCHAR *buff, uint32_t len);
 /* Open or create a file */
-FRESULT f_open (FIL *fp, const TCHAR *path, uint8 mode);
+FRESULT f_open (FIL *fp, const TCHAR *path, uint8_t mode);
 /* Open a directory */
 FRESULT f_opendir (DIR *dp, const TCHAR *path);
 /* Read a directory item */
@@ -219,7 +220,7 @@ FRESULT f_readdir (DIR *dp, FILINFO *fno);
 /* Get file status */
 FRESULT f_stat (const TCHAR *path, FILINFO *fno);
 /* Write data to the file */
-FRESULT f_write (FIL *fp, const void *buff, uint32 btw, uint32 *bw);
+FRESULT f_write (FIL *fp, const void *buff, uint32_t btw, uint32_t *bw);
 /* Change current directory */
 FRESULT f_chdir (const TCHAR *path);
 /* Create a sub directory */
@@ -231,11 +232,11 @@ FRESULT f_unlink (const TCHAR *path);
 /* check whether get to the end of file */
 FRESULT f_eof(FIL *fp );
 
-//uint32 SD_Fs_Init(void);
-uint32 Media_Fs_Init(uint8 type);
-uint16 get_musicfile_count(void);
+//uint32_t SD_Fs_Init(void);
+uint32_t Media_Fs_Init(uint8_t type);
+uint16_t get_musicfile_count(void);
 FILE_INFO *get_file_info(void);
-FIL *Get_File_From_Number(uint16 number);
+FIL *Get_File_From_Number(uint16_t number);
 
 #ifndef EOF
 #define EOF (-1)
@@ -243,13 +244,13 @@ FIL *Get_File_From_Number(uint16 number);
 
     /*--------------------------------------------------------------*/
     /* Additional user defined functions                            */
-    void mem_cpy (void *dst, const void *src, uint32 cnt);
+    void mem_cpy (void *dst, const void *src, uint32_t cnt);
 
     /* Unicode support functions */
 #if _USE_LFN
     /* Unicode - OEM code conversion */
     /* OEM-Unicode bidirectional conversion */
-    WCHAR ff_convert (WCHAR chr, uint32 dir);
+    WCHAR ff_convert (WCHAR chr, uint32_t dir);
     /* Unicode upper-case conversion */
     WCHAR ff_wtoupper (WCHAR chr);
 #endif
@@ -262,7 +263,7 @@ FIL *Get_File_From_Number(uint16 number);
 #error Wrong sector size configuration.
 #endif
 #if _MAX_SS == _MIN_SS
-#define	SS(fs)	((uint32)_MAX_SS)	/* Fixed sector size */
+#define	SS(fs)	((uint32_t)_MAX_SS)	/* Fixed sector size */
 #else
 #define	SS(fs)	((fs)->ssize)	/* Variable sector size */
 #endif
@@ -394,25 +395,25 @@ FIL *Get_File_From_Number(uint16 number);
     /*--------------------------------*/
     /* Multi-byte word access macros  */
     /* Use byte-by-byte access to the FAT structure */
-#define	LD_WORD(ptr)		(uint16)  \
-    (((uint16)*((uint8*)(ptr)+1)<<8)  \
-    |(uint16)*(uint8*)(ptr))
+#define	LD_WORD(ptr)		(uint16_t)  \
+    (((uint16_t)*((uint8_t*)(ptr)+1)<<8)  \
+    |(uint16_t)*(uint8_t*)(ptr))
 
-#define	LD_DWORD(ptr)		(uint32)  \
-    (((uint32)*((uint8*)(ptr)+3)<<24) \
-    |((uint32)*((uint8*)(ptr)+2)<<16) \
-    |((uint16)*((uint8*)(ptr)+1)<<8)  \
-    |*(uint8*)(ptr))
+#define	LD_DWORD(ptr)		(uint32_t)  \
+    (((uint32_t)*((uint8_t*)(ptr)+3)<<24) \
+    |((uint32_t)*((uint8_t*)(ptr)+2)<<16) \
+    |((uint16_t)*((uint8_t*)(ptr)+1)<<8)  \
+    |*(uint8_t*)(ptr))
 
 #define	ST_WORD(ptr,val)	        \
-    *(uint8*)(ptr)=(uint8)(val);    \
-    *((uint8*)(ptr)+1)=(uint8)((uint16)(val)>>8)
+    *(uint8_t*)(ptr)=(uint8_t)(val);    \
+    *((uint8_t*)(ptr)+1)=(uint8_t)((uint16_t)(val)>>8)
 
 #define	ST_DWORD(ptr,val)	        \
-    *(uint8*)(ptr)=(uint8)(val);    \
-    *((uint8*)(ptr)+1)=(uint8)((uint16)(val)>>8);  \
-    *((uint8*)(ptr)+2)=(uint8)((uint32)(val)>>16); \
-    *((uint8*)(ptr)+3)=(uint8)((uint32)(val)>>24)
+    *(uint8_t*)(ptr)=(uint8_t)(val);    \
+    *((uint8_t*)(ptr)+1)=(uint8_t)((uint16_t)(val)>>8);  \
+    *((uint8_t*)(ptr)+2)=(uint8_t)((uint32_t)(val)>>16); \
+    *((uint8_t*)(ptr)+3)=(uint8_t)((uint32_t)(val)>>24)
 
 #endif
 
@@ -512,20 +513,20 @@ extern "C" {
     {
         char filename[13];
         char  ext_name[3];
-        uint32   file_start_cluster;
-        uint32  file_blks;
+        uint32_t   file_start_cluster;
+        uint32_t  file_blks;
     } fat_file_info_t;
 
 
 
     typedef struct
     {
-        uint32	fcluster;
+        uint32_t	fcluster;
         char	fname[13];	/* Short file name (8.3 format) */
         char    extname[3];
-        //	uint8	ExNoChainFlag;//exfat flag
-        uint8   fat_ok_flag;
-        uint16	Reserved1;
+        //	uint8_t	ExNoChainFlag;//exfat flag
+        uint8_t   fat_ok_flag;
+        uint16_t	Reserved1;
     } FILE_INFO;
 
     //*app struct*/
@@ -533,20 +534,20 @@ extern "C" {
 
     typedef struct
     {
-        uint32		first_cluster;
-        uint16 		music_total;
-        uint8		broot_dir;
-        uint8		ExNoChainFlag;
+        uint32_t		first_cluster;
+        uint16_t 		music_total;
+        uint8_t		broot_dir;
+        uint8_t		ExNoChainFlag;
     } FAT_DIR_INFO;
 
 
     //add by wangxuejun
     typedef struct
     {
-        uint32		cluster_number;
-        uint16 		dirlevel;
-        uint8 		broot_dir;
-        uint8		ExNoChainFlag;
+        uint32_t		cluster_number;
+        uint16_t 		dirlevel;
+        uint8_t 		broot_dir;
+        uint8_t		ExNoChainFlag;
     } DIR_QUEUE;
     //add by wangxuejun
 
@@ -691,18 +692,18 @@ extern "C" {
     /* File status structure (FILINFO) */
     typedef struct
     {
-        uint32	fsize;			/* File size */
-        uint16	fdate;			/* Last modified date */
-        uint16	ftime;			/* Last modified time */
-        uint8	fattrib;		/* Attribute */
+        uint32_t	fsize;			/* File size */
+        uint16_t	fdate;			/* Last modified date */
+        uint16_t	ftime;			/* Last modified time */
+        uint8_t	fattrib;		/* Attribute */
         TCHAR	fname[13];		/* Short file name (8.3 format) */
 
-        uint8	ExNoChainFlag;	//
-        uint8	reserved;
-        uint32	fcluster;
+        uint8_t	ExNoChainFlag;	//
+        uint8_t	reserved;
+        uint32_t	fcluster;
 #if _USE_LFN
         TCHAR	*lfname;			/* Pointer to the LFN buffer */
-        uint32 	lfsize;			/* Size of LFN buffer in TCHAR */
+        uint32_t 	lfsize;			/* Size of LFN buffer in TCHAR */
 #endif
     } FILINFOADD, *PFILINFOADD;
 
@@ -893,10 +894,10 @@ extern "C" {
 
     FRESULT dir_seek (
         DIR *dj,		/* Pointer to directory object */
-        uint16 idx		/* Directory index number */
+        uint16_t idx		/* Directory index number */
     );
 
-    FRESULT chk_mounted_con (FATFS *rfs, uint8 type);
+    FRESULT chk_mounted_con (FATFS *rfs, uint8_t type);
 
 #endif
 

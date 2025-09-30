@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "rtt_ate_app.h"
 #if ATE_APP_FUN
 

@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  *  shell implementation for finsh shell.
  *
@@ -129,7 +131,7 @@ const char *finsh_get_prompt()
  *
  * @return prompt the prompt mode, 0 disable prompt mode, other values enable prompt mode.
  */
-rt_uint32_t finsh_get_prompt_mode(void)
+uint32_t finsh_get_prompt_mode(void)
 {
     RT_ASSERT(shell != RT_NULL);
     return shell->prompt_mode;
@@ -144,7 +146,7 @@ rt_uint32_t finsh_get_prompt_mode(void)
  *
  * @param prompt the prompt mode
  */
-void finsh_set_prompt_mode(rt_uint32_t prompt_mode)
+void finsh_set_prompt_mode(uint32_t prompt_mode)
 {
     RT_ASSERT(shell != RT_NULL);
     shell->prompt_mode = prompt_mode;
@@ -240,10 +242,10 @@ const char *finsh_get_device()
  *
  * @param echo the echo mode
  */
-void finsh_set_echo(rt_uint32_t echo)
+void finsh_set_echo(uint32_t echo)
 {
     RT_ASSERT(shell != RT_NULL);
-    shell->echo_mode = (rt_uint8_t)echo;
+    shell->echo_mode = (uint8_t)echo;
 }
 
 /**
@@ -253,7 +255,7 @@ void finsh_set_echo(rt_uint32_t echo)
  *
  * @return the echo mode
  */
-rt_uint32_t finsh_get_echo()
+uint32_t finsh_get_echo()
 {
     RT_ASSERT(shell != RT_NULL);
 
@@ -538,7 +540,7 @@ void finsh_thread_entry(void *parameter)
             continue;
         } else {
             char *inbuf = &shell->line[0];
-            rt_uint8_t *bp = &shell->line_position;
+            uint8_t *bp = &shell->line_position;
             if(((char)0x01 == inbuf[0])
                 && ((char)0xe0 == inbuf[1])
                 && ((char)0xfc == inbuf[2])

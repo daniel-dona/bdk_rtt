@@ -1,3 +1,4 @@
+#include <stdint.h>
 /**
  * @file reg_mac_core.h
  * @brief Definitions of the NXMAC HW block registers and register access functions.

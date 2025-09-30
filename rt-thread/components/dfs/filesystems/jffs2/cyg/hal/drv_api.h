@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 #ifndef CYGONCE_HAL_DRV_API_H
 #define CYGONCE_HAL_DRV_API_H
 

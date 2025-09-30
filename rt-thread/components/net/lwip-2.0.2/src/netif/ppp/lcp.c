@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  * lcp.c - PPP Link Control Protocol.
  *

@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "mem_pub.h"
 #include "uart_pub.h"
@@ -422,7 +423,7 @@ WORD get_musicfile_count(void)
 {
 	return mp3filecount;
 }
-WORD get_curDirMusicfile_count(uint16 curDir)
+WORD get_curDirMusicfile_count(uint16_t curDir)
 {
 	FAT_DIR_INFO* file = NULL;
     os_printf("get_curDirMusicfile_count curDir=%d,\r\n",curDir);

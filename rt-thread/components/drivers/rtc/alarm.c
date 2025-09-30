@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  * File      : alarm.c
  * This file is part of RT-Thread RTOS
@@ -36,9 +38,9 @@
 static struct rt_alarm_container _container;
 rt_thread_t alarm_tid = NULL;
 
-rt_inline rt_uint32_t alarm_mkdaysec(struct tm *time)
+rt_inline uint32_t alarm_mkdaysec(struct tm *time)
 {
-    rt_uint32_t sec;
+    uint32_t sec;
 
     sec = time->tm_sec;
     sec += time->tm_min * 60;
@@ -88,7 +90,7 @@ static rt_err_t alarm_set(struct rt_alarm *alarm)
 
 static void alarm_wakeup(struct rt_alarm *alarm, struct tm *now)
 {
-    rt_uint32_t sec_alarm, sec_now;
+    uint32_t sec_alarm, sec_now;
     rt_bool_t wakeup = RT_FALSE;
     time_t timestamp;
 
@@ -158,12 +160,12 @@ static void alarm_wakeup(struct rt_alarm *alarm, struct tm *now)
     }
 }
 
-static void alarm_update(rt_uint32_t event)
+static void alarm_update(uint32_t event)
 {
     struct rt_alarm *alm_prev = RT_NULL, *alm_next = RT_NULL;
     struct rt_alarm *alarm;
-    rt_int32_t sec_now, sec_alarm, sec_tmp;
-    rt_int32_t sec_next = 24 * 3600, sec_prev = 0;
+    int32_t sec_now, sec_alarm, sec_tmp;
+    int32_t sec_next = 24 * 3600, sec_prev = 0;
     time_t timestamp;
     struct tm now;
     rt_list_t *next;
@@ -231,9 +233,9 @@ static void alarm_update(rt_uint32_t event)
     rt_mutex_release(&_container.mutex);
 }
 
-static rt_uint32_t days_of_year_month(int tm_year, int tm_mon)
+static uint32_t days_of_year_month(int tm_year, int tm_mon)
 {
-    rt_uint32_t ret, year;
+    uint32_t ret, year;
 
     year = tm_year + 1900;
     if (tm_mon == 1)
@@ -387,7 +389,7 @@ _exit:
  * \param event RTC event(currently unused)
  * \return none
  */
-void rt_alarm_update(rt_device_t dev, rt_uint32_t event)
+void rt_alarm_update(rt_device_t dev, uint32_t event)
 {
     if(alarm_tid)
     {
@@ -436,7 +438,7 @@ rt_err_t rt_alarm_control(rt_alarm_t alarm, int cmd, void *arg)
  */
 rt_err_t rt_alarm_start(rt_alarm_t alarm)
 {
-    rt_int32_t sec_now, sec_old, sec_new;
+    int32_t sec_now, sec_old, sec_new;
     rt_err_t ret = RT_ERROR;
     time_t timestamp;
     struct tm now;
@@ -589,7 +591,7 @@ rt_alarm_t rt_alarm_create(rt_alarm_callback_t callback, struct rt_alarm_setup *
  */
 static void rt_alarmsvc_thread_init(void *param)
 {
-    rt_uint32_t recv;
+    uint32_t recv;
 
     _container.current = RT_NULL;
 

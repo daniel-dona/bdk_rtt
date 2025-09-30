@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : clock.c
  * This file is part of RT-Thread RTOS
@@ -135,9 +136,9 @@ static int lwp_load(const char *filename, struct rt_lwp *lwp, uint8_t *load_addr
         else
         {
 #ifdef RT_USING_CACHE
-            lwp->text_entry = (rt_uint8_t *)rt_malloc_align(lwp->text_size, RT_CPU_CACHE_LINE_SZ);
+            lwp->text_entry = (uint8_t *)rt_malloc_align(lwp->text_size, RT_CPU_CACHE_LINE_SZ);
 #else
-            lwp->text_entry = (rt_uint8_t *)rt_malloc(lwp->text_size);
+            lwp->text_entry = (uint8_t *)rt_malloc(lwp->text_size);
 #endif
 
             if (lwp->text_entry == RT_NULL)
@@ -296,7 +297,7 @@ static void lwp_thread(void *parameter)
     lwp = (struct rt_lwp *)parameter;
     rt_lwp_mem_init(lwp);
     tid = rt_thread_self();
-    tid->user_data = (rt_uint32_t)lwp;
+    tid->user_data = (uint32_t)lwp;
     tid->cleanup = lwp_cleanup;
 
     lwp_user_entry(lwp->text_entry, lwp->data);
@@ -333,7 +334,7 @@ int exec(char *filename)
                                1024 * 4, 2, 200);
         if (tid != RT_NULL)
         {
-            dbg_log(DBG_LOG, "lwp kernel => (0x%08x, 0x%08x)\n", (rt_uint32_t)tid->stack_addr, (rt_uint32_t)tid->stack_addr + tid->stack_size);
+            dbg_log(DBG_LOG, "lwp kernel => (0x%08x, 0x%08x)\n", (uint32_t)tid->stack_addr, (uint32_t)tid->stack_addr + tid->stack_size);
             rt_thread_startup(tid);
             return RT_EOK;
         }

@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _BK_JPEG_ENCODER_H_
 #define _BK_JPEG_ENCODER_H_
 
@@ -93,9 +94,9 @@
 #define JPEG_REG8                                    (JPEG_BASE + 8 * 4)
 #define JPEFG_READ_MASK								 1<<0
 
-static UINT32 ejpeg_open(UINT32 op_flag);
-static UINT32 ejpeg_close(void);
-static UINT32 ejpeg_ctrl(UINT32 cmd, void *param);
+static uint32_t ejpeg_open(uint32_t op_flag);
+static uint32_t ejpeg_close(void);
+static uint32_t ejpeg_ctrl(uint32_t cmd, void *param);
 void camera_power_on(void);
 
 #endif // _BK_JPEG_H_

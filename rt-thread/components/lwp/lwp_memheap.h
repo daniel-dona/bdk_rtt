@@ -1,3 +1,4 @@
+#include <stdbool.h>
 /*
  * File      : lwp_memheap.h
  * This file is part of RT-Thread RTOS
@@ -32,7 +33,7 @@
  */
 struct rt_lwp_memheap_item
 {
-    rt_uint32_t                 magic;                  /**< magic number for memheap */
+    uint32_t                 magic;                  /**< magic number for memheap */
     struct rt_lwp_memheap      *pool_ptr;               /**< point of pool */
 
     struct rt_lwp_memheap_item *next;                   /**< next memheap item */
@@ -51,9 +52,9 @@ struct rt_lwp_memheap
 
     void                   *start_addr;                 /**< pool start address and size */
 
-    rt_uint32_t             pool_size;                  /**< pool size */
-    rt_uint32_t             available_size;             /**< available size */
-    rt_uint32_t             max_used_size;              /**< maximum allocated size */
+    uint32_t             pool_size;                  /**< pool size */
+    uint32_t             available_size;             /**< available size */
+    uint32_t             max_used_size;              /**< maximum allocated size */
 
     struct rt_lwp_memheap_item *block_list;             /**< used block list */
     struct rt_lwp_memheap_item *free_list;              /**< free block list */
@@ -64,8 +65,8 @@ struct rt_lwp_memheap
     rt_list_t mlist;
 };
 
-extern rt_err_t rt_lwp_memheap_init(struct rt_lwp_memheap *memheap, const char *name, void *start_addr, rt_uint32_t size);
-extern void *rt_lwp_memheap_alloc(struct rt_lwp_memheap *heap, rt_uint32_t size);
+extern rt_err_t rt_lwp_memheap_init(struct rt_lwp_memheap *memheap, const char *name, void *start_addr, uint32_t size);
+extern void *rt_lwp_memheap_alloc(struct rt_lwp_memheap *heap, uint32_t size);
 extern void rt_lwp_memheap_free(void *ptr);
 extern void *rt_lwp_memheap_realloc(struct rt_lwp_memheap *heap, void *ptr, rt_size_t newsize);
 extern rt_bool_t rt_lwp_memheap_is_empty(struct rt_lwp_memheap *memheap);

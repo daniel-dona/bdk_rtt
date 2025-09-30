@@ -1,3 +1,4 @@
+#include <stdbool.h>
 /*
  * File      : webnet.c
  * This file is part of RT-Thread RTOS
@@ -46,7 +47,7 @@
 #endif /* WEBNET_USING_LOG */
 #include <rtdbg.h>
 
-static rt_uint16_t webnet_port = WEBNET_PORT;
+static uint16_t webnet_port = WEBNET_PORT;
 static char webnet_root[64] = WEBNET_ROOT;
 static rt_bool_t init_ok = RT_FALSE;
 

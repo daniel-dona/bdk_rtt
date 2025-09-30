@@ -1,3 +1,4 @@
+#include <stdint.h>
 /**
  ******************************************************************************
  * @file    BkDriverWdg.h
@@ -37,7 +38,7 @@
 
 OSStatus bk_wdg_initialize( uint32_t timeout )
 {
-    UINT32 ret, param;
+    uint32_t ret, param;
 
     ret = sddev_control(WDT_DEV_NAME, WCMD_POWER_UP, 0);
     ASSERT(WDT_SUCCESS == ret);
@@ -51,7 +52,7 @@ OSStatus bk_wdg_initialize( uint32_t timeout )
 
 void bk_wdg_reload( void )
 {
-    UINT32 ret;
+    uint32_t ret;
 
     ret = sddev_control(WDT_DEV_NAME, WCMD_RELOAD_PERIOD, 0);
     ASSERT(WDT_SUCCESS == ret);
@@ -61,7 +62,7 @@ void bk_wdg_reload( void )
 
 OSStatus bk_wdg_finalize( void )
 {
-    UINT32 ret;
+    uint32_t ret;
 
     ret = sddev_control(WDT_DEV_NAME, WCMD_POWER_DOWN, 0);
     ASSERT(WDT_SUCCESS == ret);

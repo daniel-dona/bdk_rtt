@@ -1,3 +1,4 @@
+#include <stdint.h>
 /**
  * @file
  * Management Information Base II (RFC1213) UDP objects and functions.
@@ -97,7 +98,7 @@ udp_endpointTable_get_cell_value_core(const u32_t* column, union snmp_variant_va
   /* all items except udpEndpointProcess are declared as not-accessible */
   switch (*column) {
   case 8: /* udpEndpointProcess */
-    value->u32 = 0; /* not supported */
+    value->uint32_t = 0; /* not supported */
     break;
   default:
     return SNMP_ERR_NOSUCHINSTANCE;
@@ -222,11 +223,11 @@ udp_Table_get_cell_value_core(struct udp_pcb *pcb, const u32_t* column, union sn
   switch (*column) {
   case 1: /* udpLocalAddress */
     /* set reference to PCB local IP and return a generic node that copies IP4 addresses */
-    value->u32 = ip_2_ip4(&pcb->local_ip)->addr;
+    value->uint32_t = ip_2_ip4(&pcb->local_ip)->addr;
     break;
   case 2: /* udpLocalPort */
     /* set reference to PCB local port and return a generic node that copies u16_t values */
-    value->u32 = pcb->local_port;
+    value->uint32_t = pcb->local_port;
     break;
   default:
     return SNMP_ERR_NOSUCHINSTANCE;

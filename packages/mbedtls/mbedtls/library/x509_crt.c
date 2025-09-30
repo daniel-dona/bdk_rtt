@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  *  X.509 certificate parsing and verification
  *
@@ -310,7 +312,7 @@ static int x509_get_basic_constraints( unsigned char **p,
 
     /*
      * BasicConstraints ::= SEQUENCE {
-     *      cA                      BOOLEAN DEFAULT FALSE,
+     *      cA                      bool DEFAULT FALSE,
      *      pathLenConstraint       INTEGER (0..MAX) OPTIONAL }
      */
     *ca_istrue = 0; /* DEFAULT FALSE */
@@ -540,7 +542,7 @@ static int x509_get_crt_ext( unsigned char **p,
         /*
          * Extension  ::=  SEQUENCE  {
          *      extnID      OBJECT IDENTIFIER,
-         *      critical    BOOLEAN DEFAULT FALSE,
+         *      critical    bool DEFAULT FALSE,
          *      extnValue   OCTET STRING  }
          */
         mbedtls_x509_buf extn_oid = {0, 0, NULL};

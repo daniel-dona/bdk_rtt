@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 
 #if (CFG_USE_APP_DEMO_VIDEO_TRANSFER)
@@ -76,13 +77,13 @@ static void app_demo_tcp_main(beken_thread_arg_t data)
     struct sockaddr_in server_addr;
     socklen_t srvaddr_len = 0;
     fd_set watchfd;
-    u8 *rcv_buf = NULL;
+    uint8_t *rcv_buf = NULL;
 
     (void)(data);
 
     APP_DEMO_TCP_FATAL("app_demo_tcp_main entry\r\n");
 
-    rcv_buf = (u8 *) os_malloc((APP_DEMO_TCP_RCV_BUF_LEN + 1) * sizeof(u8));
+    rcv_buf = (uint8_t *) os_malloc((APP_DEMO_TCP_RCV_BUF_LEN + 1) * sizeof(uint8_t));
     if (!rcv_buf)
     {
         APP_DEMO_TCP_PRT("tcp os_malloc failed\r\n");
@@ -290,7 +291,7 @@ app_demo_tcp_exit:
     rtos_delete_thread(NULL);
 }
 
-UINT32 app_demo_tcp_init(void)
+uint32_t app_demo_tcp_init(void)
 {
     int ret;
 
@@ -329,7 +330,7 @@ void app_demo_tcp_deinit(void)
 }
 
 /*---------------------------------------------------------------------------*/
-int app_demo_tcp_send_packet(UINT8 *data, UINT32 len)
+int app_demo_tcp_send_packet(uint8_t *data, uint32_t len)
 {
     int i = 0, snd_len = 0;
 

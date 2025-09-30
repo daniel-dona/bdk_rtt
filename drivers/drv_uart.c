@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : drv_uart.c
  * This file is part of RT-Thread RTOS
@@ -40,8 +41,8 @@
 struct device_uart
 {
 	struct rt_serial_device serial;
-	rt_uint32_t port;
-	rt_uint32_t irqno;
+	uint32_t port;
+	uint32_t irqno;
 	char name[RT_NAME_MAX];
 };
 
@@ -61,7 +62,7 @@ static int uart_getc(struct rt_serial_device *serial)
 	return uart_read_byte(uart->port);
 }
 
-static rt_size_t uart_dma_transmit(struct rt_serial_device *serial, rt_uint8_t *buf, rt_size_t size, int direction)
+static rt_size_t uart_dma_transmit(struct rt_serial_device *serial, uint8_t *buf, rt_size_t size, int direction)
 {
 	return (0);
 }

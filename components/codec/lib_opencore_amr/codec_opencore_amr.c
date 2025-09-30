@@ -84,7 +84,7 @@ static int codec_amr_run(struct audio_codec *codec)
         len  = strlen(AMR_MAGIC_NUMBER);
         amr_header[len] = 0;
 __retry: 
-        bytes_read = audio_stream_fetch(stream, (rt_uint8_t *)(amr_header), len);
+        bytes_read = audio_stream_fetch(stream, (uint8_t *)(amr_header), len);
         if (bytes_read != len)
         {
             if((bytes_read == -2) && (retry_cnt--) > 0)
@@ -119,7 +119,7 @@ __retry:
         int amr_size;
 
         /* get amr frame header. */
-        bytes_read = audio_stream_fetch(stream, (rt_uint8_t *)(&amr_data[0]), 1);
+        bytes_read = audio_stream_fetch(stream, (uint8_t *)(&amr_data[0]), 1);
         if (bytes_read != 1)
         {
             LOG_E("read amr frame header err, break!");
@@ -127,7 +127,7 @@ __retry:
         }
 
         amr_size = amr_frame[(amr_data[0] >> 3) & 0x0f]; /* TODO: amr size check. */
-        bytes_read = audio_stream_fetch(stream, (rt_uint8_t *)(&amr_data[1]), amr_size);
+        bytes_read = audio_stream_fetch(stream, (uint8_t *)(&amr_data[1]), amr_size);
         if (bytes_read != amr_size)
         {
             LOG_E("read amr_size err, %d:%d.", amr_size, bytes_read);

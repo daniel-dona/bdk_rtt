@@ -1,3 +1,4 @@
+#include <stdint.h>
 /* ----------------------------------------------------------------------
 * Copyright (C) 2010-2013 ARM Limited. All rights reserved.
 *

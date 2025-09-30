@@ -49,7 +49,7 @@ static char *pub_data = RT_NULL;
 /* define MQTT client context */
 static MQTTClient client;
 
-static rt_uint32_t pub_count = 0, sub_count = 0;
+static uint32_t pub_count = 0, sub_count = 0;
 static int recon_count = -1;
 static int test_start_tm = 0;
 static int test_is_started = 0;

@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  *  Portable interface to the CPU cycle counter
  *
@@ -264,7 +265,7 @@ unsigned long mbedtls_timing_get_timer( struct mbedtls_timing_hr_time *val, int 
 /* It's OK to use a global because alarm() is supposed to be global anyway */
 static DWORD alarmMs;
 
-static DWORD WINAPI TimerProc( LPVOID TimerContext )
+static DWORD WINAPI TimerProc( void * TimerContext )
 {
     ((void) TimerContext);
     Sleep( alarmMs );

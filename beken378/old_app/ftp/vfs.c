@@ -1,3 +1,4 @@
+#include <stdint.h>
 /* Copyright (c) 2013, Philipp T?lke
  * All rights reserved.
  *
@@ -96,7 +97,7 @@ vfs_t *vfs_openfs(void)
 vfs_file_t *vfs_open(vfs_t *vfs, const char *filename, const char *mode)
 {
     vfs_file_t *f = (vfs_file_t *)os_malloc(sizeof(vfs_file_t));
-    uint8 flags = 0;
+    uint8_t flags = 0;
     while (*mode != '\0')
     {
         if (*mode == 'r') flags |= FA_READ;

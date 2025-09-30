@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
   This file is part of UFFS, the Ultra-low-cost Flash File System.
   
@@ -63,7 +64,7 @@
 static void memcp_seq(void *des, int size, int start_pos)
 {
 	int i;
-	u8 *p = (u8 *)des;
+	uint8_t *p = (uint8_t *)des;
 	
 	for (i = 0; i < size; i++, p++) {
 		*p = (start_pos + SEQ_INIT + i) % SEQ_MOD_LEN;
@@ -133,7 +134,7 @@ static URET test_verify_file(const char *file_name, UBOOL noecc)
 	int ret = U_FAIL;
 	unsigned char buf[100];
 	int i, pos, len;
-	u8 x;
+	uint8_t x;
 
 	if ((fd = uffs_open(file_name, (noecc ? UO_RDONLY|UO_NOECC : UO_RDONLY))) < 0) {
 		MSGLN("Can't open file %s for read.", file_name);
@@ -470,11 +471,11 @@ static int cmd_TestPageReadWrite(int argc, char *argv[])
 	uffs_Tags local_tag;
 	uffs_Tags *tag = &local_tag;
 	int ret;
-	u16 block;
-	u16 page;
+	uint16_t block;
+	uint16_t page;
 	uffs_Buf *buf = NULL;
 
-	u32 i;
+	uint32_t i;
 	int rc = -1;
 
 	dev = uffs_GetDeviceFromMountPoint("/");
@@ -919,9 +920,9 @@ static int cmd_tcheck_seq(int argc, char *argv[])
 	int len, size;
 	int ret = 0, r_ret = 0;
 	long pos;
-	u8 buf[MAX_TEST_BUF_LEN];
+	uint8_t buf[MAX_TEST_BUF_LEN];
 	int i;
-	u8 x;
+	uint8_t x;
 
 	CHK_ARGC(3, 3);
 
@@ -974,7 +975,7 @@ static int cmd_twrite_seq(int argc, char *argv[])
 	int len = 0, size = 0;
 	long pos = 0;
 	int ret = 0, w_ret = 0;
-	u8 buf[MAX_TEST_BUF_LEN];
+	uint8_t buf[MAX_TEST_BUF_LEN];
 
 	CHK_ARGC(3, 3);
 	if (sscanf(argv[1], "%d", &fd) != 1) {

@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  *  SSL client for SMTP servers
  *

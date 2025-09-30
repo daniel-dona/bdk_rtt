@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 #include "include.h"
 #include "rw_msg_tx.h"
 #include "ke_msg.h"
@@ -34,7 +36,7 @@
 #include "power_save_pub.h"
 
 extern int bmsg_ioctl_sender(void *arg);
-extern void wpa_handler_signal(void *arg, u8 vif_idx);
+extern void wpa_handler_signal(void *arg, uint8_t vif_idx);
 
 int rw_msg_send(const void *msg_params, uint16_t reqid, void *cfm)
 {
@@ -294,7 +296,7 @@ int rw_msg_send_add_if(const unsigned char *mac,
     return rw_msg_send( add_if_req_param, MM_ADD_IF_CFM, cfm);
 }
 
-int rw_msg_send_remove_if(u8 vif_index)
+int rw_msg_send_remove_if(uint8_t vif_index)
 {
     struct ke_msg cfm;
     struct mm_remove_if_req *remove_if_req;
@@ -314,7 +316,7 @@ int rw_msg_send_remove_if(u8 vif_index)
     return rw_msg_send(remove_if_req, MM_REMOVE_IF_CFM, &cfm);
 }
 
-int rw_msg_send_apm_start_req(u8 vif_index, u8 channel,
+int rw_msg_send_apm_start_req(uint8_t vif_index, uint8_t channel,
                      struct apm_start_cfm *cfm)
 {
     struct apm_start_req *req;
@@ -338,7 +340,7 @@ int rw_msg_send_apm_start_req(u8 vif_index, u8 channel,
     req->center_freq2 = 0;
     req->ch_width = 0;
 
-    req->bcn_addr = (UINT32)beacon;
+    req->bcn_addr = (uint32_t)beacon;
     req->bcn_len = sizeof(beacon);
     req->tim_oft = 56;
     req->tim_len = 6;
@@ -362,7 +364,7 @@ int rw_msg_send_apm_start_req(u8 vif_index, u8 channel,
     return rw_msg_send(req, APM_START_CFM, cfm);
 }
 
-int rw_msg_send_apm_stop_req(u8 vif_index)
+int rw_msg_send_apm_stop_req(uint8_t vif_index)
 {
     struct apm_stop_req *req;
 	struct apm_stop_cfm *cfm
@@ -406,7 +408,7 @@ int rw_msg_send_bcn_change(void *bcn_param)
         return -1;
 
     /* Set parameters for the MM_BCN_CHANGE_REQ message */
-    req->bcn_ptr = (u32)(param->bcn_ptr);
+    req->bcn_ptr = (uint32_t)(param->bcn_ptr);
     req->bcn_len = param->bcn_len;
     req->tim_len = param->tim_len;
     req->tim_oft = param->tim_oft;
@@ -478,7 +480,7 @@ int rw_msg_send_me_sta_add(struct add_sta_st *param,
     return rw_msg_send(req, ME_STA_ADD_CFM, cfm);
 }
 
-int rw_msg_send_me_sta_del(u8 sta_idx, bool tdls_sta)
+int rw_msg_send_me_sta_del(uint8_t sta_idx, bool tdls_sta)
 {
     struct me_sta_del_req *req;
 
@@ -496,7 +498,7 @@ int rw_msg_send_me_sta_del(u8 sta_idx, bool tdls_sta)
     return rw_msg_send(req, ME_STA_DEL_CFM, NULL);
 }
 
-int rw_msg_me_set_control_port_req(bool opened, u8 sta_idx)
+int rw_msg_me_set_control_port_req(bool opened, uint8_t sta_idx)
 {
     struct me_set_control_port_req *req;
 
@@ -554,7 +556,7 @@ int rw_msg_send_key_add(KEY_PARAM_T *param, struct mm_key_add_cfm *cfm)
     return rw_msg_send(key_add_req, MM_KEY_ADD_CFM, cfm);
 }
 
-int rw_msg_send_key_del(u8 hw_key_idx)
+int rw_msg_send_key_del(uint8_t hw_key_idx)
 {
     struct mm_key_del_req *key_del_req;
 
@@ -647,7 +649,7 @@ int rw_msg_send_scanu_fast_req(FAST_SCAN_PARAM_T *fscan_param)
     return rw_msg_send(req, SCANU_FAST_CFM, NULL);
 }
 
-int rw_msg_send_connection_loss_ind(u8 vif_index)
+int rw_msg_send_connection_loss_ind(uint8_t vif_index)
 {
     struct mm_connection_loss_ind *ind = ke_msg_alloc(MM_CONNECTION_LOSS_IND,
                                          TASK_SM, TASK_API, sizeof(struct mm_connection_loss_ind));
@@ -659,7 +661,7 @@ int rw_msg_send_connection_loss_ind(u8 vif_index)
     return rw_msg_send(ind, 0, NULL);
 }
 
-int rw_msg_get_bss_info(u8 vif_idx, void *cfm)
+int rw_msg_get_bss_info(uint8_t vif_idx, void *cfm)
 {
     struct sm_get_bss_info_req *req = NULL;
 
@@ -815,12 +817,12 @@ int __rw_msg_send_sm_auth_req(AUTH_PARAM_T *sme, void *cfm)
 
 	if (req->ie_len) {
 		ASSERT(sizeof(req->ie) >= req->ie_len);
-		os_memcpy((UINT8 *)req->ie, (UINT8 *)sme->ie_buf, req->ie_len);
+		os_memcpy((uint8_t *)req->ie, (uint8_t *)sme->ie_buf, req->ie_len);
 	}
 
 	if (req->sae_data_len) {
 		//ASSERT(sizeof(req->sae_data) >= req->sae_data_len);
-		os_memcpy((UINT8 *)req->sae_data, (UINT8 *)sme->sae_data, req->sae_data_len);
+		os_memcpy((uint8_t *)req->sae_data, (uint8_t *)sme->sae_data, req->sae_data_len);
 	}
 
 	/* Send the SM_AUTH_REQ message to ULMAC FW */
@@ -885,7 +887,7 @@ int rw_msg_send_sm_assoc_req( ASSOC_PARAM_T *sme, void *cfm)
     req->ie_len = sme->ie_len;
 	if (req->ie_len) {
 		ASSERT(sizeof(req->ie_buf) >= req->ie_len);
-    	os_memcpy((UINT8 *)req->ie_buf, (UINT8 *)sme->ie_buf, req->ie_len);
+    	os_memcpy((uint8_t *)req->ie_buf, (uint8_t *)sme->ie_buf, req->ie_len);
 	}
 	req->bcn_len = sme->bcn_len;
 	if (req->bcn_len) {
@@ -923,10 +925,10 @@ int rw_msg_send_sm_connect_req( CONNECT_PARAM_T *sme, void *cfm)
     req->ctrl_port_ethertype = PP_HTONS(ETH_P_PAE);
     req->ie_len = sme->ie_len;
     req->auth_type = sme->auth_type;
-    os_memcpy((UINT8 *)req->ie_buf, (UINT8 *)sme->ie_buf, req->ie_len);
+    os_memcpy((uint8_t *)req->ie_buf, (uint8_t *)sme->ie_buf, req->ie_len);
 	req->bcn_len = sme->bcn_len;
 	if (req->bcn_len)
-		os_memcpy((UINT8 *)req->bcn_buf, (UINT8 *)sme->bcn_buf, req->bcn_len);
+		os_memcpy((uint8_t *)req->bcn_buf, (uint8_t *)sme->bcn_buf, req->bcn_len);
 
     /* Send the SM_CONNECT_REQ message to LMAC FW */
     return rw_msg_send(req, SM_CONNECT_CFM, cfm);
@@ -952,7 +954,7 @@ int rw_msg_send_sm_external_auth_status(EXTERNAL_AUTH_PARAM_T *auth_param)
 }
 #endif
 
-int rw_msg_send_tim_update(u8 vif_idx, u16 aid, u8 tx_status)
+int rw_msg_send_tim_update(uint8_t vif_idx, uint16_t aid, uint8_t tx_status)
 {
     struct mm_tim_update_req *req;
 
@@ -971,7 +973,7 @@ int rw_msg_send_tim_update(u8 vif_idx, u16 aid, u8 tx_status)
     return rw_msg_send(req, MM_TIM_UPDATE_CFM, NULL);
 }
 
-int rw_msg_set_power(u8 vif_idx, u8 power)
+int rw_msg_set_power(uint8_t vif_idx, uint8_t power)
 {
     struct mm_set_power_req *req;
 

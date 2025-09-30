@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * hostapd / IEEE 802.11 MLME
  * Copyright 2003, Jouni Malinen <j@w1.fi>
@@ -15,7 +16,7 @@ void mlme_authenticate_indication(struct hostapd_data *hapd,
 				  struct sta_info *sta);
 
 void mlme_deauthenticate_indication(struct hostapd_data *hapd,
-				    struct sta_info *sta, u16 reason_code);
+				    struct sta_info *sta, uint16_t reason_code);
 
 void mlme_associate_indication(struct hostapd_data *hapd,
 			       struct sta_info *sta);
@@ -24,10 +25,10 @@ void mlme_reassociate_indication(struct hostapd_data *hapd,
 				 struct sta_info *sta);
 
 void mlme_disassociate_indication(struct hostapd_data *hapd,
-				  struct sta_info *sta, u16 reason_code);
+				  struct sta_info *sta, uint16_t reason_code);
 
 void mlme_michaelmicfailure_indication(struct hostapd_data *hapd,
-				       const u8 *addr);
+				       const uint8_t *addr);
 
 void mlme_deletekeys_request(struct hostapd_data *hapd, struct sta_info *sta);
 

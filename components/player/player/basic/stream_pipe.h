@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File: stream_pipe.h
  * 
@@ -19,16 +20,16 @@ enum STREAM_PIPE_EVENT
 /* ring buffer */
 struct rb_buffer
 {
-    rt_uint8_t *buffer_ptr;
+    uint8_t *buffer_ptr;
 
-    rt_uint32_t read_mirror : 1;
-    rt_uint32_t read_index : 31;
+    uint32_t read_mirror : 1;
+    uint32_t read_index : 31;
 
-    rt_uint32_t write_mirror : 1;
-    rt_uint32_t write_index : 31;
+    uint32_t write_mirror : 1;
+    uint32_t write_index : 31;
     /* as we use msb of index as mirror bit, the size should be signed and
      * could only be positive. */
-    rt_int32_t buffer_size;
+    int32_t buffer_size;
 };
 
 struct stream_pipe
@@ -65,7 +66,7 @@ int32_t stream_pipe_get_reader_wm(struct stream_pipe *pipe);
 int stream_pipe_write(struct stream_pipe *pipe, const void *buf, uint32_t size, int timeout);
 int stream_pipe_read(struct stream_pipe *pipe, void *buf, uint32_t size, int timeout);
 
-rt_uint32_t rb_buffer_data_len(struct rb_buffer *rb); 
+uint32_t rb_buffer_data_len(struct rb_buffer *rb); 
 int stream_pipe_set_event_callback(void (*callback)(int event, void *user_data), void *user_data); 
 
 #endif

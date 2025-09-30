@@ -1,3 +1,4 @@
+#include <stdint.h>
 /**
  * @file
  * Abstract Syntax Notation One (ISO 8824, 8825) encoding
@@ -197,7 +198,7 @@ snmp_asn1_enc_u64t(struct snmp_pbuf_stream* pbuf_stream, u16_t octets_needed, co
     PBUF_OP_EXEC(snmp_pbuf_stream_write(pbuf_stream, (u8_t)(*value >> ((octets_needed-4) << 3))));
   }
 
-  /* skip to low u32 */
+  /* skip to low uint32_t */
   value++;
 
   while (octets_needed > 1) {
@@ -342,15 +343,15 @@ snmp_asn1_enc_u32t_cnt(u32_t value, u16_t *octets_needed)
 void
 snmp_asn1_enc_u64t_cnt(const u32_t *value, u16_t *octets_needed)
 {
-  /* check if high u32 is 0 */
+  /* check if high uint32_t is 0 */
   if (*value == 0x00) {
-    /* only low u32 is important */
+    /* only low uint32_t is important */
     value++;
     snmp_asn1_enc_u32t_cnt(*value, octets_needed);
   } else {
-    /* low u32 does not matter for length determination */
+    /* low uint32_t does not matter for length determination */
     snmp_asn1_enc_u32t_cnt(*value, octets_needed);
-    *octets_needed = *octets_needed + 4; /* add the 4 bytes of low u32 */
+    *octets_needed = *octets_needed + 4; /* add the 4 bytes of low uint32_t */
   }
 }
 
@@ -446,7 +447,7 @@ snmp_asn1_dec_tlv(struct snmp_pbuf_stream* pbuf_stream, struct snmp_asn1_tlv* tl
     tlv->value_len = 0;
 
     while (length_bytes > 0) {
-      /* we only support up to u16.maxvalue-1 (2 bytes) but have to accept leading zero bytes */
+      /* we only support up to uint16_t.maxvalue-1 (2 bytes) but have to accept leading zero bytes */
       if (tlv->value_len > 0xFF) {
         return ERR_VAL;
       }
@@ -527,9 +528,9 @@ snmp_asn1_dec_u64t(struct snmp_pbuf_stream *pbuf_stream, u16_t len, u32_t *value
   u8_t data;
 
   if (len <= 4) {
-    /* high u32 is 0 */
+    /* high uint32_t is 0 */
     *value = 0;
-    /* directly skip to low u32 */
+    /* directly skip to low uint32_t */
     value++;
   }
 
@@ -545,7 +546,7 @@ snmp_asn1_dec_u64t(struct snmp_pbuf_stream *pbuf_stream, u16_t len, u32_t *value
         PBUF_OP_EXEC(snmp_pbuf_stream_read(pbuf_stream, &data));
 
         if (len == 4) {
-          /* skip to low u32 */
+          /* skip to low uint32_t */
           value++;
           *value = 0;
         } else {

@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _SDIO_H_
 #define _SDIO_H_
 
@@ -33,32 +34,32 @@
 
 typedef struct _sdio_cmd
 {
-    UINT8 op_code;
-    UINT8 len;
-    UINT8 flag;
-    UINT8 status;
+    uint8_t op_code;
+    uint8_t len;
+    uint8_t flag;
+    uint8_t status;
 
-    UINT32 content[MAX_CONTENT_COUNT];
+    uint32_t content[MAX_CONTENT_COUNT];
 } SDIO_CMD_S, *SDIO_CMD_PTR;
 
 
 typedef struct _sdio_dcmd
 {
-    UINT8 op_code;
-    UINT8 cmd_len;
-    UINT8 flag;
-    UINT8 status;
+    uint8_t op_code;
+    uint8_t cmd_len;
+    uint8_t flag;
+    uint8_t status;
 
-    UINT16 data_len;
+    uint16_t data_len;
 #if FOR_SDIO_BLK_512
-    UINT16 start_len;
-    UINT8 seq;
-    UINT8 reserve;
-    UINT16 total_size;
-    UINT32 content[MAX_CONTENT_COUNT - 2];
+    uint16_t start_len;
+    uint8_t seq;
+    uint8_t reserve;
+    uint16_t total_size;
+    uint32_t content[MAX_CONTENT_COUNT - 2];
 #else
-    UINT16 reserve;
-    UINT32 content[MAX_CONTENT_COUNT - 1];
+    uint16_t reserve;
+    uint32_t content[MAX_CONTENT_COUNT - 1];
 #endif
 } SDIO_DCMD_S, *SDIO_DCMD_PTR;
 
@@ -69,21 +70,21 @@ typedef struct _sdio_dcmd
 
 typedef struct _sdio_entity_
 {
-    UINT16 rx_status;
-    UINT16 tx_status;
+    uint16_t rx_status;
+    uint16_t tx_status;
 #if FOR_SDIO_BLK_512
-    UINT32 tc_len;
-    UINT32 rc_len;
-    UINT8 tx_seq;
-    UINT8 rx_seq;
+    uint32_t tc_len;
+    uint32_t rc_len;
+    uint8_t tx_seq;
+    uint8_t rx_seq;
 #endif
-    UINT32 rx_len;
-    UINT32 tx_len;
-    UINT32 r_hdl_len;
-    UINT32 t_hdl_len;
-    UINT32 tx_transaction_len;
-    UINT32 rx_transaction_len;
-    UINT32 transaction_len;
+    uint32_t rx_len;
+    uint32_t tx_len;
+    uint32_t r_hdl_len;
+    uint32_t t_hdl_len;
+    uint32_t tx_transaction_len;
+    uint32_t rx_transaction_len;
+    uint32_t transaction_len;
 
     SDIO_NODE_T snode[CELL_COUNT];
 
@@ -131,15 +132,15 @@ typedef struct _sdio_entity_
 /*******************************************************************************
 * Function Declarations
 *******************************************************************************/
-extern UINT32 sdio_open(UINT32 op_flag);
+extern uint32_t sdio_open(uint32_t op_flag);
 
-extern UINT32 sdio_close(void);
+extern uint32_t sdio_close(void);
 
-extern UINT32 sdio_read(char *user_buf, UINT32 count, UINT32 op_flag);
+extern uint32_t sdio_read(char *user_buf, uint32_t count, uint32_t op_flag);
 
-extern UINT32 sdio_write(char *user_buf, UINT32 count, UINT32 op_flag);
+extern uint32_t sdio_write(char *user_buf, uint32_t count, uint32_t op_flag);
 
-extern UINT32 sdio_ctrl(UINT32 cmd, void *parm);
+extern uint32_t sdio_ctrl(uint32_t cmd, void *parm);
 
 
 #endif // _SDIO_H_

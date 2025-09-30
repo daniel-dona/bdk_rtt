@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : module_cgi.c
  * This file is part of RT-Thread RTOS/WebNet Server
@@ -26,7 +27,7 @@ struct webnet_cgi_item
     void (*handler)(struct webnet_session* session);
 };
 static struct webnet_cgi_item* _cgi_items = RT_NULL;
-static rt_uint32_t _cgi_count = 0;
+static uint32_t _cgi_count = 0;
 
 void webnet_cgi_set_root(const char* root)
 {
@@ -85,7 +86,7 @@ int webnet_module_cgi(struct webnet_session* session, int event)
         if (str_begin_with(request->path, _cgi_root))
         {
             char* cgi_name;
-            rt_uint32_t index;
+            uint32_t index;
 
             cgi_name = request->path + strlen(_cgi_root);
             for (index = 0; index < _cgi_count; index ++)

@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _MANUAL_PS_PUB_H_
 #define _MANUAL_PS_PUB_H_
 
@@ -41,15 +42,15 @@ typedef struct  ps_deep_ctrl {
 	 *      lpo_32k_src:the RTC wakeup source.LPO_SELECT_ROSC or LPO_SELECT_32K_XTAL.
 	 */
 	
-	UINT32 gpio_index_map;
-	UINT32 gpio_edge_map;
-	UINT32 gpio_stay_lo_map;
-	UINT32 gpio_last_index_map;
-	UINT32 gpio_last_edge_map;
-	UINT32 gpio_stay_hi_map;
+	uint32_t gpio_index_map;
+	uint32_t gpio_edge_map;
+	uint32_t gpio_stay_lo_map;
+	uint32_t gpio_last_index_map;
+	uint32_t gpio_last_edge_map;
+	uint32_t gpio_stay_hi_map;
 	
-	UINT32 sleep_time;
-	UINT32 lpo_32k_src;
+	uint32_t sleep_time;
+	uint32_t lpo_32k_src;
 } PS_DEEP_CTRL_PARAM;
 
 
@@ -60,10 +61,10 @@ typedef enum {
 
 #define     PS_SUPPORT_MANUAL_SLEEP     0
 typedef void ( *ps_wakeup_cb ) ( void );
-extern void deep_sleep_wakeup_with_gpio ( UINT32 gpio_index_map, UINT32 gpio_edge_map );
+extern void deep_sleep_wakeup_with_gpio ( uint32_t gpio_index_map, uint32_t gpio_edge_map );
 extern void bk_enter_deep_sleep_mode ( PS_DEEP_CTRL_PARAM *deep_param );
-extern void bk_wlan_ps_wakeup_with_timer ( MANUAL_MODE mode, UINT32 sleep_time );
-extern void bk_wlan_ps_wakeup_with_peri ( UINT8 uart2_wk, UINT32 gpio_index_map, UINT32 gpio_edge_map );
-extern void bk_wlan_ps_wakeup_with_gpio ( MANUAL_MODE mode, UINT32 gpio_index_map, UINT32 gpio_edge_map );
+extern void bk_wlan_ps_wakeup_with_timer ( MANUAL_MODE mode, uint32_t sleep_time );
+extern void bk_wlan_ps_wakeup_with_peri ( uint8_t uart2_wk, uint32_t gpio_index_map, uint32_t gpio_edge_map );
+extern void bk_wlan_ps_wakeup_with_gpio ( MANUAL_MODE mode, uint32_t gpio_index_map, uint32_t gpio_edge_map );
 #endif
 

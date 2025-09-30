@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : watchdog.h
  * This file is part of RT-Thread RTOS
@@ -50,7 +51,7 @@ struct rt_watchdog_ops
 
 rt_err_t rt_hw_watchdog_register(rt_watchdog_t *wdt,
                                  const char    *name,
-                                 rt_uint32_t    flag,
+                                 uint32_t    flag,
                                  void          *data);
 
 #endif /* __WATCHDOG_H__ */

@@ -89,7 +89,7 @@ typedef struct wlan_sta_config {
 		 * If set, this network block is used only when associating with the AP
 		 * using the configured BSSID
 		 */
-		u8 bssid[ETH_ALEN];
+		uint8_t bssid[ETH_ALEN];
 
 		/**
 		 * fast_connect_freq

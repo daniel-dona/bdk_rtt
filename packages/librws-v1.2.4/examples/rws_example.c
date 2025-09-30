@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 //  The MIT License (MIT)
 //  Copyright (c) 2018 liu2guang <liuguang@rt-thread.com>
  

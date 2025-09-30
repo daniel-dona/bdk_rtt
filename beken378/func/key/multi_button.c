@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "typedef.h"
 #include "arm_arch.h"

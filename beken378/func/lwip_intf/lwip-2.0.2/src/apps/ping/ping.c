@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : ping.c
  * This file is part of RT-Thread RTOS

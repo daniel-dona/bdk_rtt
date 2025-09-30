@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 #ifndef __ROM_CALL_FLASH_H_
 #define __ROM_CALL_FLASH_H_
 

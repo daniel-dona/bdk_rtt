@@ -27,7 +27,7 @@ enum
 	IR_KEY_PLAY,		/*0xc1*/
 	IR_KEY_MAX,
 };
-const static UINT8 IR_key_map[IR_CODE_SIZE] = 
+const static uint8_t IR_key_map[IR_CODE_SIZE] = 
 {
 	0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,
 	0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,
@@ -174,10 +174,10 @@ const static irkey_handle_func IRKey_handler[IR_KEY_TYPE_MAX][IR_KEY_MAX] =
 
 void ir_key_handle_thread(void *parameter)
 {
-	UINT32 IR_msg;
-	UINT8 key_type;
-	UINT8 key_value;
-	UINT8 ir_code;
+	uint32_t IR_msg;
+	uint8_t key_type;
+	uint8_t key_value;
+	uint8_t ir_code;
 	while(1)
 	{
 		if(IR_get_key(&IR_msg, sizeof(IR_msg), RT_WAITING_FOREVER) == RT_EOK)

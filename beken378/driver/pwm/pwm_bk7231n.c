@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "arm_arch.h"
 
@@ -12,19 +13,19 @@
 
 #define abs(a)					((a) < 0 ?(-1*(a)):(a))
 
-UINT8 current_channel;
-UINT8 current_group;
+uint8_t current_channel;
+uint8_t current_group;
 
 static const SDD_OPERATIONS pwm_op = {
 	pwm_ctrl
 };
 
-void (*p_PWM_Int_Handler[CHANNEL_NO])(UINT8);
+void (*p_PWM_Int_Handler[CHANNEL_NO])(uint8_t);
 
-static void pwm_gpio_configuration(UINT8 chan, UINT8 enable)
+static void pwm_gpio_configuration(uint8_t chan, uint8_t enable)
 {
-	UINT32 ret;
-	UINT32 param;
+	uint32_t ret;
+	uint32_t param;
 
 	switch (chan) {
 	case PWM0:
@@ -64,10 +65,10 @@ static void pwm_gpio_configuration(UINT8 chan, UINT8 enable)
 	ASSERT(GPIO_SUCCESS == ret);
 }
 
-static bk_err_t pwm_icu_configuration(pwm_param_t *pwm_param, UINT8 enable)
+static bk_err_t pwm_icu_configuration(pwm_param_t *pwm_param, uint8_t enable)
 {
-	UINT32 ret;
-	UINT32 param;
+	uint32_t ret;
+	uint32_t param;
 
 	/* set clock power down of icu module*/
 	switch (pwm_param->channel) {
@@ -139,9 +140,9 @@ exit_icu:
 	return BK_ERR_PARAM;
 }
 
-bk_err_t init_pwm_param(pwm_param_t *pwm_param, UINT8 enable)
+bk_err_t init_pwm_param(pwm_param_t *pwm_param, uint8_t enable)
 {
-	UINT32 value;
+	uint32_t value;
 
 	if ((pwm_param == NULL)
 		|| (pwm_param->channel >= PWM_COUNT)
@@ -180,33 +181,33 @@ bk_err_t init_pwm_param(pwm_param_t *pwm_param, UINT8 enable)
 
 	//pwm freq set
 #if (CFG_SOC_NAME == SOC_BK7231)
-	value = (((UINT32)pwm_param->duty_cycle & 0x0000FFFF) << 16)
-			+ ((UINT32)pwm_param->end_value & 0x0000FFFF);
+	value = (((uint32_t)pwm_param->duty_cycle & 0x0000FFFF) << 16)
+			+ ((uint32_t)pwm_param->end_value & 0x0000FFFF);
 	REG_WRITE(REG_APB_BK_PWMn_CNT_ADDR(pwm_param->channel), value);
 #else
 	if (current_channel == 0) {
-		value = (UINT32) pwm_param->duty_cycle1;
+		value = (uint32_t) pwm_param->duty_cycle1;
 		REG_WRITE(REG_GROUP_PWM0_T1_ADDR(current_group), value);
 
-		value = (UINT32) pwm_param->duty_cycle2;
+		value = (uint32_t) pwm_param->duty_cycle2;
 		REG_WRITE(REG_GROUP_PWM0_T2_ADDR(current_group), value);
 
-		value = (UINT32) pwm_param->duty_cycle3;
+		value = (uint32_t) pwm_param->duty_cycle3;
 		REG_WRITE(REG_GROUP_PWM0_T3_ADDR(current_group), value);
 
-		value = (UINT32) pwm_param->end_value;
+		value = (uint32_t) pwm_param->end_value;
 		REG_WRITE(REG_GROUP_PWM0_T4_ADDR(current_group), value);
 	} else {
-		value = (UINT32) pwm_param->duty_cycle1;
+		value = (uint32_t) pwm_param->duty_cycle1;
 		REG_WRITE(REG_GROUP_PWM1_T1_ADDR(current_group), value);
 
-		value = (UINT32) pwm_param->duty_cycle2;
+		value = (uint32_t) pwm_param->duty_cycle2;
 		REG_WRITE(REG_GROUP_PWM1_T2_ADDR(current_group), value);
 
-		value = (UINT32) pwm_param->duty_cycle3;
+		value = (uint32_t) pwm_param->duty_cycle3;
 		REG_WRITE(REG_GROUP_PWM1_T3_ADDR(current_group), value);
 
-		value = (UINT32) pwm_param->end_value;
+		value = (uint32_t) pwm_param->end_value;
 		REG_WRITE(REG_GROUP_PWM1_T4_ADDR(current_group), value);
 
 	}
@@ -227,13 +228,13 @@ bk_err_t init_pwm_param(pwm_param_t *pwm_param, UINT8 enable)
 
 	PWM_LOGD(TAG,"mode: %x, REG_PWM_GROUP_CTRL= 0x%lx\r\n", pwm_param->cfg.val, REG_READ(REG_PWM_GROUP_CTRL_ADDR(current_group)));
 
-	UINT32 ret = pwm_icu_configuration(pwm_param, enable);
+	uint32_t ret = pwm_icu_configuration(pwm_param, enable);
 	return ret;
 }
 
-bk_err_t pwm_unit_enable(UINT8 ucChannel)
+bk_err_t pwm_unit_enable(uint8_t ucChannel)
 {
-	UINT32 value;
+	uint32_t value;
 
 	if (ucChannel > PWM_CHANNEL_NUMBER_MAX)
 		return BK_ERR_PARAM;
@@ -256,9 +257,9 @@ bk_err_t pwm_unit_enable(UINT8 ucChannel)
 	return BK_OK;
 }
 
-bk_err_t pwm_unit_disable(UINT8 ucChannel)
+bk_err_t pwm_unit_disable(uint8_t ucChannel)
 {
-	UINT32 value;
+	uint32_t value;
 	if (ucChannel > PWM_CHANNEL_NUMBER_MAX)
 		return BK_ERR_PARAM;
 
@@ -280,9 +281,9 @@ bk_err_t pwm_unit_disable(UINT8 ucChannel)
 	return BK_OK;
 }
 
-UINT32 pwm_capture_value_get(UINT8 ucChannel)
+uint32_t pwm_capture_value_get(uint8_t ucChannel)
 {
-	UINT32 value, state;
+	uint32_t value, state;
 
 	if (ucChannel < 2) {
 		current_group = 0;
@@ -318,9 +319,9 @@ UINT32 pwm_capture_value_get(UINT8 ucChannel)
 
 }
 
-static void pwm_set_duty_cycle(UINT8 ucChannel, UINT32 u32DutyCycle)
+static void pwm_set_duty_cycle(uint8_t ucChannel, uint32_t u32DutyCycle)
 {
-	UINT32 value;
+	uint32_t value;
 
 	if (ucChannel < 2) {
 		current_group = 0;
@@ -350,9 +351,9 @@ static void pwm_set_duty_cycle(UINT8 ucChannel, UINT32 u32DutyCycle)
 
 }
 
-static void pwm_set_end_value(UINT8 ucChannel, UINT32 u32EndValue)
+static void pwm_set_end_value(uint8_t ucChannel, uint32_t u32EndValue)
 {
-	UINT32 value;
+	uint32_t value;
 
 	if (ucChannel < 2) {
 		current_group = 0;
@@ -382,9 +383,9 @@ static void pwm_set_end_value(UINT8 ucChannel, UINT32 u32EndValue)
 
 }
 
-bk_err_t pwm_group_enable(UINT8 ucChannel)
+bk_err_t pwm_group_enable(uint8_t ucChannel)
 {
-	UINT32 value;
+	uint32_t value;
 
 	if (ucChannel > PWM_CHANNEL_NUMBER_MAX)
 		return BK_ERR_PARAM;
@@ -403,9 +404,9 @@ bk_err_t pwm_group_enable(UINT8 ucChannel)
 	return BK_OK;
 }
 
-bk_err_t pwm_group_mode_disable(UINT8 ucChannel)
+bk_err_t pwm_group_mode_disable(uint8_t ucChannel)
 {
-	UINT32 value;
+	uint32_t value;
 
 	if (ucChannel > PWM_CHANNEL_NUMBER_MAX)
 		return BK_ERR_PARAM;
@@ -425,10 +426,10 @@ bk_err_t pwm_group_mode_disable(UINT8 ucChannel)
 	return BK_OK;
 }
 
-bk_err_t pwm_group_mode_enable(UINT8 ucChannel)
+bk_err_t pwm_group_mode_enable(uint8_t ucChannel)
 {
-	UINT32 value;
-	UINT32 ret;
+	uint32_t value;
+	uint32_t ret;
 
 	if (ucChannel < 2) {
 		current_group = 0;
@@ -451,9 +452,9 @@ bk_err_t pwm_group_mode_enable(UINT8 ucChannel)
 	return ret;
 }
 
-bk_err_t pwm_init_levl_set_low(UINT8 ucChannel)
+bk_err_t pwm_init_levl_set_low(uint8_t ucChannel)
 {
-	UINT32 value;
+	uint32_t value;
 
 	if (ucChannel > PWM_CHANNEL_NUMBER_MAX)
 		return BK_ERR_PARAM;
@@ -476,9 +477,9 @@ bk_err_t pwm_init_levl_set_low(UINT8 ucChannel)
 	return BK_OK;
 }
 
-bk_err_t pwm_init_levl_set_high(UINT8 ucChannel)
+bk_err_t pwm_init_levl_set_high(uint8_t ucChannel)
 {
-	UINT32 value;
+	uint32_t value;
 
 	if (ucChannel > PWM_CHANNEL_NUMBER_MAX)
 		return BK_ERR_PARAM;
@@ -504,9 +505,9 @@ bk_err_t pwm_init_levl_set_high(UINT8 ucChannel)
 	return BK_OK;
 }
 
-bk_err_t pwm_init_levl_get(UINT8 ucChannel)
+bk_err_t pwm_init_levl_get(uint8_t ucChannel)
 {
-	UINT32 value, ret;
+	uint32_t value, ret;
 	if (ucChannel > PWM_CHANNEL_NUMBER_MAX)
 		return BK_ERR_PARAM;
 
@@ -533,7 +534,7 @@ bk_err_t pwm_init_levl_get(UINT8 ucChannel)
 
 bk_err_t pwm_update_param(pwm_param_t *pwm_param)
 {
-	UINT32 value;
+	uint32_t value;
 
 	if ((pwm_param == NULL)
 		|| (pwm_param->channel >= PWM_COUNT)
@@ -558,37 +559,37 @@ bk_err_t pwm_update_param(pwm_param_t *pwm_param)
 	}
 
 	if (current_channel == 0) {
-		value = (UINT32) pwm_param->duty_cycle1;
+		value = (uint32_t) pwm_param->duty_cycle1;
 		REG_WRITE(REG_GROUP_PWM0_T1_ADDR(current_group), value);
 
-		value = (UINT32) pwm_param->duty_cycle2;
+		value = (uint32_t) pwm_param->duty_cycle2;
 		REG_WRITE(REG_GROUP_PWM0_T2_ADDR(current_group), value);
 
-		value = (UINT32) pwm_param->duty_cycle3;
+		value = (uint32_t) pwm_param->duty_cycle3;
 		REG_WRITE(REG_GROUP_PWM0_T3_ADDR(current_group), value);
 
-		value = (UINT32) pwm_param->end_value;
+		value = (uint32_t) pwm_param->end_value;
 		REG_WRITE(REG_GROUP_PWM0_T4_ADDR(current_group), value);
 	} else {
-		value = (UINT32) pwm_param->duty_cycle1;
+		value = (uint32_t) pwm_param->duty_cycle1;
 		REG_WRITE(REG_GROUP_PWM1_T1_ADDR(current_group), value);
 
-		value = (UINT32) pwm_param->duty_cycle2;
+		value = (uint32_t) pwm_param->duty_cycle2;
 		REG_WRITE(REG_GROUP_PWM1_T2_ADDR(current_group), value);
 
-		value = (UINT32) pwm_param->duty_cycle3;
+		value = (uint32_t) pwm_param->duty_cycle3;
 		REG_WRITE(REG_GROUP_PWM1_T3_ADDR(current_group), value);
 
-		value = (UINT32) pwm_param->end_value;
+		value = (uint32_t) pwm_param->end_value;
 		REG_WRITE(REG_GROUP_PWM1_T4_ADDR(current_group), value);
 	}
 
 	return BK_OK;
 }
 
-bk_err_t pwm_update_param_enable(UINT8 channel)
+bk_err_t pwm_update_param_enable(uint8_t channel)
 {
-	UINT32 value;
+	uint32_t value;
 
 	if (channel >= PWM_COUNT)
 		return BK_ERR_PARAM;
@@ -616,9 +617,9 @@ bk_err_t pwm_update_param_enable(UINT8 channel)
 }
 
 
-bk_err_t pwm_group_update_param_enable(UINT8 channel1, UINT8 channel2)
+bk_err_t pwm_group_update_param_enable(uint8_t channel1, uint8_t channel2)
 {
-	UINT32 value;
+	uint32_t value;
 
 	if (channel1 >= PWM_COUNT)
 		return BK_ERR_PARAM;
@@ -646,9 +647,9 @@ bk_err_t pwm_group_update_param_enable(UINT8 channel1, UINT8 channel2)
 	return BK_OK;
 }
 
-bk_err_t pwm_check_group(UINT32 channel1, UINT32 channel2)
+bk_err_t pwm_check_group(uint32_t channel1, uint32_t channel2)
 {
-	UINT32 group;
+	uint32_t group;
 	if (abs(channel2 - channel1) == 1)
 	{
 		if (channel1 == 0) {
@@ -689,7 +690,7 @@ bk_err_t pwm_check_group(UINT32 channel1, UINT32 channel2)
 }
 
 
-void pwm_param_clear(UINT8 ucChannel)
+void pwm_param_clear(uint8_t ucChannel)
 {
 	if (ucChannel < 2) {
 		current_group = 0;
@@ -715,7 +716,7 @@ void pwm_param_clear(UINT8 ucChannel)
 	}
 }
 
-static void pwm_int_handler_clear(UINT8 ucChannel)
+static void pwm_int_handler_clear(uint8_t ucChannel)
 {
 	p_PWM_Int_Handler[ucChannel] = NULL;
 }
@@ -737,25 +738,25 @@ void pwm_exit(void)
 }
 
 
-UINT32 pwm_ctrl(UINT32 cmd, void *param)
+uint32_t pwm_ctrl(uint32_t cmd, void *param)
 {
-	UINT32 ret = PWM_SUCCESS;
-	UINT32 ucChannel;
+	uint32_t ret = PWM_SUCCESS;
+	uint32_t ucChannel;
 	pwm_param_t *p_param;
 	pwm_capture_t *p_capture;
 
 	switch (cmd) {
 	case CMD_PWM_UNIT_ENABLE:
-		ucChannel = (*(UINT32 *)param);
+		ucChannel = (*(uint32_t *)param);
 		ret = pwm_unit_enable(ucChannel);
 		break;
 	case CMD_PWM_UNIT_DISABLE:
-		ucChannel = (*(UINT32 *)param);
+		ucChannel = (*(uint32_t *)param);
 		ret = pwm_unit_disable(ucChannel);
 		pwm_param_clear(ucChannel);
 		break;
 	case CMD_PWM_IR_CLEAR:
-		ucChannel = (*(UINT32 *)param);
+		ucChannel = (*(uint32_t *)param);
 		if (ucChannel > 5) {
 			ret = PWM_FAILURE;
 			break;
@@ -795,11 +796,11 @@ UINT32 pwm_ctrl(UINT32 cmd, void *param)
 		init_pwm_param(p_param, 0);
 		break;
 	case CMD_PWM_GROUP_ENABLE:
-		ucChannel = (*(UINT32 *)param);
+		ucChannel = (*(uint32_t *)param);
 		ret = pwm_group_mode_enable(ucChannel);
 		break;
 	case CMD_PWM_GROUP_DISABLE:
-		ucChannel = (*(UINT32 *)param);
+		ucChannel = (*(uint32_t *)param);
 		ret = pwm_group_mode_disable(ucChannel);
 		break;
 	case CMD_PWM_UPDATE_PARAM:
@@ -807,16 +808,16 @@ UINT32 pwm_ctrl(UINT32 cmd, void *param)
 		pwm_update_param(p_param);
 		break;
 	case CMD_PWM_UPDATE_PARAM_ENABLE:
-		ucChannel = (*(UINT32 *)param);
+		ucChannel = (*(uint32_t *)param);
 
 		ret = pwm_update_param_enable(ucChannel);
 		break;
 	case CMD_PWM_INIT_LEVL_SET_LOW:
-		ucChannel = (*(UINT32 *)param);
+		ucChannel = (*(uint32_t *)param);
 		ret = pwm_init_levl_set_low(ucChannel);
 		break;
 	case CMD_PWM_INIT_LEVL_SET_HIGH:
-		ucChannel = (*(UINT32 *)param);
+		ucChannel = (*(uint32_t *)param);
 
 		ret = pwm_init_levl_set_high(ucChannel);
 		break;
@@ -832,14 +833,14 @@ UINT32 pwm_ctrl(UINT32 cmd, void *param)
 void pwm_isr(void)
 {
 	int i;
-	UINT32 status, group;
+	uint32_t status, group;
 	for (group = 0; group < 3; group++)
 	{
 		status = REG_READ(REG_PWM_GROUP_CTRL_ADDR(group));
 		for (i = 0; i < 2; i++) {
 			if (status & PWM_GROUP_PWM_INT_STAT_MASK(i)) {
 				if (p_PWM_Int_Handler[i + 2 * group]) {
-					p_PWM_Int_Handler[i + 2 * group]((UINT8)(i + 2 * group));
+					p_PWM_Int_Handler[i + 2 * group]((uint8_t)(i + 2 * group));
 					do {
 						REG_WRITE(REG_PWM_GROUP_CTRL_ADDR(group), PWM_GROUP_PWM_INT_STAT_CLEAR(i));
 					} while (REG_READ(REG_PWM_GROUP_CTRL_ADDR(group)) & PWM_GROUP_PWM_INT_STAT_MASK(i));

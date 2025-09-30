@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * Block device emulated on standard files
  *

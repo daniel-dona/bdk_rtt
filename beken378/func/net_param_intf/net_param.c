@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "include.h"
 #include "mem_pub.h"
 #include "drv_model_pub.h"
@@ -7,9 +8,9 @@
 #include "BkDriverFlash.h"
 #include "BkDriverUart.h"
 
-static UINT32 search_info_tbl(UINT8 *buf,UINT32 *cfg_len)
+static uint32_t search_info_tbl(uint8_t *buf,uint32_t *cfg_len)
 {
-    UINT32 ret = 0, status;
+    uint32_t ret = 0, status;
     DD_HANDLE flash_handle;
     TLV_HEADER_ST head;
 	bk_logic_partition_t *pt = bk_flash_get_info(BK_PARTITION_NET_PARAM);
@@ -29,9 +30,9 @@ static UINT32 search_info_tbl(UINT8 *buf,UINT32 *cfg_len)
     return ret;
 }
 
-static UINT32 search_info_item(NET_INFO_ITEM type, UINT32 start_addr)
+static uint32_t search_info_item(NET_INFO_ITEM type, uint32_t start_addr)
 {
-    UINT32 status, addr, end_addr;
+    uint32_t status, addr, end_addr;
     DD_HANDLE flash_handle;
     INFO_ITEM_ST head;
 
@@ -62,9 +63,9 @@ static UINT32 search_info_item(NET_INFO_ITEM type, UINT32 start_addr)
     return addr;
 }
 
-static UINT32 info_item_len(NET_INFO_ITEM item)
+static uint32_t info_item_len(NET_INFO_ITEM item)
 {
-	UINT32 len = 0;
+	uint32_t len = 0;
 	switch(item)
 	{
 		case AUTO_CONNECT_ITEM:
@@ -95,13 +96,13 @@ static UINT32 info_item_len(NET_INFO_ITEM item)
 	return len;
 }
 
-UINT32 get_info_item(NET_INFO_ITEM item,UINT8 *ptr0,UINT8 *ptr1, UINT8 *ptr2)
+uint32_t get_info_item(NET_INFO_ITEM item,uint8_t *ptr0,uint8_t *ptr1, uint8_t *ptr2)
 {
-    UINT32 status, addr_start,len;
+    uint32_t status, addr_start,len;
     DD_HANDLE flash_handle;
     INFO_ITEM_ST head;
 	bk_logic_partition_t *pt;
-	UINT32 ret = 0;
+	uint32_t ret = 0;
 	
     if(!search_info_tbl(NULL,&len))
 		return ret;
@@ -165,12 +166,12 @@ UINT32 get_info_item(NET_INFO_ITEM item,UINT8 *ptr0,UINT8 *ptr1, UINT8 *ptr2)
 	return ret;
 }
 
-UINT32 save_info_item(NET_INFO_ITEM item,UINT8 *ptr0,UINT8*ptr1,UINT8 *ptr2)
+uint32_t save_info_item(NET_INFO_ITEM item,uint8_t *ptr0,uint8_t*ptr1,uint8_t *ptr2)
 {
-	UINT32 addr_offset,cfg_tbl_len,item_len,tmp;
-	UINT8 *tmpptr;
-	UINT8 *item_buf;
-	UINT32 *wrbuf;
+	uint32_t addr_offset,cfg_tbl_len,item_len,tmp;
+	uint8_t *tmpptr;
+	uint8_t *item_buf;
+	uint32_t *wrbuf;
     INFO_ITEM_ST head;
 	INFO_ITEM_ST_PTR item_head_ptr;
 	bk_logic_partition_t *pt = bk_flash_get_info(BK_PARTITION_NET_PARAM);
@@ -204,13 +205,13 @@ UINT32 save_info_item(NET_INFO_ITEM item,UINT8 *ptr0,UINT8*ptr1,UINT8 *ptr2)
 		wrbuf = os_zalloc(cfg_tbl_len);
 		if(wrbuf == NULL)
 			return 0;
-		search_info_tbl((UINT8*)wrbuf,&tmp);
+		search_info_tbl((uint8_t*)wrbuf,&tmp);
 		head.len = cfg_tbl_len - sizeof(TLV_HEADER_ST);
 	}
 
-	tmpptr = (UINT8*)wrbuf;
+	tmpptr = (uint8_t*)wrbuf;
 	item_head_ptr = (INFO_ITEM_ST_PTR)(tmpptr + addr_offset);
-	item_buf =(UINT8*)(tmpptr + addr_offset + sizeof(INFO_ITEM_ST));
+	item_buf =(uint8_t*)(tmpptr + addr_offset + sizeof(INFO_ITEM_ST));
 	switch(item)
 	{
 		case AUTO_CONNECT_ITEM:
@@ -262,8 +263,8 @@ UINT32 save_info_item(NET_INFO_ITEM item,UINT8 *ptr0,UINT8*ptr1,UINT8 *ptr2)
 	return 1;
 }
 
-UINT32 test_get_whole_tbl(UINT8 *ptr)
+uint32_t test_get_whole_tbl(uint8_t *ptr)
 {
-	UINT32 len;
+	uint32_t len;
 	return search_info_tbl(ptr,&len);
 }

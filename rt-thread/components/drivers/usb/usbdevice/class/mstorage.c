@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stdint.h>
 /*
  * File      : mstorage.c
  * This file is part of RT-Thread RTOS
@@ -59,7 +61,7 @@ typedef rt_size_t (*cbw_handler)(ufunction_t func, ustorage_cbw_t cbw);
 
 struct scsi_cmd
 {
-    rt_uint16_t cmd;
+    uint16_t cmd;
     cbw_handler handler;    
     rt_size_t cmd_len;
     CB_SIZE_TYPE type;
@@ -73,11 +75,11 @@ struct mstorage
     uep_t ep_in;
     uep_t ep_out;    
     int status;
-    rt_uint32_t cb_data_size;
+    uint32_t cb_data_size;
     rt_device_t disk;
-    rt_uint32_t block;
-    rt_int32_t count;
-    rt_int32_t size;
+    uint32_t block;
+    int32_t count;
+    int32_t size;
     struct scsi_cmd* processing;
     struct rt_device_blk_geometry geometry;    
 };
@@ -200,7 +202,7 @@ static void _send_status(ufunction_t func)
     RT_DEBUG_LOG(RT_DEBUG_USB, ("_send_status\n"));
 
     data = (struct mstorage*)func->user_data;   
-    data->ep_in->request.buffer = (rt_uint8_t*)&data->csw_response;
+    data->ep_in->request.buffer = (uint8_t*)&data->csw_response;
     data->ep_in->request.size = SIZEOF_CSW;    
     data->ep_in->request.req_type = UIO_REQUEST_WRITE;
     rt_usbd_io_request(func->device, data->ep_in, &data->ep_in->request);
@@ -249,7 +251,7 @@ static rt_size_t _allow_removal(ufunction_t func, ustorage_cbw_t cbw)
 static rt_size_t _inquiry_cmd(ufunction_t func, ustorage_cbw_t cbw)
 {
     struct mstorage *data;
-    rt_uint8_t *buf;
+    uint8_t *buf;
 
     RT_ASSERT(func != RT_NULL);
     RT_ASSERT(func->device != RT_NULL); 
@@ -260,8 +262,8 @@ static rt_size_t _inquiry_cmd(ufunction_t func, ustorage_cbw_t cbw)
     data = (struct mstorage*)func->user_data;   
     buf = data->ep_in->buffer;
 
-    *(rt_uint32_t*)&buf[0] = 0x0 | (0x80 << 8);
-    *(rt_uint32_t*)&buf[4] = 31;
+    *(uint32_t*)&buf[0] = 0x0 | (0x80 << 8);
+    *(uint32_t*)&buf[4] = 31;
 
     rt_memset(&buf[8], 0x20, 28);
     rt_memcpy(&buf[8], "RTT", 3);
@@ -311,7 +313,7 @@ static rt_size_t _request_sense(ufunction_t func, ustorage_cbw_t cbw)
     buf->AdditionalSenseCodeQualifier = 0;
 
     data->cb_data_size = MIN(data->cb_data_size, SIZEOF_REQUEST_SENSE);
-    data->ep_in->request.buffer = (rt_uint8_t*)data->ep_in->buffer;
+    data->ep_in->request.buffer = (uint8_t*)data->ep_in->buffer;
     data->ep_in->request.size = data->cb_data_size;
     data->ep_in->request.req_type = UIO_REQUEST_WRITE;
     rt_usbd_io_request(func->device, data->ep_in, &data->ep_in->request);
@@ -331,7 +333,7 @@ static rt_size_t _request_sense(ufunction_t func, ustorage_cbw_t cbw)
 static rt_size_t _mode_sense_6(ufunction_t func, ustorage_cbw_t cbw)
 {
     struct mstorage *data;
-    rt_uint8_t *buf;
+    uint8_t *buf;
 
     RT_ASSERT(func != RT_NULL);
     RT_ASSERT(func->device != RT_NULL); 
@@ -367,8 +369,8 @@ static rt_size_t _mode_sense_6(ufunction_t func, ustorage_cbw_t cbw)
 static rt_size_t _read_capacities(ufunction_t func, ustorage_cbw_t cbw)
 {
     struct mstorage *data;
-    rt_uint8_t *buf;
-    rt_uint32_t sector_count, sector_size;
+    uint8_t *buf;
+    uint32_t sector_count, sector_size;
 
     RT_ASSERT(func != RT_NULL);
     RT_ASSERT(func->device != RT_NULL); 
@@ -381,7 +383,7 @@ static rt_size_t _read_capacities(ufunction_t func, ustorage_cbw_t cbw)
     sector_count = data->geometry.sector_count;
     sector_size = data->geometry.bytes_per_sector;
 
-    *(rt_uint32_t*)&buf[0] = 0x08000000;
+    *(uint32_t*)&buf[0] = 0x08000000;
     buf[4] = sector_count >> 24;
     buf[5] = 0xff & (sector_count >> 16);
     buf[6] = 0xff & (sector_count >> 8);
@@ -413,8 +415,8 @@ static rt_size_t _read_capacity(ufunction_t func, ustorage_cbw_t cbw)
 {
     struct mstorage *data;
 
-    rt_uint8_t *buf;
-    rt_uint32_t sector_count, sector_size;
+    uint8_t *buf;
+    uint32_t sector_count, sector_size;
 
     RT_ASSERT(func != RT_NULL);
     RT_ASSERT(func->device != RT_NULL); 
@@ -659,7 +661,7 @@ static void cbw_dump(struct ustorage_cbw* cbw)
 }
 #endif
 
-static struct scsi_cmd* _find_cbw_command(rt_uint16_t cmd)
+static struct scsi_cmd* _find_cbw_command(uint16_t cmd)
 {
     int i;
 
@@ -901,7 +903,7 @@ exit:
  */
 static rt_err_t _interface_handler(ufunction_t func, ureq_t setup)
 {
-    rt_uint8_t lun = 0;
+    uint8_t lun = 0;
     
     RT_ASSERT(func != RT_NULL);
     RT_ASSERT(func->device != RT_NULL);    
@@ -979,13 +981,13 @@ static rt_err_t _function_enable(ufunction_t func)
         return -RT_ERROR;
     }
     
-    data->ep_in->buffer = (rt_uint8_t*)rt_malloc(data->geometry.bytes_per_sector);
+    data->ep_in->buffer = (uint8_t*)rt_malloc(data->geometry.bytes_per_sector);
     if(data->ep_in->buffer == RT_NULL)
     {
         rt_kprintf("no memory\n");
         return -RT_ENOMEM;
     }
-    data->ep_out->buffer = (rt_uint8_t*)rt_malloc(data->geometry.bytes_per_sector);
+    data->ep_out->buffer = (uint8_t*)rt_malloc(data->geometry.bytes_per_sector);
     if(data->ep_out->buffer == RT_NULL)
     {
         rt_free(data->ep_in->buffer);
@@ -1045,7 +1047,7 @@ static struct ufunction_ops ops =
     _function_disable,
     RT_NULL,
 };
-static rt_err_t _mstorage_descriptor_config(umass_desc_t desc, rt_uint8_t cintf_nr, rt_uint8_t device_is_hs)
+static rt_err_t _mstorage_descriptor_config(umass_desc_t desc, uint8_t cintf_nr, uint8_t device_is_hs)
 {
 #ifdef RT_USB_DEVICE_COMPOSITE
     desc->iad_desc.bFirstInterface = cintf_nr;

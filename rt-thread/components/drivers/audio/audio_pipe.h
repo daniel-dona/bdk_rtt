@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef __AUDIO_PIPE_H__
 #define __AUDIO_PIPE_H__
 
@@ -57,7 +58,7 @@ struct rt_audio_pipe
 rt_err_t rt_audio_pipe_init(struct rt_audio_pipe *pipe,
                       const char *name,
                       enum rt_audio_pipe_flag flag,
-                      rt_uint8_t *buf,
+                      uint8_t *buf,
                       rt_size_t size);
 rt_err_t rt_audio_pipe_detach(struct rt_audio_pipe *pipe);
 #ifdef RT_USING_HEAP

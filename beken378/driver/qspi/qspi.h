@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _QSPI_H_
 #define _QSPI_H_
 
@@ -55,8 +56,8 @@
 #define REG_QSPI_FIFO_STATUS       			(QSPI_BASE + 0x35 * 4)
 #define REG_QSPI_INT_STATUS        			(QSPI_BASE + 0x36 * 4)
 
-static UINT32 qspi_open(UINT32 op_flag);
-static UINT32 qspi_close(void);
-static UINT32 qspi_ctrl(UINT32 cmd, void *param);
+static uint32_t qspi_open(uint32_t op_flag);
+static uint32_t qspi_close(void);
+static uint32_t qspi_ctrl(uint32_t cmd, void *param);
 #endif //_QSPI_H_
 

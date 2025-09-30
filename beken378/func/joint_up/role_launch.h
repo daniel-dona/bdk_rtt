@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _ROLE_LAUNCH_H_
 #define _ROLE_LAUNCH_H_
 

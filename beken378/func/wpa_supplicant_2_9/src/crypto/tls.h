@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * SSL/TLS interface definition
  * Copyright (c) 2004-2013, Jouni Malinen <j@w1.fi>
@@ -12,9 +13,9 @@
 struct tls_connection;
 
 struct tls_random {
-	const u8 *client_random;
+	const uint8_t *client_random;
 	size_t client_random_len;
-	const u8 *server_random;
+	const uint8_t *server_random;
 	size_t server_random_len;
 };
 
@@ -52,7 +53,7 @@ struct tls_cert_data {
 	int depth;
 	const char *subject;
 	const struct wpabuf *cert;
-	const u8 *hash;
+	const uint8_t *hash;
 	size_t hash_len;
 	const char *altsubject[TLS_MAX_ALT_SUBJECT];
 	int num_altsubject;
@@ -180,7 +181,7 @@ struct tls_config {
  */
 struct tls_connection_params {
 	const char *ca_cert;
-	const u8 *ca_cert_blob;
+	const uint8_t *ca_cert_blob;
 	size_t ca_cert_blob_len;
 	const char *ca_path;
 	const char *subject_match;
@@ -189,16 +190,16 @@ struct tls_connection_params {
 	const char *domain_match;
 	const char *client_cert;
 	const char *client_cert2;
-	const u8 *client_cert_blob;
+	const uint8_t *client_cert_blob;
 	size_t client_cert_blob_len;
 	const char *private_key;
 	const char *private_key2;
-	const u8 *private_key_blob;
+	const uint8_t *private_key_blob;
 	size_t private_key_blob_len;
 	const char *private_key_passwd;
 	const char *private_key_passwd2;
 	const char *dh_file;
-	const u8 *dh_blob;
+	const uint8_t *dh_blob;
 	size_t dh_blob_len;
 
 	/* OpenSSL specific variables */
@@ -365,7 +366,7 @@ int __must_check tls_connection_set_verify(void *tls_ctx,
 					   struct tls_connection *conn,
 					   int verify_peer,
 					   unsigned int flags,
-					   const u8 *session_ctx,
+					   const uint8_t *session_ctx,
 					   size_t session_ctx_len);
 
 /**
@@ -397,9 +398,9 @@ int __must_check tls_connection_get_random(void *tls_ctx,
 int __must_check tls_connection_export_key(void *tls_ctx,
 					   struct tls_connection *conn,
 					   const char *label,
-					   const u8 *context,
+					   const uint8_t *context,
 					   size_t context_len,
-					   u8 *out, size_t out_len);
+					   uint8_t *out, size_t out_len);
 
 /**
  * tls_connection_get_eap_fast_key - Derive key material for EAP-FAST
@@ -415,7 +416,7 @@ int __must_check tls_connection_export_key(void *tls_ctx,
  */
 int __must_check tls_connection_get_eap_fast_key(void *tls_ctx,
 						 struct tls_connection *conn,
-						 u8 *out, size_t out_len);
+						 uint8_t *out, size_t out_len);
 
 /**
  * tls_connection_handshake - Process TLS handshake (client side)
@@ -533,7 +534,7 @@ enum {
  */
 int __must_check tls_connection_set_cipher_list(void *tls_ctx,
 						struct tls_connection *conn,
-						u8 *ciphers);
+						uint8_t *ciphers);
 
 /**
  * tls_get_version - Get the current TLS version number
@@ -584,7 +585,7 @@ int __must_check tls_connection_enable_workaround(void *tls_ctx,
  */
 int __must_check tls_connection_client_hello_ext(void *tls_ctx,
 						 struct tls_connection *conn,
-						 int ext_type, const u8 *data,
+						 int ext_type, const uint8_t *data,
 						 size_t data_len);
 
 /**
@@ -616,8 +617,8 @@ int tls_connection_get_write_alerts(void *tls_ctx,
 				    struct tls_connection *conn);
 
 typedef int (*tls_session_ticket_cb)
-(void *ctx, const u8 *ticket, size_t len, const u8 *client_random,
- const u8 *server_random, u8 *master_secret);
+(void *ctx, const uint8_t *ticket, size_t len, const uint8_t *client_random,
+ const uint8_t *server_random, uint8_t *master_secret);
 
 int __must_check  tls_connection_set_session_ticket_cb(
 	void *tls_ctx, struct tls_connection *conn,
@@ -636,7 +637,7 @@ void tls_connection_set_log_cb(struct tls_connection *conn,
 #define TLS_DHE_PRIME_58B BIT(6)
 #define TLS_DHE_NON_PRIME BIT(7)
 
-void tls_connection_set_test_flags(struct tls_connection *conn, u32 flags);
+void tls_connection_set_test_flags(struct tls_connection *conn, uint32_t flags);
 
 int tls_get_library_version(char *buf, size_t buf_len);
 
@@ -661,13 +662,13 @@ void tls_connection_remove_session(struct tls_connection *conn);
  * is the first TLS Finished message sent in the most recent TLS handshake of
  * the TLS connection.
  */
-int tls_get_tls_unique(struct tls_connection *conn, u8 *buf, size_t max_len);
+int tls_get_tls_unique(struct tls_connection *conn, uint8_t *buf, size_t max_len);
 
 /**
  * tls_connection_get_cipher_suite - Get current TLS cipher suite
  * @conn: Connection context data from tls_connection_init()
  * Returns: TLS cipher suite of the current connection or 0 on error
  */
-u16 tls_connection_get_cipher_suite(struct tls_connection *conn);
+uint16_t tls_connection_get_cipher_suite(struct tls_connection *conn);
 
 #endif /* TLS_H */

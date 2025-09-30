@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <rtdevice.h>
 #include <rthw.h>
 #include <rtthread.h>

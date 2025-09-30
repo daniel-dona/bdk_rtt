@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * File      : wn_sample.c
  * This file is part of RT-Thread RTOS
@@ -63,7 +64,7 @@ static void cgi_calc_handler(struct webnet_session* session)
     session->request->result_code = 200;
     webnet_session_set_header(session, mimetype, 200, "Ok", -1);
 
-    webnet_session_write(session, (const rt_uint8_t*)header, rt_strlen(header));
+    webnet_session_write(session, (const uint8_t*)header, rt_strlen(header));
     if (request->query_counter)
     {
         const char *a_value, *b_value;
@@ -92,7 +93,7 @@ static void cgi_hello_handler(struct webnet_session* session)
     session->request->result_code = 200;
     webnet_session_set_header(session, mimetype, 200, "Ok", strlen(status));
 
-    webnet_session_write(session, (const rt_uint8_t*)status, rt_strlen(status));
+    webnet_session_write(session, (const uint8_t*)status, rt_strlen(status));
 }
 
 void webnet_test(void)

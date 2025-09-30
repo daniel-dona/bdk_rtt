@@ -1,3 +1,4 @@
+#include <stdint.h>
 #ifndef _TX_EVM_H_
 #define _TX_EVM_H_
 

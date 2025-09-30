@@ -76,7 +76,7 @@ extern void phy_disable_lsig_intr(void);
 static void rwnx_remove_added_interface(void)
 {
     int ret;
-    u8 test_mac[6];
+    uint8_t test_mac[6];
     struct mm_add_if_cfm *cfm;
     struct apm_start_cfm *apm_cfm = 0;
 
@@ -341,13 +341,13 @@ void bk_wlan_reg_csa_cb_coexist_mode(void)
 
 void bk_wlan_user_set_rf_wakeup(void)
 {
-	UINT32 reg = RF_HOLD_BY_USER_BIT;
+	uint32_t reg = RF_HOLD_BY_USER_BIT;
 	sddev_control(SCTRL_DEV_NAME, CMD_RF_HOLD_BIT_SET, &reg);
 }
 
 void bk_wlan_user_reset_rf_wakeup(void)
 {
-	UINT32 reg = RF_HOLD_BY_USER_BIT;
+	uint32_t reg = RF_HOLD_BY_USER_BIT;
 	sddev_control(SCTRL_DEV_NAME, CMD_RF_HOLD_BIT_CLR, &reg);
 }
 
@@ -374,7 +374,7 @@ void bk_wlan_phy_show_cca(void)
 
 void bk_reboot(void)
 {
-    UINT32 wdt_val = 5;
+    uint32_t wdt_val = 5;
 
     os_printf("bk_reboot\r\n");
 
@@ -410,7 +410,7 @@ void bk_wlan_ap_init(network_InitTypeDef_st *inNetworkInitPara)
 
     os_memset(g_ap_param_ptr, 0x00, sizeof(*g_ap_param_ptr));
 
-    if(MAC_ADDR_NULL((u8 *)&g_ap_param_ptr->bssid))
+    if(MAC_ADDR_NULL((uint8_t *)&g_ap_param_ptr->bssid))
     {
         wifi_get_mac_address((char*)(&g_ap_param_ptr->bssid), CONFIG_ROLE_AP);
     }
@@ -473,7 +473,7 @@ void bk_wlan_ap_init(network_InitTypeDef_st *inNetworkInitPara)
 
 	if(inNetworkInitPara)
     {
-        UINT32 reg = RF_HOLD_BY_AP_BIT;
+        uint32_t reg = RF_HOLD_BY_AP_BIT;
         sddev_control(SCTRL_DEV_NAME, CMD_RF_HOLD_BIT_SET, &reg);
     }
 
@@ -616,12 +616,12 @@ void bk_wlan_sta_init(network_InitTypeDef_st *inNetworkInitPara)
 
     if(inNetworkInitPara)
     {
-        UINT32 reg = RF_HOLD_BY_STA_BIT;
+        uint32_t reg = RF_HOLD_BY_STA_BIT;
         sddev_control(SCTRL_DEV_NAME, CMD_RF_HOLD_BIT_SET, &reg);
     }
     else
     {
-        UINT32 reg = RF_HOLD_BY_SCAN_BIT;
+        uint32_t reg = RF_HOLD_BY_SCAN_BIT;
         sddev_control(SCTRL_DEV_NAME, CMD_RF_HOLD_BIT_SET, &reg);
     }
 
@@ -685,7 +685,7 @@ wr_exit:
 OSStatus bk_wlan_start_sta(network_InitTypeDef_st *inNetworkInitPara)
 {
 	size_t psk_len = 0;
-	u8 *psk = 0;
+	uint8_t *psk = 0;
 
 #if CFG_WPA_CTRL_IFACE
 #if CFG_WLAN_FAST_CONNECT
@@ -902,7 +902,7 @@ int bk_wlan_get_scan_ap_result(SCAN_RST_ITEM_PTR scan_rst_table, unsigned char g
 	return scanu_num;
 }
 
-void bk_wlan_start_assign_scan(UINT8 **ssid_ary, UINT8 ssid_num)
+void bk_wlan_start_assign_scan(uint8_t **ssid_ary, uint8_t ssid_num)
 {
 #if !CFG_WPA_CTRL_IFACE
 	SCAN_PARAM_T scan_param = {0};
@@ -941,7 +941,7 @@ void bk_wlan_start_assign_scan(UINT8 **ssid_ary, UINT8 ssid_num)
 
 void bk_wlan_sta_init_adv(network_InitTypeDef_adv_st *inNetworkInitParaAdv)
 {
-    UINT32 reg;
+    uint32_t reg;
 
     if(!g_sta_param_ptr)
     {
@@ -949,7 +949,7 @@ void bk_wlan_sta_init_adv(network_InitTypeDef_adv_st *inNetworkInitParaAdv)
         ASSERT(g_sta_param_ptr);
     }
 
-    if(MAC_ADDR_NULL((u8 *)&g_sta_param_ptr->own_mac))
+    if(MAC_ADDR_NULL((uint8_t *)&g_sta_param_ptr->own_mac))
     {
         wifi_get_mac_address((char *)&g_sta_param_ptr->own_mac, CONFIG_ROLE_STA);
     }
@@ -1000,7 +1000,7 @@ void bk_wlan_sta_init_adv(network_InitTypeDef_adv_st *inNetworkInitParaAdv)
 
 void bk_wlan_ap_init_adv(network_InitTypeDef_ap_st *inNetworkInitParaAP)
 {
-    UINT32 reg = RF_HOLD_BY_AP_BIT;
+    uint32_t reg = RF_HOLD_BY_AP_BIT;
 
     if(!g_ap_param_ptr)
     {
@@ -1008,7 +1008,7 @@ void bk_wlan_ap_init_adv(network_InitTypeDef_ap_st *inNetworkInitParaAP)
         ASSERT(g_ap_param_ptr);
     }
 
-    if(MAC_ADDR_NULL((u8 *)&g_ap_param_ptr->bssid))
+    if(MAC_ADDR_NULL((uint8_t *)&g_ap_param_ptr->bssid))
     {
         wifi_get_mac_address((char *)&g_ap_param_ptr->bssid, CONFIG_ROLE_AP);
     }
@@ -1266,7 +1266,7 @@ int bk_wlan_stop_scan(void)
 int bk_wlan_stop(char mode)
 {
     int ret = kNoErr;
-    UINT32 reg;
+    uint32_t reg;
 
     #if CFG_USE_AP_IDLE
     if(bk_wlan_has_role(VIF_AP) && ap_ps_enable_get())
@@ -1456,7 +1456,7 @@ OSStatus bk_wlan_get_ip_status(IPStatusTypedef *outNetpara, WiFi_Interface inInt
 OSStatus bk_wlan_get_link_status(LinkStatusTypeDef *outStatus)
 {
 	int val, ret = kNoErr;
-	u8 vif_idx = 0, ssid_len;
+	uint8_t vif_idx = 0, ssid_len;
 	struct sm_get_bss_info_cfm *cfm = NULL;
 
 	os_null_printf("bk_wlan_get_link_status\r\n");
@@ -1594,7 +1594,7 @@ int bk_wlan_start_monitor(void)
 	lsig_init();
 #endif
 
-	UINT32 reg = RF_HOLD_BY_MONITOR_BIT;
+	uint32_t reg = RF_HOLD_BY_MONITOR_BIT;
     sddev_control(SCTRL_DEV_NAME, CMD_RF_HOLD_BIT_SET, &reg);
 
 	bk_wlan_ap_init(0);
@@ -1623,7 +1623,7 @@ int bk_wlan_stop_monitor(void)
         hal_machw_exit_monitor_mode();
     }
 
-	UINT32 reg = RF_HOLD_BY_MONITOR_BIT;
+	uint32_t reg = RF_HOLD_BY_MONITOR_BIT;
     sddev_control(SCTRL_DEV_NAME, CMD_RF_HOLD_BIT_CLR, &reg);
 
     return 0;
@@ -1647,7 +1647,7 @@ int bk_wlan_get_channel(void)
 int bk_wlan_set_channel_sync(int channel)
 {
     rwnxl_reset_evt(0);
-	UINT32 reg = RF_HOLD_BY_PHY_BIT;
+	uint32_t reg = RF_HOLD_BY_PHY_BIT;
     sddev_control(SCTRL_DEV_NAME, CMD_RF_HOLD_BIT_SET, &reg);
     rw_msg_set_channel(channel, PHY_CHNL_BW_20, NULL);
 
@@ -1669,7 +1669,7 @@ int bk_wlan_get_channel_with_band_width(int *channel, int *band_width)
 int bk_wlan_set_channel_with_band_width(int channel, int band_width)
 {
     rwnxl_reset_evt(0);
-	UINT32 reg = RF_HOLD_BY_PHY_BIT;
+	uint32_t reg = RF_HOLD_BY_PHY_BIT;
     sddev_control(SCTRL_DEV_NAME, CMD_RF_HOLD_BIT_SET, &reg);
     rw_msg_set_channel((uint32_t)channel, (uint32_t)band_width, NULL);
 
@@ -1722,10 +1722,10 @@ static int get_cipher_info(uint8_t *frame, int frame_len,
 		uint8_t *pairwise_cipher_type)
 {
 	uint8_t cap = frame[24+10]; // 24 is mac header; 8 timestamp, 2 beacon interval;
-	u8 is_privacy = !!(cap & 0x10); // bit 4 = privacy
-	const u8 *ie = frame + 36; // 24 + 12
-	u16 ielen = frame_len - 36;
-	const u8 *tmp;
+	uint8_t is_privacy = !!(cap & 0x10); // bit 4 = privacy
+	const uint8_t *ie = frame + 36; // 24 + 12
+	uint16_t ielen = frame_len - 36;
+	const uint8_t *tmp;
 	int ret = 0;
 
 	tmp = (uint8_t *)mac_ie_find((uint32_t)ie, ielen, WLAN_EID_RSN);
@@ -1829,14 +1829,14 @@ extern void bmsg_ps_sender(uint8_t ioctl);
  *              0:rising,1:falling.
  */
 #if CFG_USE_DEEP_PS
-void bk_enter_deep_sleep(UINT32 gpio_index_map,
-								UINT32 gpio_edge_map,
-								UINT32 gpio_last_index_map,
-								UINT32 gpio_last_edge_map,
-								UINT32 sleep_time,
-								UINT32 wake_up_way,
-								UINT32 gpio_stay_lo_map,
-								UINT32 gpio_stay_hi_map)
+void bk_enter_deep_sleep(uint32_t gpio_index_map,
+								uint32_t gpio_edge_map,
+								uint32_t gpio_last_index_map,
+								uint32_t gpio_last_edge_map,
+								uint32_t sleep_time,
+								uint32_t wake_up_way,
+								uint32_t gpio_stay_lo_map,
+								uint32_t gpio_stay_hi_map)
 {
 	PS_DEEP_CTRL_PARAM deep_sleep_param;
 
@@ -1881,7 +1881,7 @@ int bk_wlan_dtim_rf_ps_mode_do_wakeup()
     {
         GLOBAL_INT_DECLARATION();
         GLOBAL_INT_DISABLE();
-        UINT32 reg = RF_HOLD_BY_AP_BIT;
+        uint32_t reg = RF_HOLD_BY_AP_BIT;
         sddev_control(SCTRL_DEV_NAME, CMD_RF_HOLD_BIT_SET, &reg);
         wifi_general_mac_state_set_active();
         GLOBAL_INT_RESTORE();
@@ -1889,7 +1889,7 @@ int bk_wlan_dtim_rf_ps_mode_do_wakeup()
 #endif
 
     void *sem_list = NULL;
-	UINT32 ret = 0;
+	uint32_t ret = 0;
 
 	sem_list = power_save_rf_ps_wkup_semlist_create();
 
@@ -1979,7 +1979,7 @@ int bk_wlan_dtim_rf_ps_timer_pause(void)
 }
 #endif
 
-UINT32 bk_wlan_dtim_rf_ps_get_sleep_time(void)
+uint32_t bk_wlan_dtim_rf_ps_get_sleep_time(void)
 {
     return  power_save_get_rf_ps_dtim_time();
 }
@@ -2000,7 +2000,7 @@ int bk_wlan_dtim_rf_ps_get_enable_flag(void)
 }
 #endif
 
-int bk_wlan_mcu_suppress_and_sleep(UINT32 sleep_ticks )
+int bk_wlan_mcu_suppress_and_sleep(uint32_t sleep_ticks )
 {
 #if CFG_USE_MCU_PS
 #if (CFG_OS_FREERTOS)
@@ -2186,7 +2186,7 @@ OSStatus bk_wlan_sta_is_connected(void)
     return 0;
 }
 
-UINT32 if_other_mode_rf_sleep(void)
+uint32_t if_other_mode_rf_sleep(void)
 {
     if(!bk_wlan_has_role(VIF_MESH_POINT)
         &&!bk_wlan_has_role(VIF_IBSS)

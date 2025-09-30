@@ -42,15 +42,15 @@ uint8_t ble_delegate_ps_restore_mac = 0;
 #endif
 
 uint8_t ble_switch_mac_sleeped;
-UINT32 rf_wifi_used = 0;
+uint32_t rf_wifi_used = 0;
 extern uint8_t tx_pwr_idx;
 
 extern void ble_cal_set_txpwr(uint8_t idx);
 extern void ble_cal_recover_txpwr(void);
 
-uint8 is_rf_switch_to_ble(void)
+uint8_t is_rf_switch_to_ble(void)
 {
-	UINT32 param;
+	uint32_t param;
 
 	sddev_control(SCTRL_DEV_NAME, CMD_BLE_RF_BIT_GET, &param);
 
@@ -77,7 +77,7 @@ void rf_wifi_used_clr(void)
 	GLOBAL_INT_RESTORE();
 }
 
-UINT32 if_rf_wifi_used(void )
+uint32_t if_rf_wifi_used(void )
 {
 	uint32_t value = 0;
 	GLOBAL_INT_DECLARATION();
@@ -119,7 +119,7 @@ void ble_switch_clear_mac_interrupts(void)
 }
 #endif
 
-extern UINT32 txl_cntrl_pck_get(void );
+extern uint32_t txl_cntrl_pck_get(void );
 void ble_switch_rf_to_ble(void)
 {
 	uint32_t reg;

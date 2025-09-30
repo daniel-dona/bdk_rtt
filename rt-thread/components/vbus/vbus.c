@@ -1,3 +1,4 @@
+#include <stdint.h>
 /*
  * VMM Bus
  *
@@ -145,10 +146,10 @@ rt_inline int _bus_ring_space_nr(struct rt_vbus_ring *rg)
 }
 
 struct rt_vbus_pkg {
-    rt_uint8_t id;
-    rt_uint8_t prio;
-    rt_uint8_t finished;
-    rt_uint8_t len;
+    uint8_t id;
+    uint8_t prio;
+    uint8_t finished;
+    uint8_t len;
     const void *data;
 };
 
@@ -228,7 +229,7 @@ static void _vbus_indicate(enum rt_vbus_event_id eve, unsigned char chnr)
 #define _BUS_OUT_PKG_NR         RT_VMM_RB_BLK_NR
 
 static struct rt_thread _bus_out_thread;
-static rt_uint8_t _bus_out_thread_stack[_BUS_OUT_THRD_STACK_SZ];
+static uint8_t _bus_out_thread_stack[_BUS_OUT_THRD_STACK_SZ];
 struct rt_prio_queue *_bus_out_que;
 
 static void _bus_out_entry(void *param)
@@ -249,7 +250,7 @@ static void _bus_out_entry(void *param)
                              RT_WAITING_FOREVER) == RT_EOK)
     {
         int sp;
-        rt_uint32_t nxtidx;
+        uint32_t nxtidx;
         const int dnr = LEN2BNR(dpkg.len);
 
 #ifdef RT_VBUS_USING_FLOW_CONTROL
@@ -338,11 +339,11 @@ void rt_vbus_resume_out_thread(void)
     rt_schedule();
 }
 
-rt_err_t rt_vbus_post(rt_uint8_t id,
-                      rt_uint8_t prio,
+rt_err_t rt_vbus_post(uint8_t id,
+                      uint8_t prio,
                       const void *data,
                       rt_size_t size,
-                      rt_int32_t timeout)
+                      int32_t timeout)
 {
     rt_err_t err = RT_EOK;
     struct rt_vbus_pkg pkg;
@@ -468,7 +469,7 @@ static rt_err_t _chn0_post(const void *data,
 #endif
 
 static struct rt_thread _bus_in_thread;
-static rt_uint8_t _bus_in_thread_stack[_BUS_OUT_THRD_STACK_SZ];
+static uint8_t _bus_in_thread_stack[_BUS_OUT_THRD_STACK_SZ];
 static struct rt_semaphore _bus_in_sem;
 static struct rt_event     _bus_in_event;
 /* {head, tail} */
@@ -500,15 +501,15 @@ static void rt_vbus_notify_chn(unsigned char chnr, rt_err_t err)
     rt_event_send(&_bus_in_event, 1 << chnr);
 }
 
-static void rt_vbus_notify_set(rt_uint32_t set)
+static void rt_vbus_notify_set(uint32_t set)
 {
     rt_event_send(&_bus_in_event, set);
 }
 
-rt_err_t rt_vbus_listen_on(rt_uint8_t chnr,
-                           rt_int32_t timeout)
+rt_err_t rt_vbus_listen_on(uint8_t chnr,
+                           int32_t timeout)
 {
-    rt_uint32_t notuse;
+    uint32_t notuse;
 
     if (chnr == 0 || chnr >= RT_VBUS_CHANNEL_NR || !_chn_connected(chnr))
         return -RT_EIO;
@@ -655,8 +656,8 @@ static char* dump_cmd_pkt(unsigned char *dp, size_t dsize)
     return _cmd_dump_buf;
 }
 
-static rt_err_t _chn0_echo_with(rt_uint8_t prefix,
-                                rt_uint32_t dsize,
+static rt_err_t _chn0_echo_with(uint8_t prefix,
+                                uint32_t dsize,
                                 unsigned char *dp)
 {
     rt_err_t err;
@@ -676,12 +677,12 @@ static rt_err_t _chn0_echo_with(rt_uint8_t prefix,
     return err;
 }
 
-static rt_err_t _chn0_nak(rt_uint32_t dsize, unsigned char *dp)
+static rt_err_t _chn0_nak(uint32_t dsize, unsigned char *dp)
 {
     return _chn0_echo_with(RT_VBUS_CHN0_CMD_NAK, dsize, dp);
 }
 
-static rt_err_t _chn0_ack(rt_uint32_t dsize, unsigned char *dp)
+static rt_err_t _chn0_ack(uint32_t dsize, unsigned char *dp)
 {
     return _chn0_echo_with(RT_VBUS_CHN0_CMD_ACK, dsize, dp);
 }
@@ -1071,7 +1072,7 @@ static void _bus_in_entry(void *param)
     while (rt_sem_take(&_bus_in_sem,
                        RT_WAITING_FOREVER) == RT_EOK)
     {
-        rt_uint32_t event_set = 0;
+        uint32_t event_set = 0;
 
         /* while(not empty) */
         while (RT_VBUS_IN_RING->get_idx != RT_VBUS_IN_RING->put_idx)
