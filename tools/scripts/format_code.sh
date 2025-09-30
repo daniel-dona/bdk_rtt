@@ -94,7 +94,13 @@ else
     echo "Formatting code..."
     FORMATTED_COUNT=0
     for file in $FILES; do
-        clang-format -i "$file"
+        #clang-format -i "$file"
+        timeout 10s clang-format -i "$file"
+    
+        if [ $? -eq 124 ]; then
+            echo "TIMEOUT: $file took too long, skipping..."
+        fi
+
         if [ $? -eq 0 ]; then
             FORMATTED_COUNT=$((FORMATTED_COUNT + 1))
         fi

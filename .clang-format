@@ -5,7 +5,7 @@ BasedOnStyle: LLVM
 
 IndentWidth: 4
 TabWidth: 4
-ColumnLimit: 80
+ColumnLimit: 0
 
 BreakBeforeBraces: Attach
 PointerAlignment: Left
@@ -18,3 +18,6 @@ MaxEmptyLinesToKeep: 1
 SeparateDefinitionBlocks: Always
 
 ReflowComments: false
+SortIncludes: false
+
+AlignConsecutiveMacros: true
