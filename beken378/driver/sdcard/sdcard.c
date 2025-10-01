@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <math.h>
 #include "include.h"
 
 #include "sys_rtos.h"
@@ -504,7 +505,7 @@ static SDIO_Error sdcard_cmd9_process(uint8_t card_type)
             sdcard.total_block = (csize + 1) * 1024;
         }
 
-        os_printf("size:%x total_block:%x\r\n", sdcard.block_size, sdcard.total_block);
+        //os_printf("size:%x total_block:%x\r\n", sdcard.block_size, sdcard.total_block);
     }
     else
     {
@@ -524,13 +525,19 @@ static SDIO_Error sdcard_cmd9_process(uint8_t card_type)
     }
 
     sdcard.block_size = SD_DEFAULT_BLOCK_SIZE;
-    SDCARD_PRT("Bsize:%x;Total_block:%x\r\n", sdcard.block_size, sdcard.total_block);
+    SDCARD_PRT("SD Card size report:\r\n");
+    SDCARD_PRT(" - Block size: %d bytes\r\n", sdcard.block_size);
+    SDCARD_PRT(" - Total blocks: %d\r\n", sdcard.total_block);
+    SDCARD_PRT(" - Total size: ");
+    SDCARD_PRT("~ %d GB, ", (int)round((double)sdcard.total_block * sdcard.block_size / 1000000000.0));
+    SDCARD_PRT("~ %d GiB\r\n", (int)round((double)sdcard.total_block * sdcard.block_size / (1024.0*1024.0*1024.0)));
+
     ASSERT_ERR(sdcard.block_size == SD_DEFAULT_BLOCK_SIZE);
 
     return SD_OK;
 }
 
-
+ 
 /*select/deselect card*/
 static SDIO_Error sdcard_cmd7_process(void)
 {
@@ -572,6 +579,125 @@ static SDIO_Error sdcard_acmd6_process(void)
     cmd.err = sdio_wait_cmd_response(cmd.index);
 
     return cmd.err;
+}
+
+static SDIO_Error sdcard_cmd10_process(uint8_t card_type)
+{
+    SDIO_CMD_S cmd;
+
+    cmd.index = 10;  // CMD10
+    cmd.arg = (uint32_t)(sdcard.card_rca << 16);
+    cmd.flags = SD_CMD_LONG;
+    cmd.timeout = get_timeout_param(1);
+
+    sdio_send_cmd(&cmd);
+    cmd.err = sdio_wait_cmd_response(cmd.index);
+    
+    if(cmd.err != SD_OK)
+    {
+        return cmd.err;
+    }
+
+    // Get R2 response (CID register [127:0])
+    sdio_get_cmdresponse_argument(0, &cmd.resp[0]);
+    sdio_get_cmdresponse_argument(1, &cmd.resp[1]);
+    sdio_get_cmdresponse_argument(2, &cmd.resp[2]);
+    sdio_get_cmdresponse_argument(3, &cmd.resp[3]);
+    
+    // Parse CID fields
+    uint8_t mid = (cmd.resp[0] >> 24) & 0xFF;        // [127:120] Manufacturer ID
+    uint16_t oid = (cmd.resp[0] >> 8) & 0xFFFF;      // [119:104] OEM/Application ID
+    
+    // Product name [103:64]
+    char pnm[6];
+    pnm[0] = cmd.resp[0] & 0xFF;                     // [103:96]
+    pnm[1] = (cmd.resp[1] >> 24) & 0xFF;             // [95:88]
+    pnm[2] = (cmd.resp[1] >> 16) & 0xFF;             // [87:80]
+    pnm[3] = (cmd.resp[1] >> 8) & 0xFF;              // [79:72]
+    pnm[4] = cmd.resp[1] & 0xFF;                     // [71:64]
+    pnm[5] = 0;
+    
+    uint8_t prv = (cmd.resp[2] >> 24) & 0xFF;        // [63:56] Product revision
+    
+    // [55:24] Product serial number (CORRECTED: resp[3] is shifted right by 8)
+    uint32_t psn = ((cmd.resp[2] & 0x00FFFFFF) << 8) | ((cmd.resp[3] >> 16) & 0xFF);
+    
+    // [11:0] Manufacturing date (CORRECTED: bits [11:0] not [19:8])
+    uint16_t mdt = cmd.resp[3] & 0xFFF;
+    
+    // Decode manufacturing date
+    // Month: [3:0] (0=Jan, 1=Feb, ..., 11=Dec)
+    // Year: [11:4] (offset from 2000)
+    uint8_t month_code = mdt & 0xF;
+    uint8_t year_offset = (mdt >> 4) & 0xFF;
+    uint16_t year = 2000 + year_offset;
+    
+    // Decode OEM ID as ASCII
+    char oid_str[3];
+    oid_str[0] = (oid >> 8) & 0xFF;
+    oid_str[1] = oid & 0xFF;
+    oid_str[2] = 0;
+    
+    // Enhanced vendor lookup table
+    static const struct {
+        uint8_t id;
+        const char *manufacturer;
+    } sd_database[] = {
+        { 0x01, "Panasonic" },
+        { 0x02, "Toshiba/Kingston/Viking" },
+        { 0x03, "SanDisk" },
+        { 0x08, "Silicon Power" },
+        { 0x18, "Infineon" },
+        { 0x1b, "Transcend/Samsung" },
+        { 0x1c, "Transcend" },
+        { 0x1d, "Corsair/AData" },
+        { 0x1e, "Transcend" },
+        { 0x1f, "Kingston" },
+        { 0x27, "Delkin/Phison" },
+        { 0x28, "Lexar" },
+        { 0x30, "SanDisk" },
+        { 0x31, "Silicon Power" },
+        { 0x33, "STMicroelectronics" },
+        { 0x41, "Kingston" },
+        { 0x6f, "STMicroelectronics" },
+        { 0x74, "Transcend" },
+        { 0x76, "Patriot" },
+        { 0x82, "Gobe/Sony" },
+        { 0xad, "Hynix" },
+    };
+    
+    // Lookup manufacturer
+    const char *vendor = "Unknown";
+    for(uint32_t i = 0; i < sizeof(sd_database)/sizeof(sd_database[0]); i++) {
+        if(sd_database[i].id == mid) {
+            vendor = sd_database[i].manufacturer;
+            break;
+        }
+    }
+    
+    // Month name lookup
+    static const char *month_names[] = {
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+        "INVALID", "INVALID", "INVALID", "INVALID"
+    };
+    const char *month_str = month_names[month_code];
+    
+    SDCARD_PRT("CMD10 CID info:\r\n");
+    SDCARD_PRT(" - Manufacturer: %s (0x%02x)\r\n", vendor, mid);
+    SDCARD_PRT(" - OEM/App ID: %s (0x%04x)\r\n", oid_str, oid);
+    SDCARD_PRT(" - Product Name: '%s'\r\n", pnm);
+    SDCARD_PRT(" - Product Rev: %d.%d\r\n", (prv >> 4) & 0xF, prv & 0xF);
+    SDCARD_PRT(" - Serial Number: 0x%08x\r\n", psn);
+    
+    // Validate date
+    if(month_code < 0 || month_code > 11 || year < 2000 || year > 2030) {
+        SDCARD_PRT(" - Manufacturing date: %s, %04d (invalid!)\r\n", month_str, year);
+    }else{
+        SDCARD_PRT(" - Manufacturing date: %s, %04d \r\n", month_str, year);
+    }
+
+    return SD_OK;
 }
 
 static SDIO_Error sdcard_cmd18_process(uint32_t addr)
@@ -768,6 +894,15 @@ SDIO_Error sdcard_initialize(void)
         SDCARD_FATAL("send cmd9 err:%d\r\n", err);
         goto err_return;
     }
+
+    err = sdcard_cmd10_process(SD_CARD);
+    if(err != SD_OK)
+    {
+        SDCARD_FATAL("send cmd10 err:%d\r\n", err);
+        goto err_return;
+    }
+
+
 	rtos_delay_milliseconds(2);
     // select card
     err = sdcard_cmd7_process();

@@ -73,6 +73,7 @@
 #define DFS_FILESYSTEM_TYPES_MAX 4
 #define DFS_FD_MAX               16
 #define RT_USING_DFS_ELMFAT
+#define RT_DFS_ELM_USE_EXFAT
 
 /* elm-chan's FatFs, Generic FAT Filesystem Module */
 
