@@ -3,7 +3,7 @@
 #define GC0308C_DEV_ID          (0x21)
 
 
-const uint8_t gc0308c_init_talbe[][2] = {
+const uint8_t gc0308c_init_table[][2] = {
     {0xfe, 0x80},
     {0xfe, 0x00},  // set page0
     {0xd2, 0x10},  // close AEC

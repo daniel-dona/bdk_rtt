@@ -3,7 +3,7 @@
 #define PAS6375_DEV_ID          (0x40)
 
 
-const uint8_t pas6375_init_talbe[][2] = {
+const uint8_t pas6375_init_table[][2] = {
     {0xEF, 0x00},
     {0x04, 0x00},
     {0x05, 0x24},

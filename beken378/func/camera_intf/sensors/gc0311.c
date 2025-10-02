@@ -39,12 +39,12 @@ void gc0311_sensor_init(DD_HANDLE i2c_hdl, DD_HANDLE ejpeg_hdl, camera_sensor_t 
 
     sensor->i2c_cfg->salve_id = GC0311_DEV_ID;
 
-    size = sizeof(gc0311_init_talbe) / 2;
+    size = sizeof(gc0311_init_table) / 2;
 
     for (i = 0; i < size; i++){
 
-        addr = gc0311_init_talbe[i][0];
-        data = gc0311_init_talbe[i][1];
+        addr = gc0311_init_table[i][0];
+        data = gc0311_init_table[i][1];
         camera_intf_sccb_write2(GC0311_DEV_ID, addr, &data, 1);
     }
 
@@ -66,21 +66,21 @@ void gc0311_camera_inf_cfg_ppi(uint32_t ppi_type){
     switch (ppi_type){
             
         case QVGA_320_240:
-            size = sizeof(gc0311_QVGA_320_240_talbe) / 2;
+            size = sizeof(gc0311_QVGA_320_240_table) / 2;
             for (i = 0; i < size; i++)
             {
-                addr = gc0311_QVGA_320_240_talbe[i][0];
-                data = gc0311_QVGA_320_240_talbe[i][1];
+                addr = gc0311_QVGA_320_240_table[i][0];
+                data = gc0311_QVGA_320_240_table[i][1];
                 camera_intf_sccb_write2(GC0311_DEV_ID, addr, &data, 1);;
             }
             break;
 
         case VGA_640_480:
-            size = sizeof(gc0311_VGA_640_480_talbe) / 2;
+            size = sizeof(gc0311_VGA_640_480_table) / 2;
             for (i = 0; i < size; i++)
             {
-                addr = gc0311_VGA_640_480_talbe[i][0];
-                data = gc0311_VGA_640_480_talbe[i][1];
+                addr = gc0311_VGA_640_480_table[i][0];
+                data = gc0311_VGA_640_480_table[i][1];
                 camera_intf_sccb_write2(GC0311_DEV_ID, addr, &data, 1);;
             }
             break;
@@ -101,42 +101,42 @@ void gc0311_camera_inf_cfg_fps(uint32_t fps_type){
     switch (fps_type){
         
         case TYPE_5FPS:
-            size = sizeof(gc0311_5pfs_talbe) / 2;
+            size = sizeof(gc0311_5pfs_table) / 2;
             for (i = 0; i < size; i++)
             {
-                addr = gc0311_5pfs_talbe[i][0];
-                data = gc0311_5pfs_talbe[i][1];
+                addr = gc0311_5pfs_table[i][0];
+                data = gc0311_5pfs_table[i][1];
                 camera_intf_sccb_write2(GC0311_DEV_ID, addr, &data, 1);;
             }
             break;
 
         case TYPE_10FPS:
-            size = sizeof(gc0311_10pfs_talbe) / 2;
+            size = sizeof(gc0311_10pfs_table) / 2;
             for (i = 0; i < size; i++)
             {
-                addr = gc0311_10pfs_talbe[i][0];
-                data = gc0311_10pfs_talbe[i][1];
+                addr = gc0311_10pfs_table[i][0];
+                data = gc0311_10pfs_table[i][1];
                 camera_intf_sccb_write2(GC0311_DEV_ID, addr, &data, 1);;
             }
             break;
 
         case TYPE_20FPS:
-            size = sizeof(gc0311_20pfs_talbe) / 2;
+            size = sizeof(gc0311_20pfs_table) / 2;
             for (i = 0; i < size; i++)
             {
-                addr = gc0311_20pfs_talbe[i][0];
-                data = gc0311_20pfs_talbe[i][1];
+                addr = gc0311_20pfs_table[i][0];
+                data = gc0311_20pfs_table[i][1];
                 camera_intf_sccb_write2(GC0311_DEV_ID, addr, &data, 1);;
             }
             break;
 
         default:
             os_printf("set FPS unknown\r\n");
-            size = sizeof(gc0311_20pfs_talbe) / 2;
+            size = sizeof(gc0311_20pfs_table) / 2;
             for (i = 0; i < size; i++)
             {
-                addr = gc0311_20pfs_talbe[i][0];
-                data = gc0311_20pfs_talbe[i][1];
+                addr = gc0311_20pfs_table[i][0];
+                data = gc0311_20pfs_table[i][1];
                 camera_intf_sccb_write2(GC0311_DEV_ID, addr, &data, 1);;
             }
             break;

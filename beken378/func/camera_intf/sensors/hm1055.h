@@ -1,7 +1,7 @@
 #include <stdint.h>
 #define HM_1055_DEV_ID          (0x24)		//slave_address:0x48
 
-const uint16_t hm_1055_init_talbe[][2] = {
+const uint16_t hm_1055_init_table[][2] = {
     {0x0022, 0x00},//	; RESET
     {0x0026, 0x39},//	; For 15fps @ 12MHz (MCLK=13.7M??) 0X39=29.7M
     {0x002A, 0x44},//	; Modified by Wilson

@@ -24,7 +24,9 @@
 
 #include "sensors/bf2013.h"
 #include "sensors/gc0308c.h"
+#include "sensors/gc0310.h"
 #include "sensors/gc0311.h"
+#include "sensors/gc0312.h"
 #include "sensors/gc0328c.h"
 #include "sensors/hi704.h"
 #include "sensors/hm1055.h"
@@ -385,6 +387,23 @@ void camera_intfer_deinit(camera_sensor_t *sensor){
     os_memset(&ejpeg_cfg, 0, sizeof(DJPEG_DESC_ST));
 }
 
+void fake_init(){
+    bk_printf("Fake sensor initialized!\r\n");
+}
+
+camera_sensor_t* fake_sensor(){
+
+    camera_sensor_t* sensor = malloc(sizeof(camera_sensor_t));
+
+    sensor->i2c_bus = I2C1_DEV_NAME;
+
+    sensor->name = rt_strdup("Fake sensor");
+    sensor->init = fake_init;
+
+
+    return sensor;
+}
+
 camera_sensor_t* camera_detect(){
 
     uint32_t status;
@@ -413,10 +432,20 @@ camera_sensor_t* camera_detect(){
         sensor->name = rt_strdup("GalaxyCore 328C");
         sensor->init = gc0328c_sensor_init;
 
+    }else if (gc0310_sensor_detect()){
+
+        sensor->name = rt_strdup("GalaxyCore 310");
+        sensor->init = gc0310_sensor_init;
+
     }else if (gc0311_sensor_detect()){
 
         sensor->name = rt_strdup("GalaxyCore 311");
         sensor->init = gc0311_sensor_init;
+
+    }else if (gc0312_sensor_detect()){
+
+        sensor->name = rt_strdup("GalaxyCore 312");
+        sensor->init = gc0312_sensor_init;
 
     }else if (hi704_sensor_detect()){
 
@@ -461,6 +490,11 @@ camera_sensor_t* camera_detect(){
 
             sensor->name = rt_strdup("GalaxyCore 311");
             sensor->init = gc0311_sensor_init;
+
+        }else if (gc0312_sensor_detect()){
+
+            sensor->name = rt_strdup("GalaxyCore 312");
+            sensor->init = gc0312_sensor_init;
 
         }else if (hi704_sensor_detect()){
 

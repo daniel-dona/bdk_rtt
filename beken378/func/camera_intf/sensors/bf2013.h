@@ -3,7 +3,7 @@
 #define BF_2013_DEV_ID          (0x6e)
 
 
-const uint8_t bf_2013_init_talbe[][2] = {
+const uint8_t bf_2013_init_table[][2] = {
     {0x12, 0x00},			//CHEN-TEST
     {0x09, 0x01},
     {0x15, 0x02},
