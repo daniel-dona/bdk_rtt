@@ -12,8 +12,13 @@
 
 uint8_t gc0310_sensor_detect(void){
 
+    //uint8_t trigger_reg = 0xFE;
+    //uint8_t trigger_val = 0x00;
+
+    //camera_intf_sccb_write2(GC0310_DEV_ID, (uint8_t) trigger_reg, (uint8_t *) &trigger_val, 1);
+
     uint8_t data = 0x00;
-    uint8_t addr = 0xF1;
+    uint8_t addr = 0xF0;
 
     camera_intf_sccb_read2(GC0310_DEV_ID, addr, &data, 1);
 

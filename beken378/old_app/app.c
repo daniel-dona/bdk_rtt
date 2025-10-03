@@ -714,31 +714,30 @@ static void init_app_thread( void *arg ){
 }
 */
 
-/*
+
 void scan_camera_sensors(int argc, char **argv){
 
-    os_printf("argc %d", argc);
+    //DJPEG_DESC_ST *ejpeg_cfg = (DJPEG_DESC_ST*) malloc(sizeof(DJPEG_DESC_ST));
 
-    DJPEG_DESC_ST ejpeg_cfg;
+    uint32_t  status_i2c, status_comm; // status_ejpeg,
 
-    uint32_t status;
+    //DD_HANDLE ejpeg_hdl = ddev_open(EJPEG_DEV_NAME, &status_ejpeg, 0);
 
-    DD_HANDLE ejpeg_hdl = ddev_open(EJPEG_DEV_NAME, &status, (uint32_t)&ejpeg_cfg);
+    //bk_printf("APP PTR: %p", ejpeg_cfg);
 
-    os_printf("open EJPEG %p\r\n", ejpeg_hdl);
-    os_printf("status: %d\r\n", status);
+    //os_printf("open EJPEG %p\r\n", ejpeg_hdl);
+    //os_printf("status: %d\r\n", status_ejpeg);
 
-    uint32_t i2c2_trans_mode = (0 & (~I2C2_MSG_WORK_MODE_MS_BIT)		// master
+    /*uint32_t i2c2_trans_mode = (0 & (~I2C2_MSG_WORK_MODE_MS_BIT)		// master
 						 & (~I2C2_MSG_WORK_MODE_AL_BIT)) 	// 7bit address
-						 | ( I2C2_MSG_WORK_MODE_IA_BIT);	
+						 | ( I2C2_MSG_WORK_MODE_IA_BIT);	*/
 
     //uint32_t oflag = 0;
 
-    DD_HANDLE i2c_hdl = ddev_open(I2C2_DEV_NAME, &status, i2c2_trans_mode);
-    os_printf("open I2C2\r\n");
-    os_printf("status: %d\r\n", status);
+    DD_HANDLE i2c_hdl = ddev_open(I2C1_DEV_NAME, &status_i2c, 0);
+    os_printf("status: %d\r\n", status_i2c);
 
-    unsigned char data;
+    uint8_t data;
     I2C_OP_ST i2c_operater;
 
 
@@ -748,26 +747,84 @@ void scan_camera_sensors(int argc, char **argv){
     //i2c_operater.addr_width = ADDR_WIDTH_8;
 
     
-    for(int i = 0; i < 128; i++){
+    for(int i = 1; i <= 128; i++){
 
-        i2c_operater.salve_id = (i << 1) | 1;
-
-        i2c_operater.op_addr = 0x0F0;
-
-        data = 0x00;
+        i2c_operater.salve_id = i;
+        i2c_operater.op_addr = 0x00;
+        i2c_operater.addr_width = ADDR_WIDTH_8;
 
         //status = ddev_write(i2c_hdl, (char *) data, 1, (uint32_t)&i2c_operater);
 
         //os_printf("\nREAD -> Status: %d, Data: %d %d %d %d", status, data[0], data[1], data[2], data[3]);
 
-        status = ddev_read(i2c_hdl, (char *) &data, 1, (uint32_t)&i2c_operater);
+        status_comm = ddev_read(i2c_hdl, (char *) &data, 1, (uint32_t)&i2c_operater);
 
-        os_printf("READ -> Status: %d, Device: %x, Addr: %x, Data: %x \n\n", status, i2c_operater.salve_id, i2c_operater.op_addr, data);
+        //delay100us(1*100);
+
+        if(status_comm == 0){
+
+            bk_printf("Found device at addr: 0x%02X\r\n", i);
+            bk_printf("Reading regs: \r\n");
+
+            /*uint8_t common_regs[] = {
+                0x00,   // Common: Chip ID (Aptina, GalaxyCore, many others)
+                0xFF,   // Common: Chip ID (Aptina, GalaxyCore, many others)
+                0x0A,   // OmniVision PIDH
+                0x0B,   // OmniVision PIDL
+                0x1C,   // OmniVision MIDH
+                0x1D,   // OmniVision MIDL
+                0xF0,   // GalaxyCore ID high
+                0xF1,   // GalaxyCore ID low
+                0x16,   // Sometimes Sony / others
+                0x17    // Sometimes Sony / others
+            };*/
+
+            
+
+            //i2c_operater.op_addr = 0xFC;
+            //data = 0x16;
+            
+            //ddev_write(i2c_hdl, (char *) &data, 1, (uint32_t)&i2c_operater);
+
+            for(int r = 0; r < 0xFF; r++){
+
+                i2c_operater.salve_id = i;
+                i2c_operater.op_addr = 0x00;
+                i2c_operater.addr_width = ADDR_WIDTH_8;
+
+                delay100us(1*100);
+
+                i2c_operater.op_addr = r;
+                status_comm = ddev_read(i2c_hdl, (char *) &data, 1, (uint32_t)&i2c_operater);
+
+                if(data != 0x00){
+                    bk_printf("- [%d] 0x%02X -> 0x%02X \r\n", status_comm, r, data);
+                }
+
+            }
+
+
+
+        }
 
     }
 
+    GLOBAL_INT_DECLARATION();
+
+
+    //ddev_close(ejpeg_hdl);
+    ddev_close(i2c_hdl);
+
+    GLOBAL_INT_DISABLE();
+    i2c_hdl = DD_HANDLE_UNVALID;
+    GLOBAL_INT_RESTORE();
+
+    //os_memset(&ejpeg_cfg, 0, sizeof(DJPEG_DESC_ST));
+
 
 }
+
+
 
 void gpio_read(int argc, char **argv){
 
@@ -833,7 +890,7 @@ void gpio_test_loop(int argc, char **argv){
 
     }
 }
-*/
+
 
 void fancy_msg(void){
 
@@ -845,8 +902,6 @@ void fancy_msg(void){
     bk_printf(" ╚██████╔╝██║     ███████╗██║ ╚████║╚██████╗██║  ██║██║ ╚═╝ ██║ \r\n");
     bk_printf("  ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝ ╚═════╝╚═╝  ╚═╝╚═╝     ╚═╝ \r\n");
     bk_printf("\r\n");
-
-
 
 }
 
@@ -947,7 +1002,7 @@ void app_start(void){ //Execution from BDK
     app_pre_start();
     fancy_msg();
 
-    delay100us(5*10000);
+    //delay100us(1*10000);
     run_init_script();
                                                                                                                                             
     //user_main_entry();
@@ -964,15 +1019,10 @@ int bmsg_is_empty(void){
 }
 
 
-/*void arg_test(int argc, char **argv){
-    os_printf("argc %d\n", argc);
-}*/
+MSH_CMD_EXPORT(scan_camera_sensors , scan camera sensors);
+MSH_CMD_EXPORT(gpio_write , Set GPIO <pin> <value>);
+MSH_CMD_EXPORT(gpio_read , Set GPIO <pin> <value>);
+MSH_CMD_EXPORT(gpio_test_loop, Loop over GPIOS)
 
-//MSH_CMD_EXPORT(arg_test, arg test);
-//MSH_CMD_EXPORT(scan_camera_sensors , scan camera sensors);
-//MSH_CMD_EXPORT(gpio_write , Set GPIO <pin> <value>);
-//MSH_CMD_EXPORT(gpio_read , Set GPIO <pin> <value>);
-//MSH_CMD_EXPORT(gpio_test_loop, Loop over GPIOS)
-//MSH_CMD_EXPORT(sdcard_intf_test, sdcard_intf_test);
 // eof
 

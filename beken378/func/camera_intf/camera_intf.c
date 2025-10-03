@@ -28,6 +28,8 @@
 #include "sensors/gc0311.h"
 #include "sensors/gc0312.h"
 #include "sensors/gc0328c.h"
+#include "sensors/gc0329.h"
+
 #include "sensors/hi704.h"
 #include "sensors/hm1055.h"
 #include "sensors/ov7670.h"
@@ -427,12 +429,7 @@ camera_sensor_t* camera_detect(){
     sensor->i2c_bus = I2C2_DEV_NAME;
 
 
-    if(gc0328c_sensor_detect()){
-
-        sensor->name = rt_strdup("GalaxyCore 328C");
-        sensor->init = gc0328c_sensor_init;
-
-    }else if (gc0310_sensor_detect()){
+    if (gc0310_sensor_detect()){
 
         sensor->name = rt_strdup("GalaxyCore 310");
         sensor->init = gc0310_sensor_init;
@@ -446,6 +443,16 @@ camera_sensor_t* camera_detect(){
 
         sensor->name = rt_strdup("GalaxyCore 312");
         sensor->init = gc0312_sensor_init;
+
+    }else if(gc0328c_sensor_detect()){
+
+        sensor->name = rt_strdup("GalaxyCore 328C");
+        sensor->init = gc0328c_sensor_init;
+
+    }else if (gc0329_sensor_detect()){
+
+        sensor->name = rt_strdup("GalaxyCore 329");
+        sensor->init = gc0329_sensor_init;
 
     }else if (hi704_sensor_detect()){
 
@@ -465,7 +472,7 @@ camera_sensor_t* camera_detect(){
     //os_printf("camera_intfer_deinit,%p-%p\r\n", ejpeg_hdl, i2c_hdl);
 
     
-
+    #if 1
 
     if(sensor == NULLPTR){
 
@@ -486,7 +493,12 @@ camera_sensor_t* camera_detect(){
             sensor->name = rt_strdup("GalaxyCore 328C");
             sensor->init = gc0328c_sensor_init;
 
-        }else if (gc0311_sensor_detect()){
+        }else if (gc0310_sensor_detect()){
+
+            sensor->name = rt_strdup("GalaxyCore 310");
+            sensor->init = gc0310_sensor_init;
+
+        }  else if (gc0311_sensor_detect()){
 
             sensor->name = rt_strdup("GalaxyCore 311");
             sensor->init = gc0311_sensor_init;
@@ -495,6 +507,11 @@ camera_sensor_t* camera_detect(){
 
             sensor->name = rt_strdup("GalaxyCore 312");
             sensor->init = gc0312_sensor_init;
+
+        }else if (gc0329_sensor_detect()){
+
+            sensor->name = rt_strdup("GalaxyCore 329");
+            sensor->init = gc0329_sensor_init;
 
         }else if (hi704_sensor_detect()){
 
@@ -508,6 +525,8 @@ camera_sensor_t* camera_detect(){
         }
 
     }
+
+    #endif
     
 
     GLOBAL_INT_DECLARATION();

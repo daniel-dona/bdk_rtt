@@ -26,6 +26,8 @@ void camera_intfer_init(void *ejpeg_data, camera_sensor_t *sensor);
 void camera_intfer_deinit(camera_sensor_t *sensor);
 
 camera_sensor_t* camera_detect(void);
+camera_sensor_t* fake_sensor(void);
+
 
 //uint32_t camera_intfer_set_video_param(uint32_t ppi_type, uint32_t pfs_type);
 

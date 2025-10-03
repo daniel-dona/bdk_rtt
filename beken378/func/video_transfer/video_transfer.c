@@ -414,7 +414,8 @@ static void video_transfer_main(beken_thread_arg_t data)
             if(camera_sensor != NULLPTR){
                 camera_intfer_init(&tvideo_st, camera_sensor);
             }else{
-                return;
+                camera_sensor = fake_sensor();
+                camera_intfer_init(&tvideo_st, camera_sensor);
             }
         }
     }

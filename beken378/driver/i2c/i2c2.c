@@ -11,7 +11,6 @@
 
 #include "drv_model_pub.h"
 #include "mem_pub.h"
-#include "rtos_pub.h"
 
 
 static DD_OPERATIONS i2c2_op =
@@ -857,88 +856,6 @@ static uint32_t i2c2_close(void)
 
 static uint32_t i2c2_read(char *user_buf, uint32_t count, uint32_t op_flag)
 {
-    uint32_t start_tick, cur_tick;
-    I2C_OP_PTR i2c_op;
-    GLOBAL_INT_DECLARATION();
-
-    i2c_op = (I2C_OP_PTR)op_flag;
-
-    if (gi2c2->TransDone != 0)
-    {
-        return 0;
-    }
-
-    GLOBAL_INT_DISABLE();
-    gi2c2->AddrFlag   = 0;
-    gi2c2->TransDone  = 0;
-    gi2c2->ack_check  = 1;
-    gi2c2->CurrentNum = 0;
-    gi2c2->AllDataNum = count;
-    gi2c2->pData      = (uint8_t *)user_buf;
-    gi2c2->InnerAddr  = i2c_op->op_addr;
-    gi2c2->SendAddr   = i2c_op->salve_id;
-    gi2c2->Slave_addr = i2c_op->slave_addr;
-    gi2c2->WkMode     |= (I2C2_MSG_WORK_MODE_RW_BIT);   //READ
-    gi2c2->ErrorNO = 0;
-
-
-    I2C2_PRT("gi2c2.WkMode = 0x%x\r\n",   gi2c2->WkMode);
-    I2C2_PRT("gi2c2.SalveID= 0x%x\r\n",   gi2c2->Slave_addr);
-    I2C2_PRT("gi2c2.SendAddr = 0x%x\r\n", gi2c2->SendAddr);
-    I2C2_PRT("gi2c2.ack_check = %d\r\n",  gi2c2->ack_check);
-    I2C2_PRT("gi2c2.AddrFlag = %d\r\n",   gi2c2->AddrFlag);
-    I2C2_PRT("gi2c2.CurrentNum = %d\r\n", gi2c2->CurrentNum);
-    I2C2_PRT("gi2c2.InnerAddr = %d\r\n",  gi2c2->InnerAddr);
-    I2C2_PRT("gi2c2.TransDone = %d\r\n",  gi2c2->TransDone);
-    I2C2_PRT("gi2c2.AllDataNum = %d\r\n", gi2c2->AllDataNum);
-/**
-    //write salve address
-    reg = REG_READ(REG_I2C2_CONFIG);
-    reg &= (~(0x3FF << I2C2_SLV_ADDR_POSI));
-    reg = reg | (((gi2c2->Slave_addr) & 0x3FF) << I2C2_SLV_ADDR_POSI);
-    REG_WRITE(REG_I2C2_CONFIG, reg);
-*/
-    //reg = REG_READ(REG_I2C2_CONFIG);
-    //I2C2_PRT("i2c2_config= %lx\r\n", REG_READ(REG_I2C2_CONFIG));
-
-    //reg = REG_READ(REG_I2C2_STA);
-    //I2C2_PRT("i2c2_stat= %lx\r\n", REG_READ(REG_I2C2_STA));
-
-    i2c2_send_start();
-    GLOBAL_INT_RESTORE();
-
-    start_tick = rtos_get_time();
-    while(1)
-    {
-        if (i2c2_get_busy() == 1)
-        {
-            uint32_t past = 0;
-            cur_tick = rtos_get_time();
-            past = (cur_tick >= start_tick) ? (cur_tick - start_tick) : (0xffffffffu - start_tick + cur_tick);
-            if ((past) > 2000)
-            {
-                gi2c2->ErrorNO = 1;
-                break;
-            }
-            //rtos_delay_milliseconds(10);
-        }
-        else
-        {
-            break;
-        }
-    }
-
-    GLOBAL_INT_DISABLE();
-    gi2c2->TransDone = 0;
-    GLOBAL_INT_RESTORE();
-
-    return gi2c2->ErrorNO;
-}
-
-// From freertos SDK
-/*
-static uint32_t i2c2_read(char *user_buf, uint32_t count, uint32_t op_flag)
-{
     uint32_t reg;
     I2C_OP_PTR i2c_op;
 	
@@ -990,7 +907,6 @@ static uint32_t i2c2_read(char *user_buf, uint32_t count, uint32_t op_flag)
     return 0;
 
 }
-*/
 
 static uint32_t i2c2_write(char *user_buf, uint32_t count, uint32_t op_flag)
 {

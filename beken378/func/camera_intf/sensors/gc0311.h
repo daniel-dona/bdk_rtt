@@ -15,6 +15,9 @@ void gc0311_camera_inf_cfg_fps(uint32_t fps_type);
 
 // Register tables
 extern const uint8_t gc0311_init_table[522][2];
+
+
+// Pending check and adjust, from other sensor!!
 extern const uint8_t gc0311_5pfs_table[9][2];
 extern const uint8_t gc0311_10pfs_table[9][2];
 extern const uint8_t gc0311_20pfs_table[9][2];
