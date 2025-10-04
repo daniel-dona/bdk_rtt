@@ -818,6 +818,7 @@ static uint32_t i2c2_open(uint32_t op_flag)
     
     if(op_flag) {
         i2c2_set_freq_div(op_flag);
+		//i2c2_set_freq_div(I2C_CLK_DIVID(I2C_DEFAULT_BAUD));
     } else {
         i2c2_set_freq_div(I2C_CLK_DIVID(I2C_DEFAULT_BAUD));
     }

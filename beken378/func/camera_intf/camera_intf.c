@@ -31,10 +31,13 @@
 #include "sensors/gc0329.h"
 
 #include "sensors/hi704.h"
-#include "sensors/hm1055.h"
-#include "sensors/ov7670.h"
-#include "sensors/pas6329.h"
-#include "sensors/pas6375.h"
+
+#include "sensors/ov769x.h"
+
+//#include "sensors/hm1055.h"
+//#include "sensors/ov7670.h"
+//#include "sensors/pas6329.h"
+//#include "sensors/pas6375.h"
 
 extern void delay100us(int32_t num);
 
@@ -406,27 +409,11 @@ camera_sensor_t* fake_sensor(){
     return sensor;
 }
 
-camera_sensor_t* camera_detect(){
-
-    uint32_t status;
-
-    camera_intf_config_ejpeg(&tvideo_st);
-
-    ejpeg_hdl = ddev_open(EJPEG_DEV_NAME, &status, (uint32_t)&ejpeg_cfg);
-    
-    //camera_reset();
-
-    uint32_t i2c2_trans_mode = (0 & (~I2C2_MSG_WORK_MODE_MS_BIT)// master
-                              & (~I2C2_MSG_WORK_MODE_AL_BIT))// 7bit address
-                             | (I2C2_MSG_WORK_MODE_IA_BIT); // with inner address
-
-    i2c_hdl = ddev_open(I2C2_DEV_NAME, &status, i2c2_trans_mode);
-
-    os_printf("Searching for camera sensors, using I2C2 bus...\r\n");
+camera_sensor_t* try_sensor_detection(char* I2C_DEV_NAME){
 
     camera_sensor_t* sensor = malloc(sizeof(camera_sensor_t));
 
-    sensor->i2c_bus = I2C2_DEV_NAME;
+    sensor->i2c_bus = I2C_DEV_NAME;
 
 
     if (gc0310_sensor_detect()){
@@ -459,6 +446,11 @@ camera_sensor_t* camera_detect(){
         sensor->name = rt_strdup("Hynix 704");
         sensor->init = hi704_sensor_init;
 
+    }else if (ov769x_sensor_detect()){
+
+        sensor->name = rt_strdup("OmniVision 769X");
+        sensor->init = ov769x_sensor_init;
+
     }else{
         /*sensor->name = rt_strdup("None");
         sensor->init = hi704_sensor_init;*/
@@ -466,67 +458,62 @@ camera_sensor_t* camera_detect(){
         free(sensor);
         sensor = NULLPTR;
     }
+
+    return sensor;
+}
+
+camera_sensor_t* camera_detect(){
+
+    uint32_t status;
+
+    camera_sensor_t* sensor = NULLPTR;
+
+    camera_intf_config_ejpeg(&tvideo_st);
+
+    ejpeg_hdl = ddev_open(EJPEG_DEV_NAME, &status, (uint32_t)&ejpeg_cfg);
     
+    //camera_reset();
 
-    //GLOBAL_INT_DECLARATION();
-    //os_printf("camera_intfer_deinit,%p-%p\r\n", ejpeg_hdl, i2c_hdl);
 
-    
-    #if 1
 
-    if(sensor == NULLPTR){
+    for(int try = 0; try < 3 && sensor == NULLPTR; try ++){
+
+        os_printf("Sensor detection %d/3\r\n", try);
+
+        uint32_t i2c2_trans_mode = (0 & (~I2C2_MSG_WORK_MODE_MS_BIT)// master
+                              & (~I2C2_MSG_WORK_MODE_AL_BIT))// 7bit address
+                             | (I2C2_MSG_WORK_MODE_IA_BIT); // with inner address
+
+        i2c_hdl = ddev_open(I2C2_DEV_NAME, &status, i2c2_trans_mode);
+
+        os_printf("Searching for camera sensors, using I2C2 bus...\r\n");
+
+        sensor = try_sensor_detection(I2C2_DEV_NAME);
 
         ddev_close(i2c_hdl);
 
-        uint32_t i2c1_trans_mode = 0;
+        
+        #if 1
 
-        i2c_hdl = ddev_open(I2C1_DEV_NAME, &status, i2c1_trans_mode);
+        if(sensor == NULLPTR){
 
-        os_printf("Searching for camera sensors, using I2C1 bus...\r\n");
+            ddev_close(i2c_hdl);
 
-        sensor = malloc(sizeof(camera_sensor_t));
+            uint32_t i2c1_trans_mode = 0;
 
-        sensor->i2c_bus = I2C1_DEV_NAME;
+            i2c_hdl = ddev_open(I2C1_DEV_NAME, &status, i2c1_trans_mode);
 
-        if(gc0328c_sensor_detect()){
+            os_printf("Searching for camera sensors, using I2C1 bus...\r\n");
 
-            sensor->name = rt_strdup("GalaxyCore 328C");
-            sensor->init = gc0328c_sensor_init;
+            sensor = try_sensor_detection(I2C1_DEV_NAME);
 
-        }else if (gc0310_sensor_detect()){
+            ddev_close(i2c_hdl);
 
-            sensor->name = rt_strdup("GalaxyCore 310");
-            sensor->init = gc0310_sensor_init;
-
-        }  else if (gc0311_sensor_detect()){
-
-            sensor->name = rt_strdup("GalaxyCore 311");
-            sensor->init = gc0311_sensor_init;
-
-        }else if (gc0312_sensor_detect()){
-
-            sensor->name = rt_strdup("GalaxyCore 312");
-            sensor->init = gc0312_sensor_init;
-
-        }else if (gc0329_sensor_detect()){
-
-            sensor->name = rt_strdup("GalaxyCore 329");
-            sensor->init = gc0329_sensor_init;
-
-        }else if (hi704_sensor_detect()){
-
-            sensor->name = rt_strdup("Hynix 704");
-            sensor->init = hi704_sensor_init;
-
-        }else{
-            os_printf("No compatible sensor found!\r\n");
-            free(sensor);
-            sensor = NULLPTR;
         }
 
-    }
+        #endif
 
-    #endif
+    }
     
 
     GLOBAL_INT_DECLARATION();

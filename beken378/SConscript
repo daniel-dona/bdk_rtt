@@ -134,6 +134,8 @@ src += ["func/camera_intf/sensors/gc0329.c"]
 src += ["func/camera_intf/sensors/gc0329_regs.c"]
 src += ["func/camera_intf/sensors/hi704.c"]
 src += ["func/camera_intf/sensors/hi704_regs.c"]
+src += ["func/camera_intf/sensors/ov769x.c"]
+src += ["func/camera_intf/sensors/ov769x_regs.c"]
 
 src += ["func/video_transfer/video_transfer.c"]
 #src += ["func/voice_transfer/voice_transfer.c"]

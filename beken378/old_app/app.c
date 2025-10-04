@@ -728,13 +728,13 @@ void scan_camera_sensors(int argc, char **argv){
     //os_printf("open EJPEG %p\r\n", ejpeg_hdl);
     //os_printf("status: %d\r\n", status_ejpeg);
 
-    /*uint32_t i2c2_trans_mode = (0 & (~I2C2_MSG_WORK_MODE_MS_BIT)		// master
+    uint32_t i2c2_trans_mode = (0 & (~I2C2_MSG_WORK_MODE_MS_BIT)		// master
 						 & (~I2C2_MSG_WORK_MODE_AL_BIT)) 	// 7bit address
-						 | ( I2C2_MSG_WORK_MODE_IA_BIT);	*/
+						 | ( I2C2_MSG_WORK_MODE_IA_BIT);	
 
     //uint32_t oflag = 0;
 
-    DD_HANDLE i2c_hdl = ddev_open(I2C1_DEV_NAME, &status_i2c, 0);
+    DD_HANDLE i2c_hdl = ddev_open(I2C2_DEV_NAME, &status_i2c, i2c2_trans_mode);
     os_printf("status: %d\r\n", status_i2c);
 
     uint8_t data;
@@ -895,12 +895,12 @@ void gpio_test_loop(int argc, char **argv){
 void fancy_msg(void){
 
     bk_printf("\r\n");
-    bk_printf("  ██████╗ ██████╗ ███████╗███╗   ██╗ ██████╗ █████╗ ███╗   ███╗ \r\n");
-    bk_printf(" ██╔═══██╗██╔══██╗██╔════╝████╗  ██║██╔════╝██╔══██╗████╗ ████║ \r\n");
-    bk_printf(" ██║   ██║██████╔╝█████╗  ██╔██╗ ██║██║     ███████║██╔████╔██║ \r\n");
-    bk_printf(" ██║   ██║██╔═══╝ ██╔══╝  ██║╚██╗██║██║     ██╔══██║██║╚██╔╝██║ \r\n");
-    bk_printf(" ╚██████╔╝██║     ███████╗██║ ╚████║╚██████╗██║  ██║██║ ╚═╝ ██║ \r\n");
-    bk_printf("  ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝ ╚═════╝╚═╝  ╚═╝╚═╝     ╚═╝ \r\n");
+    bk_printf(" ██████╗ ██████╗ ███████╗███╗   ██╗ ██████╗ █████╗ ███╗   ███╗\r\n");
+    bk_printf("██╔═══██╗██╔══██╗██╔════╝████╗  ██║██╔════╝██╔══██╗████╗ ████║\r\n");
+    bk_printf("██║   ██║██████╔╝█████╗  ██╔██╗ ██║██║     ███████║██╔████╔██║\r\n");
+    bk_printf("██║   ██║██╔═══╝ ██╔══╝  ██║╚██╗██║██║     ██╔══██║██║╚██╔╝██║\r\n");
+    bk_printf("╚██████╔╝██║     ███████╗██║ ╚████║╚██████╗██║  ██║██║ ╚═╝ ██║\r\n");
+    bk_printf(" ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝ ╚═════╝╚═╝  ╚═╝╚═╝     ╚═╝\r\n");
     bk_printf("\r\n");
 
 }
@@ -1002,7 +1002,7 @@ void app_start(void){ //Execution from BDK
     app_pre_start();
     fancy_msg();
 
-    //delay100us(1*10000);
+    delay100us(1*10000);
     run_init_script();
                                                                                                                                             
     //user_main_entry();

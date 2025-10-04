@@ -96,9 +96,10 @@ typedef struct i2c2_msg {
 #endif
 #define I2C_BAUD_1KHZ        1000
 #define I2C_BAUD_100KHZ      100000
+#define I2C_BAUD_200KHZ      200000
 #define I2C_BAUD_400KHZ      400000
 #define I2C_BAUD_4MHZ        4000000
-#define I2C_DEFAULT_BAUD     I2C_BAUD_400KHZ
+#define I2C_DEFAULT_BAUD     I2C_BAUD_100KHZ
 #define I2C_CLK_DIVID(rate)  (NUM_ROUND_UP(NUM_ROUND_UP(I2C1_DEFAULT_CLK, rate) - 6, 3) - 1)
 #define I2C_DEF_DIV          0x16
 
