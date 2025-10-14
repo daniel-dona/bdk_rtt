@@ -79,7 +79,7 @@
 #define EF_START_ADDR                  (0x1FE000)
 
 /* the user setting size of ENV, must be word alignment */
-#define ENV_USER_SETTING_SIZE          (1 * 1024)
+#define ENV_USER_SETTING_SIZE          (8 * 1024)
 
 #ifndef EF_ENV_USING_PFS_MODE
 #ifndef EF_ENV_USING_WL_MODE

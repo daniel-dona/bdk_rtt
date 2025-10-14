@@ -43,6 +43,7 @@
 
 #include "finsh.h"
 #include "shell.h"
+#include "bk_log.h"
 
 #ifdef FINSH_USING_MSH
 #include "msh.h"
@@ -91,7 +92,8 @@ int finsh_set_prompt(const char * prompt)
 
 const char *finsh_get_prompt()
 {
-#define _MSH_PROMPT "msh "
+#define _MSH_PROMPT LOG_COLOR(LOG_COLOR_GREEN) "opencam" LOG_RESET_COLOR ":" LOG_COLOR(LOG_COLOR_CYAN)
+#define _PROMPT_DOLLAR LOG_RESET_COLOR " $ "
 #define _PROMPT     "finsh "
     static char finsh_prompt[RT_CONSOLEBUF_SIZE + 1] = {0};
 
@@ -119,7 +121,7 @@ const char *finsh_get_prompt()
     getcwd(&finsh_prompt[rt_strlen(finsh_prompt)], RT_CONSOLEBUF_SIZE - rt_strlen(finsh_prompt));
 #endif
 
-    strcat(finsh_prompt, ">");
+    strcat(finsh_prompt, _PROMPT_DOLLAR);
 
     return finsh_prompt;
 }

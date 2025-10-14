@@ -46,6 +46,7 @@ extern const struct romfs_dirent romfs_root;
 extern int rt_hw_flash_disk_readonly_init(const char *name, uint32_t base, uint32_t sector_size, uint32_t capacity);
 
 extern void saradc_config_vddram_voltage(uint32_t vol);
+extern void app_pre_start(void);
 extern void app_start(void); 
 
 void mount_fs(){
@@ -99,6 +100,9 @@ void mount_fs(){
 }
 
 int main(int argc, char **argv){
+
+    // Old main funcs, need cleanup
+    app_pre_start();
 
     rt_kprintf("\r\n[+++] Mounting filesystems...\r\n\r\n");
 

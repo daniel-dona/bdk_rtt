@@ -37,11 +37,11 @@
 #ifdef RTC_SYNC_USING_NTP
 /* NTP first sync delay time for network connect, unit: second */
 #ifndef RTC_NTP_FIRST_SYNC_DELAY
-#define RTC_NTP_FIRST_SYNC_DELAY                 (30)
+#define RTC_NTP_FIRST_SYNC_DELAY                 (60)
 #endif
 /* NTP sync period, unit: second */
 #ifndef RTC_NTP_SYNC_PERIOD
-#define RTC_NTP_SYNC_PERIOD                      (1L*60L*60L)
+#define RTC_NTP_SYNC_PERIOD                      (24L*60L*60L)
 #endif
 #endif /* RTC_SYNC_USING_NTP */
 

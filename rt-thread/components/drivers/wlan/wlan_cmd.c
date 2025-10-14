@@ -42,7 +42,7 @@ static int network_mode      = WIFI_STATION;
 #endif
 
 #ifndef WIFI_SETTING_FN
-#define WIFI_SETTING_FN     "/sd/wlan_settings.json"
+#define WIFI_SETTING_FN     "/sd/config/wlan_settings.json"
 #endif
 
 #ifndef WIFI_DEVICE_STA_NAME

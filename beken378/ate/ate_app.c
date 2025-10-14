@@ -5,7 +5,7 @@
 #include "include.h"
 
 #if (CFG_OS_FREERTOS)
-#include "app.h"
+#include "app_pre_start.h"
 #include "wlan_cli_pub.h"
 #include "sys_ctrl_pub.h"
 #endif

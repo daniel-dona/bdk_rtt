@@ -22,7 +22,7 @@ extern "C" {
 #include "rtos_pub.h"
 #include "uart_pub.h"
 
-#define CFG_LEGACY_LOG 1
+#define CFG_LEGACY_LOG 0
 
 #define BK_LOG_NONE    0 /*!< No log output */
 #define BK_LOG_ERROR   1 /*!< Critical errors, software module can not recover on its own */

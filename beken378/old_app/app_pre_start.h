@@ -66,7 +66,6 @@ typedef struct _wifi_core_
     uint32_t stack_size;
 } WIFI_CORE_T;
 
-void app_start(void);
 void app_pre_start(void);
 int bmsg_is_empty(void);
 void core_thread_uninit(void);

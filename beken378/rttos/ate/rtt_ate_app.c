@@ -4,7 +4,7 @@
 
 #include "include.h"
 
-#include "app.h"
+#include "app_pre_start.h"
 #include "wlan_cli_pub.h"
 #include "arm_arch.h"
 #include "uart.h"

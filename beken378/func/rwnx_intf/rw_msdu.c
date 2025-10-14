@@ -31,7 +31,7 @@ LIST_HEAD_DEFINE(msdu_rx_list);
 
 #if CFG_USE_AP_PS
 #include "ps.h"
-#include "app.h"
+#include "app_pre_start.h"
 #define MAX_PS_STA_NUM          BROADCAST_STA_IDX_MIN   // CFG_STA_MAX
 #define MAX_BUFFER_TIME         10000       // 10S
 

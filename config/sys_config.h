@@ -27,6 +27,7 @@
 #define THDD_KEY_SCAN_PRIORITY    7
 
 /*section 2-----function macro config-----*/
+#define CFG_LOG_COLORS          1
 #define CFG_TX_EVM_TEST         1
 #define CFG_RX_SENSITIVITY_TEST 1
 #define CFG_AP_MONITOR_COEXIST  0
@@ -153,7 +154,7 @@
 #define CFG_GENERAL_DMA 1
 
 /*section 14-----for FTPD UPGRADE*/
-#define CFG_USE_FTPD_UPGRADE 0
+#define CFG_USE_FTPD_UPGRADE 1
 
 /*section 16-----support mcu & deep sleep*/
 #define CFG_USE_MCU_PS 1

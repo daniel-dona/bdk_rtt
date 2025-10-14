@@ -29,7 +29,7 @@
 #include "gpio_pub.h"
 #include "phy_trident.h"
 #include "rw_msg_rx.h"
-#include "app.h"
+#include "app_pre_start.h"
 #include "ate_app.h"
 #include "wdt_pub.h"
 #include "start_type_pub.h"

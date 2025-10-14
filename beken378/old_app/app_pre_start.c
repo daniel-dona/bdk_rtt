@@ -12,7 +12,7 @@
 #include "include.h"
 #include "mem_pub.h"
 #include "rwnx_config.h"
-#include "app.h"
+#include "app_pre_start.h"
 
 #if (NX_POWERSAVE)
 #include "ps.h"
@@ -43,11 +43,12 @@
 #include "i2c_pub.h"
 #include "gpio_pub.h"
 #include "jpeg_encoder_pub.h"
+#include "target_util_pub.h"
+
 
 #define CAMERA_RESET_GPIO_INDEX		GPIO16
 #define CAMERA_RESET_HIGH_VAL       1
 #define CAMERA_RESET_LOW_VAL        0
-extern void delay100us(int32_t num);
 
 #include "msh.h"
 
@@ -498,8 +499,7 @@ int bmsg_ioctl_sender(void *arg){
 }
 
 #if CFG_USE_AP_PS
-void bmsg_txing_sender(uint8_t sta_idx)
-{
+void bmsg_txing_sender(uint8_t sta_idx){
     OSStatus ret;
     BUS_MSG_T msg;
 
@@ -515,8 +515,7 @@ void bmsg_txing_sender(uint8_t sta_idx)
     }
 }
 
-void bmsg_txing_handler(BUS_MSG_T *msg)
-{
+void bmsg_txing_handler(BUS_MSG_T *msg){
     OSStatus ret;
     uint8_t sta_idx = (uint8_t)msg->arg;
 
@@ -524,8 +523,7 @@ void bmsg_txing_handler(BUS_MSG_T *msg)
 }
 #endif
 
-void bmsg_ps_sender(uint8_t arg)
-{
+void bmsg_ps_sender(uint8_t arg){
     OSStatus ret;
     BUS_MSG_T msg;
     if(g_wifi_core.io_queue)
@@ -548,8 +546,7 @@ void bmsg_ps_sender(uint8_t arg)
 }
 #if CFG_USE_STA_PS
 
-void bmsg_ps_handler(BUS_MSG_T *msg)
-{
+void bmsg_ps_handler(BUS_MSG_T *msg){
     uint8_t arg;
 
     arg = (uint8_t)msg->arg;
@@ -707,202 +704,13 @@ void core_thread_uninit(void){
     g_wifi_core.stack_size = 0;
 }
 
-/*
-static void init_app_thread( void *arg ){
+int bmsg_is_empty(void){
 
-    rtos_delete_thread( NULL );
-}
-*/
-
-
-void scan_camera_sensors(int argc, char **argv){
-
-    //DJPEG_DESC_ST *ejpeg_cfg = (DJPEG_DESC_ST*) malloc(sizeof(DJPEG_DESC_ST));
-
-    uint32_t  status_i2c, status_comm; // status_ejpeg,
-
-    //DD_HANDLE ejpeg_hdl = ddev_open(EJPEG_DEV_NAME, &status_ejpeg, 0);
-
-    //bk_printf("APP PTR: %p", ejpeg_cfg);
-
-    //os_printf("open EJPEG %p\r\n", ejpeg_hdl);
-    //os_printf("status: %d\r\n", status_ejpeg);
-
-    uint32_t i2c2_trans_mode = (0 & (~I2C2_MSG_WORK_MODE_MS_BIT)		// master
-						 & (~I2C2_MSG_WORK_MODE_AL_BIT)) 	// 7bit address
-						 | ( I2C2_MSG_WORK_MODE_IA_BIT);	
-
-    //uint32_t oflag = 0;
-
-    DD_HANDLE i2c_hdl = ddev_open(I2C2_DEV_NAME, &status_i2c, i2c2_trans_mode);
-    os_printf("status: %d\r\n", status_i2c);
-
-    uint8_t data;
-    I2C_OP_ST i2c_operater;
-
-
-    //status = ddev_write(i2c_hdl, (char *)&data, 1, (uint32_t)&i2c_operater);
-
-
-    //i2c_operater.addr_width = ADDR_WIDTH_8;
-
-    
-    for(int i = 1; i <= 128; i++){
-
-        i2c_operater.salve_id = i;
-        i2c_operater.op_addr = 0x00;
-        i2c_operater.addr_width = ADDR_WIDTH_8;
-
-        //status = ddev_write(i2c_hdl, (char *) data, 1, (uint32_t)&i2c_operater);
-
-        //os_printf("\nREAD -> Status: %d, Data: %d %d %d %d", status, data[0], data[1], data[2], data[3]);
-
-        status_comm = ddev_read(i2c_hdl, (char *) &data, 1, (uint32_t)&i2c_operater);
-
-        //delay100us(1*100);
-
-        if(status_comm == 0){
-
-            bk_printf("Found device at addr: 0x%02X\r\n", i);
-            bk_printf("Reading regs: \r\n");
-
-            /*uint8_t common_regs[] = {
-                0x00,   // Common: Chip ID (Aptina, GalaxyCore, many others)
-                0xFF,   // Common: Chip ID (Aptina, GalaxyCore, many others)
-                0x0A,   // OmniVision PIDH
-                0x0B,   // OmniVision PIDL
-                0x1C,   // OmniVision MIDH
-                0x1D,   // OmniVision MIDL
-                0xF0,   // GalaxyCore ID high
-                0xF1,   // GalaxyCore ID low
-                0x16,   // Sometimes Sony / others
-                0x17    // Sometimes Sony / others
-            };*/
-
-            
-
-            //i2c_operater.op_addr = 0xFC;
-            //data = 0x16;
-            
-            //ddev_write(i2c_hdl, (char *) &data, 1, (uint32_t)&i2c_operater);
-
-            for(int r = 0; r < 0xFF; r++){
-
-                i2c_operater.salve_id = i;
-                i2c_operater.op_addr = 0x00;
-                i2c_operater.addr_width = ADDR_WIDTH_8;
-
-                delay100us(1*100);
-
-                i2c_operater.op_addr = r;
-                status_comm = ddev_read(i2c_hdl, (char *) &data, 1, (uint32_t)&i2c_operater);
-
-                if(data != 0x00){
-                    bk_printf("- [%d] 0x%02X -> 0x%02X \r\n", status_comm, r, data);
-                }
-
-            }
-
-
-
-        }
-
+    if(!rtos_is_queue_empty(&g_wifi_core.io_queue)){
+        return 0;
+    }else{
+        return 1;
     }
-
-    GLOBAL_INT_DECLARATION();
-
-
-    //ddev_close(ejpeg_hdl);
-    ddev_close(i2c_hdl);
-
-    GLOBAL_INT_DISABLE();
-    i2c_hdl = DD_HANDLE_UNVALID;
-    GLOBAL_INT_RESTORE();
-
-    //os_memset(&ejpeg_cfg, 0, sizeof(DJPEG_DESC_ST));
-
-
-}
-
-
-
-void gpio_read(int argc, char **argv){
-
-    if (argc == 2){
-
-        int pin = atoi(argv[1]);
-
-        bk_gpio_config_input_pup((GPIO_INDEX) pin);
-
-        for (int i = 0; i < 10; i ++){
-            int value = bk_gpio_input((GPIO_INDEX)pin);   
-            bk_printf("Reading pin %d: value %d\n", pin, value);
-            delay100us(10000); // 1s
-        }
-
-    }
-}
-
-void gpio_write(int argc, char **argv){
-
-    if (argc == 3){
-
-        int pin = atoi(argv[1]);
-        int value = atoi(argv[2]) == 1;
-
-        bk_printf("Writting pin %d to value %d\n", pin, value);
-
-        bk_gpio_config_output((GPIO_INDEX) pin);
-        bk_gpio_output((GPIO_INDEX)pin, value);
-
-    }
-}
-
-void gpio_test_loop(int argc, char **argv){
-
-    if (argc == 1){
-
-        os_printf("Testing GPIOS");
-
-        for(int i = 2; i < 40; i++){
-
-            if(i != 10 && i != 11){
-
-                bk_gpio_config_output((GPIO_INDEX) i);
-
-                os_printf("PIN TESTED: %d\n", i);
-
-                bk_gpio_output((GPIO_INDEX)i, 1);
-                delay100us(1000);
-                bk_gpio_output((GPIO_INDEX)i, 0);
-                delay100us(1000);
-                bk_gpio_output((GPIO_INDEX)i, 1);
-                delay100us(1000);
-                bk_gpio_output((GPIO_INDEX)i, 0);
-
-                bk_gpio_config_input((GPIO_INDEX) i);
-
-                delay100us(1*10000); // 1s
-
-            } 
-
-        }
-
-    }
-}
-
-
-void fancy_msg(void){
-
-    bk_printf("\r\n");
-    bk_printf(" ██████╗ ██████╗ ███████╗███╗   ██╗ ██████╗ █████╗ ███╗   ███╗\r\n");
-    bk_printf("██╔═══██╗██╔══██╗██╔════╝████╗  ██║██╔════╝██╔══██╗████╗ ████║\r\n");
-    bk_printf("██║   ██║██████╔╝█████╗  ██╔██╗ ██║██║     ███████║██╔████╔██║\r\n");
-    bk_printf("██║   ██║██╔═══╝ ██╔══╝  ██║╚██╗██║██║     ██╔══██║██║╚██╔╝██║\r\n");
-    bk_printf("╚██████╔╝██║     ███████╗██║ ╚████║╚██████╗██║  ██║██║ ╚═╝ ██║\r\n");
-    bk_printf(" ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝ ╚═════╝╚═╝  ╚═╝╚═╝     ╚═╝\r\n");
-    bk_printf("\r\n");
-
 }
 
 void app_pre_start(void){
@@ -939,90 +747,3 @@ void app_pre_start(void){
     ble_entry();
 #endif
 }
-
-/*
-void user_main_entry(void){
-
-    os_printf("\r\nuser main start\r\n");
-
-    rtos_create_thread(&user_thread_handle,
-                       THD_INIT_PRIORITY,
-                       "app",
-                       (beken_thread_function_t)init_app_thread,
-                       app_stack_size,
-                       (beken_thread_arg_t)0);
-}
-*/
-
-static struct dfs_fd fd;
-void run_init_script(void){
-
-    char cmd[32];
-    memset(cmd, 0, sizeof(cmd));
-    
-    char buf;
-    uint8_t i = 0;
-
-    int length;
-
-    os_printf("Running init script: /sd/init.msh\r\n");
-
-    if (dfs_file_open(&fd, "/sd/init.msh", O_RDONLY) < 0){
-        os_printf("Init file open failed\r\n");
-    }
-
-    do {
-        
-        length = dfs_file_read(&fd, &buf, 1 );
-        if (length > 0){
-            if(buf != '\n' && buf != '\r'){
-                //rt_kprintf("%c", buf);
-                cmd[i] = buf;
-                i++;
-
-            }else{
-                os_printf("\r\n ## Running command: %s\r\n", cmd);
-                msh_exec(cmd, i);
-                memset(cmd, 0, sizeof(cmd));
-                i = 0;
-            }
-            
-        }
-    }while (length > 0);
-
-    dfs_file_close(&fd);
-
-    os_printf("Init script done.\r\n");
-
-}
-
-
-void app_start(void){ //Execution from BDK
-
-    app_pre_start();
-    fancy_msg();
-
-    delay100us(1*10000);
-    run_init_script();
-                                                                                                                                            
-    //user_main_entry();
-
-}
-
-int bmsg_is_empty(void){
-
-    if(!rtos_is_queue_empty(&g_wifi_core.io_queue)){
-        return 0;
-    }else{
-        return 1;
-    }
-}
-
-
-MSH_CMD_EXPORT(scan_camera_sensors , scan camera sensors);
-MSH_CMD_EXPORT(gpio_write , Set GPIO <pin> <value>);
-MSH_CMD_EXPORT(gpio_read , Set GPIO <pin> <value>);
-MSH_CMD_EXPORT(gpio_test_loop, Loop over GPIOS)
-
-// eof
-

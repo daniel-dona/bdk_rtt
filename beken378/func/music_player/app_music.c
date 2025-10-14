@@ -11,7 +11,7 @@
 #include "music_msg_pub.h"
 #include "driver_audio_if_pub.h"
 #include "playmode_pub.h"
-#include "app.h"
+#include "app_pre_start.h"
 #include "app_music.h"
 #include "mp3dec.h"
 #include "mp3common.h"
@@ -41,8 +41,8 @@ uint16_t  *aulawsmpl;
 uint16_t  *alawtbl;
 uint16_t  *ulawtbl;
 uint8_t  *rbbuf;
-HMP3Decoder hMP3Decoder;    //´íÎóÐÅÏ¢½á¹¹Ìå
-MP3FrameInfo mp3FrameInfo;     //mp3ÎÄ¼þÐÅÏ¢½á¹¹Ìå
+HMP3Decoder hMP3Decoder;    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½á¹¹ï¿½ï¿½
+MP3FrameInfo mp3FrameInfo;     //mp3ï¿½Ä¼ï¿½ï¿½ï¿½Ï¢ï¿½á¹¹ï¿½ï¿½
 MP3DecInfo *mp3decinfo;
 
 uint16_t input_number;
@@ -309,13 +309,13 @@ static int app_player_play_mp3_file( void )
 			return ERR_MP3_NONE;
 		}
 		
-		MP3GetLastFrameInfo(hMP3Decoder, &mp3FrameInfo); //»ñµÃ½âÂë
-		APP_MUSIC_PRT("±ÈÌØÂÊ%dkb/s, Ô­²ÉÑùÂÊ%dHZ\r\n",
+		MP3GetLastFrameInfo(hMP3Decoder, &mp3FrameInfo); //ï¿½ï¿½Ã½ï¿½ï¿½ï¿½
+		APP_MUSIC_PRT("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½%dkb/s, Ô­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½%dHZ\r\n",
 		(mp3FrameInfo.bitrate)/1000,mp3FrameInfo.samprate);
-		APP_MUSIC_PRT("Ô­ÉùµÀÊý%d, MPAG:%d,²ã:%d\r\n",
+		APP_MUSIC_PRT("Ô­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½%d, MPAG:%d,ï¿½ï¿½:%d\r\n",
 		mp3FrameInfo.nChans,mp3FrameInfo.version,mp3FrameInfo.layer);
 		APP_MUSIC_PRT("outputsamps:%d\r\n",mp3FrameInfo.outputSamps);
-		APP_MUSIC_PRT("Ã¿Ö¡Êý¾Ý:%d\r\n",mp3decinfo->framesize);
+		APP_MUSIC_PRT("Ã¿Ö¡ï¿½ï¿½ï¿½ï¿½:%d\r\n",mp3decinfo->framesize);
 
 		aud_initial(mp3FrameInfo.samprate, 2, 16 );
 		init=1;	

@@ -55,7 +55,7 @@ src += ["func/saradc_intf/saradc_intf.c"]
 # Moved from app
 src += ["ate/ate_app.c"] 
 src += ["config/param_config.c"] 
-src += ["old_app/app.c"]
+src += ["old_app/app_pre_start.c"]
 src += ["old_app/standalone-ap/sa_ap.c"]
 src += ["old_app/standalone-station/sa_station.c"]
 src += ["old_app/video_work/video_transfer_tcp.c"]
