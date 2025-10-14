@@ -20,5 +20,5 @@ void ov769x_camera_inf_cfg_fps(uint32_t fps_type);
 // Register tables
 //extern const uint8_t ov769x_init_table[287][2];
 //extern const uint8_t ov769x_init_table2[288][2];
-extern const uint8_t ov769x_init_table[144][2];
+extern const uint8_t ov769x_init_table[][2];
 

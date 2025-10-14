@@ -493,6 +493,9 @@ static uint32_t ejpeg_open(uint32_t op_flag)
     ejpeg_set_encoder_enable(0);
     ejpeg_init_quant_table();
 
+    //ejpeg_set_mclk_div(DIV_12M);
+    //ejpeg_set_mclk_div(DIV_16M);
+
     ejpeg_set_x_pixel(p_ejpeg->x_pixel);
     ejpeg_set_y_pixel(p_ejpeg->y_pixel);
 

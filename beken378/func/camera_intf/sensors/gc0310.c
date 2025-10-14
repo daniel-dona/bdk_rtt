@@ -25,9 +25,9 @@ uint8_t gc0310_sensor_detect(void){
     uint8_t found = (data == GC0310_DEV_CHIPID);
 
     if(found){
-        os_printf("Found sensor GC0310! %02X at %02X\r\n", data, addr);
+        os_printf("Found sensor GC0310!\r\n", data, addr);
     }else{
-        os_printf("NOT found sensor GC0310! %02X at %02X\r\n", data, addr);
+        os_printf("NOT found sensor GC0310!\r\n", data, addr);
     }
 
     return found;

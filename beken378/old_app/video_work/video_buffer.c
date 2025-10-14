@@ -108,6 +108,9 @@ static int video_buffer_recv_video_data(uint8_t *data, uint32_t len)
                 && (g_vbuf->start_buf == BUF_STA_COPY))
         {
             left_len = g_vbuf->buf_len - g_vbuf->frame_len;
+
+            //bk_printf("olen %d llen %d\r\n", org_len, left_len);
+
             if (org_len <= left_len)
             {
                 #if CFG_GENERAL_DMA
@@ -159,7 +162,7 @@ static int video_buffer_recv_video_data(uint8_t *data, uint32_t len)
             }
             else
             {
-                os_printf("vbuf full!\r\n");
+                //os_printf("vbuf full!\r\n");
                 GLOBAL_INT_DISABLE();
                 g_vbuf->start_buf = BUF_STA_FULL;
                 GLOBAL_INT_RESTORE();
