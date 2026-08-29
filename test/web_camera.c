@@ -91,7 +91,7 @@ void mjpeg_server_thread(void *arg)
     struct sockaddr_in addr;
     socklen_t sock_len = sizeof(struct sockaddr_in);
 
-    int bufsz = 50 * 1024;
+    //int bufsz = 50 * 1024;
     uint8_t *buf = (uint8_t *) malloc (MAX_BUF_SIZE);
 
     if (!buf)
@@ -153,7 +153,7 @@ void mjpeg_server_thread(void *arg)
 			fream_length = 0;
 			/* capture a jpeg frame */
             fream_length = video_buffer_read_frame(buf, MAX_BUF_SIZE);
-            rt_kprintf("len:%d\r\n",fream_length);
+            //rt_kprintf("len:%d\r\n",fream_length);
 			if (fream_length !=0)
 			{
 				/* send out this frame */
@@ -178,8 +178,8 @@ exit:
 
 int web_jpeg_stream(int argc, char** argv)
 {
-    int frame_len;
-    unsigned char *jpg_buf = NULL;
+    //int frame_len;
+    //unsigned char *jpg_buf = NULL;
     if (argc != 2)
     {
         rt_kprintf("%s start|stop\n", argv[0]);
@@ -204,20 +204,96 @@ int web_jpeg_stream(int argc, char** argv)
     return 0;
 }
 
-static void fream_set_video_param(int argc,char* argv[])
+static void fream_set_video_param(int argc, char* argv[])
 {
 
     if(1==atoi(argv[1]))
     {
-        video_transfer_set_video_param(QVGA_320_240,TYPE_20FPS);
+        video_transfer_set_video_param(QVGA_320_240,TYPE_10FPS);
     }
     else if(2==atoi(argv[1]))
     {
-        video_transfer_set_video_param(VGA_640_480,TYPE_20FPS);
+        video_transfer_set_video_param(VGA_640_480,TYPE_10FPS);
     }
 }
 
+char* base64_encode(const uint8_t* data, size_t input_length) {
+    // Base64 character set
+    static const char encoding_table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    
+    // Calculate the length of the output string
+    size_t output_length = 4 * ((input_length + 2) / 3);
+
+    // Allocate memory for the encoded string
+    char* encoded_data = malloc(output_length + 1);
+    if (encoded_data == NULL) return NULL;
+
+    // Process the input data in chunks of 3 bytes
+    for (int i = 0, j = 0; i < input_length;) {
+        uint32_t octet_a = i < input_length ? (unsigned char)data[i++] : 0;
+        uint32_t octet_b = i < input_length ? (unsigned char)data[i++] : 0;
+        uint32_t octet_c = i < input_length ? (unsigned char)data[i++] : 0;
+
+        uint32_t triple = (octet_a << 16) + (octet_b << 8) + octet_c;
+
+        encoded_data[j++] = encoding_table[(triple >> 18) & 0x3F];
+        encoded_data[j++] = encoding_table[(triple >> 12) & 0x3F];
+        encoded_data[j++] = encoding_table[(triple >> 6) & 0x3F];
+        encoded_data[j++] = encoding_table[triple & 0x3F];
+    }
+
+    // Add padding if necessary
+    int mod_table[] = {0, 2, 1};
+    for (int i = 0; i < mod_table[input_length % 3]; i++) {
+        encoded_data[output_length - 1 - i] = '=';
+    }
+
+    // Null-terminate the string
+    encoded_data[output_length] = '\0';
+
+    return encoded_data;
+}
+
+static struct dfs_fd fd;
+
+void save_pic(int argc, char **argv){
+
+    if(argc == 2){
+
+        video_buffer_open();
+
+        uint8_t *buf = (uint8_t *) malloc (MAX_BUF_SIZE);
+
+        int frame_length = 0;
+
+        frame_length = video_buffer_read_frame(buf, MAX_BUF_SIZE);
+
+        if (frame_length !=0){
+            os_printf("Got frame! Len: %d\n", frame_length);
+        }
+
+        if (dfs_file_open(&fd, argv[1], O_WRONLY | O_CREAT) < 0){
+            rt_kprintf("Open failed\n");
+        }else{
+
+            dfs_file_write(&fd, buf, frame_length);
+            dfs_file_close(&fd);
+
+        }
+
+        video_buffer_close();
+
+        free(buf);
+
+    }else{
+        os_printf("Use save_pic <file_name>");
+    }
+
+}
 
 MSH_CMD_EXPORT(web_jpeg_stream, web_jpeg_stream server);
 MSH_CMD_EXPORT(fream_set_video_param, fream_set_video_param cmd);
+
+MSH_CMD_EXPORT(save_pic, save_pic to sd);
+
 #endif

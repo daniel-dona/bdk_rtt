@@ -31,7 +31,7 @@
 #define HTTP_OTA_BUFF_LEN 4096
 #define HTTP_OTA_DL_DELAY (10 * RT_TICK_PER_SECOND)
 
-#define HTTP_OTA_URL "http://192.168.10.135:80/rtthread.rbl"
+#define HTTP_OTA_URL "http://192.168.10.100:8888/rtthread_ota.rbl"
 
 static void print_progress(size_t cur_size, size_t total_size)
 {
@@ -189,7 +189,7 @@ static int http_ota_fw_download(const char *uri)
                 log_i("OTA file raw size %d bytes.", raw_size); 
 
                 // Gets the describe partition name of the OTA file
-                rt_strncpy(desc_part_name, &buffer_read[12], 16);
+                rt_strncpy(desc_part_name, (const char *) &buffer_read[12], 16);
 
                 /* dump new firmware info. */
                 {

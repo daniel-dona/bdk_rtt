@@ -26,9 +26,6 @@
 #if defined(RT_USING_DFS_ROMFS)
 #include <dfs_fs.h>
 #endif
-#if defined(PKG_USING_PLAYER)
-#include "player.h"
-#endif
 
 #include "include.h"
 #include "driver_pub.h"
@@ -39,6 +36,9 @@
 #include <fal.h>
 #include "rt_ota.h"
 #include "sys_ctrl_pub.h"
+#include "sdcard.h"
+#include "saradc_intf.h"
+
 static int wlan_app_init(void);
 
 extern const struct romfs_dirent romfs_root;
@@ -51,70 +51,57 @@ extern int rt_hw_flash_disk_readonly_init(const char *name, uint32_t base, uint3
 extern void rt_hw_wdg_start(int argc, char **argv);
 extern int bk_wlan_dtim_rf_ps_mode_enable(void );
 
-int main(int argc, char **argv)
-{
+extern void saradc_config_vddram_voltage(UINT32 vol);
+
+int main(int argc, char **argv){
+
     /* mount ROMFS as root directory */
-#if defined(RT_USING_DFS_ROMFS)
-    if (dfs_mount(RT_NULL, "/", "rom", 0, (const void *)DFS_ROMFS_ROOT) == 0)
-    {
-        rt_kprintf("ROMFS File System initialized!\n");
-    }
-    else
-    {
-        rt_kprintf("ROMFS File System initialized Failed!\n");
-    }
-#endif
 
-#if 0
-    /* mount sd card fat partition 1 as root directory */
-    saradc_config_vddram_voltage(PSRAM_VDD_3_3V);
-    if(dfs_mount("sd0", "/sd", "elm", 0, 0) == 0)
-        rt_kprintf("SD File System initialized!\n");
-    else
-        rt_kprintf("SD File System initialzation failed!\n");
-#endif
-
-#if 0
-    const struct fal_partition *dl_part = RT_NULL;
-
-    if ((dl_part = fal_partition_find(RT_BK_DL_PART_NAME)) != RT_NULL)
-    {
-        /* dump current firmware version. */
-        rt_kprintf("current image name: %s, version: %s, timestamp: %d \n", rt_ota_get_fw_dest_part_name(dl_part), rt_ota_get_fw_version(dl_part), rt_ota_get_fw_timestamp(dl_part));
-
-        rt_hw_flash_disk_readonly_init("flash0", dl_part->offset + 96, 512, dl_part->len - 1024);
-        /* mount sd card fat partition 1 as root directory */
-        if(dfs_mount("flash0", "/flash0", "elm", 0, 0) == 0)
-            rt_kprintf("FLASH File System initialized!\n");
+    #if defined(RT_USING_DFS_ROMFS)
+        if (dfs_mount(RT_NULL, "/", "rom", 0, (const void *)DFS_ROMFS_ROOT) == 0)
+        {
+            rt_kprintf("ROMFS File System initialized!\n");
+        }
         else
-            rt_kprintf("FLASH File System initialzation failed!\n");
-    }
-    else
-    {
-        rt_kprintf("not found %s partition \n", RT_BK_DL_PART_NAME);
-    }
+        {
+            rt_kprintf("ROMFS File System initialized Failed!\n");
+        }
+    #endif
 
-#endif
+    #if 1
+        /* mount sd card fat partition 1 as root directory */
+        saradc_config_vddram_voltage(PSRAM_VDD_3_3V);
+
+        if(dfs_mount("sd0", "/sd", "elm", 0, 0) == 0)
+            rt_kprintf("SD File System initialized!\n");
+        else
+            rt_kprintf("SD File System initialzation failed!\n");
+    #endif
+
+    #if 0
+        const struct fal_partition *dl_part = RT_NULL;
+
+        if ((dl_part = fal_partition_find("app")) != RT_NULL)
+        {
+            /* dump current firmware version. */
+            rt_kprintf("current image name: %s, version: %s, timestamp: %d \n", rt_ota_get_fw_dest_part_name(dl_part), rt_ota_get_fw_version(dl_part), rt_ota_get_fw_timestamp(dl_part));
+
+            rt_hw_flash_disk_readonly_init("flash0", dl_part->offset + 96, 512, dl_part->len - 1024);
+            /* mount sd card fat partition 1 as root directory */
+            if(dfs_mount("flash0", "/flash0", "elm", 0, 0) == 0)
+                rt_kprintf("FLASH File System initialized!\n");
+            else
+                rt_kprintf("FLASH File System initialzation failed!\n");
+        }
+        else
+        {
+            rt_kprintf("not found %s partition \n", RT_BK_DL_PART_NAME);
+        }
+
+    #endif
 
     wlan_app_init();
-#if  defined(PKG_USING_PLAYER)
-    extern int player_codec_helixmp3_register(void);
-    extern int player_codec_beken_aac_register(void);
-    extern int player_codec_beken_m4a_register(void);
-    extern int player_codec_opencore_amr_register(void);
 
-    player_codec_helixmp3_register(); 
-    player_codec_beken_aac_register(); 
-    player_codec_beken_m4a_register(); 
-    player_codec_opencore_amr_register(); 
-	player_system_init();
-#endif
-#ifdef XIAOYA_OS
-    app_manage_init();
-#endif
-	rt_hw_wdg_start(0,NULL);
-
-    return 0;
 }
 
 #ifdef BEKEN_USING_WLAN
@@ -138,7 +125,7 @@ static int wlan_app_init(void)
 	}
 	else
 	{
-		rt_kprintf("Enter normal mode...\r\n\r\n");
+		rt_kprintf("\r\n\r\nEnter normal mode...\r\n\r\n");
 		app_start();
 
 		//user_app_start();

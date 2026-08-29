@@ -38,19 +38,30 @@
 #include "txu_cntrl.h"
 #include "power_save.h"
 
-#if (CFG_OS_FREERTOS)
-#include "wlan_cli_pub.h"
-#endif
+// Dani
+#include "i2c_pub.h"
+#include "gpio_pub.h"
+#include "jpeg_encoder_pub.h"
 
-#if CFG_ENABLE_DEMO_TEST
-#include "demos_start.h"
-#endif
+#define CAMERA_RESET_GPIO_INDEX		GPIO16
+#define CAMERA_RESET_HIGH_VAL       1
+#define CAMERA_RESET_LOW_VAL        0
+extern void delay100us(INT32 num);
+
+#include "msh.h"
+
+//#include "camera_intf.h"
+
+
 #include "ap_idle_pub.h"
 #include "arbitrate.h"
 #include "ke_event.h"
 
 beken_thread_t  init_thread_handle;
 beken_thread_t  app_thread_handle;
+beken_thread_t  user_thread_handle;
+
+
 uint32_t  init_stack_size = 2000;
 uint32_t  app_stack_size = 4096;
 
@@ -93,8 +104,7 @@ static void kmsg_bk_thread_main( void *arg )
     }
 }
 
-static void init_thread_main( void *arg )
-{
+static void init_thread_main( void *arg ){
     GLOBAL_INT_START();
 
     bk_wlan_app_init();
@@ -665,8 +675,7 @@ static void core_thread_main( void *arg )
     }
 }
 
-void core_thread_init(void)
-{
+void core_thread_init(void){
     OSStatus ret;
 
     g_wifi_core.queue_item_count = CORE_QITEM_COUNT;
@@ -720,27 +729,144 @@ void core_thread_uninit(void)
     g_wifi_core.stack_size = 0;
 }
 
-extern void  user_main(void);
-void __attribute__((weak)) user_main(void)
-{
-	
-}
 
-static void init_app_thread( void *arg )
-{
-	#if CFG_ENABLE_DEMO_TEST
-    if(application_start)
-    {
-        application_start();
-    }
-	#endif
-	user_main();
+static void init_app_thread( void *arg ){
 
     rtos_delete_thread( NULL );
 }
 
-void app_pre_start(void)
-{
+/*
+void scan_camera_sensors(int argc, char **argv){
+
+    os_printf("argc %d", argc);
+
+    DJPEG_DESC_ST ejpeg_cfg;
+
+    UINT32 status;
+
+    DD_HANDLE ejpeg_hdl = ddev_open(EJPEG_DEV_NAME, &status, (UINT32)&ejpeg_cfg);
+
+    os_printf("open EJPEG %p\r\n", ejpeg_hdl);
+    os_printf("status: %d\r\n", status);
+
+    UINT32 i2c2_trans_mode = (0 & (~I2C2_MSG_WORK_MODE_MS_BIT)		// master
+						 & (~I2C2_MSG_WORK_MODE_AL_BIT)) 	// 7bit address
+						 | ( I2C2_MSG_WORK_MODE_IA_BIT);	
+
+    //UINT32 oflag = 0;
+
+    DD_HANDLE i2c_hdl = ddev_open(I2C2_DEV_NAME, &status, i2c2_trans_mode);
+    os_printf("open I2C2\r\n");
+    os_printf("status: %d\r\n", status);
+
+    unsigned char data;
+    I2C_OP_ST i2c_operater;
+
+
+    //status = ddev_write(i2c_hdl, (char *)&data, 1, (UINT32)&i2c_operater);
+
+
+    //i2c_operater.addr_width = ADDR_WIDTH_8;
+
+    
+    for(int i = 0; i < 128; i++){
+
+        i2c_operater.salve_id = (i << 1) | 1;
+
+        i2c_operater.op_addr = 0x0F0;
+
+        data = 0x00;
+
+        //status = ddev_write(i2c_hdl, (char *) data, 1, (UINT32)&i2c_operater);
+
+        //os_printf("\nREAD -> Status: %d, Data: %d %d %d %d", status, data[0], data[1], data[2], data[3]);
+
+        status = ddev_read(i2c_hdl, (char *) &data, 1, (UINT32)&i2c_operater);
+
+        os_printf("READ -> Status: %d, Device: %x, Addr: %x, Data: %x \n\n", status, i2c_operater.salve_id, i2c_operater.op_addr, data);
+
+    }
+
+
+}
+
+void gpio_read(int argc, char **argv){
+
+    if (argc == 2){
+
+        int pin = atoi(argv[1]);
+
+        bk_gpio_config_input_pup((GPIO_INDEX) pin);
+
+        for (int i = 0; i < 10; i ++){
+            int value = bk_gpio_input((GPIO_INDEX)pin);   
+            bk_printf("Reading pin %d: value %d\n", pin, value);
+            delay100us(10000); // 1s
+        }
+
+    }
+}
+
+void gpio_write(int argc, char **argv){
+
+    if (argc == 3){
+
+        int pin = atoi(argv[1]);
+        int value = atoi(argv[2]) == 1;
+
+        bk_printf("Writting pin %d to value %d\n", pin, value);
+
+        bk_gpio_config_output((GPIO_INDEX) pin);
+        bk_gpio_output((GPIO_INDEX)pin, value);
+
+    }
+}
+
+void gpio_test_loop(int argc, char **argv){
+
+    if (argc == 1){
+
+        os_printf("Testing GPIOS");
+
+        for(int i = 2; i < 40; i++){
+
+            if(i != 10 && i != 11){
+
+                bk_gpio_config_output((GPIO_INDEX) i);
+
+                os_printf("PIN TESTED: %d\n", i);
+
+                bk_gpio_output((GPIO_INDEX)i, 1);
+                delay100us(1000);
+                bk_gpio_output((GPIO_INDEX)i, 0);
+                delay100us(1000);
+                bk_gpio_output((GPIO_INDEX)i, 1);
+                delay100us(1000);
+                bk_gpio_output((GPIO_INDEX)i, 0);
+
+                bk_gpio_config_input((GPIO_INDEX) i);
+
+                delay100us(1*10000); // 1s
+
+            } 
+
+        }
+
+    }
+}
+*/
+
+void fancy_msg(void){
+    os_printf("\r\n");
+    os_printf("  ___ _  ______ ___ ___ ___    ___                 ___            \r\n");
+    os_printf(" | _ ) |/ /__  |_  ) __|_  )  / _ \\ _ __  ___ _ _ / __|__ _ _ __  \r\n");
+    os_printf(" | _ \\ ' <  / / / /|__ \\/ /  | (_) | '_ \\/ -_) ' \\ (__/ _` | '  \\ \r\n");
+    os_printf(" |___/_|\\_\\/_/ /___|___/___|  \\___/| .__/\\___|_||_\\___\\__,_|_|_|_|\r\n");
+    os_printf("\r\n");
+}
+
+void app_pre_start(void){
+
     OSStatus ret;
 
     ret = rtos_init_semaphore(&app_sema, 1);
@@ -767,10 +893,6 @@ void app_pre_start(void)
 
     rf_thread_init();
 
-#if (CONFIG_APP_MP3PLAYER == 1)
-    key_init();
-    media_thread_init();
-#endif
 
 #if ((CFG_SUPPORT_BLE) && (CFG_BLE_VERSION == BLE_VERSION_5_x))
     extern void ble_entry(void);
@@ -778,29 +900,76 @@ void app_pre_start(void)
 #endif
 }
 
+void user_main_entry(void){
 
-void app_start(void)
-{
-    app_pre_start();
+    os_printf("\r\nuser main start\r\n");
 
-#if (CFG_OS_FREERTOS)
-    cli_init();
-#endif
-
-#if CFG_UDISK_MP3
-    um_init();
-#endif
-}
-
-void user_main_entry(void)
-{
-    rtos_create_thread(NULL,
+    rtos_create_thread(&user_thread_handle,
                        THD_INIT_PRIORITY,
                        "app",
                        (beken_thread_function_t)init_app_thread,
                        app_stack_size,
                        (beken_thread_arg_t)0);
 }
+
+
+static struct dfs_fd fd;
+void run_init_script(void){
+
+    char cmd[32];
+    memset(cmd, 0, sizeof(cmd));
+    
+    char buf;
+    uint8_t i = 0;
+
+    int length;
+
+    os_printf("Running init script: /sd/init.msh\r\n");
+
+    if (dfs_file_open(&fd, "/sd/init.msh", O_RDONLY) < 0){
+        os_printf("Init file open failed\r\n");
+    }
+
+    do {
+        
+        length = dfs_file_read(&fd, &buf, 1 );
+        if (length > 0){
+            if(buf != '\n' && buf != '\r'){
+                //rt_kprintf("%c", buf);
+                cmd[i] = buf;
+                i++;
+
+            }else{
+                os_printf("\r\n ## Running command: %s\r\n", cmd);
+                msh_exec(cmd, i);
+                memset(cmd, 0, sizeof(cmd));
+                i = 0;
+            }
+            
+        }
+    }while (length > 0);
+
+    dfs_file_close(&fd);
+
+    os_printf("Init script done.\r\n");
+
+}
+
+
+void app_start(void){
+
+    app_pre_start();
+    fancy_msg();
+
+    delay100us(5*10000);
+    run_init_script();
+    
+    
+                                                                                                                                        
+    //user_main_entry();
+
+}
+
 
 int bmsg_is_empty(void)
 {
@@ -814,5 +983,15 @@ int bmsg_is_empty(void)
     }
 }
 
+/*void arg_test(int argc, char **argv){
+    os_printf("argc %d\n", argc);
+}*/
+
+//MSH_CMD_EXPORT(arg_test, arg test);
+//MSH_CMD_EXPORT(scan_camera_sensors , scan camera sensors);
+//MSH_CMD_EXPORT(gpio_write , Set GPIO <pin> <value>);
+//MSH_CMD_EXPORT(gpio_read , Set GPIO <pin> <value>);
+//MSH_CMD_EXPORT(gpio_test_loop, Loop over GPIOS)
+//MSH_CMD_EXPORT(sdcard_intf_test, sdcard_intf_test);
 // eof
 

@@ -76,4 +76,13 @@
 
 #define PSRAM_TEST
 #endif
-#define PM_TEST
+//#define PM_TEST
+
+#define VIDEO_BUF_TEST
+#define WEB_CAMERA_TEST
+#define MICPHONE_TEST
+
+//#define I2C_RTT_TEST
+
+/**/
+//#define I2C_TEST

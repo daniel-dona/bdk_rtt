@@ -40,6 +40,7 @@ $(NAME)_INCLUDES := app/standalone-ap \
 					func/rf_test \
 					func/rf_use \
 					func/camera_intf \
+					func/camera_intf/sensors \
 					func/video_transfer \
 					func/user_driver \
 					func/ble_wifi_exchange
@@ -143,6 +144,12 @@ $(NAME)_SOURCES :=  app/app.c \
 					func/lwip_intf/dhcpd/dhcp-server-main.c \
 					func/lwip_intf/dhcpd/dhcp-server.c \
 					func/camera_intf/camera_intf.c \
+					func/camera_intf/sensors/gc0328c.c \
+					func/camera_intf/sensors/gc0328c_regs.c \
+					func/camera_intf/sensors/gc0311.c \
+					func/camera_intf/sensors/gc0311_regs.c \
+					func/camera_intf/sensors/hi704.c \
+					func/camera_intf/sensors/hi704_regs.c \
 					func/video_transfer/video_transfer.c \
 					func/ble_wifi_exchange/ble_wifi_port.c
 
@@ -167,11 +174,11 @@ $(NAME)_INCLUDES += func/$(WPA_VERSION)/src \
 					func/$(WPA_VERSION)/hostapd \
 					func/$(WPA_VERSION)/wpa_supplicant
 
-$(NAME)_SOURCES +=                      alios/lwip-2.0.2/port/ethernetif.c \
-					alios/lwip-2.0.2/port/net.c \
-					alios/lwip-2.0.2/apps/ping/ping.c \
-					alios/lwip-2.0.2/apps/iperf/iperf.c \
-					alios/os/mem_arch.c \
-					alios/os/str_arch.c \
-					alios/flash_hal.c \
-					alios/entry/arch_main.c
+#$(NAME)_SOURCES +=                      alios/lwip-2.0.2/port/ethernetif.c \
+#					alios/lwip-2.0.2/port/net.c \
+#					alios/lwip-2.0.2/apps/ping/ping.c \
+#					alios/lwip-2.0.2/apps/iperf/iperf.c \
+#					alios/os/mem_arch.c \
+#					alios/os/str_arch.c \
+#					alios/flash_hal.c \
+#					alios/entry/arch_main.c

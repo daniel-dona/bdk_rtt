@@ -41,7 +41,7 @@ static int network_mode      = WIFI_STATION;
 #endif
 
 #ifndef WIFI_SETTING_FN
-#define WIFI_SETTING_FN     "/appfs/setting.json"
+#define WIFI_SETTING_FN     "/sd/wlan_settings.json"
 #endif
 
 #ifndef WIFI_DEVICE_STA_NAME
@@ -96,6 +96,7 @@ int wifi_read_cfg(const char *filename)
     if (fd < 0)
     {
         /* no setting file */
+        rt_kprintf("No settings file found!\r\n");
         return -1;
     }
 
@@ -111,6 +112,7 @@ int wifi_read_cfg(const char *filename)
             {
                 lseek(fd, 0, SEEK_SET);
                 read(fd, json_str, length);
+                //rt_kprintf("JSON: %s", json_str);
 
                 json = cJSON_Parse(json_str);
                 rt_free(json_str);
@@ -118,6 +120,8 @@ int wifi_read_cfg(const char *filename)
         }
         close(fd);
     }
+
+    
 
     if (json)
     {
@@ -382,7 +386,7 @@ int wifi(int argc, char **argv)
 	/* get wlan device */
 	wlan = (struct rt_wlan_device *)rt_device_find(argv[1]);
 	if (!wlan) {
-		rt_kprintf("no wlan:%s device\n", argv[1]);
+		rt_kprintf("no wlan: '%s' device\n", argv[1]);
 		return 0;
 	}
 

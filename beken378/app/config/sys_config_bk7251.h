@@ -144,10 +144,10 @@
 #define CFG_USE_TEMPERATURE_DETECT                 0
 
 /*section 12-----for video transfer*/
-#define CFG_USE_APP_DEMO_VIDEO_TRANSFER            0
+#define CFG_USE_APP_DEMO_VIDEO_TRANSFER            1
 #define CFG_USE_HSLAVE_SPI                         0
 #define CFG_USE_SPIDMA                             0
-#define CFG_USE_CAMERA_INTF                        0
+#define CFG_USE_CAMERA_INTF                        1
 
 /*section 13-----for GENERRAL DMA */
 #define CFG_GENERAL_DMA                            1
@@ -175,9 +175,9 @@
 /*section 19-----for SDCARD HOST*/
 #define CFG_USE_SDCARD_HOST                        1
 //select SD or SD1
-#define SD_HOST_INTF                                0
-#define SD1_HOST_INTF                               1
-#define CFG_SD_HOST_INTF                            SD1_HOST_INTF
+#define SD_HOST_INTF                                1
+#define SD1_HOST_INTF                               0
+#define CFG_SD_HOST_INTF                            SD_HOST_INTF
 
 /*section 20 ----- support mp3 decoder*/
 #define CONFIG_APP_MP3PLAYER                       0

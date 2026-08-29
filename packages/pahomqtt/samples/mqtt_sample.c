@@ -25,7 +25,7 @@
  * tcp://[fe80::20c:29ff:fe9a:a07e]:1883
  * ssl://[fe80::20c:29ff:fe9a:a07e]:1884
  */
-#define MQTT_URI                "tcp://192.168.3.236:1883" //"tcp://iot.eclipse.org:1883"
+#define MQTT_URI                "tcp://192.168.10.1:1883" //"tcp://iot.eclipse.org:1883"
 #define MQTT_SUBTOPIC           "/mqtt/test1"
 #define MQTT_PUBTOPIC           "/mqtt/test1"
 #define MQTT_WILLMSG            "Goodbye!"

@@ -203,8 +203,9 @@
 #define PKG_NETUTILS_PING
 #define PKG_NETUTILS_NETIO
 #define PKG_NETUTILS_NTP
-#define NETUTILS_NTP_TIMEZONE 8
-#define NETUTILS_NTP_HOSTNAME "cn.ntp.org.cn"
+#define PKG_NETUTILS_TELNET
+#define NETUTILS_NTP_TIMEZONE 0 //UTC
+#define NETUTILS_NTP_HOSTNAME "0.pool.ntp.org"
 #define PKG_USING_NETUTILS_LATEST_VERSION
 
 /* IoT Cloud */
@@ -276,7 +277,7 @@
 
 /* Hardware Drivers Config */
 #define BEKEN_USING_UART1
-#define BEKEN_USING_UART2
+//#define BEKEN_USING_UART2
 #define BEKEN_USING_WDT
 #define BEKEN_USING_FLASH
 #define BEKEN_USING_PWM
@@ -293,29 +294,29 @@
 /* Player Config */
 
 /* PLAYER 1.2.7 ************************************************************************** */
-#define PKG_USING_PLAYER
-#define PKG_USING_PLAYER_V127
-#define PLAYER_DEVICE "sound"
-#define PLAYER_DEFAULT_VOLUME 65
+//#define PKG_USING_PLAYER
+//#define PKG_USING_PLAYER_V127
+//#define PLAYER_DEVICE "sound"
+//#define PLAYER_DEFAULT_VOLUME 65
 
 /* PLAYER �ڲ�֧�� CODEC */
-#define PLAYER_ENABLE_CODEC_PCM             /* PCM���� */
-#define PLAYER_ENABLE_CODEC_WAV             /* WAV���� */
+//#define PLAYER_ENABLE_CODEC_PCM             /* PCM���� */
+//#define PLAYER_ENABLE_CODEC_WAV             /* WAV���� */
 // #define PLAYER_ENABLE_FORMAT_TS          /* MPEG-TS���� */
 
 /* PLAYER ������ */
-#define PLAYER_ENABLE_NET_STREAM            /* ��������Ƶ����֧�� */
-#define PLAYER_ENABLE_HTTP_STREAM           /* HTTP����Ƶ����֧�� */
-#define PLAYER_ENABLE_HTTPS_STREAM          /* HTTPS����Ƶ����֧�� */
-#define PLAYER_ENABLE_TTS_STREAM            /* TTS����Ƶ����֧�� */
+//#define PLAYER_ENABLE_NET_STREAM            /* ��������Ƶ����֧�� */
+//#define PLAYER_ENABLE_HTTP_STREAM           /* HTTP����Ƶ����֧�� */
+//#define PLAYER_ENABLE_HTTPS_STREAM          /* HTTPS����Ƶ����֧�� */
+//#define PLAYER_ENABLE_TTS_STREAM            /* TTS����Ƶ����֧�� */
 // #define PLAYER_ENABLE_HLS_STREAM         /* HLS����Ƶ����֧�� */
 // #define PLAYER_ENABLE_HLS_ACCELERATE     /* HLS TLS���� */
 // #define PLAYER_ENABLE_PLS_STREAM         /* PLS����Ƶ����֧�� */
 
-#define PLAYER_USING_NETSTREAM_BUFSZ 96     /* ���绺�� */
+//#define PLAYER_USING_NETSTREAM_BUFSZ 96     /* ���绺�� */
 
 /* PLAYER ��־ */
-#define PLAYER_USING_DEBUG 0                /* 0:�����汾, 1:���԰汾 */
+//#define PLAYER_USING_DEBUG 0                /* 0:�����汾, 1:���԰汾 */
 
 /* PLAYER Example */
 #define PLAYER_USING_EXAMPLE00
